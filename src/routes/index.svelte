@@ -1,14 +1,5 @@
 <script>
 
-import {contracts} from '$lib/storage/contracts';
-import { onMount } from 'svelte';
-
-let _contracts
-	onMount( async ()=>{
-		_contracts = await contracts();		
-		console.log(_contracts)
-	})
-
 </script>
 
 <svelte:head>
