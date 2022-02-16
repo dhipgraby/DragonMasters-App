@@ -1,5 +1,12 @@
 <script>
+	import { EggContract } from '$lib/contracts/methods';
+	import { onMount } from 'svelte';
 
+	let contract
+	onMount(async () => {
+		contract = await new Methods();		
+	});
+	
 </script>
 
 <svelte:head>
@@ -7,7 +14,7 @@
 </svelte:head>
 
 <section>
-
+	<button class="btn btn-dark" on:click={() => contract.mintGen0Egg() }> MINT </button>
 </section>
 
 <style>
@@ -18,5 +25,4 @@
 		align-items: center;
 		flex: 1;
 	}
-
 </style>

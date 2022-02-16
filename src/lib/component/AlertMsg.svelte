@@ -9,7 +9,7 @@
     export let show = true;
   
     let marginBottom = (alert_number - 1) * 70 + 10;
-    let timeOut = 4500;
+    let timeOut = 40500;
     let _dismiss;
   
     if (marginBottom < 80) marginBottom = 10;
@@ -58,10 +58,17 @@
       z-index: 100;
       position: fixed;
       width: fit-content;
-      margin-left: 5%;
-      margin-right: 5%;
-      max-width: 80%;
+      margin: auto;
+      width: 100%;
     }
+
+    .alert {
+        width: fit-content;
+        max-width: 70%;
+        margin: auto;
+    }
+
+
   
     p {
       margin: 0;
