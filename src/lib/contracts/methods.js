@@ -4,16 +4,35 @@ import { contracts } from "./contracts";
 export class EggContract {
     constructor() {
         this.contract
-      return (async () => {
-        
-        this.contract = await contracts();
-        return this;
-      })();
+        return (async () => {
+
+            this.contract = await contracts();
+            return this;
+        })();
+    }
+
+    async getEgg(eggId) {
+
+        try {
+            let eggDetails = await this.contract.EggToken.methods.getEgg(eggId).call()
+            
+            let content = `
+            <b>mumId:</b> `+ eggDetails.mumId  +`<br>
+            <b>dadId: </b>`+ eggDetails.dadId  +`<br>
+            <b>incubationCompleteAt: </b>`+ eggDetails.incubationCompleteAt  +`<br>
+            <b>laidTime: </b>`+ eggDetails.laidTime;
+
+            setAlert('Egg info:<br>' + content, 'info')
+
+        } catch (err) {
+            setAlert('Incubation time to avaiable for this Egg', 'warning')
+            console.log("Error at: cgetEgg" + err)
+        }
     }
 
     async mintGen0Egg() {
-   
-        try {    
+
+        try {
             await this.contract.EggToken.methods.mintGen0EggTo(this.contract.account).send({}, function (err, txHash) {
                 if (err) setAlert(err, 'warning')
                 else {
@@ -27,8 +46,8 @@ export class EggContract {
     }
 
     async startIncubation(eggId) {
-   
-        try {    
+
+        try {
             await this.contract.EggToken.methods.startIncubation(eggId).send({}, function (err, txHash) {
                 if (err) setAlert(err, 'warning')
                 else {
@@ -38,13 +57,13 @@ export class EggContract {
             })
         } catch (err) {
             setAlert('Error starting Incubation for this Egg', 'warning')
-            console.log("Error at: mintGen0Egg" + err)
+            console.log("Error at: startIncubation" + err)
         }
     }
 
     async checkIncubation(eggId) {
-   
-        try {    
+
+        try {
             let incubationTime = await this.contract.EggToken.methods.checkIncubation(eggId).call()
             setAlert('Incubation time for this Egg is :' + incubationTime, 'info')
         } catch (err) {
@@ -52,9 +71,8 @@ export class EggContract {
             console.log("Error at: checking incubationTime" + err)
         }
     }
-  }
+}
 
 
 
-  
-  
+
