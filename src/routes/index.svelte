@@ -4,7 +4,7 @@
 
 	let contract
 	onMount(async () => {
-		contract = await new Methods();		
+		contract = await new EggContract();		
 	});
 	
 </script>
@@ -14,7 +14,7 @@
 </svelte:head>
 
 <section>
-	<button class="btn btn-dark" on:click={() => contract.mintGen0Egg() }> MINT </button>
+	<button class="btn btn-dark" on:click={() => contract.checkIncubation(0) }> MINT </button>
 </section>
 
 <style>
