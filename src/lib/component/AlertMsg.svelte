@@ -9,7 +9,7 @@
     export let show = true;
   
     let marginBottom = (alert_number - 1) * 70 + 10;
-    let timeOut = 40500;
+    let timeOut = 4000;
     let _dismiss;
   
     if (marginBottom < 80) marginBottom = 10;
@@ -46,7 +46,7 @@
         role="alert"
         transition:fly={{ y: 100, duration: 700 }}
       >
-        <p>index: {alert_number} {@html content}</p>
+        <p>{@html content}</p>
   
         <button type="button" class="btn-close" on:click={() => dismiss()} />
       </div>

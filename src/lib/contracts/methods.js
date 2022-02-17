@@ -46,7 +46,7 @@ export class EggContract {
    
         try {    
             let incubationTime = await this.contract.EggToken.methods.checkIncubation(eggId).call()
-            console.log(incubationTime)
+            setAlert('Incubation time for this Egg is :' + incubationTime, 'info')
         } catch (err) {
             setAlert('Incubation time to avaiable for this Egg', 'warning')
             console.log("Error at: checking incubationTime" + err)
