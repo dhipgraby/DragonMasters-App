@@ -1,5 +1,8 @@
 import { setAlert } from "$lib/storage/alerts";
+import { writable } from "svelte/store";
 import { contracts } from "./contracts";
+
+export const userEggs = writable([]) 
 
 export class EggContract {
     constructor() {
@@ -15,19 +18,47 @@ export class EggContract {
 
         try {
             let eggDetails = await this.contract.EggToken.methods.getEgg(eggId).call()
-            
-            let content = `
-            <b>mumId:</b> `+ eggDetails.mumId  +`<br>
-            <b>dadId: </b>`+ eggDetails.dadId  +`<br>
-            <b>incubationCompleteAt: </b>`+ eggDetails.incubationCompleteAt  +`<br>
-            <b>laidTime: </b>`+ eggDetails.laidTime;
 
-            setAlert('Egg info:<br>' + content, 'info')
-
+            return {
+                tokenId:eggId,
+                mumId:eggDetails.mumId,
+                dadId:eggDetails.dadId,
+                incubation:eggDetails.incubationCompleteAt,
+                laidTime:eggDetails.laidTime
+            }
+                      
         } catch (err) {
-            setAlert('Incubation time to avaiable for this Egg', 'warning')
+            setAlert('Error getting this egg id ', 'warning')
             console.log("Error at: cgetEgg" + err)
         }
+    }
+
+    async getEggIds(          
+         startIndex, 
+         endIndex
+    ){
+        try {
+            let eggsIds = await this.contract.EggToken.methods.getEggIds(this.contract.account,startIndex,endIndex).call()
+            console.log(eggsIds)     
+            return eggsIds       
+        } catch (err) {
+            setAlert('getEggIds error', 'warning')
+            console.log("Error at: getEggIds" + err)
+        }                
+    }
+
+    async getUserEggs(){
+        
+        let allEggs = await this.getEggIds(0,5)
+        let eggs = []
+
+        for (let i = 0; i < allEggs.tokenIds.length; i++) {
+            let eggDetails = await this.getEgg(allEggs.tokenIds[i])
+            eggs.push(eggDetails)
+            
+        }
+
+        userEggs.set(eggs)                
     }
 
     async mintGen0Egg() {
