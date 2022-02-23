@@ -21,6 +21,12 @@
 
 	<br />
 	<div class="grid" align="left">
+		
+		<button class="btn btn-info t-sm" on:click={() => contract.totalSupply()}
+			>Total Supply</button
+		>
+
+		<br>
 		<table class="table table-striped">
 			<tr>
 				<h2>Mint Gen 0 egg</h2>
@@ -59,6 +65,22 @@
 </section>
 
 <style>
+
+	.btn-info {
+		border-radius: 50px;
+		color:white;
+		font-weight: 500;
+		letter-spacing: 2px;
+		padding: 4px 20px;
+		text-shadow: 0px 2px 2px #444444
+	}
+
+	.t-sm {
+
+		font-size: 14px;
+
+	}
+
 	input {
 		border-radius: 50px;
 		border: solid 2px #919191;
@@ -70,8 +92,9 @@
 	}
 
 	.grid {
+		box-shadow: 0px 10px 20px -8px;
 		background-color: white;
-		border: solid 2px #919191;
+		
 		border-radius: 20px;
 		padding: 30px;
 		min-width: 600px;
@@ -88,9 +111,9 @@
 	}
 
 	h2 {
-		line-height: 60px;
+		line-height: 45px;
 		font-weight: 600;
-		font-size: 25px;
+		font-size: 20px;
 	}
 
 	.btn-dark {

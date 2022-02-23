@@ -105,6 +105,17 @@ export class EggContract {
             console.log("Error at: checking incubationTime" + String(err))
         }
     }
+
+    async totalSupply() {
+
+        try {
+            let _totalSupply = await this.contract.EggToken.methods.totalSupply().call()
+            setAlert('Total Supply :' + _totalSupply, 'info')
+        } catch (err) {            
+            setAlert(err, 'warning')
+            console.log("Error at: totalSupply " + err)
+        }
+    }
 }
 
 
