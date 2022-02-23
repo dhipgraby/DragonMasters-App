@@ -9,6 +9,8 @@ export const balances = writable({ contract: 0,user: 0 });
 
 export async function contracts() {
     
+
+    
     let account = web3.currentProvider.selectedAddress;
 
     let Egg_instance = new web3.eth.Contract(contractsAbi.EggToken, EggToken, {

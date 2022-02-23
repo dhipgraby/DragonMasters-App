@@ -1,6 +1,7 @@
 import { setAlert } from "$lib/storage/alerts";
 import { writable } from "svelte/store";
 import { contracts } from "./contracts";
+import { getErrors } from "./errorHandling";
 
 export const userEggs = writable([]) 
 
@@ -98,12 +99,13 @@ export class EggContract {
             let incubationTime = await this.contract.EggToken.methods.checkIncubation(eggId).call()
             setAlert('Incubation time for this Egg is :' + incubationTime, 'info')
         } catch (err) {
-            setAlert('Incubation time to avaiable for this Egg', 'warning')
-            console.log("Error at: checking incubationTime" + err)
+
+            let errMsg = getErrors('checkIncubation',err)
+            setAlert(errMsg, 'warning')
+            console.log("Error at: checking incubationTime" + String(err))
         }
     }
 }
-
 
 
 
