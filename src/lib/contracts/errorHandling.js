@@ -6,8 +6,8 @@ export function getErrors(functionName,error){
 
     switch (functionName) {
         case 'checkIncubation':
-            newMsg = checkIncubationError(error)
-            break;
+            newMsg = checkIncubationError(error,functionName)
+            break;            
 
         default:
             newMsg = "Error at " + functionName
@@ -23,6 +23,7 @@ function checkIncubationError(error,functionName){
     let msg = "Error at " + functionName
 
     if(error.includes("nonexistent"))  msg = "Token Not exist"
+    if(error.includes("Not begun"))  msg = "Incubation not started"
     
     return msg
 

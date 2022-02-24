@@ -55,8 +55,9 @@ export class EggContract {
 
         for (let i = 0; i < allEggs.tokenIds.length; i++) {
             let eggDetails = await this.getEgg(allEggs.tokenIds[i])
-            eggs.push(eggDetails)
-            
+            let incubationTime = await this.checkIncubation(allEggs.tokenIds[i], false)
+            eggDetails.incubationTime = incubationTime
+            eggs.push(eggDetails)            
         }
 
         userEggs.set(eggs)                
@@ -93,16 +94,24 @@ export class EggContract {
         }
     }
 
-    async checkIncubation(eggId) {
+    async checkIncubation(eggId,msg = true) {
 
         try {
             let incubationTime = await this.contract.EggToken.methods.checkIncubation(eggId).call()
-            setAlert('Incubation time for this Egg is :' + incubationTime, 'info')
-        } catch (err) {
+            
+            if(msg == true) setAlert('Incubation time for this Egg is :' + incubationTime, 'info')
 
+            return incubationTime
+
+        } catch (err) {
             let errMsg = getErrors('checkIncubation',err)
-            setAlert(errMsg, 'warning')
+            
+            if(msg == true) setAlert(errMsg, 'warning')
+
             console.log("Error at: checking incubationTime" + String(err))
+
+            if(errMsg == "Incubation not started") return "-1";
+            
         }
     }
 
