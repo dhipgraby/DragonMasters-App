@@ -19,6 +19,7 @@
 
 <svelte:head>
 	<title>Cave - Dragon Masters</title>
+	<link href="/css/egg.css" rel="stylesheet" />
 </svelte:head>
 
 <section>
@@ -26,7 +27,9 @@
 
 	<div class="row">
 		{#each eggs as egg}
-			<EggCard {egg} />
+			<div class="col-md-4">
+				<EggCard {egg} {contract} />
+			</div>
 		{/each}
 	</div>
 </section>
