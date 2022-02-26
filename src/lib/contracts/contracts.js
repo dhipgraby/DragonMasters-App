@@ -15,14 +15,21 @@ export async function contracts() {
         from: account,
     });
 
+    let Dragon_instance = new web3.eth.Contract(contractsAbi.DragonToken, DragonToken, {
+        from: account,
+    });
+
     let address = {
-        EggToken:EggToken        
+        EggToken:EggToken,
+        DragonToken:DragonToken,
+        Marketplace:Marketplace        
     }
     
     let contractData = {              
         address:address,
         account: account,
-        EggToken:Egg_instance,    
+        EggToken:Egg_instance,
+        DragonToken:Dragon_instance    
         
     } 
     return contractData
