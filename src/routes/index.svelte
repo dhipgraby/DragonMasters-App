@@ -6,6 +6,9 @@
 
 <svelte:head>
 	<title>Home</title>
+
+	<link href="/css/contractUI.css" rel="stylesheet" />
+
 </svelte:head>
 
 

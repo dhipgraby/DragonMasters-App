@@ -8,7 +8,7 @@
 	let eggId_hatch;
 </script>
 
-<h1>EggToken Contract Workflow</h1>
+<h1>EggToken</h1>
 
 <br />
 <div class="grid" align="left">
