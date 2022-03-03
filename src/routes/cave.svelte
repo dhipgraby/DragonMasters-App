@@ -1,20 +1,32 @@
 <script>
 	import EggCard from '$lib/component/EggCard.svelte';
 	import { EggContract, userEggs } from '$lib/contracts/methods';
+	import { DragonContract, userDragons } from '$lib/contracts/DragonToken';
 	import { onMount } from 'svelte';
 
-	let contract;
+	let contract = [];
 	let eggs = [];
+	let dragons = [];
 
 	onMount(async () => {
-		contract = await new EggContract();
-		await contract.getUserEggs();
+		contract['egg'] = await new EggContract();
+		contract['dragon'] = await new DragonContract();
+
+		await contract['egg'].getUserEggs();
+		await contract['dragon'].getUserDragons();
 	});
 
-	const unsubscribe = userEggs.subscribe((value) => {
-		eggs = value;
-		console.log(eggs);
+	const subscribeEggs = userEggs.subscribe((value) => {
+		eggs = value;		
 	});
+
+	
+	const subscribeDragons = userDragons.subscribe((value) => {
+		dragons = value;
+		console.log(dragons);
+	});
+
+
 </script>
 
 <svelte:head>
@@ -26,11 +38,15 @@
 	<h1>Your Eggs</h1>
 
 	<div class="row">
-		{#each eggs as egg}
-			<div class="col-md-4">
-				<EggCard {egg} {contract} />
-			</div>
-		{/each}
+		{#if eggs.length}
+			{#each eggs as egg}
+				<div class="col-md-4">
+					<EggCard {egg} contract={contract['egg']} />
+				</div>
+			{/each}
+		{:else}
+			<h2>Not Eggs found</h2>
+		{/if}
 	</div>
 </section>
 

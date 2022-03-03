@@ -55,7 +55,7 @@ export class EggContract {
     ) {
         try {
             let eggsIds = await this.contract.EggToken.methods.getEggIds(this.contract.account, startIndex, endIndex).call()
-            console.log(eggsIds)
+            
             return eggsIds
         } catch (err) {
             setAlert('getEggIds error', 'warning')

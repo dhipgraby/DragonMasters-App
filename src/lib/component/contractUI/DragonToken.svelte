@@ -1,10 +1,10 @@
 <script>
-	
-    export let contract
+	export let contract;
 
+	let getDragonId;
 </script>
 
-<h1>DragonToken </h1>
+<h1>DragonToken</h1>
 
 <br />
 <div class="grid" align="left">
@@ -12,6 +12,12 @@
 
 	<br />
 	<table class="table table-striped">
-
+		<tr>
+			<h2>Get Dragon</h2>
+			<div class="mb-3">
+				<input type="text" bind:value={getDragonId} class="form-control" placeholder="Dragon Id" />
+			</div>
+			<button class="btn btn-dark" on:click={() => contract.getDragon(getDragonId)}>GET</button>
+		</tr>
 	</table>
 </div>

@@ -3,7 +3,7 @@ import { writable } from "svelte/store";
 import { contracts } from "./contracts";
 import { getErrors } from "./errorHandling";
 
-export const userDragon = writable([])
+export const userDragons = writable([])
 
 export class DragonContract {
     constructor() {
@@ -14,8 +14,59 @@ export class DragonContract {
         })();
     }
 
+    async getDragon(dragonId) {
+        try {
+            let dragonDetails = await this.contract.DragonToken.methods.getDragon(dragonId).call()
+
+            return {
+                ageGroup: dragonDetails,
+                birthTime: dragonDetails,
+                dadId: dragonDetails,
+                dnaId: dragonDetails,
+                fullEnergyAt: dragonDetails,
+                maturesAt: dragonDetails,
+                mumId: dragonDetails
+            }
+
+        } catch (err) {
+            setAlert('Error getting this Dragon id ', 'warning')
+            console.log("Error at: getDragon" + err)
+        }
+    }
+
+    async getDragonIds(
+        startIndex,
+        endIndex
+    ) {
+        try {
+            let dragonsIds = await this.contract.DragonToken.methods.getDragonIds(this.contract.account, startIndex, endIndex).call()
+            
+            return dragonsIds
+        } catch (err) {
+            setAlert('getDragonIds error', 'warning')
+            console.log("Error at: getDragonIds" + err)
+        }
+    }
+
+    async getUserDragons() {
+
+        let allDragons = await this.getDragonIds(0, 5)
+        let dragons = []
+
+        for (let i = 0; i < allDragons.tokenIds.length; i++) {
+
+            let dragonDetails = await this.getDragon(allDragons.tokenIds[i])            
+            
+            dragons.push(dragonDetails)
+        }
+
+        userDragons.set(dragons)
+        console.log(userDragons)
+    }
+
+
     /************* STANDARD CONTRACT FUNCTIONS  ***************/
-    
+
     async totalSupply() {
 
         try {
