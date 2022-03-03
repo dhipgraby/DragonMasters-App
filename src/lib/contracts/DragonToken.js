@@ -19,13 +19,14 @@ export class DragonContract {
             let dragonDetails = await this.contract.DragonToken.methods.getDragon(dragonId).call()
 
             return {
-                ageGroup: dragonDetails,
-                birthTime: dragonDetails,
-                dadId: dragonDetails,
-                dnaId: dragonDetails,
-                fullEnergyAt: dragonDetails,
-                maturesAt: dragonDetails,
-                mumId: dragonDetails
+                tokenId:dragonId,
+                ageGroup: dragonDetails.ageGroup,
+                birthTime: dragonDetails.birthTime,
+                dadId: dragonDetails.dadId,
+                dnaId: dragonDetails.dnaId,
+                fullEnergyAt: dragonDetails.fullEnergyAt,
+                maturesAt: dragonDetails.maturesAt,
+                mumId: dragonDetails.mumId
             }
 
         } catch (err) {
@@ -59,9 +60,7 @@ export class DragonContract {
             
             dragons.push(dragonDetails)
         }
-
-        userDragons.set(dragons)
-        console.log(userDragons)
+        userDragons.set(dragons)        
     }
 
 

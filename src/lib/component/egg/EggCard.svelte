@@ -1,6 +1,6 @@
 <script>
 	import { readable } from 'svelte/store';
-	import Message from './Message.svelte';
+	import Message from '../Message.svelte';
 	
 	export let egg;	
 	export let contract

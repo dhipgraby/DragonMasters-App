@@ -9,7 +9,7 @@
 </script>
 
 <script>
-	import EggCard from '$lib/component/EggCard.svelte';
+	import EggCard from '$lib/component/egg/EggCard.svelte';
 	import { EggContract } from '$lib/contracts/methods';
 	import { onMount } from 'svelte';
 

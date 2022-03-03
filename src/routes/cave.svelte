@@ -1,5 +1,7 @@
 <script>
-	import EggCard from '$lib/component/EggCard.svelte';
+
+	import EggGrid from '$lib/component/egg/EggGrid.svelte';
+	import DragonGrid from '$lib/component/dragon/DragonGrid.svelte';
 	import { EggContract, userEggs } from '$lib/contracts/methods';
 	import { DragonContract, userDragons } from '$lib/contracts/DragonToken';
 	import { onMount } from 'svelte';
@@ -7,6 +9,8 @@
 	let contract = [];
 	let eggs = [];
 	let dragons = [];
+
+	let show = 1;
 
 	onMount(async () => {
 		contract['egg'] = await new EggContract();
@@ -17,16 +21,13 @@
 	});
 
 	const subscribeEggs = userEggs.subscribe((value) => {
-		eggs = value;		
+		eggs = value;
 	});
 
-	
 	const subscribeDragons = userDragons.subscribe((value) => {
 		dragons = value;
 		console.log(dragons);
 	});
-
-
 </script>
 
 <svelte:head>
@@ -35,27 +36,22 @@
 </svelte:head>
 
 <section>
-	<h1>Your Eggs</h1>
-
-	<div class="row">
-		{#if eggs.length}
-			{#each eggs as egg}
-				<div class="col-md-4">
-					<EggCard {egg} contract={contract['egg']} />
-				</div>
-			{/each}
-		{:else}
-			<h2>Not Eggs found</h2>
-		{/if}
+	<div class="btn-group" role="group">
+		<button type="button" on:click={() => (show = 1)} class="btn btn-light">EGG CONTRACT</button>
+		<button type="button" on:click={() => (show = 2)} class="btn btn-light">DRAGON CONTRACT</button>
 	</div>
+
+	{#if show == 1}
+		<EggGrid {eggs} contract={contract['egg']} />
+	{/if}
+
+	{#if show == 2}
+		<DragonGrid {dragons} contract={contract['dragon']} />
+	{/if}
+
 </section>
 
 <style>
-	h1 {
-		margin-bottom: 40px;
-		font-size: 56px;
-		font-weight: 600;
-	}
 
 	section {
 		padding-top: 50px;
@@ -65,4 +61,17 @@
 		align-items: center;
 		flex: 1;
 	}
+
+	.btn-group .btn {
+		margin: 8px;
+		font-weight: 600;
+		letter-spacing: 0.8px;
+		font-size: 14px;
+	}
+
+	.btn-group {
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+
 </style>
