@@ -1,5 +1,5 @@
 <script>
-	import { readable } from 'svelte/store';
+	import { readable } from 'svelte/store';	
 	import Message from '../Message.svelte';
 	
 	export let egg;	
@@ -24,11 +24,12 @@
 			clearInterval(interval);
 		};
 	});
+
 </script>
 
 	<div class="card" style="width: 18rem;">
-		<div class="card-header">
-			<div id="egg" />
+		<div class="card-header" >
+			<a href="/dragon/{egg.tokenId}">	<div id="egg" /></a>
 		</div>
 		<div class="card-body">
 			<h5 class="card-title">Egg : #{egg.tokenId}</h5>
@@ -57,11 +58,21 @@
 				<button class="btn btn-yellow" disabled={incubating} on:click={() => { if(!incubating) contract.hatch(egg.tokenId) }}>Ready to Hatch!</button>
 			{/if}
 
-			
+			<a href="/dragon/{egg.tokenId}"><button class="btn btn-dark">Checkout <i class="fas fa-arrow-circle-right" /></button></a>
 		</div>
 	</div>
 
 <style>
+
+	.btn-yellow {
+		font-size: 14px;
+		padding: 4px 20px !important;
+		margin-bottom: 10px;
+	}
+
+	.btn-dark {
+		width: 100%;
+	}
 
 	p {
 		font-weight: 600;

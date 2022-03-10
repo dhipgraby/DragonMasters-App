@@ -1,13 +1,11 @@
 <script>
 	export let dragon;
-	export let contract;
+	// export let contract;
 </script>
 
 <div class="card" style="width: 18rem;">
-	<div class="card-header">
-		
-        <img src="/images/dragon.png" alt="dragon" />
-
+	<div class="card-header" on:click={() => watch('dragon', dragon.tokenId)}>
+		<a href="/dragon/{dragon.tokenId}"> <img src="/images/dragon.png" alt="dragon" /></a>
 	</div>
 	<div class="card-body">
 		<h5 class="card-title">Dragon : #{dragon.tokenId}</h5>
@@ -19,18 +17,27 @@
 			<b>DadId:</b>
 			{dragon.dadId}
 		</p>
+		<br />
+
+		<a href="/dragon/{dragon.tokenId}"
+			><button class="btn btn-dark">Checkout <i class="fas fa-arrow-circle-right" /></button></a
+		>
 	</div>
 </div>
 
 <style>
+	.btn-dark {
+		width: 100%;
+	}
 
-    img {
-        widows: 100%;
-    }
+	img {
+		widows: 100%;
+	}
 
 	p {
 		font-weight: 600;
 		color: #999999;
+		margin: 0px;
 	}
 	.card {
 		border-radius: 20px;
