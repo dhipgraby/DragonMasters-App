@@ -10,7 +10,7 @@
 
 <script>
 	import EggCard from '$lib/component/egg/EggCard.svelte';
-	import { EggContract } from '$lib/contracts/methods';
+	import { EggContract } from '$lib/contracts/EggToken';
 	import { onMount } from 'svelte';
 
 	export let EggId;

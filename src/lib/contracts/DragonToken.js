@@ -56,13 +56,62 @@ export class DragonContract {
 
         for (let i = 0; i < allDragons.tokenIds.length; i++) {
 
-            let dragonDetails = await this.getDragon(allDragons.tokenIds[i])            
+            let dragonDetails = await this.getDragon(allDragons.tokenIds[i])        
             
+            dragonDetails['dna'] = await this.getDna(dragonDetails.dnaId)
             dragons.push(dragonDetails)
         }
         userDragons.set(dragons)        
+        console.log(dragons)
     }
 
+    async getDna(dnaId) {
+        try {
+            let dna = await this.contract.DnaToken.methods.getDna(dnaId).call()                        
+            return dna
+
+        } catch (err) {            
+            let errMsg = getErrors('getDna', err)
+            console.log("Error at: getDragon" + errMsg)
+        }
+    }
+
+    async checkEnergy(dragonId){
+        try {
+            let energy = await this.contract.DragonToken.methods.checkEnergy(dragonId).call()                        
+            console.log(energy)
+           
+            if(energy == 0){
+                setAlert('This dragon have full energy!','success')        
+            } else {
+                setAlert('Dragon energy: ' + energy,'info')   
+            }
+            return energy
+
+        } catch (err) {            
+            let errMsg = getErrors('checkEnergy', err)
+            console.log("Error at: checkEnergy " + errMsg)
+        }
+    }
+
+    
+    async checkMaturity(dragonId){
+        try {
+            let maturity = await this.contract.DragonToken.methods.checkMaturity(dragonId).call()                        
+            let secondsRemaining = maturity.secondsRemaining
+           
+            if(secondsRemaining == 0){
+                setAlert('This dragon is Mature ready to Raise!','success')        
+            } else {
+                setAlert('Dragon Matures at : ' + secondsRemaining,'info')   
+            }
+            return secondsRemaining
+
+        } catch (err) {            
+            let errMsg = getErrors('checkMaturity', err)
+            console.log("Error at: checkMaturity " + errMsg)
+        }
+    }
 
     /************* STANDARD CONTRACT FUNCTIONS  ***************/
 

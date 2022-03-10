@@ -1,7 +1,7 @@
 <script>
 	import EggToken from './EggToken.svelte';
 	import DragonToken from './DragonToken.svelte';
-	import { EggContract } from '$lib/contracts/methods';
+	import { EggContract } from '$lib/contracts/EggToken';
 	import { DragonContract } from '$lib/contracts/DragonToken';
 	import { onMount } from 'svelte';	
 

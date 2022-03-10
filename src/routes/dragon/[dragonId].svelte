@@ -9,19 +9,19 @@
 </script>
 
 <script>
-	import DragonCard from '$lib/component/dragon/DragonCard.svelte';
-    import { DragonContract } from '$lib/contracts/DragonToken';	
+	import SingleDragon from '$lib/component/dragon/SingleDragon.svelte';
+	import { DragonContract } from '$lib/contracts/DragonToken';
 	import { onMount } from 'svelte';
 
 	export let dragonId;
 
 	let contract;
 	let dragon = [];
+	let energy;
 
 	onMount(async () => {
 		contract = await new DragonContract();
-		dragon = await contract.getDragon(dragonId)
-		console.log(dragon)
+		dragon = await contract.getDragon(dragonId);
 	});
 
 </script>
@@ -31,11 +31,14 @@
 	<link href="/css/egg.css" rel="stylesheet" />
 </svelte:head>
 
-<h1>Egg id is {dragonId}</h1>
-
 {#if dragon.tokenId}
-    <DragonCard {dragon} {contract} />
+	<SingleDragon {dragon} {contract} />
 {:else}
-     <h2>Dragon not found...</h2>
+	<h2>Dragon not found...</h2>
 {/if}
 
+<style>
+	h2 {
+		margin-top: 50px;
+	}
+</style>

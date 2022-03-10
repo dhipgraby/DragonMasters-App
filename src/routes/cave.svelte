@@ -2,7 +2,7 @@
 
 	import EggGrid from '$lib/component/egg/EggGrid.svelte';
 	import DragonGrid from '$lib/component/dragon/DragonGrid.svelte';
-	import { EggContract, userEggs } from '$lib/contracts/methods';
+	import { EggContract, userEggs } from '$lib/contracts/EggToken';
 	import { DragonContract, userDragons } from '$lib/contracts/DragonToken';
 	import { onMount } from 'svelte';
 

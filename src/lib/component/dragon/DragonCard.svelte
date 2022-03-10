@@ -4,7 +4,7 @@
 </script>
 
 <div class="card" style="width: 18rem;">
-	<div class="card-header" on:click={() => watch('dragon', dragon.tokenId)}>
+	<div class="card-header">
 		<a href="/dragon/{dragon.tokenId}"> <img src="/images/dragon.png" alt="dragon" /></a>
 	</div>
 	<div class="card-body">
@@ -16,6 +16,12 @@
 			<br />
 			<b>DadId:</b>
 			{dragon.dadId}
+			<br />
+			<b>DNA:</b>
+			{dragon.dna.genes}
+			<br />
+			<b>Generation:</b>
+			{dragon.dna.generation}
 		</p>
 		<br />
 
