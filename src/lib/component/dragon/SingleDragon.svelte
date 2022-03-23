@@ -1,23 +1,27 @@
 <script>
-	import { onMount } from 'svelte';
+	import { onMount } from 'svelte';	
+	import ProgressBar from './ProgressBar.svelte';
 
 	export let dragon;
 	export let contract;
 
 	let dna;
+	let maturity;
+	let energy
 
 	onMount(async () => {
 		dna = await contract.getDna(dragon.dnaId);
+		checkEnergy();
+		checkMaturity();
 	});
 
 	async function checkEnergy() {
-		await contract.checkEnergy(dragon.tokenId);
+		energy = await contract.checkEnergy(dragon.tokenId);
 	}
 
-    async function checkMaturity() {
-		await contract.checkMaturity(dragon.tokenId);
+	async function checkMaturity() {
+		maturity = await contract.checkMaturity(dragon.tokenId);
 	}
-
 </script>
 
 <div class="row">
@@ -50,24 +54,36 @@
 
 		<hr />
 		<div class="group-btn">
-			<button class="btn btn-light" on:click={ () => checkEnergy() }><i class="fas fa-bolt"></i> Check Energy</button>
+			<button class="btn btn-light" on:click={() => checkEnergy()}
+				><i class="fas fa-bolt" /> Check Energy</button
+			>
 
-			<button class="btn btn-dark" on:click={ () => checkMaturity() }><i class="fas fa-brain"></i> Check Maturity</button>
+			<button class="btn btn-dark" on:click={() => checkMaturity()}
+				><i class="fas fa-brain" /> Check Maturity</button
+			>
 		</div>
+
+		{#if maturity > 0}
+			<ProgressBar timer={maturity} bgClass={'bg-info'} />
+		{/if}
+
+		{#if energy > 0}
+		<ProgressBar timer={energy} bgClass={'bg-warning'} />
+	{/if}
 	</div>
 </div>
 
 <style>
+
 	.row {
 		margin-top: 40px;
 	}
 
-    button {
-        margin: 10px;
-        letter-spacing: 1px;
-        font-weight: 600;
-    }
-    
+	button {
+		margin: 10px;
+		letter-spacing: 1px;
+		font-weight: 600;
+	}
 
 	.dragonBg {
 		margin-bottom: 25px;
@@ -86,33 +102,6 @@
 		font-weight: 600;
 		color: #999999;
 		margin: 0px;
-	}
-	.card {
-		border-radius: 20px;
-		margin: 10px;
-		transition: 0.5s;
-	}
-
-	.card:hover {
-		box-shadow: 0px 10px 20px -8px;
-	}
-
-	.card-title {
-		color: #737373;
-		font-size: 20px;
-		font-weight: 600;
-	}
-
-	.card-header {
-		border-radius: 20px 20px 0px 0px;
-		cursor: pointer;
-		padding: 20px 0px;
-		background-color: #f2fffb;
-		background: linear-gradient(20deg, #f2fffb, #b3b3b3);
-	}
-
-	.card-body {
-		text-align: center;
 	}
 
 	.card-text {

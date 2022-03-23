@@ -1,9 +1,9 @@
 <script>
-	import { readable } from 'svelte/store';	
+	import { readable } from 'svelte/store';
 	import Message from '../Message.svelte';
-	
-	export let egg;	
-	export let contract
+
+	export let egg;
+	export let contract;
 
 	let incTime = Number(egg.incubationTime);
 
@@ -27,51 +27,79 @@
 
 </script>
 
-	<div class="card" style="width: 18rem;">
-		<div class="card-header" >
-			<a href="/dragon/{egg.tokenId}">	<div id="egg" /></a>
-		</div>
-		<div class="card-body">
-			<h5 class="card-title">Egg : #{egg.tokenId}</h5>
-			<hr />
-			<p class="card-text">
-				<b>MumId:</b>
-				{egg.mumId}
-				<br />
-				<b>DadId:</b>
-				{egg.dadId}
-			</p>
-
-			{#if $time < 0}
-				<button class="btn btn-dark" on:click={() => contract.startIncubation(egg.tokenId)}>Start Incubation</button>
-			{:else if $time == 0}
-				<button class="btn btn-yellow" on:click={() => contract.hatch(egg.tokenId)}>Ready to Hatch!</button>
-			{:else}
-				{#if incubating}
-					<Message>
-						<span>
-							{$time}
-						</span>
-						<small>time let for hatching...</small>
-					</Message>
-				{/if}
-				<button class="btn btn-yellow" disabled={incubating} on:click={() => { if(!incubating) contract.hatch(egg.tokenId) }}>Ready to Hatch!</button>
-			{/if}
-
-			<a href="/dragon/{egg.tokenId}"><button class="btn btn-dark">Checkout <i class="fas fa-arrow-circle-right" /></button></a>
-		</div>
+<div class="card" style="width: 18rem;">
+	<div class="card-header">
+		<a href="/egg/{egg.tokenId}"> <div id="egg" /></a>
 	</div>
+	<div class="card-body">
+		<h5 class="card-title">Egg : #{egg.tokenId}</h5>
+		<hr />
+		<p class="card-text">
+			<b>MumId:</b>
+			{egg.mumId}
+			<br />
+			<b>DadId:</b>
+			{egg.dadId}
+		</p>
+
+		{#if egg.incubationTime == undefined}
+			<button class="btn btn-dark" on:click={() => contract.startIncubation(egg.tokenId)}
+				>Start Incubation</button
+			>
+		{:else if $time == 0}
+			<button class="btn btn-yellow" on:click={() => contract.hatch(egg.tokenId)}
+				>Ready to Hatch!</button
+			>
+		{:else}
+			{#if incubating}
+		
+			<Message>
+					<span>
+						{$time}
+					</span>
+					<small>time let for hatching...</small>
+				</Message>
+			{/if}
+			<button
+				class="btn btn-yellow"
+				disabled={incubating}
+				on:click={() => {
+					if (!incubating) contract.hatch(egg.tokenId);
+				}}>Ready to Hatch!</button
+			>
+		{/if}
+
+		<a href="/egg/{egg.tokenId}"
+			><button class="btn btn-light">Checkout <i class="fas fa-arrow-circle-right" /></button></a
+		>
+	</div>
+</div>
 
 <style>
 
-	.btn-yellow {
+	.btn-dark {
 		font-size: 14px;
 		padding: 4px 20px !important;
 		margin-bottom: 10px;
 	}
 
-	.btn-dark {
+	.btn-light {
 		width: 100%;
+		padding: 4px 20px !important;
+		margin-bottom: 10px;
+		font-weight: 500;
+		border: solid 1px;
+	}
+
+	.btn-light:hover {
+		background-color: black;
+		color: white;
+	}
+
+	.btn-yellow {
+		font-size: 14px;
+		padding: 4px 20px !important;
+		margin-bottom: 10px;
 	}
 
 	p {
@@ -114,5 +142,4 @@
 	.card-text {
 		text-align: left;
 	}
-	
 </style>

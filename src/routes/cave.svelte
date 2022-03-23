@@ -22,11 +22,11 @@
 
 	const subscribeEggs = userEggs.subscribe((value) => {
 		eggs = value;
+		console.log(eggs);
 	});
 
 	const subscribeDragons = userDragons.subscribe((value) => {
 		dragons = value;
-		console.log(dragons);
 	});
 </script>
 

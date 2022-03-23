@@ -18,3 +18,10 @@
 		<h2>Not Eggs found</h2>
 	{/if}
 </div>
+
+
+<style>
+	.row {
+		margin-top: 25px;
+	}
+</style>
