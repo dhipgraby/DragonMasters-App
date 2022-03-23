@@ -24,7 +24,6 @@
 			clearInterval(interval);
 		};
 	});
-
 </script>
 
 <div class="card" style="width: 18rem;">
@@ -52,8 +51,7 @@
 			>
 		{:else}
 			{#if incubating}
-		
-			<Message>
+				<Message>
 					<span>
 						{$time}
 					</span>
@@ -76,7 +74,6 @@
 </div>
 
 <style>
-
 	.btn-dark {
 		font-size: 14px;
 		padding: 4px 20px !important;

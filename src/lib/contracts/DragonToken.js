@@ -113,6 +113,20 @@ export class DragonContract {
         }
     }
 
+    async raiseHatchling(dragonId){
+        try {
+            await this.contract.DragonToken.methods.raiseHatchling(dragonId).send({}, function (err, txHash) {
+                if (err) setAlert(err, 'warning')
+                else {
+                    setAlert(txHash, 'success')
+                    return txHash
+                }
+            })
+        } catch (err) {
+            console.log("Error at: raiseHatchling function" + err)
+        }
+    }
+
     /************* STANDARD CONTRACT FUNCTIONS  ***************/
 
     async totalSupply() {

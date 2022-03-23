@@ -1,26 +1,31 @@
 <script>
-    import { readable } from 'svelte/store';
+	import { createEventDispatcher } from 'svelte';
+	import { readable } from 'svelte/store';
+	export let bgClass = 'bg-info';
+	export let timer;
+	export let emitEvent = false;
+	export let eventName;
 
-    export let bgClass = 'bg-info'	
-    export let timer 
-	let percentTimer = timer
-    
+	timer -= 50;
+	const dispatch = createEventDispatcher();
+
+	let percentTimer = timer;
+
 	let secondsUp = 0;
 
 	const percent = readable(percentTimer, function start(set) {
 		const interval = setInterval(() => {
-			if (secondsUp < percentTimer) {            
+			if (secondsUp < percentTimer) {
 				secondsUp++;
 				let percentage = (secondsUp * 100) / percentTimer;
-               
-				set(percentage);                
-			} else {           
+
+				set(percentage);
+			} else {
 				stop();
 			}
 		}, 1000);
 
-		return function stop() {     
-            
+		return function stop() {
 			clearInterval(interval);
 		};
 	});
@@ -39,25 +44,42 @@
 			clearInterval(minterval);
 		};
 	});
+
+	$: send = $timeLeft == 0 ? sendEvent() : '';
+
+	function sendEvent() {
+		if (emitEvent) {
+			dispatch(eventName, {
+				text: 'Hello!'
+			});
+			console.log('emit event');
+		}
+	}
 </script>
 
-<p class="timeleft">Time left: {$timeLeft} seconds</p>
-
-<div class="progress">
-    <div
-        class="progress-bar progress-bar-striped progress-bar-animated {bgClass}"
-        role="progressbar"
-        style="width: {$percent}%"
-        aria-valuemin="0"
-        aria-valuemax={100}
-    >
-        {parseFloat($percent).toFixed(2)}%
-    </div>
-</div>
-
-
+{#if $timeLeft > 0}
+	<p class="timeleft">Time left: {$timeLeft} seconds</p>
+	<div class="progress">
+		<div
+			class="progress-bar progress-bar-striped progress-bar-animated {bgClass}"
+			role="progressbar"
+			style="width: {$percent}%"
+			aria-valuemin="0"
+			aria-valuemax={100}
+		>
+			{parseFloat($percent).toFixed(2)}%
+		</div>
+	</div>
+{:else}
+	<b>FULL ENERGY</b>
+{/if}
 
 <style>
+
+	b {
+		color: #444444;		
+	}
+
 	.timeleft {
 		color: black;
 		font-size: 16px;

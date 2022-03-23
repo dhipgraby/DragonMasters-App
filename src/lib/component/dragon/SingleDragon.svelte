@@ -1,5 +1,5 @@
 <script>
-	import { onMount } from 'svelte';	
+	import { onMount } from 'svelte';
 	import ProgressBar from './ProgressBar.svelte';
 
 	export let dragon;
@@ -7,7 +7,9 @@
 
 	let dna;
 	let maturity;
-	let energy
+	let energy;
+	let raiseDisabled = true;
+	let isAdult = dragon.ageGroup != 1 ? 'Adult Dragon' : 'Hatchling';
 
 	onMount(async () => {
 		dna = await contract.getDna(dragon.dnaId);
@@ -21,6 +23,10 @@
 
 	async function checkMaturity() {
 		maturity = await contract.checkMaturity(dragon.tokenId);
+	}
+
+	function readyToRaise(event) {
+		raiseDisabled = false;
 	}
 </script>
 
@@ -50,39 +56,56 @@
 				<b>Generation:</b>
 				{dna.generation}
 			{/if}
+			<br />
+			<b>Maturity:</b>
+			{isAdult}
 		</p>
 
 		<hr />
-		<div class="group-btn">
-			<button class="btn btn-light" on:click={() => checkEnergy()}
-				><i class="fas fa-bolt" /> Check Energy</button
-			>
 
-			<button class="btn btn-dark" on:click={() => checkMaturity()}
-				><i class="fas fa-brain" /> Check Maturity</button
-			>
-		</div>
+		{#if dragon.ageGroup == '1'}
+			{#if maturity > 0}
+				<p class="c-black"><i class="fas fa-brain" /> Maturity</p>
+				<ProgressBar timer={maturity} bgClass={'bg-info'} />
 
-		{#if maturity > 0}
-			<ProgressBar timer={maturity} bgClass={'bg-info'} />
+				<button
+					on:click={() => {
+						contract.raiseHatchling(dragon.tokenId);
+					}}
+					class="btn btn-yellow mt-3"
+					disabled={raiseDisabled}>Raise to Adult</button
+				>
+			{/if}
+		{:else}
+			<!-- else content here -->
 		{/if}
 
 		{#if energy > 0}
-		<ProgressBar timer={energy} bgClass={'bg-warning'} />
-	{/if}
+			<p class="c-black mt-3"><i class="fas fa-bolt" /> Energy</p>
+			<ProgressBar
+				emitEvent={true}
+				eventName={'isReady'}
+				on:isReady={readyToRaise}
+				timer={energy}
+				bgClass={'bg-warning'}
+			/>
+		{/if}
 	</div>
 </div>
 
 <style>
+	.btn-yellow {
+		font-size: 14px;
+		padding: 4px 20px !important;
+		margin-bottom: 10px;
+	}
+
+	i {
+		margin-right: 5px;
+	}
 
 	.row {
 		margin-top: 40px;
-	}
-
-	button {
-		margin: 10px;
-		letter-spacing: 1px;
-		font-weight: 600;
 	}
 
 	.dragonBg {
@@ -95,13 +118,6 @@
 
 	img {
 		widows: 100%;
-	}
-
-	p {
-		font-size: 22px;
-		font-weight: 600;
-		color: #999999;
-		margin: 0px;
 	}
 
 	.card-text {
