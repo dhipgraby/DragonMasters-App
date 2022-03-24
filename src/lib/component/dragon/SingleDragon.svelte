@@ -1,5 +1,5 @@
 <script>
-	import { beforeUpdate, createEventDispatcher } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 	import { onMount } from 'svelte';
 	import ProgressBar from './ProgressBar.svelte';
 
