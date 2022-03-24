@@ -16,13 +16,18 @@
 	export let dragonId;
 
 	let contract;
-	let dragon = [];
-	let energy;
+	let dragon = [];	
 
 	onMount(async () => {
 		contract = await new DragonContract();
 		dragon = await contract.getDragon(dragonId);
+		console.log(dragon)
 	});
+	
+
+	async function updateDragon(){		
+		dragon = await contract.getDragon(dragonId);		
+	}
 
 </script>
 
@@ -32,7 +37,7 @@
 </svelte:head>
 
 {#if dragon.tokenId}
-	<SingleDragon {dragon} {contract} />
+	<SingleDragon on:update={updateDragon} {dragon} {contract} />
 {:else}
 	<h2>Dragon not found...</h2>
 {/if}

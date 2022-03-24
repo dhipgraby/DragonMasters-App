@@ -49,9 +49,7 @@
 
 	function sendEvent() {
 		if (emitEvent) {
-			dispatch(eventName, {
-				text: 'Hello!'
-			});
+			dispatch(eventName);
 			console.log('emit event');
 		}
 	}

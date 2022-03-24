@@ -1,16 +1,20 @@
 <script>
+	import { beforeUpdate, createEventDispatcher } from 'svelte';
 	import { onMount } from 'svelte';
 	import ProgressBar from './ProgressBar.svelte';
 
+	const dispatch = createEventDispatcher();
+
 	export let dragon;
-	export let contract;
+	export let contract;	
 
 	let dna;
 	let maturity;
 	let energy;
 	let raiseDisabled = true;
-	let isAdult = dragon.ageGroup != 1 ? 'Adult Dragon' : 'Hatchling';
-
+	
+	$: isAdult = dragon.ageGroup != '1' ? 'Adult Dragon' : 'Hatchling';
+	
 	onMount(async () => {
 		dna = await contract.getDna(dragon.dnaId);
 		checkEnergy();
@@ -23,10 +27,16 @@
 
 	async function checkMaturity() {
 		maturity = await contract.checkMaturity(dragon.tokenId);
+		if (maturity == 0) raiseDisabled = false;
 	}
 
-	function readyToRaise(event) {
+	function readyToRaise() {
 		raiseDisabled = false;
+	}
+
+	async function raiseDragon() {
+		await contract.raiseHatchling(dragon.tokenId);
+		dispatch('update');		
 	}
 </script>
 
@@ -44,7 +54,7 @@
 		</p>
 	</div>
 
-	<div class="col-8 px-4">
+	<div class="col-8 px-4">		
 		<h1>Dragon #{dragon.tokenId}</h1>
 		<hr />
 
@@ -67,17 +77,22 @@
 			{#if maturity > 0}
 				<p class="c-black"><i class="fas fa-brain" /> Maturity</p>
 				<ProgressBar timer={maturity} bgClass={'bg-info'} />
-
-				<button
-					on:click={() => {
-						contract.raiseHatchling(dragon.tokenId);
-					}}
-					class="btn btn-yellow mt-3"
-					disabled={raiseDisabled}>Raise to Adult</button
-				>
 			{/if}
-		{:else}
-			<!-- else content here -->
+
+			{#if maturity == 0}
+				<b>READY TO RAISE</b>
+				<br />
+			{/if}
+			<button
+				on:click={() => {
+					raiseDragon();
+				}}
+				emitEvent={true}
+				eventName={'isReady'}
+				on:isReady={readyToRaise}
+				class="btn btn-yellow mt-3"
+				disabled={raiseDisabled}>Raise to Adult</button
+			>
 		{/if}
 
 		{#if energy > 0}

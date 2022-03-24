@@ -1,6 +1,8 @@
 <script>
 	export let dragon;
 	// export let contract;
+
+	$: isAdult = dragon.ageGroup != '1' ? 'Adult Dragon' : 'Hatchling';
 </script>
 
 <div class="card" style="width: 18rem;">
@@ -11,17 +13,19 @@
 		<h5 class="card-title">Dragon : #{dragon.tokenId}</h5>
 		<hr />
 		<p class="card-text">
+			<b>DNA:</b>
+			{dragon.dna.genes}			
+			<br />
+			<b>Maturity: {isAdult}</b>
+			<br />
+			<b>Generation:</b>
+			{dragon.dna.generation}
+			<br>
 			<b>MumId:</b>
 			{dragon.mumId}
 			<br />
 			<b>DadId:</b>
-			{dragon.dadId}
-			<br />
-			<b>DNA:</b>
-			{dragon.dna.genes}
-			<br />
-			<b>Generation:</b>
-			{dragon.dna.generation}
+			{dragon.dadId}						
 		</p>
 		<br />
 
@@ -41,6 +45,7 @@
 	}
 
 	p {
+		font-size: 12px;
 		font-weight: 600;
 		color: #999999;
 		margin: 0px;

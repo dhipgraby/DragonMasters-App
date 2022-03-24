@@ -61,8 +61,7 @@ export class DragonContract {
             dragonDetails['dna'] = await this.getDna(dragonDetails.dnaId)
             dragons.push(dragonDetails)
         }
-        userDragons.set(dragons)        
-        console.log(dragons)
+        userDragons.set(dragons)                
     }
 
     async getDna(dnaId) {
@@ -78,8 +77,7 @@ export class DragonContract {
 
     async checkEnergy(dragonId){
         try {
-            let energy = await this.contract.DragonToken.methods.checkEnergy(dragonId).call()                        
-            console.log(energy)
+            let energy = await this.contract.DragonToken.methods.checkEnergy(dragonId).call()                                    
            
             if(energy == 0){
                 setAlert('This dragon have full energy!','success')        
