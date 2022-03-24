@@ -7,7 +7,7 @@
 
 <div class="card" style="width: 18rem;">
 	<div class="card-header">
-		<a href="/dragon/{dragon.tokenId}"> <img src="/images/dragon.png" alt="dragon" /></a>
+		<img src="/images/dragon.png" alt="dragon" />
 	</div>
 	<div class="card-body">
 		<h5 class="card-title">Dragon : #{dragon.tokenId}</h5>

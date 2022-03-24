@@ -34,8 +34,8 @@
 		mum_dragon = value;
 	});
 
-	function breed(mum, dad) {
-		console.log(mum, dad);
+	async function breed(mumId, dadId) {
+		await contract.breed(mumId, dadId);
 	}
 
 	function switchGender() {

@@ -125,6 +125,20 @@ export class DragonContract {
         }
     }
 
+    async breed(idDragonMateA,idDragonMateB){
+        try {
+            await this.contract.DragonToken.methods.breed(idDragonMateA,idDragonMateB).send({}, function (err, txHash) {
+                if (err) setAlert(err, 'warning')
+                else {
+                    setAlert(txHash, 'success')
+                    return txHash
+                }
+            })
+        } catch (err) {
+            console.log("Error at: Breeding function" + err)
+        }
+    }
+
     /************* STANDARD CONTRACT FUNCTIONS  ***************/
 
     async totalSupply() {
