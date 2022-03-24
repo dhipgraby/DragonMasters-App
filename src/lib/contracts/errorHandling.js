@@ -9,7 +9,7 @@ export function getErrors(functionName,error){
     let reason = Object.values(error.data)[0].reason
     
     if(reason == null) reason = newMsg    
-    console.log('Error at : '+ functionName)
+    //console.log('Error at : '+ functionName)
     
     return reason
 

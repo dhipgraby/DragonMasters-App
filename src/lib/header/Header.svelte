@@ -15,6 +15,3 @@
 {#each lastAlerts as alert, i}
 	<Alert {...alert} alert_number={i} />
 {/each}
-
-<style>
-</style>

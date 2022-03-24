@@ -1,19 +1,15 @@
 <script>
 
-	import ContractUI from '$lib/component/ContractUI.svelte'
-	import { EggContract } from '$lib/contracts/methods';
-	import { onMount } from 'svelte';
-
-	let contract;
-
-	onMount(async () => {
-		contract = await new EggContract();
-	});
+	import ContractUI from '$lib/component/contractUI/ContractUI.svelte'
+	
 </script>
 
 <svelte:head>
 	<title>Home</title>
+
+	<link href="/css/contractUI.css" rel="stylesheet" />
+
 </svelte:head>
 
 
-<ContractUI {contract} />
+<ContractUI />

@@ -1,19 +1,32 @@
 <script>
-	import EggCard from '$lib/component/EggCard.svelte';
-	import { EggContract, userEggs } from '$lib/contracts/methods';
+
+	import EggGrid from '$lib/component/egg/EggGrid.svelte';
+	import DragonGrid from '$lib/component/dragon/DragonGrid.svelte';
+	import { EggContract, userEggs } from '$lib/contracts/EggToken';
+	import { DragonContract, userDragons } from '$lib/contracts/DragonToken';
 	import { onMount } from 'svelte';
 
-	let contract;
+	let contract = [];
 	let eggs = [];
+	let dragons = [];
+
+	let show = 1;
 
 	onMount(async () => {
-		contract = await new EggContract();
-		await contract.getUserEggs();
+		contract['egg'] = await new EggContract();
+		contract['dragon'] = await new DragonContract();
+
+		await contract['egg'].getUserEggs();
+		await contract['dragon'].getUserDragons();
 	});
 
-	const unsubscribe = userEggs.subscribe((value) => {
+	const subscribeEggs = userEggs.subscribe((value) => {
 		eggs = value;
 		console.log(eggs);
+	});
+
+	const subscribeDragons = userDragons.subscribe((value) => {
+		dragons = value;
 	});
 </script>
 
@@ -23,23 +36,22 @@
 </svelte:head>
 
 <section>
-	<h1>Your Eggs</h1>
-
-	<div class="row">
-		{#each eggs as egg}
-			<div class="col-md-4">
-				<EggCard {egg} {contract} />
-			</div>
-		{/each}
+	<div class="btn-group" role="group">
+		<button type="button" on:click={() => (show = 1)} class="btn btn-light">EGG CONTRACT</button>
+		<button type="button" on:click={() => (show = 2)} class="btn btn-light">DRAGON CONTRACT</button>
 	</div>
+
+	{#if show == 1}
+		<EggGrid {eggs} contract={contract['egg']} />
+	{/if}
+
+	{#if show == 2}
+		<DragonGrid {dragons} contract={contract['dragon']} />
+	{/if}
+
 </section>
 
 <style>
-	h1 {
-		margin-bottom: 40px;
-		font-size: 56px;
-		font-weight: 600;
-	}
 
 	section {
 		padding-top: 50px;
@@ -49,4 +61,17 @@
 		align-items: center;
 		flex: 1;
 	}
+
+	.btn-group .btn {
+		margin: 8px;
+		font-weight: 600;
+		letter-spacing: 0.8px;
+		font-size: 14px;
+	}
+
+	.btn-group {
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+
 </style>
