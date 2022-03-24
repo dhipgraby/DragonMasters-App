@@ -1,6 +1,6 @@
 <script>
 	export let dragon;
-	// export let contract;
+	export let checkBtn = true;
 
 	$: isAdult = dragon.ageGroup != '1' ? 'Adult Dragon' : 'Hatchling';
 </script>
@@ -14,24 +14,25 @@
 		<hr />
 		<p class="card-text">
 			<b>DNA:</b>
-			{dragon.dna.genes}			
+			{dragon.dna.genes}
 			<br />
 			<b>Maturity: {isAdult}</b>
 			<br />
 			<b>Generation:</b>
 			{dragon.dna.generation}
-			<br>
+			<br />
 			<b>MumId:</b>
 			{dragon.mumId}
 			<br />
 			<b>DadId:</b>
-			{dragon.dadId}						
+			{dragon.dadId}
 		</p>
 		<br />
-
-		<a href="/dragon/{dragon.tokenId}"
-			><button class="btn btn-dark">Checkout <i class="fas fa-arrow-circle-right" /></button></a
-		>
+		{#if checkBtn}
+			<a href="/dragon/{dragon.tokenId}"
+				><button class="btn btn-dark">Checkout <i class="fas fa-arrow-circle-right" /></button></a
+			>
+		{/if}
 	</div>
 </div>
 
