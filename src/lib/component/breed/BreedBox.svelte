@@ -2,15 +2,15 @@
 	import { onMount } from 'svelte';
 	import { dragonA, dragonB } from '$lib/storage/dragon';
 	import { DragonContract, userDragons } from '$lib/contracts/DragonToken';
-	
+
 	//COMPONENTS
 	import UserDragons from './UserDragons.svelte';
-    import BreedBtn from './BreedBtn.svelte';
-	import DragonSelection from './DragonSelection.svelte';	
+	import BreedBtn from './BreedBtn.svelte';
+	import DragonSelection from './DragonSelection.svelte';
 	import BirthBox from './birthBox.svelte';
 
 	let mum_dragon;
-	let dad_dragon;	
+	let dad_dragon;
 	let gender;
 	let displayDragons = false;
 	let breedEvent = false;
@@ -20,18 +20,32 @@
 	onMount(async () => {
 		contract = await new DragonContract();
 		await contract.getUserDragons();
+
+		await contract.contract.DragonToken.events
+			.EggLaid()
+			.once('data', (event) => {
+				console.log(event);
+			})
+			.on('error', console.error);
 	});
+
+	async function checkEnergy(tokenId) {
+		let energy = await contract.checkEnergy(tokenId);
+		return energy;
+	}
 
 	const subscribeDragons = userDragons.subscribe((value) => {
 		dragons = value;
 	});
 
-	const dadDragon = dragonA.subscribe((value) => {
+	const dadDragon = dragonA.subscribe(async (value) => {
 		dad_dragon = value;
+		if (dad_dragon.tokenId) dad_dragon.energy = await checkEnergy(dad_dragon.tokenId);		
 	});
 
-	const mumDragon = dragonB.subscribe((value) => {
+	const mumDragon = dragonB.subscribe(async (value) => {
 		mum_dragon = value;
+		if (mum_dragon.tokenId) mum_dragon.energy = await checkEnergy(mum_dragon.tokenId);		
 	});
 
 	async function breed(mumId, dadId) {
@@ -63,9 +77,5 @@
 	<DragonSelection {mum_dragon} {dad_dragon} {showDragons} {switchGender} />
 	<BreedBtn {mum_dragon} {dad_dragon} {breed} />
 
-	<UserDragons        
-        {hideDragons}
-        {displayDragons}
-        allDragons={dragons}
-        {gender}  />
+	<UserDragons {hideDragons} {displayDragons} allDragons={dragons} {gender} />
 {/if}

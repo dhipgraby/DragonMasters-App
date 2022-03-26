@@ -65,12 +65,12 @@ export class EggContract {
 
     async getUserEggs() {
 
-        let allEggs = await this.getEggIds(0, 5)
+        let allEggs = await this.getEggIds(0, 20)
         let eggs = []
 
         for (let i = 0; i < allEggs.tokenIds.length; i++) {
             let eggDetails = await this.getEgg(allEggs.tokenIds[i])
-            let incubationTime = await this.checkIncubation(allEggs.tokenIds[i], false)
+            let incubationTime = (eggDetails.incubation == '0') ? null : await this.checkIncubation(allEggs.tokenIds[i], false)
             eggDetails.incubationTime = incubationTime
             eggs.push(eggDetails)
         }
@@ -81,10 +81,10 @@ export class EggContract {
     async startIncubation(eggId) {
 
         try {
-            await this.contract.EggToken.methods.startIncubation(eggId).send({}, function (err, txHash) {
+            await this.contract.EggToken.methods.startIncubation(eggId).send({}, async function (err, txHash) {
                 if (err) setAlert(err, 'warning')
                 else {
-                    setAlert(txHash, 'success')
+                    setAlert('Incubation Started for Egg id: ' + eggId, 'success')              
                     return txHash
                 }
             })
@@ -109,7 +109,6 @@ export class EggContract {
             if (msg == true) setAlert(errMsg, 'warning')
 
             if (errMsg == "Incubation not started") return "-1";
-
         }
     }
 

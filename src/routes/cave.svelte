@@ -1,8 +1,8 @@
 <script>
-
 	import EggGrid from '$lib/component/egg/EggGrid.svelte';
 	import DragonGrid from '$lib/component/dragon/DragonGrid.svelte';
 	import { EggContract, userEggs } from '$lib/contracts/EggToken';
+	import { initEventListener } from '$lib/contracts/events';
 	import { DragonContract, userDragons } from '$lib/contracts/DragonToken';
 	import { onMount } from 'svelte';
 
@@ -16,6 +16,11 @@
 		contract['egg'] = await new EggContract();
 		contract['dragon'] = await new DragonContract();
 
+		let contractEvents = await contract.egg.contract.EggToken.events	
+		let updater = () =>{ contract['egg'].getUserEggs() }
+		await initEventListener(contractEvents,updater)
+
+			if (eggs.length > 0) return;
 		await contract['egg'].getUserEggs();
 		await contract['dragon'].getUserDragons();
 	});
@@ -27,6 +32,7 @@
 
 	const subscribeDragons = userDragons.subscribe((value) => {
 		dragons = value;
+		console.log(dragons);
 	});
 </script>
 
@@ -48,11 +54,9 @@
 	{#if show == 2}
 		<DragonGrid {dragons} contract={contract['dragon']} />
 	{/if}
-
 </section>
 
 <style>
-
 	section {
 		padding-top: 50px;
 		display: flex;
@@ -73,5 +77,4 @@
 		margin-top: 20px;
 		margin-bottom: 20px;
 	}
-
 </style>

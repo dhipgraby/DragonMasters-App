@@ -13,6 +13,12 @@
 		<h5 class="card-title">Dragon : #{dragon.tokenId}</h5>
 		<hr />
 		<p class="card-text">
+			{#if dragon.energy}
+				<b>Energy:</b>
+				{dragon.energy}
+				<br />
+			{/if}
+
 			<b>DNA:</b>
 			{dragon.dna.genes}
 			<br />
