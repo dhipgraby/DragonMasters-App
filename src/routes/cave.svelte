@@ -26,8 +26,7 @@
 	});
 
 	const subscribeEggs = userEggs.subscribe((value) => {
-		eggs = value;
-		console.log(eggs);
+		eggs = value;		
 	});
 
 	const subscribeDragons = userDragons.subscribe((value) => {

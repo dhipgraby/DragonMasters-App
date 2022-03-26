@@ -23,15 +23,12 @@ export async function eventsHandler(event, contractEvents) {
 // Eggs Events
 
 async function EggIncubationStarted(event, contractEvents) {
-
-    console.log('Handling : ' + event.event)
     updater()
     await initIncubation(contractEvents)
 
 }
 
-async function Hatched(event, contractEvents) {
-    console.log('Handling : ' + event.event)
+async function Hatched(event, contractEvents) {    
     updater()
     await initHatched(contractEvents)
 }
