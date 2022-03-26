@@ -1,4 +1,3 @@
-import { contracts } from "./contracts";
 
 let updater 
 

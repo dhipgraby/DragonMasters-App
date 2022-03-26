@@ -1,13 +1,14 @@
 <script>
+
 	import { readable } from 'svelte/store';
 	import Message from '../Message.svelte';
 
 	export let egg;
 	export let contract;
 
-	let incTime = Number(egg.incubationTime);
+	$: incTime = Number(egg.incubationTime);
 
-	let incubating = incTime > 0 ? true : false;
+	$: incubating = incTime > 0 ? true : false;
 
 	export const time = readable(incTime, function start(set) {
 		const interval = setInterval(() => {

@@ -32,7 +32,6 @@
 
 	const subscribeDragons = userDragons.subscribe((value) => {
 		dragons = value;
-		console.log(dragons);
 	});
 </script>
 
