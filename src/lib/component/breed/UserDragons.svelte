@@ -4,10 +4,11 @@
 
 	export let hideDragons;
 	export let displayDragons;
-	export let allDragons;
+	export let dragons;
 	export let gender;
+	export let getEnergy
 
-	afterUpdate(() => {
+	afterUpdate(() => {	
 		gender = gender;
 		displayDragons = displayDragons;
 	});
@@ -16,11 +17,11 @@
 <div class="row container" id="dragonGrid">
 	{#if displayDragons}
 		<h1 class="mt-5">Choose {gender}</h1>
-		{#if allDragons != undefined}
-			{#each allDragons as dragon}
+		{#if dragons != undefined}
+			{#each dragons as dragon}
             <!-- ONLY ADULT DRAGONS -->
 				{#if dragon.ageGroup == 2}
-					<DragonBox dragonProps={dragon} {gender} hide={hideDragons} />
+					<DragonBox dragonProps={dragon} {gender} hide={hideDragons} {getEnergy} />
 				{/if}
 			{/each}
 		{/if}

@@ -1,8 +1,12 @@
 <script>
+	import ProgressBar from "./ProgressBar.svelte";
+
 	export let dragon;
 	export let checkBtn = true;
+	export let fullEnergy = null
 
 	$: isAdult = dragon.ageGroup != '1' ? 'Adult Dragon' : 'Hatchling';
+
 </script>
 
 <div class="card" style="width: 18rem;">
@@ -14,9 +18,15 @@
 		<hr />
 		<p class="card-text">
 			{#if dragon.energy}
-				<b>Energy:</b>
-				{dragon.energy}
+				<b>Energy: {dragon.energy}</b>
 				<br />
+				<ProgressBar	
+				emitEvent={true}
+				eventName={'isReady'}
+				on:isReady={fullEnergy}										
+				timer={dragon.energy}
+				bgClass={'bg-warning'}
+				 />
 			{/if}
 
 			<b>DNA:</b>

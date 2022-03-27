@@ -6,6 +6,7 @@
 	export let showDragons;
 	export let mum_dragon;
 	export let dad_dragon;
+	export let getEnergy;
 </script>
 
 <div class="row container" id="dragonGrid">
@@ -32,6 +33,7 @@
 			gender={dad_dragon.gender}
 			switchBtn={true}
 			callback={showDragons}
+			{getEnergy}
 		/>
 	{:else}
 		<SelectBox callback={showDragons} gender={'dad'} />

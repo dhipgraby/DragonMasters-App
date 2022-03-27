@@ -50,8 +50,8 @@
 	function sendEvent() {
 		if (emitEvent) {
 			dispatch(eventName);
-			console.log('emit event');
 		}
+		return
 	}
 </script>
 
@@ -69,13 +69,30 @@
 		</div>
 	</div>
 {:else}
-	<b>FULL ENERGY</b>
+	<div class="progress">
+		<div
+			class="progress-bar progress-bar-striped progress-bar-animated {bgClass}"
+			role="progressbar"
+			style="width: 100%"
+			aria-valuemin="0"
+			aria-valuemax={100}
+		>
+		<i class="fas fa-bolt" /> FULL 
+		</div>
+	</div>
 {/if}
 
 <style>
 
-	b {
-		color: #444444;		
+	.progress {
+		margin: 5px 0px;
+	}
+
+	.progress-bar {
+		color: black;
+		font-size: 11px !important;		
+		display: inline-block;
+
 	}
 
 	.timeleft {

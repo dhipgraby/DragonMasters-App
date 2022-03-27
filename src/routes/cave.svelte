@@ -16,17 +16,20 @@
 		contract['egg'] = await new EggContract();
 		contract['dragon'] = await new DragonContract();
 
-		let contractEvents = await contract.egg.contract.EggToken.events	
-		let updater = () =>{ contract['egg'].getUserEggs() }
-		await initEventListener(contractEvents,updater)
+		let contractEvents = await contract.egg.contract.EggToken.events;
+		let updater = () => {
+			contract['egg'].getUserEggs();
+		};
+		await initEventListener(contractEvents, updater);
 
-			if (eggs.length > 0) return;
+		if (eggs.length > 0) return;
 		await contract['egg'].getUserEggs();
+		if (dragons.length > 0) return;
 		await contract['dragon'].getUserDragons();
 	});
 
 	const subscribeEggs = userEggs.subscribe((value) => {
-		eggs = value;		
+		eggs = value;
 	});
 
 	const subscribeDragons = userDragons.subscribe((value) => {
