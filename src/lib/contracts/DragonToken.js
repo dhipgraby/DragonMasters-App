@@ -1,9 +1,26 @@
 import { setAlert } from "$lib/storage/alerts";
-import { writable } from "svelte/store";
+import { writable,get } from "svelte/store";
 import { contracts } from "./contracts";
 import { getErrors } from "./errorHandling";
 
 export const userDragons = writable([])
+
+export async function updateSingle(dragon){
+
+    let dragons = get(userDragons)
+
+    let updated = dragons.map((elem) => {
+        if(elem.tokenId == dragon.tokenId) elem = dragon
+            return elem
+    } )
+
+    userDragons.update(value => {
+        value = updated
+        return value;
+    });   
+
+    console.log(updated)
+}
 
 export class DragonContract {
     constructor() {
@@ -62,7 +79,7 @@ export class DragonContract {
             dragons.push(dragonDetails)
         }
         userDragons.set(dragons)       
-        console.log('updating')         
+        console.log(dragons)         
     }
 
     async getDna(dnaId) {

@@ -5,8 +5,7 @@
 	export let switchGender;
 	export let showDragons;
 	export let mum_dragon;
-	export let dad_dragon;
-	export let getEnergy;
+	export let dad_dragon;	
 </script>
 
 <div class="row container" id="dragonGrid">
@@ -15,7 +14,7 @@
             dragonProps={mum_dragon}
             gender={mum_dragon.gender}
             switchBtn={true}
-            callback={showDragons}
+            callback={showDragons}			
         />
 	{:else}
 		<SelectBox callback={showDragons} gender={'mum'} />
@@ -32,8 +31,7 @@
 			dragonProps={dad_dragon}
 			gender={dad_dragon.gender}
 			switchBtn={true}
-			callback={showDragons}
-			{getEnergy}
+			callback={showDragons}		
 		/>
 	{:else}
 		<SelectBox callback={showDragons} gender={'dad'} />

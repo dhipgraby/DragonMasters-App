@@ -7,7 +7,7 @@
 	import UserDragons from './UserDragons.svelte';
 	import BreedBtn from './BreedBtn.svelte';
 	import DragonSelection from './DragonSelection.svelte';
-	import BirthBox from './birthBox.svelte';
+	import BirthBox from './BirthBox.svelte';
 
 	
 	let gender;
@@ -45,8 +45,7 @@
 		displayDragons = true;
 		gender = dragonGender;
 	 }, 
-	 switchGender, 
-	 getEnergy: async(tokenId) => {return await contract.checkEnergy(tokenId);}  
+	 switchGender	 
 	}
 
 	$: DragonsInfo = {

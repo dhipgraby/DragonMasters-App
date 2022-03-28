@@ -2,6 +2,7 @@
 import { setAlert } from '$lib/storage/alerts';
 
 	import { update_current_dragon } from '$lib/storage/dragon';
+	import { updateSingle } from '$lib/contracts/DragonToken'
 	import { onMount } from 'svelte';
 	import DragonCard from '../dragon/DragonCard.svelte';
 	import SwitchButton from './SwitchButton.svelte';
@@ -10,24 +11,27 @@ import { setAlert } from '$lib/storage/alerts';
 	export let gender;
 	export let switchBtn = false;
 	export let callback = null;
-	export let getEnergy;
+	export let getEnergy = null;
 	export let hide = null;
 
+	$: dragon = dragonProps
+
 	onMount(async () => {
-		dragonProps.energy = await getEnergy(dragonProps.tokenId);
+		if(getEnergy == null && dragon.energy != undefined) return
+			console.log(dragon.energy)
+		dragon.energy = await getEnergy(dragonProps.tokenId);
 	});
 
-	$: energy = dragonProps.energy
-
 	function fullEnergy(){
-		dragonProps.energy = 0
+		dragon.energy = 0
+		updateSingle(dragon);
 	}
 
 	function chooseDragon() {
-		if (energy <= 0) {
+		if (dragon.energy <= 0) {
 			if (hide != null) {
 				hide();
-				update_current_dragon(dragonProps, gender);
+				update_current_dragon(dragon, gender);
 			}
 		} else {
 			setAlert('Dragons need full energy to Breed','warning')
@@ -37,11 +41,11 @@ import { setAlert } from '$lib/storage/alerts';
 
 <div
 	on:click={() => chooseDragon()}
-	id={'dragon' + dragonProps.tokenId}
+	id={'dragon' + dragon.tokenId}
 	class="col-lg-4 pointer"
 	align="left"
 >
-	<DragonCard dragon={dragonProps} checkBtn={false} {fullEnergy} />
+	<DragonCard {dragon} checkBtn={false} {fullEnergy} />
 
 	{#if switchBtn}
 		<SwitchButton {gender} {callback} />

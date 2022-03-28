@@ -1,35 +1,9 @@
 
-import { writable,get } from 'svelte/store';
+import { writable } from 'svelte/store';
 
 //FOR BREEDING
 export const dragonA = writable(0);
 export const dragonB = writable(0);
-
-//USER DRAGONS ARRAY
-export const userDragons = writable([]);
-
-export function modify(){
-    
-    let currentDragons = get(userDragons)
-    currentDragons[0].offer = false;
-    userDragons.set(currentDragons)
-
-    return 
-}
-
-export function getUserDragons(){    
-    return get(userDragons)
-}
-
-export async function setUserDragons(dragons){
-
-    let dragonArray = [];
-    dragons.forEach((dragon) => {
-        dragonArray.push(user_format(dragon))
-    });
-    
-    userDragons.set(dragonArray)
-}
 
 export function update_current_dragon(dragon,_gender){
     
@@ -46,7 +20,7 @@ export function update_current_dragon(dragon,_gender){
             value = dragon
             return value;
         }); 
-    }   
+    }       
 }
 
 export function offer_format(dragon){
