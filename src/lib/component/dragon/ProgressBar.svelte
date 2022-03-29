@@ -68,18 +68,7 @@
 			{parseFloat($percent).toFixed(2)}%
 		</div>
 	</div>
-{:else}
-	<div class="progress">
-		<div
-			class="progress-bar progress-bar-striped progress-bar-animated {bgClass}"
-			role="progressbar"
-			style="width: 100%"
-			aria-valuemin="0"
-			aria-valuemax={100}
-		>
-		<i class="fas fa-bolt" /> FULL 
-		</div>
-	</div>
+
 {/if}
 
 <style>

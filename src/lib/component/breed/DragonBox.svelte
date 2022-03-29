@@ -17,8 +17,9 @@ import { setAlert } from '$lib/storage/alerts';
 	$: dragon = dragonProps
 
 	onMount(async () => {
-		if(getEnergy == null && dragon.energy != undefined) return
-			console.log(dragon.energy)
+		if(getEnergy == null && dragon.energy != undefined) return			
+		if(dragon.energy == 0) return	
+		console.log('calling energy')
 		dragon.energy = await getEnergy(dragonProps.tokenId);
 	});
 

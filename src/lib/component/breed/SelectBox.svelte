@@ -1,6 +1,5 @@
 <script>
 
-
 export let callback;
 export let gender;
 
@@ -28,10 +27,19 @@ export let gender;
         background: #ffffff;
         padding: 70px;
         vertical-align: middle;
-        box-shadow: 0px 5px 7px 0px #444444;
     }
 
-    .eggContainer h1 {
-        color: #444444;        
+    .eggContainer h1,h3 {
+        color: #a1a1a1;        
     }
+
+    .eggContainer h3 {
+        color: #a1a1a1;        
+    }
+
+    .eggContainer:hover h1 {
+        color: #444;       
+    }
+    
+
 </style>

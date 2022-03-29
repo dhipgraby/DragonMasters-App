@@ -18,7 +18,7 @@
 		<hr />
 		<p class="card-text">
 			{#if dragon.energy}
-				<b>Energy: {dragon.energy}</b>
+				<b>Energy</b>
 				<br />
 				<ProgressBar	
 				emitEvent={true}

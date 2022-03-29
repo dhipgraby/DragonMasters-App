@@ -1,15 +1,16 @@
 <script>
 
-	import ContractUI from '$lib/component/contractUI/ContractUI.svelte'
-	
 </script>
 
 <svelte:head>
-	<title>Home</title>
+	<title>Welcome to Dragon Masters</title>
 
-	<link href="/css/contractUI.css" rel="stylesheet" />
-
+	
 </svelte:head>
 
+<div class="container mt-5 ta-c">
 
-<ContractUI />
+	<h1>Welcome to Dragon Masters</h1>
+
+</div>
+

@@ -5,7 +5,14 @@
 	export let contract;
 </script>
 
-<h1>Your Dragons</h1>
+<div class="row extended mt-4 mb-4">
+	<div class="col-6 ta-l">
+		<h1>Your Dragons</h1>
+	</div>
+	<div class="col-6 ta-r">
+		<a href="/breed" class="btn btn-danger"> Breed </a>
+	</div>
+</div>
 
 <div class="row">
 	{#if dragons.length}
@@ -18,3 +25,9 @@
 		<h2>Not dragons found</h2>
 	{/if}
 </div>
+
+<style>
+	.extended {
+		width: 100%;
+	}
+</style>

@@ -44,8 +44,8 @@
 
 <section>
 	<div class="btn-group" role="group">
-		<button type="button" on:click={() => (show = 1)} class="btn btn-light">EGG CONTRACT</button>
-		<button type="button" on:click={() => (show = 2)} class="btn btn-light">DRAGON CONTRACT</button>
+		<button type="button" on:click={() => (show = 1)} class="btn btn-light"><i class="fas fa-egg"></i> EGGS </button>
+		<button type="button" on:click={() => (show = 2)} class="btn btn-light"><i class="fas fa-dragon" /> DRAGONS </button>
 	</div>
 
 	{#if show == 1}

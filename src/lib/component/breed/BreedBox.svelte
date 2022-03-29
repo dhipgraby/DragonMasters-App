@@ -9,19 +9,18 @@
 	import DragonSelection from './DragonSelection.svelte';
 	import BirthBox from './BirthBox.svelte';
 
-	
 	let gender;
 	let displayDragons = false;
 	let breedEvent = false;
 	let contract;
-	
+
 	$: dad_dragon = $dragonA;
-	$: mum_dragon = $dragonB;	
+	$: mum_dragon = $dragonB;
 	$: dragons = $userDragons;
-	
+
 	onMount(async () => {
-		contract = await new DragonContract();				
-		if(dragons.length > 0) return		
+		contract = await new DragonContract();
+		if (dragons.length > 0) return;
 		await contract.getUserDragons();
 	});
 
@@ -39,29 +38,34 @@
 	}
 
 	$: Parents = {
-	 mum_dragon,
-	 dad_dragon,
-	 showDragons:(dragonGender) => { 
-		displayDragons = true;
-		gender = dragonGender;
-	 }, 
-	 switchGender	 
-	}
+		mum_dragon,
+		dad_dragon,
+		showDragons: (dragonGender) => {
+			displayDragons = true;
+			gender = dragonGender;
+		},
+		switchGender
+	};
 
 	$: DragonsInfo = {
 		dragons,
+		mum_dragon,
+		dad_dragon,
 		gender,
 		displayDragons,
-		getEnergy: async(tokenId) => {return await contract.checkEnergy(tokenId);} ,		
-		hideDragons:()=>{displayDragons = false}
-	}
+		getEnergy: async (tokenId) => {
+			return await contract.checkEnergy(tokenId);
+		},
+		hideDragons: () => {
+			displayDragons = false;
+		}
+	};
 
 	$: BreedInfo = {
-	 mum_dragon,
-	 dad_dragon,
-	 breed,	
-	}
-
+		mum_dragon,
+		dad_dragon,
+		breed
+	};
 </script>
 
 {#if breedEvent}
