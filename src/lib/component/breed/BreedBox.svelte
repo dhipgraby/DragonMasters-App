@@ -25,7 +25,7 @@
 
 		let contractEvents = await contract.contract.DragonToken.events;
 		
-		const updater = () => {	console.log('running updater') }		
+		const updater = () => {	breedEvent = true }		
 
 		await initEventListener(contractEvents, updater,'DragonToken');
 
