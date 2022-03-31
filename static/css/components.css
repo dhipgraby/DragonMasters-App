@@ -26,12 +26,6 @@
 
 /********* Buttons ***********/
 
-	button {
-		padding: 8px 24px !important;
-		border-radius: 50px !important; 
-		transition: 0.1s;
-	}
-
 	button:hover {
 		transform: scale(1.02);
 		opacity: 0.8;

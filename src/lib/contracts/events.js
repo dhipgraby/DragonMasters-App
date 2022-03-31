@@ -14,8 +14,8 @@ export async function initEventListener(contractEvents, callback, contract) {
             break;
     }
 
-    updater = () => {
-        return callback()
+    updater = (event) => {
+        return callback(event)
     }
 }
 
@@ -47,8 +47,8 @@ async function Hatched(event, contractEvents) {
 }
 
 async function EggLaid(event, contractEvents) {
-    updater()
     console.log(event)
+    updater(event)    
     await initBreeding(contractEvents)
 }
 

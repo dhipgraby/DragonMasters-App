@@ -14,24 +14,31 @@
 	let displayDragons = false;
 	let breedEvent = false;
 	let contract;
+	let newEgg;
 
 	$: dad_dragon = $dragonA;
 	$: mum_dragon = $dragonB;
 	$: dragons = $userDragons;
 
 	onMount(async () => {
-		
 		contract = await new DragonContract();
 
 		let contractEvents = await contract.contract.DragonToken.events;
-		
-		const updater = () => {	breedEvent = true }		
 
-		await initEventListener(contractEvents, updater,'DragonToken');
+		const updater = (event) => {
+			newEgg = {
+				eggId:event.returnValues.eggId,
+				dadId:event.returnValues.dadId,
+				mumId:event.returnValues.mumId,
+			}		
+			breedEvent = true			
+		};
+
+		await initEventListener(contractEvents, updater, 'DragonToken');
 
 		if (dragons.length > 0) return;
 		await contract.getUserDragons();
-		dragons.reverse()
+		dragons.reverse();
 	});
 
 	async function breed(mumId, dadId) {
@@ -76,10 +83,20 @@
 		dad_dragon,
 		breed
 	};
+
+	// function showNew(){
+	// 	newEgg = {
+	// 			eggId:3,
+	// 			dadId:0,
+	// 			mumId:1,
+	// 		}		
+	// 		breedEvent = true	
+	// }
+
 </script>
 
 {#if breedEvent}
-	<BirthBox />
+	<BirthBox {...newEgg} />
 {:else}
 	<DragonSelection {...Parents} />
 	<BreedBtn {...BreedInfo} />
