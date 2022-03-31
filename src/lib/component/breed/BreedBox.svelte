@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { dragonA, dragonB } from '$lib/storage/dragon';
 	import { DragonContract, userDragons } from '$lib/contracts/DragonToken';
+	import { initEventListener } from '$lib/contracts/events';
 
 	//COMPONENTS
 	import UserDragons from './UserDragons.svelte';
@@ -19,9 +20,18 @@
 	$: dragons = $userDragons;
 
 	onMount(async () => {
+		
 		contract = await new DragonContract();
+
+		let contractEvents = await contract.contract.DragonToken.events;
+		
+		const updater = () => {	console.log('running updater') }		
+
+		await initEventListener(contractEvents, updater,'DragonToken');
+
 		if (dragons.length > 0) return;
 		await contract.getUserDragons();
+		dragons.reverse()
 	});
 
 	async function breed(mumId, dadId) {

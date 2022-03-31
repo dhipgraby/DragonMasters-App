@@ -20,7 +20,7 @@
 		let updater = () => {
 			contract['egg'].getUserEggs();
 		};
-		await initEventListener(contractEvents, updater);
+		await initEventListener(contractEvents, updater,'EggToken');
 
 		if (eggs.length > 0) return;
 		await contract['egg'].getUserEggs();

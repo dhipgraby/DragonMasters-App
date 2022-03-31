@@ -19,7 +19,6 @@ export async function updateSingle(dragon){
         return value;
     });   
 
-    console.log(updated)
 }
 
 export class DragonContract {
@@ -78,8 +77,7 @@ export class DragonContract {
             dragonDetails['dna'] = await this.getDna(dragonDetails.dnaId)
             dragons.push(dragonDetails)
         }
-        userDragons.set(dragons)       
-        console.log(dragons)         
+        userDragons.set(dragons)               
     }
 
     async getDna(dnaId) {

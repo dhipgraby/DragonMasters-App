@@ -1,9 +1,13 @@
 <script>
 	import ProgressBar from "./ProgressBar.svelte";
+	import { onInterval } from '$lib/helpers/utils.js';
 
 	export let dragon;
 	export let checkBtn = true;
 	export let fullEnergy = null
+	export let callback = null;	
+
+	if(callback != null) onInterval(callback, 1000);
 
 	$: isAdult = dragon.ageGroup != '1' ? 'Adult Dragon' : 'Hatchling';
 
