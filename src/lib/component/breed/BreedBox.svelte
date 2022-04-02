@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
-	import { dragonA, dragonB } from '$lib/storage/dragon';
-	import { DragonContract, userDragons } from '$lib/contracts/DragonToken';
+	import { dragonA, dragonB, userDragons } from '$lib/storage/dragon';
+	import { DragonContract } from '$lib/contracts/DragonToken';
 	import { initEventListener } from '$lib/contracts/events';
 
 	//COMPONENTS
@@ -16,11 +16,9 @@
 	let contract;
 	let newEgg;
 
-	$: dad_dragon = $dragonA;
-	$: mum_dragon = $dragonB;
-	$: dragons = $userDragons;
-
 	onMount(async () => {
+
+		userDragons.useLocalStorage()
 		contract = await new DragonContract();
 
 		let contractEvents = await contract.contract.DragonToken.events;
@@ -37,22 +35,12 @@
 		await initEventListener(contractEvents, updater, 'DragonToken');
 
 		if (dragons.length > 0) return;
-		await contract.getUserDragons();
-		dragons.reverse();
+		await contract.getUserDragons();		
 	});
 
-	async function breed(mumId, dadId) {
-		await contract.breed(mumId, dadId);
-	}
-
-	function switchGender() {
-		let old_dad = dad_dragon;
-		dad_dragon = mum_dragon;
-		mum_dragon = old_dad;
-		mum_dragon.gender = 'mum';
-		dad_dragon.gender = 'dad';
-		return;
-	}
+	$: dad_dragon = $dragonA;
+	$: mum_dragon = $dragonB;
+	$: dragons = $userDragons;
 
 	$: Parents = {
 		mum_dragon,
@@ -83,15 +71,19 @@
 		dad_dragon,
 		breed
 	};
+	
+	async function breed(mumId, dadId) {
+		await contract.breed(mumId, dadId);
+	}
 
-	// function showNew(){
-	// 	newEgg = {
-	// 			eggId:3,
-	// 			dadId:0,
-	// 			mumId:1,
-	// 		}		
-	// 		breedEvent = true	
-	// }
+	function switchGender() {
+		let old_dad = dad_dragon;
+		dad_dragon = mum_dragon;
+		mum_dragon = old_dad;
+		mum_dragon.gender = 'mum';
+		dad_dragon.gender = 'dad';
+		return;
+	}
 
 </script>
 

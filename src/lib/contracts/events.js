@@ -30,7 +30,7 @@ export async function eventsHandler(event, contractEvents) {
 
     if (event.event == "EggIncubationStarted") EggIncubationStarted(event, contractEvents)
     if (event.event == "Hatched") Hatched(event, contractEvents)
-    if (event.event == "EggLaid") EggLaid(event, contractEvents)
+    if (event.event == "EggLaid") EggLaid(event)
 }
 
 // Eggs Events
@@ -46,10 +46,10 @@ async function Hatched(event, contractEvents) {
     await initHatched(contractEvents)
 }
 
-async function EggLaid(event, contractEvents) {
+async function EggLaid(event) {
     console.log(event)
     updater(event)    
-    await initBreeding(contractEvents)
+    //await initBreeding(contractEvents)
 }
 
 //INITIATORS FOR REPROGRAM EVENTS AFTER IS EMITED
@@ -77,7 +77,7 @@ async function initIncubation(contractEvents) {
 async function initBreeding(contractEvents) {
     await contractEvents
         .EggLaid()
-        .once('data', (event) => {            
+        .on('data', (event) => {            
             eventsHandler(event, contractEvents);
         })
         .on('error', console.error);

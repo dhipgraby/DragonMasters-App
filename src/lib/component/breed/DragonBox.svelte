@@ -1,8 +1,7 @@
 <script>
 	import { setAlert } from '$lib/storage/alerts';
 
-	import { update_current_dragon } from '$lib/storage/dragon';
-	import { updateSingle } from '$lib/contracts/DragonToken';
+	import { update_current_dragon,updateSingle } from '$lib/storage/dragon';		
 	import { onMount } from 'svelte';
 	import DragonCard from '../dragon/DragonCard.svelte';
 	import SwitchButton from './SwitchButton.svelte';

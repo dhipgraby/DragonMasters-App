@@ -1,18 +1,23 @@
 <script>
 	import EggGrid from '$lib/component/egg/EggGrid.svelte';
 	import DragonGrid from '$lib/component/dragon/DragonGrid.svelte';
-	import { EggContract, userEggs } from '$lib/contracts/EggToken';
+	import { userDragons }  from "$lib/storage/dragon";
+	import { userEggs }  from "$lib/storage/eggs";
+	import { EggContract } from '$lib/contracts/EggToken';
 	import { initEventListener } from '$lib/contracts/events';
-	import { DragonContract, userDragons } from '$lib/contracts/DragonToken';
+	import { DragonContract } from '$lib/contracts/DragonToken';	
 	import { onMount } from 'svelte';
 
 	let contract = [];
-	let eggs = [];
-	let dragons = [];
+	$: eggs = $userEggs;
+	$: dragons = $userDragons;
 
 	let show = 1;
 
 	onMount(async () => {
+
+		userDragons.useLocalStorage()		
+
 		contract['egg'] = await new EggContract();
 		contract['dragon'] = await new DragonContract();
 
@@ -25,16 +30,9 @@
 		if (eggs.length > 0) return;
 		await contract['egg'].getUserEggs();
 		if (dragons.length > 0) return;
-		await contract['dragon'].getUserDragons();
+		await contract['dragon'].getUserDragons();		
 	});
 
-	const subscribeEggs = userEggs.subscribe((value) => {
-		eggs = value;
-	});
-
-	const subscribeDragons = userDragons.subscribe((value) => {
-		dragons = value;
-	});
 </script>
 
 <svelte:head>

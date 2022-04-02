@@ -1,26 +1,32 @@
-
-import { writable } from 'svelte/store';
-
+import { createWritableStore } from '$lib/helpers/storage'
+import { get } from "svelte/store";
 //FOR BREEDING
-export const dragonA = writable(0);
-export const dragonB = writable(0);
+export const dragonA = createWritableStore('dragonA',0);
+export const dragonB = createWritableStore('dragonB',0);
+export const userDragons = createWritableStore('userDragons',[])
 
 export function update_current_dragon(dragon,_gender){
     
     dragon.gender = _gender
     if(_gender == 'dad'){
-        dragonA.update(value => {
-            value = dragon
-            return value;
-        });   
+        dragonA.set(dragon);   
     }
 
     if(_gender == 'mum'){
-        dragonB.update(value => {
-            value = dragon
-            return value;
-        }); 
+        dragonB.set(dragon); 
     }       
+}
+
+export async function updateSingle(dragon){
+
+    let dragons = get(userDragons)
+
+    let updated = dragons.map((elem) => {
+        if(elem.tokenId == dragon.tokenId) elem = dragon
+            return elem
+    } )
+
+    userDragons.set(updated);   
 }
 
 export function offer_format(dragon){

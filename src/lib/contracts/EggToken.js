@@ -1,9 +1,7 @@
 import { setAlert } from "$lib/storage/alerts";
-import { writable } from "svelte/store";
+import { userEggs } from "$lib/storage/eggs";
 import { contracts } from "./contracts";
 import { getErrors } from "./errorHandling";
-
-export const userEggs = writable([])
 
 export class EggContract {
     constructor() {
