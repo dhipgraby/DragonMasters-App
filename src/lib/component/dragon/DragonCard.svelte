@@ -1,37 +1,58 @@
 <script>
+	import ProgressBar from "./ProgressBar.svelte";
+	import { onInterval } from '$lib/helpers/utils.js';
+
 	export let dragon;
-	// export let contract;
+	export let checkBtn = true;
+	export let fullEnergy = null
+	export let callback = null;	
+
+	if(callback != null) onInterval(callback, 1000);
 
 	$: isAdult = dragon.ageGroup != '1' ? 'Adult Dragon' : 'Hatchling';
+
 </script>
 
 <div class="card" style="width: 18rem;">
 	<div class="card-header">
-		<a href="/dragon/{dragon.tokenId}"> <img src="/images/dragon.png" alt="dragon" /></a>
+		<img src="/images/dragon.png" alt="dragon" />
 	</div>
 	<div class="card-body">
 		<h5 class="card-title">Dragon : #{dragon.tokenId}</h5>
 		<hr />
 		<p class="card-text">
+			{#if dragon.energy}
+				<b>Energy</b>
+				<br />
+				<ProgressBar	
+				emitEvent={true}
+				eventName={'isReady'}
+				on:isReady={fullEnergy}										
+				timer={dragon.energy}
+				bgClass={'bg-warning'}
+				 />
+			{/if}
+
 			<b>DNA:</b>
-			{dragon.dna.genes}			
+			{dragon.dna.genes}
 			<br />
 			<b>Maturity: {isAdult}</b>
 			<br />
 			<b>Generation:</b>
 			{dragon.dna.generation}
-			<br>
+			<br />
 			<b>MumId:</b>
 			{dragon.mumId}
 			<br />
 			<b>DadId:</b>
-			{dragon.dadId}						
+			{dragon.dadId}
 		</p>
 		<br />
-
-		<a href="/dragon/{dragon.tokenId}"
-			><button class="btn btn-dark">Checkout <i class="fas fa-arrow-circle-right" /></button></a
-		>
+		{#if checkBtn}
+			<a href="/dragon/{dragon.tokenId}"
+				><button class="btn btn-dark">Checkout <i class="fas fa-arrow-circle-right" /></button></a
+			>
+		{/if}
 	</div>
 </div>
 

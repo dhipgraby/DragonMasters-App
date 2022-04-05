@@ -1,13 +1,14 @@
 <script>
+
 	import { readable } from 'svelte/store';
 	import Message from '../Message.svelte';
 
 	export let egg;
 	export let contract;
 
-	let incTime = Number(egg.incubationTime);
+	$: incTime = Number(egg.incubationTime);
 
-	let incubating = incTime > 0 ? true : false;
+	$: incubating = incTime > 0 ? true : false;
 
 	export const time = readable(incTime, function start(set) {
 		const interval = setInterval(() => {
@@ -24,6 +25,14 @@
 			clearInterval(interval);
 		};
 	});
+
+	function hatch() {
+		contract.hatch(egg.tokenId);		
+	}
+
+	function startIncubation() {
+		contract.startIncubation(egg.tokenId);		
+	}
 </script>
 
 <div class="card" style="width: 18rem;">
@@ -42,13 +51,9 @@
 		</p>
 
 		{#if egg.incubationTime == undefined}
-			<button class="btn btn-dark" on:click={() => contract.startIncubation(egg.tokenId)}
-				>Start Incubation</button
-			>
+			<button class="btn btn-dark" on:click={() => startIncubation()}>Start Incubation</button>
 		{:else if $time == 0}
-			<button class="btn btn-yellow" on:click={() => contract.hatch(egg.tokenId)}
-				>Ready to Hatch!</button
-			>
+			<button class="btn btn-yellow" on:click={() => hatch()}>Ready to Hatch!</button>
 		{:else}
 			{#if incubating}
 				<Message>

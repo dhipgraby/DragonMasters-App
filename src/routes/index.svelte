@@ -1,15 +1,17 @@
 <script>
+	import DragonLogo from "$lib/component/dragon/DragonLogo.svelte";
 
-	import ContractUI from '$lib/component/contractUI/ContractUI.svelte'
-	
 </script>
 
 <svelte:head>
-	<title>Home</title>
-
-	<link href="/css/contractUI.css" rel="stylesheet" />
-
+	<title>Dragon-masters</title>
 </svelte:head>
 
+<div class="mt-5" align="center">
+	<h1><i class="fas fa-dragon" /></h1>
+	<h1 class="reflex-box">Dragon Masters NFTs</h1>
 
-<ContractUI />
+	<div class="mt-4" align="center">
+		<DragonLogo />
+	</div>
+</div>

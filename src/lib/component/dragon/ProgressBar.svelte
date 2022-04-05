@@ -1,15 +1,16 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
 	import { readable } from 'svelte/store';
+	
 	export let bgClass = 'bg-info';
 	export let timer;
 	export let emitEvent = false;
 	export let eventName;
 
-	timer -= 50;
 	const dispatch = createEventDispatcher();
 
 	let percentTimer = timer;
+	let secondsLeft = timer;
 
 	let secondsUp = 0;
 
@@ -30,11 +31,11 @@
 		};
 	});
 
-	const timeLeft = readable(timer, function start(set) {
+	const timeLeft = readable(secondsLeft, function start(set) {
 		const minterval = setInterval(() => {
-			if (timer > 0) {
-				timer--;
-				set(timer);
+			if (secondsLeft > 0) {
+				secondsLeft--;
+				set(secondsLeft);
 			} else {
 				stop();
 			}
@@ -50,8 +51,8 @@
 	function sendEvent() {
 		if (emitEvent) {
 			dispatch(eventName);
-			console.log('emit event');
 		}
+		return
 	}
 </script>
 
@@ -68,19 +69,25 @@
 			{parseFloat($percent).toFixed(2)}%
 		</div>
 	</div>
-{:else}
-	<b>FULL ENERGY</b>
+
 {/if}
 
 <style>
 
-	b {
-		color: #444444;		
+	.progress {
+		margin: 5px 0px;
+	}
+
+	.progress-bar {
+		color: black;
+		font-size: 11px !important;		
+		display: inline-block;
+
 	}
 
 	.timeleft {
 		color: black;
-		font-size: 16px;
+		font-size: 12px;
 		margin: 10px 0px;
 	}
 

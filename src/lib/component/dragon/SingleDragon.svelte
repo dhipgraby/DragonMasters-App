@@ -45,13 +45,24 @@
 		<div class="dragonBg">
 			<img src="/images/dragon.png" alt="dragon" />
 		</div>
+		{#if dragon.mumId != 0 && dragon.dadId != 0 }
+		
 		<p>
 			<b>MumId:</b>
-			{dragon.mumId}
+			<a href="/dragon/{dragon.mumId}">{dragon.mumId}</a>
 			<br />
 			<b>DadId:</b>
-			{dragon.dadId}
+			<a href="/dragon/{dragon.dadId}">{dragon.dadId}</a>
 		</p>
+		{:else}
+		{#if dragon.tokenId  == 0}
+		<p>This is The <b class="first">First Dragons</b></p>		
+		{:else}
+		<p>This is one of the first Dragons</p>		
+		{/if}
+		
+			
+		{/if}
 	</div>
 
 	<div class="col-8 px-4">		
@@ -104,11 +115,21 @@
 				timer={energy}
 				bgClass={'bg-warning'}
 			/>
+			{:else}
+			<p class="c-black mt-3"><i class="fas fa-bolt" /> Full Energy</p>
 		{/if}
+
+	
+
 	</div>
 </div>
 
 <style>
+
+	.first {
+		color:#fab005;		
+	}
+
 	.btn-yellow {
 		font-size: 14px;
 		padding: 4px 20px !important;

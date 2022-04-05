@@ -5,7 +5,9 @@
 	export let contract;
 </script>
 
-<h1>Your Eggs</h1>
+<div class="mt-4 mb-4">
+	<h1>Your Eggs</h1>
+</div>
 
 <div class="row">
 	{#if eggs.length}
@@ -18,10 +20,3 @@
 		<h2>Not Eggs found</h2>
 	{/if}
 </div>
-
-
-<style>
-	.row {
-		margin-top: 25px;
-	}
-</style>

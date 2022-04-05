@@ -1,9 +1,7 @@
 import { setAlert } from "$lib/storage/alerts";
-import { writable } from "svelte/store";
+import { userDragons }  from "$lib/storage/dragon";
 import { contracts } from "./contracts";
 import { getErrors } from "./errorHandling";
-
-export const userDragons = writable([])
 
 export class DragonContract {
     constructor() {
@@ -51,7 +49,7 @@ export class DragonContract {
 
     async getUserDragons() {
 
-        let allDragons = await this.getDragonIds(0, 5)
+        let allDragons = await this.getDragonIds(0, 20)
         let dragons = []
 
         for (let i = 0; i < allDragons.tokenIds.length; i++) {
@@ -61,7 +59,7 @@ export class DragonContract {
             dragonDetails['dna'] = await this.getDna(dragonDetails.dnaId)
             dragons.push(dragonDetails)
         }
-        userDragons.set(dragons)                
+        userDragons.set(dragons)               
     }
 
     async getDna(dnaId) {
@@ -75,14 +73,14 @@ export class DragonContract {
         }
     }
 
-    async checkEnergy(dragonId){
+    async checkEnergy(dragonId, msg = false){
         try {
             let energy = await this.contract.DragonToken.methods.checkEnergy(dragonId).call()                                    
            
             if(energy == 0){
-                setAlert('This dragon have full energy!','success')        
+               if(msg == true) setAlert('This dragon have full energy!','success')        
             } else {
-                setAlert('Dragon energy: ' + energy,'info')   
+                if(msg == true) setAlert('Dragon energy: ' + energy,'info')   
             }
             return energy
 
@@ -93,15 +91,15 @@ export class DragonContract {
     }
 
     
-    async checkMaturity(dragonId){
+    async checkMaturity(dragonId, msg = false){
         try {
             let maturity = await this.contract.DragonToken.methods.checkMaturity(dragonId).call()                        
             let secondsRemaining = maturity.secondsRemaining
            
             if(secondsRemaining == 0){
-                setAlert('This dragon is Mature ready to Raise!','success')        
+                if(msg == true) setAlert('This dragon is Mature ready to Raise!','success')        
             } else {
-                setAlert('Dragon Matures at : ' + secondsRemaining,'info')   
+                if(msg == true)  setAlert('Dragon Matures at : ' + secondsRemaining,'info')   
             }
             return secondsRemaining
 
@@ -122,6 +120,20 @@ export class DragonContract {
             })
         } catch (err) {
             console.log("Error at: raiseHatchling function" + err)
+        }
+    }
+
+    async breed(idDragonMateA,idDragonMateB){
+        try {
+            await this.contract.DragonToken.methods.breed(idDragonMateA,idDragonMateB).send({}, function (err, txHash) {
+                if (err) setAlert(err, 'warning')
+                else {
+                    setAlert(txHash, 'success')
+                    return txHash
+                }
+            })
+        } catch (err) {
+            console.log("Error at: Breeding function" + err)
         }
     }
 

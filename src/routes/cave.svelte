@@ -1,33 +1,38 @@
 <script>
-
 	import EggGrid from '$lib/component/egg/EggGrid.svelte';
 	import DragonGrid from '$lib/component/dragon/DragonGrid.svelte';
-	import { EggContract, userEggs } from '$lib/contracts/EggToken';
-	import { DragonContract, userDragons } from '$lib/contracts/DragonToken';
+	import { userDragons }  from "$lib/storage/dragon";
+	import { userEggs }  from "$lib/storage/eggs";
+	import { EggContract } from '$lib/contracts/EggToken';
+	import { initEventListener } from '$lib/contracts/events';
+	import { DragonContract } from '$lib/contracts/DragonToken';	
 	import { onMount } from 'svelte';
 
 	let contract = [];
-	let eggs = [];
-	let dragons = [];
+	$: eggs = $userEggs;
+	$: dragons = $userDragons;
 
 	let show = 1;
 
 	onMount(async () => {
+
+		userDragons.useLocalStorage()		
+
 		contract['egg'] = await new EggContract();
 		contract['dragon'] = await new DragonContract();
 
+		let contractEvents = await contract.egg.contract.EggToken.events;
+		let updater = () => {
+			contract['egg'].getUserEggs();
+		};
+		await initEventListener(contractEvents, updater,'EggToken');
+
+		if (eggs.length > 0) return;
 		await contract['egg'].getUserEggs();
-		await contract['dragon'].getUserDragons();
+		if (dragons.length > 0) return;
+		await contract['dragon'].getUserDragons();		
 	});
 
-	const subscribeEggs = userEggs.subscribe((value) => {
-		eggs = value;
-		console.log(eggs);
-	});
-
-	const subscribeDragons = userDragons.subscribe((value) => {
-		dragons = value;
-	});
 </script>
 
 <svelte:head>
@@ -37,8 +42,8 @@
 
 <section>
 	<div class="btn-group" role="group">
-		<button type="button" on:click={() => (show = 1)} class="btn btn-light">EGG CONTRACT</button>
-		<button type="button" on:click={() => (show = 2)} class="btn btn-light">DRAGON CONTRACT</button>
+		<button type="button" on:click={() => (show = 1)} class="btn btn-light"><i class="fas fa-egg"></i> EGGS </button>
+		<button type="button" on:click={() => (show = 2)} class="btn btn-light"><i class="fas fa-dragon" /> DRAGONS </button>
 	</div>
 
 	{#if show == 1}
@@ -48,11 +53,9 @@
 	{#if show == 2}
 		<DragonGrid {dragons} contract={contract['dragon']} />
 	{/if}
-
 </section>
 
 <style>
-
 	section {
 		padding-top: 50px;
 		display: flex;
@@ -73,5 +76,4 @@
 		margin-top: 20px;
 		margin-bottom: 20px;
 	}
-
 </style>
