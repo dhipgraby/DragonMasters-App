@@ -32,7 +32,9 @@
 				bgClass={'bg-warning'}
 				 />
 			{/if}
-
+			<b>Type:</b>
+			{dragon.subSpecies}
+			<br>
 			<b>DNA:</b>
 			{dragon.dna.genes}
 			<br />

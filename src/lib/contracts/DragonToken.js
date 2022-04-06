@@ -1,5 +1,6 @@
 import { setAlert } from "$lib/storage/alerts";
 import { userDragons }  from "$lib/storage/dragon";
+import { subSpeciesName } from "$lib/helpers/utils"
 import { contracts } from "./contracts";
 import { getErrors } from "./errorHandling";
 
@@ -15,6 +16,8 @@ export class DragonContract {
     async getDragon(dragonId) {
         try {
             let dragonDetails = await this.contract.DragonToken.methods.getDragon(dragonId).call()
+            let subSpecies =  await this.contract.DnaToken.methods.getSubSpecies(dragonDetails.dnaId).call()
+            
 
             return {
                 tokenId:dragonId,
@@ -22,6 +25,7 @@ export class DragonContract {
                 birthTime: dragonDetails.birthTime,
                 dadId: dragonDetails.dadId,
                 dnaId: dragonDetails.dnaId,
+                subSpecies: subSpeciesName(subSpecies), 
                 fullEnergyAt: dragonDetails.fullEnergyAt,
                 maturesAt: dragonDetails.maturesAt,
                 mumId: dragonDetails.mumId
@@ -55,7 +59,7 @@ export class DragonContract {
         for (let i = 0; i < allDragons.tokenIds.length; i++) {
 
             let dragonDetails = await this.getDragon(allDragons.tokenIds[i])        
-            
+            console.log(dragonDetails)
             dragonDetails['dna'] = await this.getDna(dragonDetails.dnaId)
             dragons.push(dragonDetails)
         }

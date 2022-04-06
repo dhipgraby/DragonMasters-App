@@ -16,7 +16,7 @@
 
 	onMount(async () => {
 
-		userDragons.useLocalStorage()		
+		// userDragons.useLocalStorage()		
 
 		contract['egg'] = await new EggContract();
 		contract['dragon'] = await new DragonContract();
