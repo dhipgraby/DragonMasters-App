@@ -3,6 +3,37 @@ import { userEggs } from "$lib/storage/eggs";
 import { contracts } from "./contracts";
 import { getErrors } from "./errorHandling";
 
+const SubSpecies = {
+    Unknown:0,
+    Earth:1,
+    Fire:2,
+    Air:3,
+    Water:4
+}
+
+function subSpeciesName(SubSpecies){
+
+    let speciesName = ""
+
+    switch(SubSpecies){
+        case "1" :
+            speciesName = 'Earth'
+        break;           
+        case "2" :
+            speciesName = 'Fire'
+        break;           
+        case "3" :
+            speciesName = 'Air'
+        break;             
+        case "4" :
+            speciesName = 'Water'
+        break;           
+    }
+    return speciesName
+}
+
+Object.freeze(SubSpecies)
+
 export class EggContract {
     constructor() {
         this.contract
@@ -32,13 +63,14 @@ export class EggContract {
 
         try {
             let eggDetails = await this.contract.EggToken.methods.getEgg(eggId).call()
-
+            
             return {
                 tokenId: eggId,
                 mumId: eggDetails.mumId,
                 dadId: eggDetails.dadId,
                 incubation: eggDetails.incubationCompleteAt,
-                laidTime: eggDetails.laidTime
+                laidTime: eggDetails.laidTime,
+                subSpecies:subSpeciesName(eggDetails.subSpecies)
             }
 
         } catch (err) {
@@ -67,7 +99,8 @@ export class EggContract {
         let eggs = []
 
         for (let i = 0; i < allEggs.tokenIds.length; i++) {
-            let eggDetails = await this.getEgg(allEggs.tokenIds[i])
+            let eggDetails = await this.getEgg(allEggs.tokenIds[i])          
+            console.log(eggDetails)              
             let incubationTime = (eggDetails.incubation == '0') ? null : await this.checkIncubation(allEggs.tokenIds[i], false)
             eggDetails.incubationTime = incubationTime
             eggs.push(eggDetails)

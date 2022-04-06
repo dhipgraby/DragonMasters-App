@@ -632,6 +632,11 @@ export const contractsAbi = {
     {
       "inputs": [
         {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
           "internalType": "uint256",
           "name": "mumId",
           "type": "uint256"
@@ -642,9 +647,9 @@ export const contractsAbi = {
           "type": "uint256"
         },
         {
-          "internalType": "address",
-          "name": "owner",
-          "type": "address"
+          "internalType": "enum SubSpecies",
+          "name": "subSpecies",
+          "type": "uint8"
         }
       ],
       "name": "procreateEgg",
@@ -732,6 +737,11 @@ export const contractsAbi = {
       "outputs": [
         {
           "components": [
+            {
+              "internalType": "enum SubSpecies",
+              "name": "subSpecies",
+              "type": "uint8"
+            },
             {
               "internalType": "uint256",
               "name": "mumId",
@@ -957,6 +967,18 @@ export const contractsAbi = {
       "inputs": [
         {
           "indexed": false,
+          "internalType": "enum SubSpecies",
+          "name": "subSpecies",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
           "internalType": "uint256",
           "name": "eggId",
           "type": "uint256"
@@ -972,12 +994,6 @@ export const contractsAbi = {
           "internalType": "uint256",
           "name": "dadId",
           "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "address",
-          "name": "owner",
-          "type": "address"
         }
       ],
       "name": "EggLaid",
@@ -1481,6 +1497,11 @@ export const contractsAbi = {
           "internalType": "uint256",
           "name": "dadId",
           "type": "uint256"
+        },
+        {
+          "internalType": "enum SubSpecies",
+          "name": "subSpecies",
+          "type": "uint8"
         }
       ],
       "name": "mintTo",
@@ -2317,6 +2338,11 @@ export const contractsAbi = {
               "internalType": "uint256",
               "name": "generation",
               "type": "uint256"
+            },
+            {
+              "internalType": "enum SubSpecies",
+              "name": "subSpecies",
+              "type": "uint8"
             }
           ],
           "internalType": "struct IDnaToken.Dna",
@@ -2330,7 +2356,13 @@ export const contractsAbi = {
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        {
+          "internalType": "enum SubSpecies",
+          "name": "subSpecies",
+          "type": "uint8"
+        }
+      ],
       "name": "mintGen0Dna",
       "outputs": [
         {
@@ -2379,6 +2411,11 @@ export const contractsAbi = {
     },
     {
       "inputs": [
+        {
+          "internalType": "enum SubSpecies",
+          "name": "subSpecies",
+          "type": "uint8"
+        },
         {
           "internalType": "uint256",
           "name": "mumDnaId",
@@ -2436,6 +2473,11 @@ export const contractsAbi = {
               "internalType": "uint256",
               "name": "generation",
               "type": "uint256"
+            },
+            {
+              "internalType": "enum SubSpecies",
+              "name": "subSpecies",
+              "type": "uint8"
             }
           ],
           "internalType": "struct IDnaToken.Dna",
@@ -2444,6 +2486,51 @@ export const contractsAbi = {
         }
       ],
       "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "dnaId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getSubSpecies",
+      "outputs": [
+        {
+          "internalType": "enum SubSpecies",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "numDigits",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "seed",
+          "type": "uint256"
+        }
+      ],
+      "name": "calcPseudoRandom",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "randomNumber",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
       "type": "function",
       "constant": true
     },
@@ -2478,31 +2565,6 @@ export const contractsAbi = {
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "numDigits",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "seed",
-          "type": "uint256"
-        }
-      ],
-      "name": "calcPseudoRandom",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "randomNumber",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "pure",
       "type": "function",
       "constant": true
     }
