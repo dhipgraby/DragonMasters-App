@@ -99,8 +99,7 @@ export class EggContract {
         let eggs = []
 
         for (let i = 0; i < allEggs.tokenIds.length; i++) {
-            let eggDetails = await this.getEgg(allEggs.tokenIds[i])          
-            console.log(eggDetails)              
+            let eggDetails = await this.getEgg(allEggs.tokenIds[i])                                    
             let incubationTime = (eggDetails.incubation == '0') ? null : await this.checkIncubation(allEggs.tokenIds[i], false)
             eggDetails.incubationTime = incubationTime
             eggs.push(eggDetails)

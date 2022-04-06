@@ -42,7 +42,10 @@
 	<div class="card-body">
 		<h5 class="card-title">Egg : #{egg.tokenId}</h5>
 		<hr />
-		<p class="card-text">
+		<p class="card-text">			
+			<b>Type:</b>
+			{egg.subSpecies}
+			<br />
 			<b>MumId:</b>
 			{egg.mumId}
 			<br />
