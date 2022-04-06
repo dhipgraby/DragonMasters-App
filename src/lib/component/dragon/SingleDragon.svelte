@@ -70,6 +70,9 @@
 		<hr />
 
 		<p class="card-text">
+			<b>Type:</b>
+			{dragon.subSpecies}
+			<br>
 			{#if dna}
 				<b>DNA:</b>
 				{dna.genes}
