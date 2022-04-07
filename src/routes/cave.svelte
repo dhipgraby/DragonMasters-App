@@ -37,7 +37,6 @@
 
 <svelte:head>
 	<title>Cave - Dragon Masters</title>
-	<link href="/css/egg.css" rel="stylesheet" />
 </svelte:head>
 
 <section>

@@ -18,6 +18,7 @@ export const SubSpecies = {
 
 export function subSpeciesName(SubSpecies){
 
+    SubSpecies = SubSpecies.toString()
     let speciesName = ""
 
     switch(SubSpecies){
