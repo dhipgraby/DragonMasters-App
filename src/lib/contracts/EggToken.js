@@ -34,7 +34,7 @@ export class EggContract {
 
         try {
             let eggDetails = await this.contract.EggToken.methods.getEgg(eggId).call()
-            
+        
             return {
                 tokenId: eggId,
                 mumId: eggDetails.mumId,
@@ -75,7 +75,6 @@ export class EggContract {
             eggDetails.incubationTime = incubationTime
             eggs.push(eggDetails)
         }
-
         userEggs.set(eggs)
     }
 

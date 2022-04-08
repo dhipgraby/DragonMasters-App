@@ -1,7 +1,7 @@
 <script>
 	import ProgressBar from "./ProgressBar.svelte";
-	import { onInterval } from '$lib/helpers/utils.js';
-
+	import { onInterval,Maturity,Attribute } from '$lib/helpers/utils.js';	
+	
 	export let dragon;
 	export let checkBtn = true;
 	export let fullEnergy = null
@@ -9,8 +9,8 @@
 
 	if(callback != null) onInterval(callback, 1000);
 
-	$: isAdult = dragon.ageGroup != '1' ? 'Adult Dragon' : 'Hatchling';
-
+	$: _maturity = Object.keys(Maturity)[dragon.ageGroup]
+	
 </script>
 
 <div class="card" style="width: 18rem;">
@@ -34,20 +34,18 @@
 			{/if}
 			<b>Type:</b>
 			{dragon.subSpecies}
-			<br>
-			<b>DNA:</b>
-			{dragon.dna.genes}
-			<br />
-			<b>Maturity: {isAdult}</b>
+			<br>			
+			<b>Maturity: {_maturity}</b>
 			<br />
 			<b>Generation:</b>
 			{dragon.dna.generation}
+			<br>
+			{#each dragon.attributes as attribute , i}
+			
+			<b>{Object.keys(Attribute)[i]}: {attribute}</b>
 			<br />
-			<b>MumId:</b>
-			{dragon.mumId}
-			<br />
-			<b>DadId:</b>
-			{dragon.dadId}
+			{/each}
+	
 		</p>
 		<br />
 		{#if checkBtn}

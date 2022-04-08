@@ -2,10 +2,10 @@
 	import BreedBox from '$lib/component/breed/BreedBox.svelte';
 	import { onMount } from 'svelte';
 
-	let SubSpecies = 0;
+	let SubSpecies = null;
 
 	onMount(() => {
-		SubSpecies = 0;
+		SubSpecies = null;
 	});
 
 	function selectSubSpecie(number) {
@@ -26,17 +26,17 @@
 		</div>
 	</div>
 
-	{#if SubSpecies == 0}
+	{#if SubSpecies == null}
 		<!-- LITHOSPHERE -->
 		<div class="row">
 			<div class="col p-1">
-				<div class="eggContainer pointer" id="mum" on:click={() => selectSubSpecie(1)}>
+				<div class="eggContainer pointer" id="mum" on:click={() => selectSubSpecie(0)}>
 					<h1 class="egg earth"><i class="fas fa-egg" /></h1>
 					<h3>Earth</h3>
 				</div>
 			</div>
 			<div class="col p-1">
-				<div class="eggContainer pointer" id="mum" on:click={() => selectSubSpecie(2)}>
+				<div class="eggContainer pointer" id="mum" on:click={() => selectSubSpecie(1)}>
 					<h1 class="egg fire"><i class="fas fa-egg" /></h1>
 					<h3>Fire</h3>
 				</div>
@@ -45,13 +45,13 @@
 			<!-- HIDROSPHERE -->
 
 			<div class="col p-1">
-				<div class="eggContainer pointer" id="mum" on:click={() => selectSubSpecie(3)}>
+				<div class="eggContainer pointer" id="mum" on:click={() => selectSubSpecie(2)}>
 					<h1 class="egg air"><i class="fas fa-egg" /></h1>
 					<h3>Air</h3>
 				</div>
 			</div>
 			<div class="col p-1">
-				<div class="eggContainer pointer" id="mum" on:click={() => selectSubSpecie(4)}>
+				<div class="eggContainer pointer" id="mum" on:click={() => selectSubSpecie(3)}>
 					<h1 class="egg water"><i class="fas fa-egg" /></h1>
 					<h3>Earth</h3>
 				</div>

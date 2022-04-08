@@ -57,6 +57,7 @@
 	};
 
 	$: DragonsInfo = {
+		SubSpecies:SubSpeciesName,
 		dragons,
 		mum_dragon,
 		dad_dragon,
@@ -96,6 +97,5 @@
 {:else}
 	<DragonSelection {...Parents} />
 	<BreedBtn {...BreedInfo} />
-
 	<UserDragons {...DragonsInfo} />
 {/if}

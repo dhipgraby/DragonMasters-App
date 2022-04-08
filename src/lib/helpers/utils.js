@@ -1,39 +1,73 @@
 import { onDestroy } from 'svelte';
 
 export function onInterval(callback, milliseconds) {
-	const interval = setInterval(callback, milliseconds);
+    const interval = setInterval(callback, milliseconds);
 
-	onDestroy(() => {
-		clearInterval(interval);
-	});
+    onDestroy(() => {
+        clearInterval(interval);
+    });
 }
 
-export const SubSpecies = {
-    Unknown:0,
-    Earth:1,
-    Fire:2,
-    Air:3,
-    Water:4
+export const Maturity = {
+    Hatchling: 0,
+    Adolescent: 1,
+    YoungAdult: 2,
+    MatureAdult: 3,
+    Senior: 4,
+    Ancient: 5,
+    Immortal: 6
 }
 
-export function subSpeciesName(SubSpecies){
+const SubSpecies = {
+    Earth: 0,
+    Fire: 1,
+    Air: 2,
+    Water: 3
+}
+
+export const Attribute = {
+    Strength:0,
+    Endurance:1,
+    Agility:2,
+    Charisma:3,
+    Intelligence:4,
+    Wisdom:5
+}
+
+export const Skill = {
+    Attack:0,
+    Defend:1,
+    Run:2,
+    Climb:3,
+    Jump:4,
+    Fly:5,
+    Swim:6,
+    Dig:7
+}
+
+Object.freeze(Maturity)
+Object.freeze(SubSpecies)
+Object.freeze(Attribute)
+Object.freeze(Skill)
+
+export function subSpeciesName(SubSpecies) {
 
     SubSpecies = SubSpecies.toString()
     let speciesName = ""
 
-    switch(SubSpecies){
-        case "1" :
+    switch (SubSpecies) {
+        case "0":
             speciesName = 'Earth'
-        break;           
-        case "2" :
+            break;
+        case "1":
             speciesName = 'Fire'
-        break;           
-        case "3" :
+            break;
+        case "2":
             speciesName = 'Air'
-        break;             
-        case "4" :
+            break;
+        case "3":
             speciesName = 'Water'
-        break;           
+            break;
     }
     return speciesName
 }

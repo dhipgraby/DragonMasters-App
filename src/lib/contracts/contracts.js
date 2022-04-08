@@ -1,10 +1,10 @@
 import { writable } from 'svelte/store';
 import { contractsAbi } from "./contractsAbi";
 
-export const EggToken = "0xF56B763EfE7E43b2b18A93783C0A736bAF23c708"
-export const Marketplace = "0xeb549fA7Be1b3B6BEadeC541AFFA996098CD6bFa"
-export const DragonToken = "0xa64749c1447A46226306Ee7Aa103eeBc6e82fE28"
-export const DnaToken = "0xf5346aa8EBeC5C7732361e259E6e449578D94ba1"
+export const EggToken = "0x4974c5A716aEd590DE3CC53055259d87e4C64458"
+export const Marketplace = "0x5865CE33A1Bcef61961D2394bbbc94aBC0bAB1E5"
+export const DragonToken = "0x900638e16d7a3408010a02F8e1802018fC40f70b"
+export const DnaToken = "0xa01Cb47FFE2497A23022063CA9b1bED66bE8AFda"
 
 export const balances = writable({ contract: 0,user: 0 });
 
