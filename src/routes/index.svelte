@@ -22,6 +22,12 @@
 			case 'idle':
 			sleeping = getImg(element).idle
 			break;
+			case 'egg':
+			sleeping = getImg(element).egg
+			break;
+			case 'segg':
+			sleeping = getImg(element).segg
+			break;
 		}
 
 	}
@@ -42,13 +48,15 @@
 <button on:click={()=> change('sleep') }>Sleep</button>
 <button on:click={()=> change('idle') }>Idle</button>
 <button on:click={()=> change('fly') }>Fly</button>
-
+<button on:click={()=> change('egg') }>Egg</button>
+<button on:click={()=> change('segg') }>Special</button>
 
 <br>
 <button on:click={()=> changeElem('fire') }>fire</button>
 <button on:click={()=> changeElem('water') }>Water</button>
 <button on:click={()=> changeElem('earth') }>Earth</button>
 <button on:click={()=> changeElem('air') }>Air</button>
+
 
 
 

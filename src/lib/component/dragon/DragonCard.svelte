@@ -1,21 +1,24 @@
 <script>
-	import ProgressBar from "./ProgressBar.svelte";
-	import { onInterval,Maturity,Attribute } from '$lib/helpers/utils.js';	
-	
+	import ProgressBar from './ProgressBar.svelte';
+	import { onInterval, Maturity, Attribute } from '$lib/helpers/utils.js';
+	import { getImg } from '$lib/storage/dragonImg';
+
 	export let dragon;
 	export let checkBtn = true;
-	export let fullEnergy = null
-	export let callback = null;	
+	export let fullEnergy = null;
+	export let callback = null;
 
-	if(callback != null) onInterval(callback, 1000);
+	if (callback != null) onInterval(callback, 1000);
 
-	$: _maturity = Object.keys(Maturity)[dragon.ageGroup]
-	
+	$: _maturity = Object.keys(Maturity)[dragon.ageGroup];
+
+	let img = getImg(dragon.subSpecies).idle;
+
 </script>
 
 <div class="card" style="width: 18rem;">
 	<div class="card-header">
-		<img src="/images/dragon.png" alt="dragon" />
+		<img src={img} alt="dragon" />
 	</div>
 	<div class="card-body">
 		<h5 class="card-title">Dragon : #{dragon.tokenId}</h5>
@@ -24,28 +27,26 @@
 			{#if dragon.energy}
 				<b>Energy</b>
 				<br />
-				<ProgressBar	
-				emitEvent={true}
-				eventName={'isReady'}
-				on:isReady={fullEnergy}										
-				timer={dragon.energy}
-				bgClass={'bg-warning'}
-				 />
+				<ProgressBar
+					emitEvent={true}
+					eventName={'isReady'}
+					on:isReady={fullEnergy}
+					timer={dragon.energy}
+					bgClass={'bg-warning'}
+				/>
 			{/if}
 			<b>Type:</b>
 			{dragon.subSpecies}
-			<br>			
+			<br />
 			<b>Maturity: {_maturity}</b>
 			<br />
 			<b>Generation:</b>
 			{dragon.dna.generation}
-			<br>
-			{#each dragon.attributes as attribute , i}
-			
-			<b>{Object.keys(Attribute)[i]}: {attribute}</b>
 			<br />
+			{#each dragon.attributes as attribute, i}
+				<b>{Object.keys(Attribute)[i]}: {attribute}</b>
+				<br />
 			{/each}
-	
 		</p>
 		<br />
 		{#if checkBtn}
@@ -62,7 +63,10 @@
 	}
 
 	img {
-		widows: 100%;
+		width: 280px;
+		margin-left: auto;
+		margin-right: auto;
+		display: block;
 	}
 
 	p {
