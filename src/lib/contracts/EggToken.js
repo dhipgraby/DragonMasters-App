@@ -30,6 +30,21 @@ export class EggContract {
         }
     }
 
+    async mintBatchEggsTo(amount){
+        try {
+            await this.contract.EggToken.methods.mintBatchEggsTo(this.contract.account,amount).send({}, function (err, txHash) {
+                if (err) setAlert(err, 'warning')
+                else {
+                    setAlert(txHash, 'success')
+                    return txHash
+                }
+            })
+        } catch (err) {
+            console.log("Error at: Batch minting Error: " + err)
+        }
+
+    }
+
     async getEgg(eggId) {
 
         try {
@@ -66,7 +81,7 @@ export class EggContract {
 
     async getUserEggs() {
 
-        let allEggs = await this.getEggIds(0, 20)
+        let allEggs = await this.getEggIds(0, 50)
         let eggs = []
 
         for (let i = 0; i < allEggs.tokenIds.length; i++) {
@@ -129,10 +144,21 @@ export class EggContract {
 
     /************* STANDARD CONTRACT FUNCTIONS  ***************/
 
-    async totalSupply() {
+    async currentSupply() {
 
         try {
             let _totalSupply = await this.contract.EggToken.methods.totalSupply().call()
+            setAlert('Current Supply : ' + _totalSupply, 'info')
+        } catch (err) {
+            setAlert(err, 'warning')
+            console.log("Error at: currentSupply " + err)
+        }
+    }
+
+    async totalSupply() {
+
+        try {
+            let _totalSupply = await this.contract.EggToken.methods.getGen0Limit().call()
             setAlert('Total Supply : ' + _totalSupply, 'info')
         } catch (err) {
             setAlert(err, 'warning')

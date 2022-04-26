@@ -60,8 +60,7 @@ export class DragonContract {
 
         for (let i = 0; i < allDragons.tokenIds.length; i++) {
 
-            let dragonDetails = await this.getDragon(allDragons.tokenIds[i])        
-            console.log(dragonDetails)
+            let dragonDetails = await this.getDragon(allDragons.tokenIds[i])                    
             dragonDetails['dna'] = await this.getDna(dragonDetails.dnaId)                   
             dragons.push(dragonDetails)
         }

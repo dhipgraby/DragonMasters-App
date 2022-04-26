@@ -1,6 +1,6 @@
 export const contractsAbi = {
 
-  EggToken: [
+  EggToken:  [
     {
       "anonymous": false,
       "inputs": [
@@ -56,18 +56,24 @@ export const contractsAbi = {
       "inputs": [
         {
           "indexed": false,
+          "internalType": "address",
+          "name": "toOwner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
           "internalType": "uint256",
-          "name": "eggId",
+          "name": "firstEggId",
           "type": "uint256"
         },
         {
           "indexed": false,
-          "internalType": "address",
-          "name": "owner",
-          "type": "address"
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
         }
       ],
-      "name": "EggGen0Minted",
+      "name": "BatchGen0EggsMinted",
       "type": "event"
     },
     {
@@ -87,6 +93,25 @@ export const contractsAbi = {
         }
       ],
       "name": "EggIncubationStarted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "toOwner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "eggId",
+          "type": "uint256"
+        }
+      ],
+      "name": "Gen0EggMinted",
       "type": "event"
     },
     {
@@ -604,6 +629,24 @@ export const contractsAbi = {
         }
       ],
       "name": "mintGen0EggTo",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "mintBatchEggsTo",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -2747,7 +2790,7 @@ export const contractsAbi = {
       "constant": true
     }
   ],
-  Marketplace:[
+  Marketplace: [
     {
       "anonymous": false,
       "inputs": [

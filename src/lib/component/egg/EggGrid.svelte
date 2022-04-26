@@ -3,6 +3,7 @@
 
 	export let eggs;
 	export let contract;
+	
 </script>
 
 <div class="mt-4 mb-4">
