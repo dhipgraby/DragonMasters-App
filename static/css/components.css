@@ -49,3 +49,33 @@
 	}
 
 	
+/********* FA FAS ***********/
+
+.fa-fire {
+	color: rgb(235, 66, 66);
+}
+
+.fa-mountain {
+	color:#301303;
+}
+.fa-tint {
+	color:#349edb;
+}
+.fa-wind {
+	color:#ffffff;
+}
+
+.elemCircle {
+	display: table;	
+	width: 27px;
+	height: 27px;
+	border-radius: 50px;
+    border:solid 1px #efefef;
+    text-align: center;
+}
+
+.elemCircle i {
+	display: table-cell;
+    vertical-align: middle;
+}
+

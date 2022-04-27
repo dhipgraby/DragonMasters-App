@@ -39,19 +39,19 @@
     }
     
 	.earth {
-		color: #ffac68 !important;
+		color: #301303 !important;
 	}
 
 	.fire {
-		color: #ff6d6d !important;
+		color: rgb(235, 66, 66);
 	}
 
 	.air {
-		color: #a6ffc8 !important;
+		color: #fff !important;
 	}
 
 	.water {
-		color: #6fbcff !important;
+		color: #349edb !important;
 	}
 
 	@-webkit-keyframes AnimationName {

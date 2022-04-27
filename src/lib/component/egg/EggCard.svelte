@@ -1,22 +1,23 @@
 <script>
 	import { readable } from 'svelte/store';
 	import Message from '../Message.svelte';
-	import { getImg } from '$lib/storage/dragonImg';
-import { onMount } from 'svelte';
+	import { getImg, iconElement } from '$lib/storage/dragonImg';
+	import { afterUpdate } from 'svelte';
 
 	export let egg;
 	export let contract;
-	
-	let eggImg
+
+	let eggImg;
+	let element;
 
 	$: incTime = Number(egg.incubationTime);
 
 	$: incubating = incTime > 0 ? true : false;
 
-	
-	onMount(()=>{
+	afterUpdate(() => {
+		element = iconElement(egg.subSpecies);
 		eggImg = getImg(egg.subSpecies).egg;
-	})
+	});
 
 	export const time = readable(incTime, function start(set) {
 		const interval = setInterval(() => {
@@ -48,10 +49,11 @@ import { onMount } from 'svelte';
 		<a href="/egg/{egg.tokenId}">
 			<div class="egg-top-container">
 				{#if eggImg}
-				<img class="eggImg egg-top" alt="egg" src={eggImg} />
-				<div class="egg-top-shadow" />
+					<img class="eggImg egg-top" alt="egg" src={eggImg} />
+					<div class="egg-top-shadow" />
 				{/if}
-				
+
+				<div class="pabsolute top10 right10">{@html element}</div>
 			</div>
 		</a>
 	</div>
@@ -120,10 +122,6 @@ import { onMount } from 'svelte';
 		margin-bottom: 10px;
 	}
 
-	p {
-		font-weight: 600;
-		color: #999999;
-	}
 	.card {
 		border-radius: 20px;
 		margin: 10px;
