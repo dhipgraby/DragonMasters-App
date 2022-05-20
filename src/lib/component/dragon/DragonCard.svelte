@@ -117,8 +117,7 @@
 		font-weight: 600;
 	}
 
-	.card-header {
-		
+	.card-header {		
 		position: relative;
 		border-radius: 20px 20px 0px 0px;
 		cursor: pointer;

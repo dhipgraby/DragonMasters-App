@@ -36,7 +36,6 @@ export function iconElement(element) {
 
 }
 
-
 export function iconAttr(attr) {
 
     let icon

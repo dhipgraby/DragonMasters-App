@@ -24,6 +24,10 @@ export async function contracts() {
         from: account,
     });
 
+    let marketplace_instance = new web3.eth.Contract(contractsAbi.Marketplace, Marketplace, {
+        from: account,
+    });
+
     let address = {
         EggToken:EggToken,
         DragonToken:DragonToken,
@@ -36,7 +40,8 @@ export async function contracts() {
         account: account,
         EggToken:Egg_instance,
         DragonToken:Dragon_instance,
-        DnaToken:Dna_instance           
+        DnaToken:Dna_instance,
+        Marketplace:marketplace_instance
     } 
 
     return contractData
