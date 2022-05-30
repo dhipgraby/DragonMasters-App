@@ -14,9 +14,9 @@
 
 	$: incubating = incTime > 0 ? true : false;
 
-	afterUpdate(() => {
+	afterUpdate( async () => {
 		element = iconElement(egg.subSpecies);
-		eggImg = getImg(egg.subSpecies).egg;
+		eggImg = await getImg(egg.subSpecies).egg;
 	});
 
 	export const time = readable(incTime, function start(set) {

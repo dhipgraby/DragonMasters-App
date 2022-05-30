@@ -15,6 +15,7 @@
         closeModal();
       }
     });
+
   });
 
   function closeModal() {
@@ -22,13 +23,13 @@
     overlay.classList.add("hidden");
   }
 
-  const openModal = function () {
+  export const openModal = function () {
     modal.classList.remove("hidden");
     overlay.classList.remove("hidden");
   };
 </script>
 
-{#if btnName != "false"}
+{#if btnName != false}
   <button on:click={() => openModal(id)} class="btn btn-light"
     >{@html btnName}</button
   >
@@ -76,10 +77,10 @@
     transform: translate(-50%, -50%);
     width: fit-content;
     max-width: 800px !important;
-    background-color: #2d3134;
+    background-color: #fff;
     padding: 20px;
     border-radius: 10px;
-    border: solid 1px #5c5c5c;
+    border: solid 2px #5c5c5c;
     z-index: 12;
   }
 

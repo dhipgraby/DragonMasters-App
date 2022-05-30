@@ -81,7 +81,7 @@ export class EggContract {
 
     async getUserEggs() {
 
-        let allEggs = await this.getEggIds(0, 50)
+        let allEggs = await this.getEggIds(0, 10)
         let eggs = []
 
         for (let i = 0; i < allEggs.tokenIds.length; i++) {

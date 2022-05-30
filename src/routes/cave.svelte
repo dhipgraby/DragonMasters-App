@@ -12,7 +12,7 @@
 	$: eggs = $userEggs;
 	$: dragons = $userDragons;
 
-	let show = 1;
+	let show = 2;
 
 	onMount(async () => {
 

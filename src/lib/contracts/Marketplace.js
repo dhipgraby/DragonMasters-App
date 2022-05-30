@@ -181,7 +181,70 @@ export class MarketplaceContract {
         }
     }
 
+    async removeApproveForAll() {
+        try {
+            let dragonsIds = await this.contract.DragonToken.methods.setApprovalForAll(
+                this.contract.address.Marketplace,
+                false
+            ).send({}, function (err, txHash) {
+                if (err) setAlert(err, 'warning')
+                else {
+                    setAlert('Maketplace approved for all removed!', 'success')
+                    return txHash
+                }
+            })
 
+            return dragonsIds
+        } catch (err) {
+            setAlert('setApprovalForAll error ', 'warning')
+            console.log('Error at: setApprovalForAll ' + err)
+        }
+    }
+
+
+    async getApproved(tokenId) {
+
+        let isApproved
+        const contractAddress = this.contract.address.Marketplace
+
+        try {
+            await this.contract.DragonToken.methods.getApproved(tokenId).call({}, (err, approved) => {
+    
+                if (err) console.log(err)
+                if (contractAddress == approved) {
+                    
+                    setAlert(tokenId + ' is approved','success')
+                    isApproved = true;
+                } else {
+                    setAlert(tokenId + ' is not approved','warning')
+                    console.log('Marketplace is not approved, ' + approved)
+                    isApproved = false
+                }
+    
+            })
+        }
+        catch (err) {
+            console.log("Error from singleApprove(): " + err)
+        }
+        return isApproved
+    }
+    
+    async isApprovedForAll() {
+    
+        try {
+            const isMarketplaceAnOperator = await this.contract.DragonToken.methods.isApprovedForAll(this.contract.account, this.contract.address.Marketplace).call()
+            console.log(isMarketplaceAnOperator)
+            if(isMarketplaceAnOperator == true){
+                setAlert('This account is Aprrove fro All','success')
+            } else {
+                setAlert('Not approve for All','warning')
+            } 
+            return isMarketplaceAnOperator
+        } catch (error) {
+            setAlert('Contract error, please check metamask account and connection','warning')            
+        }    
+    }
+    
 
 }
 

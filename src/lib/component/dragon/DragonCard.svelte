@@ -1,7 +1,9 @@
 <script>
-	import ProgressBar from './ProgressBar.svelte';
 	import { onInterval, Maturity, Attribute } from '$lib/helpers/utils.js';
 	import { getImg, iconElement, iconAttr } from '$lib/storage/dragonImg';
+	import { fade } from 'svelte/transition';
+	import ProgressBar from './ProgressBar.svelte';
+	import CircleMenu from '../Menus/CircleMenu.svelte';
 
 	export let dragon;
 	export let checkBtn = true;
@@ -14,27 +16,43 @@
 
 	let img = getImg(dragon.subSpecies).idle;
 	let element = iconElement(dragon.subSpecies);
+	let hovering;
+
+	function enter() {
+		hovering = true;
+	}
+
+	function leave() {
+		hovering = false;
+	}
 </script>
 
-<div class="card" style="width: 18rem;">
+<div
+	transition:fade={{ delay: 500 }}
+	on:mouseenter={enter}
+	on:mouseleave={leave}
+	class="card"
+	style="width: 18rem;"
+>
 	<div class="card-header">
+		<CircleMenu {hovering} dragonProps={dragon} />
+
 		<img src={img} alt="dragon" />
-
-		<div class="pabsolute top10 right10">{@html element}</div>
-
+		<!-- ELEMENT -->
+		<div class="pabsolute bottom10 right10">{@html element}</div>
+		<!-- GENERATION -->
 		<div class="pabsolute top10 left10">
 			<span class="badge rounded-pill bg-light text-dark mt-2">
 				<b>Gen:{dragon.dna.generation}</b>
 			</span>
 		</div>
-
-		<div class="pabsolute left10 bottom10 maturity"><small><i class="fas fa-seedling" />: {_maturity}</small></div>
+		<!-- MATURITY -->
+		<div class="pabsolute left10 bottom10 maturity">
+			<small><i class="fas fa-seedling" />: {_maturity}</small>
+		</div>
 	</div>
 	<div class="card-body ta-c">
-
 		<h5 class="card-title">Dragon : #{dragon.tokenId}</h5>
-		<!--   MATURITY  -->
-		
 		<!--   ENERGY  -->
 		<p class="card-text">
 			{#if dragon.energy}
@@ -60,9 +78,9 @@
 
 		<br />
 		{#if checkBtn}
-			<a href="/dragon/{dragon.tokenId}"
-				><button class="btn btn-dark">Checkout <i class="fas fa-arrow-circle-right" /></button></a
-			>
+			<a href="/dragon/{dragon.tokenId}">
+				<button class="btn btn-dark">Checkout <i class="fas fa-arrow-circle-right" /> </button>
+			</a>
 		{/if}
 	</div>
 </div>
@@ -117,7 +135,7 @@
 		font-weight: 600;
 	}
 
-	.card-header {		
+	.card-header {
 		position: relative;
 		border-radius: 20px 20px 0px 0px;
 		cursor: pointer;
