@@ -202,7 +202,7 @@ export class MarketplaceContract {
     }
 
 
-    async getApproved(tokenId) {
+    async getApproved(tokenId,msg = false) {
 
         let isApproved
         const contractAddress = this.contract.address.Marketplace
@@ -213,11 +213,10 @@ export class MarketplaceContract {
                 if (err) console.log(err)
                 if (contractAddress == approved) {
                     
-                    setAlert(tokenId + ' is approved','success')
+                    if(msg == true) setAlert(tokenId + ' is approved','success')
                     isApproved = true;
                 } else {
-                    setAlert(tokenId + ' is not approved','warning')
-                    console.log('Marketplace is not approved, ' + approved)
+                    if(msg == true) setAlert(tokenId + ' is not approved','warning')                    
                     isApproved = false
                 }
     
@@ -229,15 +228,15 @@ export class MarketplaceContract {
         return isApproved
     }
     
-    async isApprovedForAll() {
+    async isApprovedForAll(msg = false) {
     
         try {
             const isMarketplaceAnOperator = await this.contract.DragonToken.methods.isApprovedForAll(this.contract.account, this.contract.address.Marketplace).call()
-            console.log(isMarketplaceAnOperator)
+            
             if(isMarketplaceAnOperator == true){
-                setAlert('This account is Aprrove fro All','success')
+                if(msg == true) setAlert('This account is Aprrove fro All','success')
             } else {
-                setAlert('Not approve for All','warning')
+                if(msg == true) setAlert('Not approve for All','warning')
             } 
             return isMarketplaceAnOperator
         } catch (error) {

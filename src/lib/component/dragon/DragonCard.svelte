@@ -3,9 +3,11 @@
 	import { getImg, iconElement, iconAttr } from '$lib/storage/dragonImg';
 	import { fade } from 'svelte/transition';
 	import ProgressBar from './ProgressBar.svelte';
-	import CircleMenu from '../Menus/CircleMenu.svelte';
+	import CircleMenu from '../dragonMenu/CircleMenu.svelte';
 
 	export let dragon;
+	export let contract
+	export let singleApproval
 	export let checkBtn = true;
 	export let fullEnergy = null;
 	export let callback = null;
@@ -35,7 +37,7 @@
 	style="width: 18rem;"
 >
 	<div class="card-header">
-		<CircleMenu {hovering} dragonProps={dragon} />
+		<CircleMenu {hovering} dragonProps={dragon} {singleApproval} {contract} />
 
 		<img src={img} alt="dragon" />
 		<!-- ELEMENT -->

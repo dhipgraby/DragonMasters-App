@@ -2,7 +2,9 @@
 	import DragonCard from '$lib/component/dragon/DragonCard.svelte';
 
 	export let dragons;
+	export let singleApproval;
 	export let contract;
+
 </script>
 
 <div class="row extended mt-4 mb-4">
@@ -18,7 +20,7 @@
 	{#if dragons.length}
 		{#each dragons as dragon}
 			<div class="col">
-				<DragonCard {dragon} {contract} />
+				<DragonCard {dragon} {contract} {singleApproval} />
 			</div>
 		{/each}
 	{:else}

@@ -2,16 +2,20 @@
 	import { onMount } from 'svelte';
 	import SellOption from './SellOption.svelte';
 
-	export let hovering;
 	export let dragonProps;
+	export let contract
+	export let singleApproval
+	export let hovering;	
 
 	let active = false;
 	let openModal;
 	let modaComponent;
+	let doPromise = false
 
 	onMount(() => {
-		console.log(dragonProps);
-		openModal = function () {
+		openModal = function () {			
+			doPromise = true		
+			console.log('opening')
 			modaComponent.openModal();
 		};
 
@@ -20,6 +24,8 @@
 			return new bootstrap.Tooltip(tooltipTriggerEl);
 		});
 	});
+
+
 </script>
 
 <div class="{hovering ? 'show' : 'hide'} maindiv">
@@ -59,7 +65,7 @@
 	</div>
 </div>
 
-<SellOption bind:this={modaComponent} {dragonProps} />
+<SellOption bind:this={modaComponent} {dragonProps} {singleApproval} {contract} {doPromise} />
 
 <style>
 	.menu {

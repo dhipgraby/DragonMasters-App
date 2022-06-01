@@ -38,14 +38,14 @@
 <br />
 
 <div class="grid" align="left">
-	<button on:click={() => contract.removeApproveForAll()} class="btn btn-danger"
-		>Remove Approve for all</button
-	>
+	<button on:click={() => contract.removeApproveForAll()} class="btn btn-danger">
+		Remove Approve for all
+	</button>
 
 	<table class="table table-striped">
 		<tr>
 			<h2>Dragons - Is Approve for All</h2>
-			<button class="btn btn-dark" on:click={() => contract.isApprovedForAll()}
+			<button class="btn btn-dark" on:click={() => contract.isApprovedForAll(true)}
 				>Check Approval</button
 			>
 		</tr>
@@ -64,12 +64,11 @@
 					placeholder="Token Id"
 				/>
 			</div>
-			<button class="btn btn-dark" on:click={() => contract.getApproved(singleApproval)}
+			<button class="btn btn-dark" on:click={() => contract.getApproved(singleApproval,true)}
 				>Check Approve</button
 			>
 		</tr>
 
-	
 		<tr>
 			<h2>Approve Token</h2>
 			<div class="mb-3">
