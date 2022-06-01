@@ -6,7 +6,6 @@
 	import ModifyOffer from '../marketplace/modifyOffer.svelte';
 	import CreateOffer from '../marketplace/CreateOffer.svelte';
 	import AppoveToken from '../marketplace/appoveToken.svelte';
-
 	export let dragonProps;
 	export let contract;
 	export let singleApproval;
@@ -25,10 +24,9 @@
 	});
 
 	afterUpdate(() => {
-		if (doPromise == true) {
-			promise = later(2000);
-		}
 		dragonProps.isApproved = singleApproval == false ? true : false;
+		if (doPromise == true && singleApproval == true) promise = later(500);
+
 		updateDragonData(dragonProps);
 	});
 
@@ -74,9 +72,15 @@
 			setTimeout(resolve, delay, await contract.getApproved(dragonProps.tokenId))
 		);
 	}
+
+	function handleApprove(event) {
+		dragonProps.isApproved = true
+		updateDragonData(dragonProps);
+	}
 </script>
 
-<BasicModal
+
+<BasicModal	
 	bind:this={modaComponent}
 	{...modalData}
 	btnName={false}
@@ -102,8 +106,8 @@
 					<CreateOffer tokenId={dragonProps.tokenId} />
 				{/if}
 			{:else}
-				<!-- ADDRESS HAVE TO APPROVE -->
-				<AppoveToken tokenId={dragonProps.tokenId} />
+				<!-- ADDRESS HAVE TO APPROVE -->		 
+				<AppoveToken on:approved={handleApprove} tokenId={dragonProps.tokenId} {contract} />
 			{/if}
 		{:catch error}
 			<p style="color: red">{error.message}</p>

@@ -55,7 +55,7 @@ export class DragonContract {
 
     async getUserDragons() {
 
-        let allDragons = await this.getDragonIds(0, 10)
+        let allDragons = await this.getDragonIds(10, 20)
         let dragons = []
 
         for (let i = 0; i < allDragons.tokenIds.length; i++) {

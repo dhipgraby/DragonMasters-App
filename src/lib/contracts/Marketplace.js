@@ -150,14 +150,15 @@ export class MarketplaceContract {
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert('Token ' + tokenId + ' approved', 'success')
-                    return txHash
+                    return true
                 }
             })
 
             return dragonsIds
         } catch (err) {
-            setAlert('approveToken error ', 'warning')
+            setAlert('ApproveToken error ', 'warning')
             console.log('Error at: approveToken ' + err)
+            return false;
         }
     }
 
@@ -170,7 +171,7 @@ export class MarketplaceContract {
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert('Maketplace approved for all', 'success')
-                    return txHash
+                    return true
                 }
             })
 
@@ -178,6 +179,7 @@ export class MarketplaceContract {
         } catch (err) {
             setAlert('setApprovalForAll error ', 'warning')
             console.log('Error at: setApprovalForAll ' + err)
+            return false
         }
     }
 
