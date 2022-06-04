@@ -2,6 +2,7 @@
 	import DragonBox from './DragonBox.svelte';
 	import SelectBox from './SelectBox.svelte';
 
+	export let SubSpecies
 	export let switchGender;
 	export let showDragons;
 	export let mum_dragon;
@@ -17,10 +18,10 @@
             callback={showDragons}			
         />
 	{:else}
-		<SelectBox callback={showDragons} gender={'mum'} />
+		<SelectBox callback={showDragons} gender={'mum'}  {SubSpecies} />
 	{/if}
 
-	<div class="col-sm-4 pointer p-1">
+	<div class="col-sm-4 pointer p-1 ta-c">
 		<div id="dad" on:click={() => switchGender()}>
 			<h1 class="egg"><i class="fas fa-exchange-alt" /></h1>
 		</div>
@@ -34,7 +35,7 @@
 			callback={showDragons}		
 		/>
 	{:else}
-		<SelectBox callback={showDragons} gender={'dad'} />
+		<SelectBox callback={showDragons} gender={'dad'} {SubSpecies} />
 	{/if}
 </div>
 

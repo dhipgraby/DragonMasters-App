@@ -1,10 +1,10 @@
 import { writable } from 'svelte/store';
 import { contractsAbi } from "./contractsAbi";
 
-export const EggToken = "0x39D9Dea7Df7df0f7193BBa07059eaE6Fac018D7a"
-export const Marketplace = "0x64052c23827F7d456e2fdaFfDC4854Edd8da40f9"
-export const DragonToken = "0x84cEFdA29eD99733dBA1A388568E443335655987"
-export const DnaToken = "0x2a76d30F11b0Bde497629eDEcA12A8064f6Ba449"
+export const EggToken = "0x8964658525Bf92fdc4bcFB17860e8339BDF4CbFD"
+export const Marketplace = "0x6ae5a9AB2BF400eDbADFe76aA80d751c7798D46f"
+export const DragonToken = "0x56098929989D0A530f72A99b1A7d722a15458F1F"
+export const DnaToken = "0xe6B95F5b03dEe34583639A36E1680bA9425971e7"
 
 export const balances = writable({ contract: 0,user: 0 });
 
@@ -24,6 +24,10 @@ export async function contracts() {
         from: account,
     });
 
+    let marketplace_instance = new web3.eth.Contract(contractsAbi.Marketplace, Marketplace, {
+        from: account,
+    });
+
     let address = {
         EggToken:EggToken,
         DragonToken:DragonToken,
@@ -36,7 +40,8 @@ export async function contracts() {
         account: account,
         EggToken:Egg_instance,
         DragonToken:Dragon_instance,
-        DnaToken:Dna_instance           
+        DnaToken:Dna_instance,
+        Marketplace:marketplace_instance
     } 
 
     return contractData

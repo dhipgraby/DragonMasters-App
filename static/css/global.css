@@ -3,6 +3,19 @@
 	cursor: pointer;
 }
 
+.dblock {
+	display: block;
+}
+
+.dflex {
+	display: inline-flex;
+}
+
+.pabsolute {
+	position: absolute;
+}
+
+
 /********* Text Colors ***********/
 
 .c-black {
@@ -23,4 +36,38 @@
 
 .ta-r {
 	text-align: right;
+}
+
+/********* SIZING ***********/
+
+.top10 {
+	top:10px;
+}
+
+.top20 {
+	top:20px;
+}
+
+.right10 {
+	right:10px;
+}
+
+.right20 {
+	right:20px;
+}
+
+.bottom10 {
+	bottom:10px;
+}
+
+.bottom20 {
+	bottom:20px;
+}
+
+.left10 {
+	left:10px;
+}
+
+.left20 {
+	left:20px;
 }

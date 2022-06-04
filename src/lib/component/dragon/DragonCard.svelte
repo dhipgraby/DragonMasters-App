@@ -1,74 +1,124 @@
 <script>
-	import ProgressBar from "./ProgressBar.svelte";
-	import { onInterval } from '$lib/helpers/utils.js';
+	import { onInterval, Maturity, Attribute } from '$lib/helpers/utils.js';
+	import { getImg, iconElement, iconAttr } from '$lib/storage/dragonImg';
+	import { fade } from 'svelte/transition';
+	import ProgressBar from './ProgressBar.svelte';
+	import CircleMenu from '../dragonMenu/CircleMenu.svelte';
 
 	export let dragon;
+	export let contract
+	export let singleApproval
 	export let checkBtn = true;
-	export let fullEnergy = null
-	export let callback = null;	
+	export let fullEnergy = null;
+	export let callback = null;
 
-	if(callback != null) onInterval(callback, 1000);
+	if (callback != null) onInterval(callback, 1000);
 
-	$: isAdult = dragon.ageGroup != '1' ? 'Adult Dragon' : 'Hatchling';
+	$: _maturity = Object.keys(Maturity)[dragon.ageGroup];
 
+	let img = getImg(dragon.subSpecies).idle;
+	let element = iconElement(dragon.subSpecies);
+	let hovering;
+
+	function enter() {
+		hovering = true;
+	}
+
+	function leave() {
+		hovering = false;
+	}
 </script>
 
-<div class="card" style="width: 18rem;">
+<div
+	transition:fade={{ delay: 500 }}
+	on:mouseenter={enter}
+	on:mouseleave={leave}
+	class="card"
+	style="width: 18rem;"
+>
 	<div class="card-header">
-		<img src="/images/dragon.png" alt="dragon" />
+		<CircleMenu {hovering} dragonProps={dragon} {singleApproval} {contract} />
+
+		<img src={img} alt="dragon" />
+		<!-- ELEMENT -->
+		<div class="pabsolute bottom10 right10">{@html element}</div>
+		<!-- GENERATION -->
+		<div class="pabsolute top10 left10">
+			<span class="badge rounded-pill bg-light text-dark mt-2">
+				<b>Gen:{dragon.dna.generation}</b>
+			</span>
+		</div>
+		<!-- MATURITY -->
+		<div class="pabsolute left10 bottom10 maturity">
+			<small><i class="fas fa-seedling" />: {_maturity}</small>
+		</div>
 	</div>
-	<div class="card-body">
+	<div class="card-body ta-c">
 		<h5 class="card-title">Dragon : #{dragon.tokenId}</h5>
-		<hr />
+		<!--   ENERGY  -->
 		<p class="card-text">
 			{#if dragon.energy}
 				<b>Energy</b>
 				<br />
-				<ProgressBar	
-				emitEvent={true}
-				eventName={'isReady'}
-				on:isReady={fullEnergy}										
-				timer={dragon.energy}
-				bgClass={'bg-warning'}
-				 />
+				<ProgressBar
+					emitEvent={true}
+					eventName={'isReady'}
+					on:isReady={fullEnergy}
+					timer={dragon.energy}
+					bgClass={'bg-warning'}
+				/>
 			{/if}
-
-			<b>DNA:</b>
-			{dragon.dna.genes}
-			<br />
-			<b>Maturity: {isAdult}</b>
-			<br />
-			<b>Generation:</b>
-			{dragon.dna.generation}
-			<br />
-			<b>MumId:</b>
-			{dragon.mumId}
-			<br />
-			<b>DadId:</b>
-			{dragon.dadId}
 		</p>
+		<!--   ATTRIBUTES  -->
+		<div class="row p-0 mt-2">
+			{#each dragon.attributes as attribute, i}
+				<div class="w-50 ta-l">
+					<p>{@html iconAttr(Object.keys(Attribute)[i])}: {attribute}</p>
+				</div>
+			{/each}
+		</div>
+
 		<br />
 		{#if checkBtn}
-			<a href="/dragon/{dragon.tokenId}"
-				><button class="btn btn-dark">Checkout <i class="fas fa-arrow-circle-right" /></button></a
-			>
+			<a href="/dragon/{dragon.tokenId}">
+				<button class="btn btn-dark">Checkout <i class="fas fa-arrow-circle-right" /> </button>
+			</a>
 		{/if}
 	</div>
 </div>
 
 <style>
+	.maturity {
+		font-size: 11px;
+		text-align: center;
+		background-color: #c7ffe3;
+		width: fit-content;
+		border-radius: 50px;
+		padding: 1px 10px;
+		margin: auto;
+	}
+
+	.badge {
+		font-weight: 400;
+		letter-spacing: 1px;
+		font-size: 11px;
+	}
+
 	.btn-dark {
 		width: 100%;
 	}
 
 	img {
-		widows: 100%;
+		width: 280px;
+		margin-left: auto;
+		margin-right: auto;
+		display: block;
 	}
 
 	p {
-		font-size: 12px;
+		font-size: 16px;
 		font-weight: 600;
-		color: #999999;
+		color: rgb(56, 56, 56);
 		margin: 0px;
 	}
 	.card {
@@ -88,6 +138,7 @@
 	}
 
 	.card-header {
+		position: relative;
 		border-radius: 20px 20px 0px 0px;
 		cursor: pointer;
 		padding: 20px 0px;
@@ -96,6 +147,7 @@
 	}
 
 	.card-body {
+		position: relative;
 		text-align: center;
 	}
 

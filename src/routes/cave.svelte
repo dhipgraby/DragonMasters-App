@@ -4,23 +4,26 @@
 	import { userDragons }  from "$lib/storage/dragon";
 	import { userEggs }  from "$lib/storage/eggs";
 	import { EggContract } from '$lib/contracts/EggToken';
-	import { initEventListener } from '$lib/contracts/events';
 	import { DragonContract } from '$lib/contracts/DragonToken';	
+	import { MarketplaceContract } from '$lib/contracts/Marketplace';	
+	import { initEventListener } from '$lib/contracts/events';	
 	import { onMount } from 'svelte';
 
 	let contract = [];
+	let singleApproval = false
 	$: eggs = $userEggs;
 	$: dragons = $userDragons;
 
-	let show = 1;
+	let show = 2;
 
 	onMount(async () => {
 
-		userDragons.useLocalStorage()		
+		// userDragons.useLocalStorage()		
 
 		contract['egg'] = await new EggContract();
 		contract['dragon'] = await new DragonContract();
-
+		contract['market'] = await new MarketplaceContract();
+		
 		let contractEvents = await contract.egg.contract.EggToken.events;
 		let updater = () => {
 			contract['egg'].getUserEggs();
@@ -31,13 +34,20 @@
 		await contract['egg'].getUserEggs();
 		if (dragons.length > 0) return;
 		await contract['dragon'].getUserDragons();		
+
+		let approveForAll = await contract['market'].isApprovedForAll();
+		
+		if(approveForAll == true){
+			singleApproval = false
+		} else {
+			singleApproval = true			
+		}
 	});
 
 </script>
 
 <svelte:head>
 	<title>Cave - Dragon Masters</title>
-	<link href="/css/egg.css" rel="stylesheet" />
 </svelte:head>
 
 <section>
@@ -51,7 +61,7 @@
 	{/if}
 
 	{#if show == 2}
-		<DragonGrid {dragons} contract={contract['dragon']} />
+		<DragonGrid {dragons} contract={contract['market']} {singleApproval} />
 	{/if}
 </section>
 

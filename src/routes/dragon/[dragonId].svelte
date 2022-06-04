@@ -33,7 +33,6 @@
 
 <svelte:head>
 	<title>Cave - Dragon ID - {dragonId}</title>
-	<link href="/css/egg.css" rel="stylesheet" />
 </svelte:head>
 
 {#if dragon.tokenId}

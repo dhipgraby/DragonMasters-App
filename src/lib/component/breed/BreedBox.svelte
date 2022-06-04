@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { dragonA, dragonB, userDragons } from '$lib/storage/dragon';
+	import { subSpeciesName } from '$lib/helpers/utils';
 	import { DragonContract } from '$lib/contracts/DragonToken';
 	import { initEventListener } from '$lib/contracts/events';
 
@@ -10,6 +11,8 @@
 	import DragonSelection from './DragonSelection.svelte';
 	import BirthBox from './BirthBox.svelte';
 
+	export let SubSpecies
+	$: SubSpeciesName = subSpeciesName(SubSpecies)
 	let gender;
 	let displayDragons = false;
 	let breedEvent = false;
@@ -18,7 +21,7 @@
 
 	onMount(async () => {
 
-		userDragons.useLocalStorage()
+		// userDragons.useLocalStorage()
 		contract = await new DragonContract();
 
 		let contractEvents = await contract.contract.DragonToken.events;
@@ -43,6 +46,7 @@
 	$: dragons = $userDragons;
 
 	$: Parents = {
+		SubSpecies:SubSpeciesName,
 		mum_dragon,
 		dad_dragon,
 		showDragons: (dragonGender) => {
@@ -53,6 +57,7 @@
 	};
 
 	$: DragonsInfo = {
+		SubSpecies:SubSpeciesName,
 		dragons,
 		mum_dragon,
 		dad_dragon,
@@ -92,6 +97,5 @@
 {:else}
 	<DragonSelection {...Parents} />
 	<BreedBtn {...BreedInfo} />
-
 	<UserDragons {...DragonsInfo} />
 {/if}

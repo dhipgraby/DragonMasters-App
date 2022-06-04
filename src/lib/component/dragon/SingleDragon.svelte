@@ -2,6 +2,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import { onMount } from 'svelte';
 	import ProgressBar from './ProgressBar.svelte';
+	import { Maturity } from '$lib/helpers/utils.js';
 
 	const dispatch = createEventDispatcher();
 
@@ -13,7 +14,7 @@
 	let energy;
 	let raiseDisabled = true;
 	
-	$: isAdult = dragon.ageGroup != '1' ? 'Adult Dragon' : 'Hatchling';
+	$: _maturity = Object.keys(Maturity)[dragon.ageGroup]
 	
 	onMount(async () => {
 		dna = await contract.getDna(dragon.dnaId);
@@ -35,7 +36,7 @@
 	}
 
 	async function raiseDragon() {
-		await contract.raiseHatchling(dragon.tokenId);
+		await contract.raiseMaturity(dragon.tokenId);
 		dispatch('update');		
 	}
 </script>
@@ -70,6 +71,9 @@
 		<hr />
 
 		<p class="card-text">
+			<b>Type:</b>
+			{dragon.subSpecies}
+			<br>
 			{#if dna}
 				<b>DNA:</b>
 				{dna.genes}
@@ -79,12 +83,12 @@
 			{/if}
 			<br />
 			<b>Maturity:</b>
-			{isAdult}
+			{_maturity}
 		</p>
 
 		<hr />
 
-		{#if dragon.ageGroup == '1'}
+		{#if dragon.ageGroup != Maturity.Immortal }
 			{#if maturity > 0}
 				<p class="c-black"><i class="fas fa-brain" /> Maturity</p>
 				<ProgressBar timer={maturity} bgClass={'bg-info'} />

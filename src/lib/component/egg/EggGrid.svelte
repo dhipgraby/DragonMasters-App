@@ -3,6 +3,7 @@
 
 	export let eggs;
 	export let contract;
+	
 </script>
 
 <div class="mt-4 mb-4">
@@ -12,7 +13,7 @@
 <div class="row">
 	{#if eggs.length}
 		{#each eggs as egg}
-			<div class="col-md-4">
+			<div class="col">
 				<EggCard {egg} {contract} />
 			</div>
 		{/each}

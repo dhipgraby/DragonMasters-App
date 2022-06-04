@@ -1,5 +1,6 @@
 import { setAlert } from "$lib/storage/alerts";
 import { userDragons }  from "$lib/storage/dragon";
+import { subSpeciesName } from "$lib/helpers/utils"
 import { contracts } from "./contracts";
 import { getErrors } from "./errorHandling";
 
@@ -15,16 +16,21 @@ export class DragonContract {
     async getDragon(dragonId) {
         try {
             let dragonDetails = await this.contract.DragonToken.methods.getDragon(dragonId).call()
-
+            const toNumbers2D = arr => arr.map(arr => arr.map(Number)); 
+            dragonDetails = { ...dragonDetails[0], skills: toNumbers2D(dragonDetails[1])}            
+            
             return {
-                tokenId:dragonId,
-                ageGroup: dragonDetails.ageGroup,
-                birthTime: dragonDetails.birthTime,
-                dadId: dragonDetails.dadId,
+                tokenId:dragonId,                
                 dnaId: dragonDetails.dnaId,
+                subSpecies: subSpeciesName(dragonDetails.subSpecies), 
                 fullEnergyAt: dragonDetails.fullEnergyAt,
-                maturesAt: dragonDetails.maturesAt,
-                mumId: dragonDetails.mumId
+                ageGroup: dragonDetails.age.group,
+                birthTime: dragonDetails.age.birthTime,              
+                maturesAt: dragonDetails.age.maturesAt,    
+                mumId:0,                          
+                dadId:0,
+                skills:dragonDetails.skills,
+                attributes:dragonDetails.attributes,
             }
 
         } catch (err) {
@@ -49,14 +55,13 @@ export class DragonContract {
 
     async getUserDragons() {
 
-        let allDragons = await this.getDragonIds(0, 20)
+        let allDragons = await this.getDragonIds(10, 20)
         let dragons = []
 
         for (let i = 0; i < allDragons.tokenIds.length; i++) {
 
-            let dragonDetails = await this.getDragon(allDragons.tokenIds[i])        
-            
-            dragonDetails['dna'] = await this.getDna(dragonDetails.dnaId)
+            let dragonDetails = await this.getDragon(allDragons.tokenIds[i])                    
+            dragonDetails['dna'] = await this.getDna(dragonDetails.dnaId)                   
             dragons.push(dragonDetails)
         }
         userDragons.set(dragons)               
@@ -109,9 +114,9 @@ export class DragonContract {
         }
     }
 
-    async raiseHatchling(dragonId){
+    async raiseMaturity(dragonId){
         try {
-            await this.contract.DragonToken.methods.raiseHatchling(dragonId).send({}, function (err, txHash) {
+            await this.contract.DragonToken.methods.raiseMaturity(dragonId).send({}, function (err, txHash) {
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert(txHash, 'success')
@@ -119,7 +124,7 @@ export class DragonContract {
                 }
             })
         } catch (err) {
-            console.log("Error at: raiseHatchling function" + err)
+            console.log("Error at: raiseMaturity function" + err)
         }
     }
 

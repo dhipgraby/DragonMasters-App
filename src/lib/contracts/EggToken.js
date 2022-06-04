@@ -1,7 +1,9 @@
 import { setAlert } from "$lib/storage/alerts";
 import { userEggs } from "$lib/storage/eggs";
+import { subSpeciesName } from "$lib/helpers/utils"
 import { contracts } from "./contracts";
 import { getErrors } from "./errorHandling";
+
 
 export class EggContract {
     constructor() {
@@ -28,17 +30,33 @@ export class EggContract {
         }
     }
 
+    async mintBatchEggsTo(amount){
+        try {
+            await this.contract.EggToken.methods.mintBatchEggsTo(this.contract.account,amount).send({}, function (err, txHash) {
+                if (err) setAlert(err, 'warning')
+                else {
+                    setAlert(txHash, 'success')
+                    return txHash
+                }
+            })
+        } catch (err) {
+            console.log("Error at: Batch minting Error: " + err)
+        }
+
+    }
+
     async getEgg(eggId) {
 
         try {
             let eggDetails = await this.contract.EggToken.methods.getEgg(eggId).call()
-
+        
             return {
                 tokenId: eggId,
                 mumId: eggDetails.mumId,
                 dadId: eggDetails.dadId,
                 incubation: eggDetails.incubationCompleteAt,
-                laidTime: eggDetails.laidTime
+                laidTime: eggDetails.laidTime,
+                subSpecies:subSpeciesName(eggDetails.subSpecies)
             }
 
         } catch (err) {
@@ -63,16 +81,15 @@ export class EggContract {
 
     async getUserEggs() {
 
-        let allEggs = await this.getEggIds(0, 20)
+        let allEggs = await this.getEggIds(0, 10)
         let eggs = []
 
         for (let i = 0; i < allEggs.tokenIds.length; i++) {
-            let eggDetails = await this.getEgg(allEggs.tokenIds[i])
+            let eggDetails = await this.getEgg(allEggs.tokenIds[i])                                    
             let incubationTime = (eggDetails.incubation == '0') ? null : await this.checkIncubation(allEggs.tokenIds[i], false)
             eggDetails.incubationTime = incubationTime
             eggs.push(eggDetails)
         }
-
         userEggs.set(eggs)
     }
 
@@ -127,10 +144,21 @@ export class EggContract {
 
     /************* STANDARD CONTRACT FUNCTIONS  ***************/
 
-    async totalSupply() {
+    async currentSupply() {
 
         try {
             let _totalSupply = await this.contract.EggToken.methods.totalSupply().call()
+            setAlert('Current Supply : ' + _totalSupply, 'info')
+        } catch (err) {
+            setAlert(err, 'warning')
+            console.log("Error at: currentSupply " + err)
+        }
+    }
+
+    async totalSupply() {
+
+        try {
+            let _totalSupply = await this.contract.EggToken.methods.getGen0Limit().call()
             setAlert('Total Supply : ' + _totalSupply, 'info')
         } catch (err) {
             setAlert(err, 'warning')

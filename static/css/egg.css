@@ -16,6 +16,43 @@
 		animation: AnimationName 12s ease infinite;
 		transition: 0.5s;
 	}
+	
+    .eggContainer {
+		transition: 0.3s;
+		text-align: center;
+        border-radius: 10px;
+        background: #ffffff;
+        padding: 30px;
+        vertical-align: middle;
+    }
+
+    .eggContainer h1,h3 {
+        color: #a1a1a1;        
+    }
+
+    .eggContainer h3 {
+        color: #a1a1a1;        
+    }
+
+    .eggContainer:hover h1 {
+        color: #444;       
+    }
+    
+	.earth {
+		color: #301303 !important;
+	}
+
+	.fire {
+		color: rgb(235, 66, 66);
+	}
+
+	.air {
+		color: #fff !important;
+	}
+
+	.water {
+		color: #349edb !important;
+	}
 
 	@-webkit-keyframes AnimationName {
 		0% {

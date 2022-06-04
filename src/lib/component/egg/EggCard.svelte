@@ -1,14 +1,23 @@
 <script>
-
 	import { readable } from 'svelte/store';
 	import Message from '../Message.svelte';
+	import { getImg, iconElement } from '$lib/storage/dragonImg';
+	import { afterUpdate } from 'svelte';
 
 	export let egg;
 	export let contract;
 
+	let eggImg;
+	let element;
+
 	$: incTime = Number(egg.incubationTime);
 
 	$: incubating = incTime > 0 ? true : false;
+
+	afterUpdate( async () => {
+		element = iconElement(egg.subSpecies);
+		eggImg = await getImg(egg.subSpecies).egg;
+	});
 
 	export const time = readable(incTime, function start(set) {
 		const interval = setInterval(() => {
@@ -27,28 +36,30 @@
 	});
 
 	function hatch() {
-		contract.hatch(egg.tokenId);		
+		contract.hatch(egg.tokenId);
 	}
 
 	function startIncubation() {
-		contract.startIncubation(egg.tokenId);		
+		contract.startIncubation(egg.tokenId);
 	}
 </script>
 
 <div class="card" style="width: 18rem;">
 	<div class="card-header">
-		<a href="/egg/{egg.tokenId}"> <div id="egg" /></a>
+		<a href="/egg/{egg.tokenId}">
+			<div class="egg-top-container">
+				{#if eggImg}
+					<img class="eggImg egg-top" alt="egg" src={eggImg} />
+					<div class="egg-top-shadow" />
+				{/if}
+
+				<div class="pabsolute top10 right10">{@html element}</div>
+			</div>
+		</a>
 	</div>
 	<div class="card-body">
 		<h5 class="card-title">Egg : #{egg.tokenId}</h5>
 		<hr />
-		<p class="card-text">
-			<b>MumId:</b>
-			{egg.mumId}
-			<br />
-			<b>DadId:</b>
-			{egg.dadId}
-		</p>
 
 		{#if egg.incubationTime == undefined}
 			<button class="btn btn-dark" on:click={() => startIncubation()}>Start Incubation</button>
@@ -79,6 +90,13 @@
 </div>
 
 <style>
+	.eggImg {
+		width: 170px;
+		margin-left: auto;
+		margin-right: auto;
+		display: block;
+	}
+
 	.btn-dark {
 		font-size: 14px;
 		padding: 4px 20px !important;
@@ -104,10 +122,6 @@
 		margin-bottom: 10px;
 	}
 
-	p {
-		font-weight: 600;
-		color: #999999;
-	}
 	.card {
 		border-radius: 20px;
 		margin: 10px;
@@ -132,16 +146,62 @@
 		background: linear-gradient(20deg, #f2fffb, #b3b3b3);
 	}
 
-	.card-header:hover #egg {
-		transform: scale(1) rotateX(0deg);
-		box-shadow: 0px 25px 15px -5px #595959;
-	}
-
 	.card-body {
 		text-align: center;
 	}
 
-	.card-text {
-		text-align: left;
+	.egg-top-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	/* Animate the things */
+	.egg-top {
+		animation-name: egg-top;
+		animation-duration: 4s;
+		animation-iteration-count: infinite;
+	}
+
+	.egg-top-shadow {
+		animation-name: egg-top-shadow;
+		animation-duration: 4s;
+		animation-iteration-count: infinite;
+		background-color: #222;
+		width: 100px;
+		height: 50px;
+		margin-left: auto;
+		margin-right: auto;
+		border-radius: 100px / 50px;
+	}
+
+	@keyframes egg-top {
+		0% {
+			transform: translate(0, 0);
+		}
+		35% {
+			transform: translate(0, -12px);
+			animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1);
+		}
+		100% {
+			transform: translate(0, 0);
+			animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1);
+		}
+	}
+
+	@keyframes egg-top-shadow {
+		0% {
+			filter: blur(10px);
+			opacity: 0.25;
+		}
+		35% {
+			filter: blur(15px);
+			opacity: 0.15;
+			transform: scale(1.3);
+		}
+		100% {
+			filter: blur(10px);
+			opacity: 0.25;
+		}
 	}
 </style>

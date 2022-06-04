@@ -2,6 +2,7 @@
 	import DragonBox from './DragonBox.svelte';
 	import { afterUpdate } from 'svelte';
 
+	export let SubSpecies;
 	export let hideDragons;
 	export let displayDragons;
 	export let dragons;
@@ -11,8 +12,9 @@
 	export let getEnergy;
 
 	afterUpdate(() => {
+		console.log(dragons)
 		gender = gender;
-		displayDragons = displayDragons;		
+		displayDragons = displayDragons;
 	});
 </script>
 
@@ -20,11 +22,13 @@
 	{#if displayDragons}
 		<h1 class="mt-5">Choose {gender}</h1>
 		{#if dragons != undefined}
-			{#each dragons as dragon}
-				<!-- ONLY ADULT DRAGONS -->
-				{#if dragon.ageGroup == 2}
-					{#if mum_dragon.tokenId != dragon.tokenId && dad_dragon.tokenId != dragon.tokenId}
-						<DragonBox dragonProps={dragon} {gender} hide={hideDragons} {getEnergy} />
+			{#each dragons as dragon}			
+				{#if dragon.subSpecies == SubSpecies}
+					<!-- ONLY ADULT DRAGONS -->
+					{#if dragon.ageGroup == 2}
+						{#if mum_dragon.tokenId != dragon.tokenId && dad_dragon.tokenId != dragon.tokenId}
+							<DragonBox dragonProps={dragon} {gender} hide={hideDragons} {getEnergy} />
+						{/if}
 					{/if}
 				{/if}
 			{/each}

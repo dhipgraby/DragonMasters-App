@@ -28,7 +28,6 @@
 
 <svelte:head>
 	<title>Cave - Egg ID - {EggId}</title>
-	<link href="/css/egg.css" rel="stylesheet" />
 </svelte:head>
 
 <h1>Egg id is {EggId}</h1>
