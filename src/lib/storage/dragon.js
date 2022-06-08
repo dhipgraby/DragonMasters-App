@@ -1,9 +1,10 @@
 import { createWritableStore } from '$lib/helpers/storage'
-import { get } from "svelte/store";
+import { get, writable } from "svelte/store";
 //FOR BREEDING
 export const dragonA = createWritableStore('dragonA',0);
 export const dragonB = createWritableStore('dragonB',0);
 export const userDragons = createWritableStore('userDragons',[])
+export const dragonApproval = writable(false)
 
 export function update_current_dragon(dragon,_gender){
     

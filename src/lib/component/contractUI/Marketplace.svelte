@@ -1,5 +1,5 @@
 <script>
-	import { TokenType, OfferType, rentTerms, saleTerms } from '$lib/contracts/Marketplace';
+	import { TokenType, OfferType, rentTerms, saleTerms } from '$lib/contracts/Marketplace';	
 
 	export let contract;
 
@@ -11,6 +11,7 @@
 	let removeRentId;
 	let removeAllId;
 	let singleApproval;
+	let revokeId;
 
 	function sellOffer() {
 		contract.setOffer(sellId, OfferType.ForSale, TokenType.Dragon, saleTerms);
@@ -38,7 +39,7 @@
 <br />
 
 <div class="grid" align="left">
-	<button on:click={() => contract.removeApproveForAll()} class="btn btn-danger">
+	<button on:click={() => contract.removeApproveForAll()} class="btn btn-danger f-right">
 		Remove Approve for all
 	</button>
 
@@ -75,6 +76,15 @@
 				<input type="text" bind:value={approveId} class="form-control" placeholder="Token Id" />
 			</div>
 			<button class="btn btn-dark" on:click={() => contract.approveToken(approveId)}>APPROVE</button
+			>
+		</tr>
+
+		<tr>
+			<h2>Revoke Token</h2>
+			<div class="mb-3">
+				<input type="text" bind:value={revokeId} class="form-control" placeholder="Token Id" />
+			</div>
+			<button class="btn btn-danger" on:click={() => contract.revokeToken(revokeId)}>REVOKE</button
 			>
 		</tr>
 
@@ -132,8 +142,11 @@
 
 <style>
 	.btn-danger {
-		font-size: 12px;
-		float: right;
+		font-size: 12px;		
 		margin-bottom: 20px;
+	}
+
+	.f-right {
+		float: right;
 	}
 </style>

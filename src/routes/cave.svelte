@@ -1,20 +1,20 @@
 <script>
 	import EggGrid from '$lib/component/egg/EggGrid.svelte';
 	import DragonGrid from '$lib/component/dragon/DragonGrid.svelte';
-	import { userDragons }  from "$lib/storage/dragon";
-	import { userEggs }  from "$lib/storage/eggs";
+	import { userDragons }  from "$lib/storage/dragon";	
+	import { userEggs }  from "$lib/storage/eggs";	
 	import { EggContract } from '$lib/contracts/EggToken';
 	import { DragonContract } from '$lib/contracts/DragonToken';	
 	import { MarketplaceContract } from '$lib/contracts/Marketplace';	
 	import { initEventListener } from '$lib/contracts/events';	
-	import { onMount } from 'svelte';
+	import { afterUpdate, onMount } from 'svelte';
 
 	let contract = [];
-	let singleApproval = false
-	$: eggs = $userEggs;
-	$: dragons = $userDragons;
-
+	let singleApproval = false	
 	let show = 2;
+	
+	$: eggs = $userEggs;
+	$: dragons = $userDragons;	
 
 	onMount(async () => {
 
@@ -30,9 +30,13 @@
 		};
 		await initEventListener(contractEvents, updater,'EggToken');
 
-		if (eggs.length > 0) return;
+		LoadInterface()			
+	});
+
+	async function LoadInterface(forceReload = false){		
+		if (eggs.length > 0 && forceReload == false) return;
 		await contract['egg'].getUserEggs();
-		if (dragons.length > 0) return;
+		if (dragons.length > 0 && forceReload == false) return;
 		await contract['dragon'].getUserDragons();		
 
 		let approveForAll = await contract['market'].isApprovedForAll();
@@ -42,7 +46,7 @@
 		} else {
 			singleApproval = true			
 		}
-	});
+	}
 
 </script>
 
@@ -54,6 +58,7 @@
 	<div class="btn-group" role="group">
 		<button type="button" on:click={() => (show = 1)} class="btn btn-light"><i class="fas fa-egg"></i> EGGS </button>
 		<button type="button" on:click={() => (show = 2)} class="btn btn-light"><i class="fas fa-dragon" /> DRAGONS </button>
+		<button type="button" on:click={async () => await LoadInterface(true) } class="btn btn-dark"> <i class="fas fa-redo"></i> </button>
 	</div>
 
 	{#if show == 1}

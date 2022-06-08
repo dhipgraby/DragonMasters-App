@@ -18,6 +18,7 @@
 
 	async function approveForAll() {
 		let approval = await contract.approveForAll(tokenId);
+		console.log(approval)
 		if (approval.blockHash) {
 			dispatch('approved', {
 				text: 'Address approved'

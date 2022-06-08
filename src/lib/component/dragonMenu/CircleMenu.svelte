@@ -14,8 +14,7 @@
 
 	onMount(() => {
 		openModal = function () {			
-			doPromise = true		
-			console.log('opening')
+			doPromise = true					
 			modaComponent.openModal();
 		};
 
@@ -24,7 +23,6 @@
 			return new bootstrap.Tooltip(tooltipTriggerEl);
 		});
 	});
-
 
 </script>
 

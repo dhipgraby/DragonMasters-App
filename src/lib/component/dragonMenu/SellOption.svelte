@@ -1,20 +1,23 @@
 <svelte:options accessors={true} />
 
 <script>
-	import BasicModal from '../BasicModal.svelte';
 	import { afterUpdate, onMount } from 'svelte';
+	import { dragonApproval }  from "$lib/storage/dragon";	
+	import BasicModal from '../BasicModal.svelte';	
 	import ModifyOffer from '../marketplace/modifyOffer.svelte';
 	import CreateOffer from '../marketplace/CreateOffer.svelte';
 	import AppoveToken from '../marketplace/appoveToken.svelte';
+
 	export let dragonProps;
 	export let contract;
 	export let singleApproval;
 	export let openModal;
 	export let doPromise = false;
-
+	
 	let modaComponent;
 	let modalData;
 	let promise;
+	$: CheckApproval = $dragonApproval
 
 	onMount(() => {
 		openModal = function () {
@@ -23,10 +26,10 @@
 		updateDragonData(dragonProps);
 	});
 
-	afterUpdate(() => {
+	afterUpdate(() => {			
+		if(CheckApproval == true) singleApproval = false	
 		dragonProps.isApproved = singleApproval == false ? true : false;
 		if (doPromise == true && singleApproval == true) promise = later(500);
-
 		updateDragonData(dragonProps);
 	});
 
@@ -74,6 +77,7 @@
 	}
 
 	function handleApprove(event) {
+		singleApproval = false	
 		dragonProps.isApproved = true
 		updateDragonData(dragonProps);
 	}
@@ -87,7 +91,7 @@
 	id={'dragonModal' + dragonProps.tokenId}
 >
 	<!-- CHECK APPROVE FOR ALL -->
-	{#if dragonProps.isApproved}
+	{#if dragonProps.isApproved == true}
 		{#if dragonProps.offer}
 			<ModifyOffer tokenId={dragonProps.tokenId} />
 		{:else}

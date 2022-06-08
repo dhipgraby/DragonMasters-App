@@ -1,4 +1,5 @@
 import { setAlert } from "$lib/storage/alerts";
+import { dragonApproval } from '$lib/storage/dragon'
 import { contracts } from "./contracts";
 
 const salePriceInWei = '500000000000000000'  //0.5 ETH
@@ -162,6 +163,28 @@ export class MarketplaceContract {
         }
     }
 
+    
+    async revokeToken(tokenId) {
+        try {
+            let dragonsIds = await this.contract.DragonToken.methods.approve(
+                "0x0000000000000000000000000000000000000000",
+                tokenId
+            ).send({}, function (err, txHash) {
+                if (err) setAlert(err, 'warning')
+                else {
+                    setAlert('Token ' + tokenId + ' revoked', 'success')
+                    return true
+                }
+            })
+
+            return dragonsIds
+        } catch (err) {
+            setAlert('revokeToken error ', 'warning')
+            console.log('Error at: revokeToken ' + err)
+            return false;
+        }
+    }
+
     async approveForAll() {
         try {
             let dragonsIds = await this.contract.DragonToken.methods.setApprovalForAll(
@@ -169,7 +192,8 @@ export class MarketplaceContract {
                 true
             ).send({}, function (err, txHash) {
                 if (err) setAlert(err, 'warning')
-                else {
+                else {                    
+                    dragonApproval.set(true)
                     setAlert('Maketplace approved for all', 'success')
                     return true
                 }
@@ -191,6 +215,7 @@ export class MarketplaceContract {
             ).send({}, function (err, txHash) {
                 if (err) setAlert(err, 'warning')
                 else {
+                    dragonApproval.set(false)
                     setAlert('Maketplace approved for all removed!', 'success')
                     return txHash
                 }
@@ -236,6 +261,7 @@ export class MarketplaceContract {
             const isMarketplaceAnOperator = await this.contract.DragonToken.methods.isApprovedForAll(this.contract.account, this.contract.address.Marketplace).call()
             
             if(isMarketplaceAnOperator == true){
+                dragonApproval.set(true)                
                 if(msg == true) setAlert('This account is Aprrove fro All','success')
             } else {
                 if(msg == true) setAlert('Not approve for All','warning')
