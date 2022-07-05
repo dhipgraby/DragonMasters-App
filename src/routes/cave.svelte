@@ -1,53 +1,68 @@
 <script>
 	import EggGrid from '$lib/component/egg/EggGrid.svelte';
 	import DragonGrid from '$lib/component/dragon/DragonGrid.svelte';
-	import { userDragons }  from "$lib/storage/dragon";	
-	import { userEggs }  from "$lib/storage/eggs";	
+	import { userDragons } from '$lib/storage/dragon';
+	import { userEggs } from '$lib/storage/eggs';
 	import { EggContract } from '$lib/contracts/EggToken';
-	import { DragonContract } from '$lib/contracts/DragonToken';	
-	import { MarketplaceContract } from '$lib/contracts/Marketplace';	
-	import { initEventListener } from '$lib/contracts/events';	
-	import { afterUpdate, onMount } from 'svelte';
+	import { DragonContract } from '$lib/contracts/DragonToken';
+	import { MarketplaceContract } from '$lib/contracts/Marketplace';
+	import { initEventListener } from '$lib/contracts/events';
+	import { onMount } from 'svelte';
 
 	let contract = [];
-	let singleApproval = false	
-	let show = 2;
-	
+	let singleApproval = false;
+	let show = 1;
+	let fromId = 1;
+	let toId = 10;
+	let eggButtons = []
+	let dragonButtons = []
+
 	$: eggs = $userEggs;
-	$: dragons = $userDragons;	
+	$: dragons = $userDragons;
 
 	onMount(async () => {
-
-		// userDragons.useLocalStorage()		
+		// userDragons.useLocalStorage()
 
 		contract['egg'] = await new EggContract();
 		contract['dragon'] = await new DragonContract();
 		contract['market'] = await new MarketplaceContract();
-		
+
 		let contractEvents = await contract.egg.contract.EggToken.events;
 		let updater = () => {
-			contract['egg'].getUserEggs();
+			contract['egg'].getUserEggs(fromId, toId);
 		};
-		await initEventListener(contractEvents, updater,'EggToken');
+		await initEventListener(contractEvents, updater, 'EggToken');
 
-		LoadInterface()			
+		LoadInterface(fromId, toId);
 	});
 
-	async function LoadInterface(forceReload = false){		
+	async function LoadInterface(from, to, forceReload = false) {
+		fromId = from;
+		toId = to;
+		console.log('loading interface from:' + fromId + ' to: ' + toId);
 		if (eggs.length > 0 && forceReload == false) return;
-		await contract['egg'].getUserEggs();
+		await contract['egg'].getUserEggs(fromId, toId);
+		console.log('loading Eggs');
 		if (dragons.length > 0 && forceReload == false) return;
-		await contract['dragon'].getUserDragons();		
+		await contract['dragon'].getUserDragons(fromId, toId);
+		console.log('loading Dragons');
 
+		//Checking Approval
 		let approveForAll = await contract['market'].isApprovedForAll();
-		
-		if(approveForAll == true){
-			singleApproval = false
+		if (approveForAll == true) {
+			singleApproval = false;
 		} else {
-			singleApproval = true			
+			singleApproval = true;
 		}
-	}
 
+		let totalEggs = parseInt(eggs.totalOwned);
+		let eggsPages = Math.round(totalEggs / 10);
+		let totalDragons = parseInt(dragons.totalOwned);
+		console.log(totalDragons)
+		let dragonPages = Math.round(totalDragons / 10);
+		eggButtons = new Array(eggsPages);
+		dragonButtons = new Array(dragonPages);
+	}
 </script>
 
 <svelte:head>
@@ -56,21 +71,48 @@
 
 <section>
 	<div class="btn-group" role="group">
-		<button type="button" on:click={() => (show = 1)} class="btn btn-light"><i class="fas fa-egg"></i> EGGS </button>
-		<button type="button" on:click={() => (show = 2)} class="btn btn-light"><i class="fas fa-dragon" /> DRAGONS </button>
-		<button type="button" on:click={async () => await LoadInterface(true) } class="btn btn-dark"> <i class="fas fa-redo"></i> </button>
+		<button type="button" on:click={() => (show = 1)} class="btn btn-light"
+			><i class="fas fa-egg" /> EGGS
+		</button>
+		<button type="button" on:click={() => (show = 2)} class="btn btn-light"
+			><i class="fas fa-dragon" /> DRAGONS
+		</button>
+		<button
+			type="button"
+			on:click={async () => await LoadInterface(fromId, toId, true)}
+			class="btn btn-dark"
+		>
+			<i class="fas fa-redo" />
+		</button>
+	</div>
+	<div class="input-group">
+		<span class="input-group-text" id="basic-addon1">FROM</span>
+		<input type="number" bind:value={fromId} class="form-control" placeholder="from Id" />
+
+		<span class="input-group-text ms-3" id="basic-addon1">TO</span>
+		<input type="number" bind:value={toId} class="form-control" placeholder="to Id" />
+		<button
+			type="button"
+			on:click={async () => await LoadInterface(fromId, toId, true)}
+			class="btn btn-dark"
+		>
+			search
+		</button>
 	</div>
 
 	{#if show == 1}
-		<EggGrid {eggs} contract={contract['egg']} />
+		<EggGrid {eggs} contract={contract['egg']} pages={eggButtons} loadPage={LoadInterface} />
 	{/if}
 
 	{#if show == 2}
-		<DragonGrid {dragons} contract={contract['market']} {singleApproval} />
+		<DragonGrid {dragons} contract={contract['market']} {singleApproval} pages={dragonButtons} />
 	{/if}
 </section>
 
 <style>
+	.input-group {
+		max-width: 500px;
+	}
 	section {
 		padding-top: 50px;
 		display: flex;
@@ -84,11 +126,14 @@
 		margin: 8px;
 		font-weight: 600;
 		letter-spacing: 0.8px;
-		font-size: 14px;
 	}
 
 	.btn-group {
 		margin-top: 20px;
 		margin-bottom: 20px;
+	}
+
+	.btn-dark {
+		font-size: 12px !important;
 	}
 </style>

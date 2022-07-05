@@ -17,22 +17,15 @@
 	<button class="btn btn-warning t-sm" on:click={() => contract.currentSupply()}>Current Supply</button>
 	<button class="btn btn-warning t-sm" on:click={() => contract.totalSupply()}>Total Supply</button>
 
-
 	<br />
 	<table class="table table-striped">
 		<tr>
-			<h2>Mint Gen 0 egg</h2>
-			<button class="btn btn-dark" on:click={() => contract.mintGen0Egg()}>MINT</button>
-		</tr>
-		<tr>
-			<h2>Batch Miting</h2>
+			<h2>Mint Gen 0 eggs</h2>
 			<div class="mb-3">
 				<input type="number" bind:value={amountToMint} class="form-control" placeholder="Egg Amounts" />
 			</div>
-			<button class="btn btn-dark" on:click={() => contract.mintBatchEggsTo(amountToMint)}
-				>Batch Mint!</button
-			>
-		</tr>
+			<button class="btn btn-dark" on:click={() => contract.mintGen0Egg(amountToMint)}>MINT</button>
+		</tr>		
 		<tr>
 			<h2>Start Incubation</h2>
 			<div class="mb-3">
@@ -57,7 +50,7 @@
 			<div class="mb-3">
 				<input type="text" bind:value={eggId_details} class="form-control" placeholder="Egg Id" />
 			</div>
-			<button class="btn btn-dark" on:click={() => contract.getEgg(eggId_details)}
+			<button class="btn btn-dark" on:click={() => contract.getEgg(eggId_details,true)}
 				>Get Details</button
 			>
 		</tr>

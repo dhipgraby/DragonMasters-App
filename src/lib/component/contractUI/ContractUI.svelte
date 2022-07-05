@@ -12,7 +12,7 @@
 	let dragon_contract;
 	let marketplace_contract;
 
-	let show = 3;
+	let show = 1;
 
 	onMount(async () => {
 		egg_contract = await new EggContract();

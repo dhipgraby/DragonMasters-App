@@ -15,60 +15,21 @@
 	export let doPromise = false;
 	
 	let modaComponent;
-	let modalData;
 	let promise;
 	$: CheckApproval = $dragonApproval
 
 	onMount(() => {
 		openModal = function () {
 			modaComponent.openModal();
-		};
-		updateDragonData(dragonProps);
+		};		
 	});
 
 	afterUpdate(() => {			
 		if(CheckApproval == true) singleApproval = false	
 		dragonProps.isApproved = singleApproval == false ? true : false;
 		if (doPromise == true && singleApproval == true) promise = later(500);
-		updateDragonData(dragonProps);
+		
 	});
-
-	const createOffer = async () => {
-		// setForSale(dragonProps.tokenId, price);
-		console.log('setting offer');
-	};
-
-	const updateDragonData = async (dragonProps) => {
-		if (dragonProps.isApproved == true) {
-			if (dragonProps.offer) {
-				modalData = modal_modify_offer;
-			} else {
-				modalData = modal_Sell;
-			}
-		} else {
-			modalData = modal_approve;
-		}
-	};
-
-	//MODAL DATA DEPEDING ON APPROVE AND OFFER
-
-	let modal_Sell = {
-		submit_name: 'submit',
-		title: 'Create marketplace offer',
-		callback: createOffer
-	};
-
-	let modal_modify_offer = {
-		submit_name: 'submit',
-		title: 'Change offer for token id: <b>' + dragonProps.tokenId + '</b>',
-		callback: false
-	};
-
-	let modal_approve = {
-		submit_name: 'Approve',
-		title: 'Marketplace Approval',
-		callback: false
-	};
 
 	async function later(delay) {
 		return new Promise(async (resolve) =>
@@ -78,24 +39,28 @@
 
 	function handleApprove(event) {
 		singleApproval = false	
-		dragonProps.isApproved = true
-		updateDragonData(dragonProps);
+		dragonProps.isApproved = true		
+	}
+
+	function handleSetOffer(event) {
+		dragonProps.offer = {
+			price: event.detail.price
+		}
 	}
 </script>
 
 
 <BasicModal	
-	bind:this={modaComponent}
-	{...modalData}
+	bind:this={modaComponent}	
 	btnName={false}
 	id={'dragonModal' + dragonProps.tokenId}
 >
 	<!-- CHECK APPROVE FOR ALL -->
 	{#if dragonProps.isApproved == true}
 		{#if dragonProps.offer}
-			<ModifyOffer tokenId={dragonProps.tokenId} />
-		{:else}
-			<CreateOffer tokenId={dragonProps.tokenId} />
+			<ModifyOffer offer={dragonProps.offer} tokenId={dragonProps.tokenId} />
+		{:else}			
+			<CreateOffer on:offerCreated={handleSetOffer} tokenId={dragonProps.tokenId} {contract} />
 		{/if}
 		<!-- IF IS NOT APPROVE FOR ALL CHECK SINGLE APPROVE  -->
 	{:else if doPromise == true}

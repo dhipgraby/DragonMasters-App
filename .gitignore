@@ -10,3 +10,4 @@ node_modules
 .output
 dragon.service
 update.sh
+runblockchain.bat

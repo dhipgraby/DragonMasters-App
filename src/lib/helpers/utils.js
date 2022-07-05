@@ -72,3 +72,24 @@ export function subSpeciesName(SubSpecies) {
     return speciesName
 }
 
+
+export function shortAddr(address) {
+    var firstPart = address.substr(0, 6);
+    var secondPart = address.substr(38, 4);
+    var userAddr = firstPart + "...." + secondPart
+
+    return userAddr;
+}
+
+//ether to wei
+export const getWei = async (value) => {    
+    let res = await web3.utils.toWei(String(value))
+    return res
+}
+
+//Wei to ether
+export const getEth = async (value) => {    
+    if(typeof value != 'string') value = String(value)
+    let res = await web3.utils.fromWei(value)
+    return res
+}

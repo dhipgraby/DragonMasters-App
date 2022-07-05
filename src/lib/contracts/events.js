@@ -77,7 +77,7 @@ async function initIncubation(contractEvents) {
 async function initBreeding(contractEvents) {
     await contractEvents
         .EggLaid()
-        .on('data', (event) => {            
+        .once('data', (event) => {            
             eventsHandler(event, contractEvents);
         })
         .on('error', console.error);

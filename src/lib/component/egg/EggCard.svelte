@@ -1,4 +1,5 @@
 <script>
+	
 	import { readable } from 'svelte/store';
 	import Message from '../Message.svelte';
 	import { getImg, iconElement } from '$lib/storage/dragonImg';
@@ -14,7 +15,7 @@
 
 	$: incubating = incTime > 0 ? true : false;
 
-	afterUpdate( async () => {
+	afterUpdate(async () => {
 		element = iconElement(egg.subSpecies);
 		eggImg = await getImg(egg.subSpecies).egg;
 	});

@@ -15,10 +15,13 @@ export class EggContract {
         })();
     }
 
-    async mintGen0Egg() {
+    async mintGen0Egg(amount) {
+
+        console.log(amount)
 
         try {
-            await this.contract.EggToken.methods.mintGen0EggTo(this.contract.account).send({}, function (err, txHash) {
+            await this.contract.EggToken.methods.mintGen0EggsTo(this.contract.account,amount).send({}, function (err, txHash) {
+                console.log('awaiting')
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert(txHash, 'success')
@@ -30,26 +33,12 @@ export class EggContract {
         }
     }
 
-    async mintBatchEggsTo(amount){
-        try {
-            await this.contract.EggToken.methods.mintBatchEggsTo(this.contract.account,amount).send({}, function (err, txHash) {
-                if (err) setAlert(err, 'warning')
-                else {
-                    setAlert(txHash, 'success')
-                    return txHash
-                }
-            })
-        } catch (err) {
-            console.log("Error at: Batch minting Error: " + err)
-        }
-
-    }
-
-    async getEgg(eggId) {
+    async getEgg(eggId,message = false) {
 
         try {
             let eggDetails = await this.contract.EggToken.methods.getEgg(eggId).call()
-        
+            
+            if(message == true) setAlert(eggDetails,'success')
             return {
                 tokenId: eggId,
                 mumId: eggDetails.mumId,
@@ -70,8 +59,7 @@ export class EggContract {
         endIndex
     ) {
         try {
-            let eggsIds = await this.contract.EggToken.methods.getEggIds(this.contract.account, startIndex, endIndex).call()
-            
+            let eggsIds = await this.contract.EggToken.methods.getEggIds(this.contract.account, startIndex, endIndex).call()                  
             return eggsIds
         } catch (err) {
             setAlert('getEggIds error', 'warning')
@@ -79,9 +67,9 @@ export class EggContract {
         }
     }
 
-    async getUserEggs() {
+    async getUserEggs(from,to) {
 
-        let allEggs = await this.getEggIds(0, 10)
+        let allEggs = await this.getEggIds(from,to)                
         let eggs = []
 
         for (let i = 0; i < allEggs.tokenIds.length; i++) {
@@ -90,16 +78,18 @@ export class EggContract {
             eggDetails.incubationTime = incubationTime
             eggs.push(eggDetails)
         }
+        eggs.totalOwned = allEggs.totalOwned
         userEggs.set(eggs)
     }
 
-    async startIncubation(eggId) {
+    async startIncubation(eggIds) {
 
+        eggIds = eggIds.split(',')        
         try {
-            await this.contract.EggToken.methods.startIncubation(eggId).send({}, async function (err, txHash) {
+            await this.contract.EggToken.methods.startIncubation(eggIds).send({}, async function (err, txHash) {
                 if (err) setAlert(err, 'warning')
                 else {
-                    setAlert('Incubation Started for Egg id: ' + eggId, 'success')              
+                    setAlert('Incubation Started for Egg id: ' + eggIds, 'success')              
                     return txHash
                 }
             })
@@ -128,6 +118,7 @@ export class EggContract {
     }
 
     async hatch(eggId) {
+        eggId = eggId.split(',')        
 
         try {
             await this.contract.EggToken.methods.hatch(eggId).send({}, function (err, txHash) {
