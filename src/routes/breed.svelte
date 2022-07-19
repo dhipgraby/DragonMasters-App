@@ -53,7 +53,7 @@
 			<div class="col p-1">
 				<div class="eggContainer pointer" id="mum" on:click={() => selectSubSpecie(3)}>
 					<h1 class="egg water"><i class="fas fa-egg" /></h1>
-					<h3>Earth</h3>
+					<h3>Water</h3>
 				</div>
 			</div>
 		</div>

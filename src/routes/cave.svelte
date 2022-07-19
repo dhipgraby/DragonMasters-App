@@ -1,11 +1,15 @@
 <script>
+	//COMPONENTS
 	import EggGrid from '$lib/component/egg/EggGrid.svelte';
 	import DragonGrid from '$lib/component/dragon/DragonGrid.svelte';
+	//STORAGE
 	import { userDragons } from '$lib/storage/dragon';
 	import { userEggs } from '$lib/storage/eggs';
+	import { userOffers } from '$lib/storage/marketplace';
+	//CONTRACTS
 	import { EggContract } from '$lib/contracts/EggToken';
 	import { DragonContract } from '$lib/contracts/DragonToken';
-	import { MarketplaceContract } from '$lib/contracts/Marketplace';
+	import { MarketplaceContract, TokenType, OfferType } from '$lib/contracts/Marketplace';
 	import { initEventListener } from '$lib/contracts/events';
 	import { onMount } from 'svelte';
 
@@ -14,9 +18,9 @@
 	let show = 1;
 	let fromId = 1;
 	let toId = 10;
-	let eggButtons = []
-	let dragonButtons = []
+	let dragonButtons = [];
 
+	$: offers = $userOffers;
 	$: eggs = $userEggs;
 	$: dragons = $userDragons;
 
@@ -28,24 +32,14 @@
 		contract['market'] = await new MarketplaceContract();
 
 		let contractEvents = await contract.egg.contract.EggToken.events;
+
 		let updater = () => {
 			contract['egg'].getUserEggs(fromId, toId);
 		};
+
 		await initEventListener(contractEvents, updater, 'EggToken');
 
 		LoadInterface(fromId, toId);
-	});
-
-	async function LoadInterface(from, to, forceReload = false) {
-		fromId = from;
-		toId = to;
-		console.log('loading interface from:' + fromId + ' to: ' + toId);
-		if (eggs.length > 0 && forceReload == false) return;
-		await contract['egg'].getUserEggs(fromId, toId);
-		console.log('loading Eggs');
-		if (dragons.length > 0 && forceReload == false) return;
-		await contract['dragon'].getUserDragons(fromId, toId);
-		console.log('loading Dragons');
 
 		//Checking Approval
 		let approveForAll = await contract['market'].isApprovedForAll();
@@ -54,14 +48,22 @@
 		} else {
 			singleApproval = true;
 		}
+	});
 
-		let totalEggs = parseInt(eggs.totalOwned);
-		let eggsPages = Math.round(totalEggs / 10);
-		let totalDragons = parseInt(dragons.totalOwned);
-		console.log(totalDragons)
-		let dragonPages = Math.round(totalDragons / 10);
-		eggButtons = new Array(eggsPages);
-		dragonButtons = new Array(dragonPages);
+	async function LoadInterface(from, to, forceReload = false) {
+		fromId = from;
+		toId = to;
+		console.log('loading interface from:' + fromId + ' to: ' + toId);
+		if (eggs.length > 0 && forceReload == false) return;
+		await contract['egg'].getUserEggs(fromId, toId);
+		console.log('Eggs loaded');
+		if (dragons.length > 0 && forceReload == false) return;
+		await contract['dragon'].getUserDragons(fromId, toId);
+		console.log('Dragons loaded');
+		if (offers.length > 0 && forceReload == false) return;
+		await contract['market'].getOfferedBy(fromId, toId, OfferType.ForSale, TokenType.Dragon);
+		await contract['market'].getOfferedBy(fromId, toId, OfferType.ForSale, TokenType.Egg);
+		console.log('Offers loaded');
 	}
 </script>
 
@@ -101,7 +103,7 @@
 	</div>
 
 	{#if show == 1}
-		<EggGrid {eggs} contract={contract['egg']} pages={eggButtons} loadPage={LoadInterface} />
+		<EggGrid {eggs} contract={contract['egg']} loadPage={LoadInterface} />
 	{/if}
 
 	{#if show == 2}
@@ -113,6 +115,7 @@
 	.input-group {
 		max-width: 500px;
 	}
+
 	section {
 		padding-top: 50px;
 		display: flex;

@@ -10,14 +10,14 @@
 
 	let egg_contract;
 	let dragon_contract;
-	let marketplace_contract;
+	let marketplace_contract;	
 
-	let show = 1;
+	let show = 3;
 
 	onMount(async () => {
 		egg_contract = await new EggContract();
 		dragon_contract = await new DragonContract();
-		marketplace_contract = await new MarketplaceContract();		
+		marketplace_contract = await new MarketplaceContract();			
 	});
 </script>
 

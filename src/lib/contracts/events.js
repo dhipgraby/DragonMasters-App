@@ -48,7 +48,7 @@ async function Hatched(event, contractEvents) {
 
 async function EggLaid(event) {
     console.log(event)
-    updater(event)    
+    //updater(event)    
     //await initBreeding(contractEvents)
 }
 
@@ -76,7 +76,7 @@ async function initIncubation(contractEvents) {
 
 async function initBreeding(contractEvents) {
     await contractEvents
-        .EggLaid()
+        .EggsLaid()
         .once('data', (event) => {            
             eventsHandler(event, contractEvents);
         })

@@ -1,0 +1,30 @@
+<script>
+
+export let pages
+export let loadPage
+
+</script>
+<div>
+    <div class="btn-group mt-3" role="group">
+        {#if pages}
+            {#each pages as button, i}
+                <button
+                    on:click={() => loadPage(i * 10, i * 10 + 10, true)}
+                    type="button"
+                    class="btn btn-light">{i}</button
+                >
+            {/each}
+        {/if}
+    </div>
+</div>
+
+<style>
+	.btn-light {
+		font-weight: 700;
+		color: grey;
+	}
+
+	.btn-light:hover {
+		color: black;
+	}
+</style>

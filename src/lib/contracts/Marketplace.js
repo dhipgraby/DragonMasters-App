@@ -1,4 +1,5 @@
 import { setAlert } from "$lib/storage/alerts";
+import { userOffers } from "$lib/storage/marketplace";
 import { dragonApproval } from '$lib/storage/dragon'
 import { contracts } from "./contracts";
 
@@ -82,13 +83,58 @@ export class MarketplaceContract {
                 rent: rental
             }
 
-            console.log(result)
-
-            setAlert(JSON.stringify(result), 'success')
+            return result
 
         } catch (err) {
             setAlert('getOffer error ', 'warning')
             console.log('Error at: getOffer ' + err)
+        }
+    }
+
+    async getOfferedBy(
+        startIndex,
+        endIndex, 
+        _offerType,
+        _tokenType,
+        _account,
+        alert = false
+    ) {
+
+        let offers = []
+
+        try {
+
+            if(_account == '' | !_account | _account == undefined) _account = this.contract.account
+            
+            let ids = await this.contract.Marketplace.methods.getOfferedBy(_account, startIndex, endIndex,_offerType,_tokenType).call()
+
+            for (let i = 0; i < ids.tokenIds.length; i++) {
+                let currentOffer = await this.getOffer(ids.tokenIds[i],_tokenType)                                                    
+                offers.push(currentOffer)
+            }
+
+            userOffers.set(offers)            
+            console.log(offers)            
+            if(alert == true) setAlert('You have a total of ' + ids.totalOffered + ' offers.<p class="bold m-0">Token Ids: ' + ids.tokenIds + '</p>','success')
+
+        } catch (err) {
+            setAlert('getOfferedBy error', 'warning')
+            console.log("Error at: getOfferedBy" + err)
+        }
+    }
+
+    async isOnOffer(
+        tokenId,
+        _offerType,
+        _tokenType,
+        alert = false
+    ) {
+        try {
+            let onOffer = await this.contract.Marketplace.methods.isOnOffer(tokenId,_offerType,_tokenType).call()
+            return onOffer
+        } catch (err) {
+            if(alert == true)  setAlert('isOnOffer error', 'warning')
+            console.log("Error at: isOnOffer" + err)
         }
     }
 
@@ -117,14 +163,14 @@ export class MarketplaceContract {
         }
     }
 
-    
+
     async removeAllOffers(
-        tokenId,        
+        tokenId,
         tokenType
     ) {
         try {
             let offer = await this.contract.Marketplace.methods.removeAllOffers(
-                tokenId,                
+                tokenId,
                 tokenType
             ).send({}, function (err, txHash) {
                 if (err) setAlert(err, 'warning')
@@ -163,7 +209,7 @@ export class MarketplaceContract {
         }
     }
 
-    
+
     async revokeToken(tokenId) {
         try {
             let dragonsIds = await this.contract.DragonToken.methods.approve(
@@ -192,7 +238,7 @@ export class MarketplaceContract {
                 true
             ).send({}, function (err, txHash) {
                 if (err) setAlert(err, 'warning')
-                else {                    
+                else {
                     dragonApproval.set(true)
                     setAlert('Maketplace approved for all', 'success')
                     return true
@@ -229,24 +275,24 @@ export class MarketplaceContract {
     }
 
 
-    async getApproved(tokenId,msg = false) {
+    async getApproved(tokenId, msg = false) {
 
         let isApproved
         const contractAddress = this.contract.address.Marketplace
 
         try {
             await this.contract.DragonToken.methods.getApproved(tokenId).call({}, (err, approved) => {
-    
+
                 if (err) console.log(err)
                 if (contractAddress == approved) {
-                    
-                    if(msg == true) setAlert(tokenId + ' is approved','success')
+
+                    if (msg == true) setAlert(tokenId + ' is approved', 'success')
                     isApproved = true;
                 } else {
-                    if(msg == true) setAlert(tokenId + ' is not approved','warning')                    
+                    if (msg == true) setAlert(tokenId + ' is not approved', 'warning')
                     isApproved = false
                 }
-    
+
             })
         }
         catch (err) {
@@ -254,24 +300,24 @@ export class MarketplaceContract {
         }
         return isApproved
     }
-    
+
     async isApprovedForAll(msg = false) {
-    
+
         try {
             const isMarketplaceAnOperator = await this.contract.DragonToken.methods.isApprovedForAll(this.contract.account, this.contract.address.Marketplace).call()
-            
-            if(isMarketplaceAnOperator == true){
-                dragonApproval.set(true)                
-                if(msg == true) setAlert('This account is Aprrove fro All','success')
+
+            if (isMarketplaceAnOperator == true) {
+                dragonApproval.set(true)
+                if (msg == true) setAlert('This account is Aprrove fro All', 'success')
             } else {
-                if(msg == true) setAlert('Not approve for All','warning')
-            } 
+                if (msg == true) setAlert('Not approve for All', 'warning')
+            }
             return isMarketplaceAnOperator
         } catch (error) {
-            setAlert('Contract error, please check metamask account and connection','warning')            
-        }    
+            setAlert('Contract error, please check metamask account and connection', 'warning')
+        }
     }
-    
+
 
 }
 

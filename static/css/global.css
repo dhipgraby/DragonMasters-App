@@ -71,3 +71,11 @@
 .left20 {
 	left:20px;
 }
+
+.f-right {
+	float: right;
+}
+
+.bold {
+	font-weight: 700 !important;
+}
