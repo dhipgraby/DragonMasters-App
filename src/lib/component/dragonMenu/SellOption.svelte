@@ -35,14 +35,36 @@
 		);
 	}
 
+	function formHanlders(event){
+		
+		let eventName = event.detail.name
+		console.log('handling All, ' + eventName)
+		switch(eventName){			
+			case 'offerCreated' : 
+			handleSetOffer(event);
+			break;
+			case 'offerModifyed' : 
+			handleModifyOffer(event);
+			break;
+		}
+	}
+
 	function handleApprove(event) {
 		singleApproval = false;
 		dragonProps.isApproved = true;
 	}
 
 	function handleSetOffer(event) {
+		console.log('handling setOffer')
 		dragonProps.offer = {
-			price: event.detail.price
+			sellPrice: event.detail.price
+		};
+	}
+
+	function handleModifyOffer(event) {
+		console.log('handling modifyOffer')
+		dragonProps.offer = {
+			sellPrice: event.detail.price
 		};
 	}
 </script>
@@ -53,7 +75,7 @@
 		<OfferForm
 			offer={dragonProps.offer}
 			tokenId={dragonProps.tokenId}
-			{handleSetOffer}
+			{formHanlders}
 			{contract}
 		/>
 		<!-- IF IS NOT APPROVE FOR ALL CHECK SINGLE APPROVE  -->
@@ -66,7 +88,7 @@
 				<OfferForm
 					offer={dragonProps.offer}
 					tokenId={dragonProps.tokenId}
-					{handleSetOffer}
+					{formHanlders}					
 					{contract}
 				/>
 			{:else}

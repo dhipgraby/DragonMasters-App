@@ -5,11 +5,11 @@
     export let contract
     export let offer
     export let tokenId
-    export let handleSetOffer
+    export let formHanlders
 </script>
 
 {#if offer}
-	<ModifyOffer {offer} {tokenId} />
+	<ModifyOffer on:offerModifyed={formHanlders} {offer} {tokenId} {contract} />
 {:else}
-	<CreateOffer on:offerCreated={handleSetOffer} {tokenId} {contract} />
+	<CreateOffer on:offerCreated={formHanlders} {tokenId} {contract} />
 {/if}

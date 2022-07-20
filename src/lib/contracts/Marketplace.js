@@ -47,7 +47,7 @@ export class MarketplaceContract {
             ).send({}, function (err, txHash) {
                 if (err) setAlert(err, 'warning')
                 else {
-                    setAlert(txHash, 'success')
+                    setAlert('New offer created!', 'success')
                     return txHash
                 }
             })
@@ -69,7 +69,7 @@ export class MarketplaceContract {
             ).send({}, function (err, txHash) {
                 if (err) setAlert(err, 'warning')
                 else {
-                    setAlert(txHash, 'success')
+                    setAlert('Offer Modifyed!', 'success')
                     return txHash
                 }
             })

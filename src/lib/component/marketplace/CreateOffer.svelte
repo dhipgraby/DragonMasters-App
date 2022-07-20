@@ -16,7 +16,8 @@
         console.log(selling)
         if (selling.blockHash) {
 			dispatch('offerCreated', {
-				price:price,                
+				price:price, 
+				name:'offerCreated'               
 			});
 		}
 	}
