@@ -1,7 +1,8 @@
 import { setAlert } from "$lib/storage/alerts";
 import { userOffers } from "$lib/storage/marketplace";
-import { dragonApproval } from '$lib/storage/dragon'
+import { dragonApproval, userDragons } from '$lib/storage/dragon'
 import { contracts } from "./contracts";
+import { get } from 'svelte/store';
 
 const salePriceInWei = '500000000000000000'  //0.5 ETH
 const rentPriceInWei = '10000000000000000'  // 0.01ETH
@@ -93,7 +94,7 @@ export class MarketplaceContract {
 
     async getOfferedBy(
         startIndex,
-        endIndex, 
+        endIndex,
         _offerType,
         _tokenType,
         _account,
@@ -104,18 +105,33 @@ export class MarketplaceContract {
 
         try {
 
-            if(_account == '' | !_account | _account == undefined) _account = this.contract.account
-            
-            let ids = await this.contract.Marketplace.methods.getOfferedBy(_account, startIndex, endIndex,_offerType,_tokenType).call()
+            if (_account == '' | !_account | _account == undefined) _account = this.contract.account
 
-            for (let i = 0; i < ids.tokenIds.length; i++) {
-                let currentOffer = await this.getOffer(ids.tokenIds[i],_tokenType)                                                    
+            let ids = await this.contract.Marketplace.methods.getOfferedBy(_account, startIndex, endIndex, _offerType, _tokenType).call()
+            let tokenIds = ids.tokenIds
+
+            for (let i = 0; i < tokenIds.length; i++) {
+                let currentOffer = await this.getOffer(ids.tokenIds[i], _tokenType)
                 offers.push(currentOffer)
             }
 
-            userOffers.set(offers)            
-            console.log(offers)            
-            if(alert == true) setAlert('You have a total of ' + ids.totalOffered + ' offers.<p class="bold m-0">Token Ids: ' + ids.tokenIds + '</p>','success')
+            userOffers.set(offers)
+            let dragons = get(userDragons)
+
+            let dragonOffers = dragons.map(el => {
+                let TID = el.tokenId
+                if (tokenIds.includes(TID)) {                    
+                    el.offer = offers.map(offer => { if(offer.tokenId == TID) return offer })                 
+                } 
+                return el
+            })
+
+            userDragons.set(dragonOffers)
+
+            console.log(dragonOffers)
+            console.log(tokenIds)
+            console.log(offers)
+            if (alert == true) setAlert('You have a total of ' + ids.totalOffered + ' offers.<p class="bold m-0">Token Ids: ' + tokenIds + '</p>', 'success')
 
         } catch (err) {
             setAlert('getOfferedBy error', 'warning')
@@ -130,10 +146,10 @@ export class MarketplaceContract {
         alert = false
     ) {
         try {
-            let onOffer = await this.contract.Marketplace.methods.isOnOffer(tokenId,_offerType,_tokenType).call()
+            let onOffer = await this.contract.Marketplace.methods.isOnOffer(tokenId, _offerType, _tokenType).call()
             return onOffer
         } catch (err) {
-            if(alert == true)  setAlert('isOnOffer error', 'warning')
+            if (alert == true) setAlert('isOnOffer error', 'warning')
             console.log("Error at: isOnOffer" + err)
         }
     }

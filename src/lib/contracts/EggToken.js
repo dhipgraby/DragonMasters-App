@@ -9,7 +9,6 @@ export class EggContract {
     constructor() {
         this.contract
         return (async () => {
-
             this.contract = await contracts();
             return this;
         })();
@@ -131,6 +130,10 @@ export class EggContract {
         } catch (err) {
             console.log("Error at: Hatch function" + err)
         }
+    }
+
+    async getEvents(){
+        return this.contract.EggToken.events
     }
 
     /************* STANDARD CONTRACT FUNCTIONS  ***************/
