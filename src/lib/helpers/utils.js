@@ -82,8 +82,9 @@ export function shortAddr(address) {
 }
 
 //ether to wei
-export const getWei = async (value) => {    
-    let res = await web3.utils.toWei(String(value))
+export const getWei = async (value) => { 
+    if(typeof value != 'string') value = String(value)   
+    let res = await web3.utils.toWei(value)
     return res
 }
 

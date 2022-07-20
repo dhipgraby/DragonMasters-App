@@ -76,6 +76,11 @@
 	float: right;
 }
 
+.f-left {
+	float: left;
+}
+
+
 .bold {
 	font-weight: 700 !important;
 }

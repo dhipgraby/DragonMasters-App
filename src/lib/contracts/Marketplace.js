@@ -58,6 +58,28 @@ export class MarketplaceContract {
             console.log("Error at: setOffer " + err)
         }
     }
+    
+    async modifyOffer(tokenId, offerType, tokenType, terms) {
+        try {
+            let offer = await this.contract.Marketplace.methods.modifyOffer(
+                tokenId,
+                terms,
+                offerType,
+                tokenType,
+            ).send({}, function (err, txHash) {
+                if (err) setAlert(err, 'warning')
+                else {
+                    setAlert(txHash, 'success')
+                    return txHash
+                }
+            })
+
+            return offer
+        } catch (err) {
+            setAlert('Error setting offer, try again or contact support.', 'warning')
+            console.log("Error at: setOffer " + err)
+        }
+    }
 
     async getOffer(
         tokenId,
@@ -120,17 +142,16 @@ export class MarketplaceContract {
 
             let dragonOffers = dragons.map(el => {
                 let TID = el.tokenId
-                if (tokenIds.includes(TID)) {                    
-                    el.offer = offers.map(offer => { if(offer.tokenId == TID) return offer })                 
-                } 
+                if (tokenIds.includes(TID)) {
+                    el.offer = offers.find(function (offer) {
+                        return offer.tokenId === TID;
+                    });                    
+                }
                 return el
             })
 
             userDragons.set(dragonOffers)
 
-            console.log(dragonOffers)
-            console.log(tokenIds)
-            console.log(offers)
             if (alert == true) setAlert('You have a total of ' + ids.totalOffered + ' offers.<p class="bold m-0">Token Ids: ' + tokenIds + '</p>', 'success')
 
         } catch (err) {
