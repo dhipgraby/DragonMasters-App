@@ -1,7 +1,7 @@
 <script>
 	import { TokenType, OfferType, saleTerms, rentTerms } from '$lib/contracts/Marketplace';
 	import { getWei, timeDropdrown } from '$lib/helpers/utils';
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import TimeInputs from './TimeInputs.svelte';
 
 	const dispatch = createEventDispatcher();
@@ -40,6 +40,10 @@
 	function addTime(days) {
 		duration += days;
 	}
+
+	onMount(()=>{
+		console.log(_offerType)
+	})
 </script>
 
 <h3>Create a {_offerType == OfferType.ForSale ? 'Sale' : 'Rent'} Offer</h3>

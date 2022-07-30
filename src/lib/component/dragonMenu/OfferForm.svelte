@@ -67,6 +67,8 @@
 			{:else}
 				<CreateOffer on:offerCreated={formHanlders} {tokenId} {contract} {_offerType} />
 			{/if}
+		{:else}
+			<CreateOffer on:offerCreated={formHanlders} {tokenId} {contract} {_offerType} />
 		{/if}
 	{/if}
 {/if}
