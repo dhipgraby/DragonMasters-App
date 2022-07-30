@@ -1,45 +1,73 @@
 <script>
-	
-	import { onMount,createEventDispatcher } from 'svelte';	
-	import { TokenType, OfferType, saleTerms } from '$lib/contracts/Marketplace';
-	import { getEth,getWei } from '$lib/helpers/utils';
+	import { onMount, createEventDispatcher } from 'svelte';
+	import { TokenType, OfferType, saleTerms, rentTerms } from '$lib/contracts/Marketplace';
+	import { getEth, getWei, timeDropdrown } from '$lib/helpers/utils';
+	import TimeInputs from './TimeInputs.svelte';
 
 	const dispatch = createEventDispatcher();
-	
+
 	export let contract;
 	export let offer;
 	export let tokenId;
+	export let _offerType;
 
 	let price;
-	let currentPrice
+	let deposit;
+	let duration;
 	let tap = 1;
+	let currentPrice;
 
-	const changeTap = (num) => { tap = num	}
+	const changeTap = (num) => {
+		tap = num;
+	};
 
-	function removeSellOffer() {
-		contract.removeOffer(tokenId, OfferType.ForSale, TokenType.Dragon);
-	}
-	
-	async function modifyOffer() {
-        let priceInWei = await getWei(price)
-        saleTerms.price = priceInWei     
-		let modify = await contract.modifyOffer(tokenId, OfferType.ForSale, TokenType.Dragon, saleTerms);
-        
-        if (modify.blockHash) {
-			dispatch('offerModifyed', {
-				price:priceInWei,        
-				name:'offerModifyed'        
+	async function removeSellOffer() {
+		let offerRemove = await contract.removeOffer(tokenId, _offerType, TokenType.Dragon);
+		if (offerRemove.blockHash) {
+			dispatch('offerRemoved', {
+				name: 'offerRemoved'
 			});
 		}
+	}
+
+	async function modifyOffer() {
+		let Terms;
+		let priceInWei = await getWei(price);
+
+		if (_offerType == OfferType.ForSale) {
+			Terms = saleTerms;
+			Terms.price = priceInWei;
+		} else {
+			Terms = rentTerms;
+			Terms.rental.price = priceInWei;
+			Terms.rental.minDuration = duration * timeDropdrown.oneDay;
+		}
+
+		let modifying = await contract.modifyOffer(tokenId, _offerType, TokenType.Dragon, Terms);
+		console.log(modifying);
+		if (modifying.blockHash) {
+			dispatch('offerModifyed', {
+				price: priceInWei,
+				name: 'offerModifyed'
+			});
+		}
+	}
+
+	function addTime(days) {
+		duration += days;
 	}
 
 	onMount(async () => {
 		price = await getEth(offer.sellPrice);
 		currentPrice = await getEth(offer.sellPrice);
+		if (offer.rent) {
+			deposit = getEth(offer.rent.deposit);
+			duration = parseInt(offer.rent.minDuration) / timeDropdrown.oneDay;
+		}
 	});
 </script>
 
-<h3>Change offer</h3>
+<h3>Change {_offerType == OfferType.ForSale ? 'Sale' : 'Rent'} Offer</h3>
 
 <div class="myContainer">
 	<div class="row">
@@ -58,13 +86,39 @@
 			<i class="fab fa-ethereum" /> Current Price : {currentPrice}
 		</p>
 
-		<small class="m-0 mb-2 mt-3 f-left"
-			><i class="fas fa-cash-register" />
-			Change price
-		</small>
+		<div class="form-floating mb-3">
+			<input bind:value={price} type="number" class="form-control mt-2" placeholder="Eth" />
+			<label for="price">Price</label>
+		</div>
 
-		<input bind:value={price} type="number" class="form-control mt-2" placeholder="Eth" />
-		<button class="btn btn-success modifyBtn text-light" on:click={() => modifyOffer()}>Confirm</button>
+		{#if _offerType == OfferType.ForRent}
+			<div class="form-floating mb-3">
+				<input
+					type="number"
+					class="form-control"
+					id="deposit"
+					placeholder="Amount in Eth"
+					bind:value={deposit}
+				/>
+				<label for="deposit">Deposit in Eth</label>
+			</div>
+			<div class="form-floating mb-3">
+				<input
+					type="number"
+					class="form-control"
+					id="duration"
+					placeholder="Time to rent"
+					bind:value={duration}
+				/>
+				<label for="floatingPassword">Number of days</label>
+			</div>
+
+			<TimeInputs {addTime} />
+		{/if}
+
+		<button class="btn btn-success modifyBtn text-light" on:click={() => modifyOffer()}
+			>Confirm</button
+		>
 	{:else}
 		<button class="btn btn-danger text-light" on:click={() => removeSellOffer()}>Remove </button>
 	{/if}

@@ -83,7 +83,7 @@
     width: fit-content;
     max-width: 800px !important;
     background-color: #fff;
-    padding: 20px;
+    padding: 30px;
     border-radius: 10px;
     border: solid 2px #5c5c5c;
     z-index: 12;

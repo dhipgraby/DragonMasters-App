@@ -45,6 +45,8 @@ export const Skill = {
     Dig:7
 }
 
+const dayInSeconds = 86400
+
 Object.freeze(Maturity)
 Object.freeze(SubSpecies)
 Object.freeze(Attribute)
@@ -93,4 +95,15 @@ export const getEth = async (value) => {
     if(typeof value != 'string') value = String(value)
     let res = await web3.utils.fromWei(value)
     return res
+}
+
+export const timeDropdrown = {    
+    oneDay:dayInSeconds,
+    twoDays:dayInSeconds * 2,
+    threeDays:dayInSeconds * 3,                
+    week:dayInSeconds * 7,
+    twoWeeks:dayInSeconds * 14,
+    month:dayInSeconds * 30,
+    twoMonths:dayInSeconds * 60,
+    oneYear:dayInSeconds * 365
 }

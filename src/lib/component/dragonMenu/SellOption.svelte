@@ -37,14 +37,16 @@
 
 	function formHanlders(event){
 		
-		let eventName = event.detail.name
-		console.log('handling All, ' + eventName)
+		let eventName = event.detail.name		
 		switch(eventName){			
 			case 'offerCreated' : 
 			handleSetOffer(event);
 			break;
 			case 'offerModifyed' : 
 			handleModifyOffer(event);
+			break;
+			case 'offerRemoved' : 
+			handleRemoveOffer(event);
 			break;
 		}
 	}
@@ -66,6 +68,11 @@
 		dragonProps.offer = {
 			sellPrice: event.detail.price
 		};
+	}
+
+	function handleRemoveOffer(event) {
+		console.log('handling modifyOffer')
+		dragonProps.offer = null
 	}
 </script>
 
