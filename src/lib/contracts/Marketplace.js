@@ -83,7 +83,8 @@ export class MarketplaceContract {
 
     async getOffer(
         tokenId,
-        tokenType
+        tokenType,
+        alert = false
     ) {
         try {
             let offer = await this.contract.Marketplace.methods.getOffer(
@@ -105,6 +106,8 @@ export class MarketplaceContract {
                 sellPrice: offer.terms.sale.price,
                 rent: rental
             }
+
+            if(alert == true) setAlert('Offer:<br>' + JSON.stringify(result), 'success')
 
             return result
 

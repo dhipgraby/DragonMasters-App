@@ -82,7 +82,7 @@
 					<option value={TokenType.Egg}>Egg</option>
 				</select>
 
-				<button class="btn btn-dark" on:click={() => contract.getOffer(offerId, _tokenType)}
+				<button class="btn btn-dark" on:click={() => contract.getOffer(offerId, _tokenType,true)}
 					>GET OFFER</button
 				>
 			</tr>
