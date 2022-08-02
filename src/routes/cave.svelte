@@ -22,6 +22,7 @@
 	onMount(async () => {
 		// userDragons.useLocalStorage()
 		LoadInterface(fromId, toId);
+		console.log(dragons)
 	});
 </script>
 

@@ -6,6 +6,7 @@
 	import BasicModal from '../BasicModal.svelte';
 	import AppoveToken from '../marketplace/appoveToken.svelte';
 	import OfferForm from './OfferForm.svelte';
+import { OfferType } from '$lib/contracts/LoanBook';
 
 	export let dragonProps;
 	export let contract;
@@ -56,24 +57,34 @@
 		dragonProps.isApproved = true;
 	}
 
-	function handleSetOffer(event) {
-		console.log('handling setOffer')
-		dragonProps.offer = {
-			sellPrice: event.detail.price
-		};
+	function handleSetOffer(event) {			
+		console.log('handling setOffer ',event)
+		updateDragonOffer(event.detail.offer)
 	}
 
 	function handleModifyOffer(event) {
 		console.log('handling modifyOffer')
-		dragonProps.offer = {
-			sellPrice: event.detail.price
-		};
+		updateDragonOffer(event.detail.offer)
 	}
 
 	function handleRemoveOffer(event) {
-		console.log('handling modifyOffer')
-		dragonProps.offer = null
+		console.log('handling removeOffer')
+		let offerType = event.detail.offerType
+		if(offerType == OfferType.ForSale){
+			dragonProps.offer.sellOffer = null
+		} else {
+			dragonProps.offer.rentOffer = null
+		}
 	}
+
+	function updateDragonOffer(offer){
+		if(offer.offerType == OfferType.ForSale){
+			dragonProps.offer.sellOffer = offer
+		} else {
+			dragonProps.offer.rentOffer = offer
+		}
+	}
+
 </script>
 
 <BasicModal bind:this={modaComponent} btnName={false} id={'dragonModal' + dragonProps.tokenId}>

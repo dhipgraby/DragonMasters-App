@@ -39,19 +39,16 @@ async function loadAssets(contract,from, to){
 }
 
 async function loadEggs(contract,from, to) {
-    await contract['egg'].getUserEggs(from, to);
-    console.log('loading Eggs');
+    await contract['egg'].getUserEggs(from, to);    
 }
 
 async function loadDragons(contract,from, to) {
-    await contract['dragon'].getUserDragons(from, to);
-    console.log('loading Dragons');
+    await contract['dragon'].getUserDragons(from, to);    
 }
 
 async function loadOffers(contract,from, to) {
     await contract['market'].getOfferedBy(from, to, OfferType.ForSale, TokenType.Dragon)
-    await contract['market'].getOfferedBy(from, to, OfferType.ForSale, TokenType.Egg)
-    console.log('offers');
+    await contract['market'].getOfferedBy(from, to, OfferType.ForRent, TokenType.Dragon)                
 }
 
 async function loadEvents(contract,from,to) {

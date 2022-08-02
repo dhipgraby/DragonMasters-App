@@ -130,7 +130,11 @@ export class MarketplaceContract {
 
         try {
 
-            if (_account == '' | !_account | _account == undefined) _account = this.contract.account
+            let ownAccount = false 
+            if (_account == '' | !_account | _account == undefined) {
+                ownAccount = true
+                _account = this.contract.account
+            }
 
             let ids = await this.contract.Marketplace.methods.getOfferedBy(_account, startIndex, endIndex, _offerType, _tokenType).call()
             let tokenIds = ids.tokenIds
@@ -140,22 +144,25 @@ export class MarketplaceContract {
                 offers.push(currentOffer)
             }
 
-            userOffers.set(offers)
-            let dragons = get(userDragons)
+            if(ownAccount == true){
+                let dragons = get(userDragons)    
+                let offerName = (_offerType == OfferType.ForSale) ? 'sellOffer': 'rentOffer'; 
+                let dragonOffers = dragons.map(el => {
+                    let TID = el.tokenId                    
+                    if (tokenIds.includes(TID)) {
+                        if(el.offer == undefined) el.offer = []
+                        el.offer[offerName] = offers.find(function (offer) {
+                            return offer.tokenId === TID;
+                        });                                            
+                    }
+                    return el
+                })
+                userDragons.set(dragonOffers)    
+                console.log(dragonOffers)
+            }                        
 
-            let dragonOffers = dragons.map(el => {
-                let TID = el.tokenId
-                if (tokenIds.includes(TID)) {
-                    el.offer = offers.find(function (offer) {
-                        return offer.tokenId === TID;
-                    });                    
-                }
-                return el
-            })
-
-            userDragons.set(dragonOffers)
-
-            if (alert == true) setAlert('You have a total of ' + ids.totalOffered + ' offers.<p class="bold m-0">Token Ids: ' + tokenIds + '</p>', 'success')
+            if (alert == true) setAlert('You have a total of ' + ids.totalOffered + ' offers.<p class="bold m-0">Token Ids: ' + tokenIds + '</p>', 'success')            
+            return offers;
 
         } catch (err) {
             setAlert('getOfferedBy error', 'warning')
@@ -203,7 +210,6 @@ export class MarketplaceContract {
         }
     }
 
-
     async removeAllOffers(
         tokenId,
         tokenType
@@ -226,8 +232,7 @@ export class MarketplaceContract {
             console.log("Error at: removeAllOffers " + err)
         }
     }
-
-
+    // APPROVAL FUNCTIONS
     async approveToken(tokenId) {
         try {
             let dragonsIds = await this.contract.DragonToken.methods.approve(
@@ -248,7 +253,6 @@ export class MarketplaceContract {
             return false;
         }
     }
-
 
     async revokeToken(tokenId) {
         try {
@@ -313,7 +317,6 @@ export class MarketplaceContract {
             console.log('Error at: setApprovalForAll ' + err)
         }
     }
-
 
     async getApproved(tokenId, msg = false) {
 

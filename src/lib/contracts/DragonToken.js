@@ -107,7 +107,6 @@ export class DragonContract {
         }
     }
 
-
     async checkMaturity(dragonId, msg = false) {
         try {
             let maturity = await this.contract.DragonToken.methods.checkMaturity(dragonId).call()
@@ -166,7 +165,6 @@ export class DragonContract {
         }
     }
 
-    
     /************* STANDARD CONTRACT FUNCTIONS  ***************/
 
     async totalSupply() {

@@ -12,6 +12,7 @@
 	afterUpdate(() => {
 		let totalDragonPages = Math.round(parseInt(dragons.totalOwned) / 10);
 		pages = (totalDragonPages > 0) ? new Array(totalDragonPages) : []; 
+		console.log(dragons)
 	});
 
 </script>

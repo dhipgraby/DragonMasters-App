@@ -16,6 +16,7 @@
 
 	async function createOffer() {
 		let Terms;
+		let rent = null;
 		let priceInWei = await getWei(price);
 
 		if (_offerType == OfferType.ForSale) {
@@ -25,13 +26,29 @@
 			Terms = rentTerms;
 			Terms.rental.price = priceInWei;
 			Terms.rental.minDuration = duration * timeDropdrown.oneDay;
+			rent = true;
 		}
 
 		let offering = await contract.setOffer(tokenId, _offerType, TokenType.Dragon, Terms);
-		console.log(offering);
+
 		if (offering.blockHash) {
+			let offer = {
+				offerType: _offerType,
+				owner: contract.contract.account,
+				rent:
+					rent == true
+						? {
+								deposit: Terms.rental.deposit,
+								minDuration: Terms.rental.minDuration
+						  }
+						: null,
+				sellPrice: priceInWei,
+				tokenId: tokenId,
+				tokenType: TokenType.Dragon
+			};
+
 			dispatch('offerCreated', {
-				price: priceInWei,
+				offer: offer,
 				name: 'offerCreated'
 			});
 		}
@@ -40,10 +57,6 @@
 	function addTime(days) {
 		duration += days;
 	}
-
-	onMount(()=>{
-		console.log(_offerType)
-	})
 </script>
 
 <h3>Create a {_offerType == OfferType.ForSale ? 'Sale' : 'Rent'} Offer</h3>

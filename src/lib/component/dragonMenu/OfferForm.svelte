@@ -9,19 +9,19 @@
 	export let tokenId;
 	export let formHanlders;
 
-	console.log(offer);
-
 	let _offerType = OfferType.NoOffer;
 	let showOptions = true;
 
 	function forSale() {
 		showOptions = false;
 		_offerType = OfferType.ForSale;
+		console.log(_offerType);
 	}
 
 	function forRent() {
 		showOptions = false;
 		_offerType = OfferType.ForRent;
+		console.log(offer);
 	}
 </script>
 
@@ -38,28 +38,14 @@
 			<i class="fas fa-arrow-left" /> Back
 		</p>
 	</div>
-	{#if _offerType == OfferType.ForSale}
-		{#if offer}
-			<ModifyOffer
-				on:offerModifyed={formHanlders}
-				on:offerRemoved={formHanlders}
-				{offer}
-				{tokenId}
-				{contract}
-				{_offerType}
-			/>
-		{:else}
-			<CreateOffer on:offerCreated={formHanlders} {tokenId} {contract} {_offerType} />
-		{/if}
-	{/if}
 
-	{#if _offerType == OfferType.ForRent}
-		{#if offer}
-			{#if offer.rent != undefined && offer.rent.price != '0'}
+	{#if offer}
+		{#if _offerType == OfferType.ForSale}
+			{#if offer.sellOffer}
 				<ModifyOffer
 					on:offerModifyed={formHanlders}
 					on:offerRemoved={formHanlders}
-					{offer}
+					offer={offer.sellOffer}
 					{tokenId}
 					{contract}
 					{_offerType}
@@ -67,9 +53,24 @@
 			{:else}
 				<CreateOffer on:offerCreated={formHanlders} {tokenId} {contract} {_offerType} />
 			{/if}
-		{:else}
-			<CreateOffer on:offerCreated={formHanlders} {tokenId} {contract} {_offerType} />
 		{/if}
+
+		{#if _offerType == OfferType.ForRent}
+			{#if offer.rentOffer}
+				<ModifyOffer
+					on:offerModifyed={formHanlders}
+					on:offerRemoved={formHanlders}
+					offer={offer.rentOffer}
+					{tokenId}
+					{contract}
+					{_offerType}
+				/>
+			{:else}
+				<CreateOffer on:offerCreated={formHanlders} {tokenId} {contract} {_offerType} />
+			{/if}
+		{/if}
+	{:else}
+		<CreateOffer on:offerCreated={formHanlders} {tokenId} {contract} {_offerType} />
 	{/if}
 {/if}
 

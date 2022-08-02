@@ -25,13 +25,15 @@
 		let offerRemove = await contract.removeOffer(tokenId, _offerType, TokenType.Dragon);
 		if (offerRemove.blockHash) {
 			dispatch('offerRemoved', {
-				name: 'offerRemoved'
+				name: 'offerRemoved',
+				offerType : _offerType 
 			});
 		}
 	}
 
 	async function modifyOffer() {
 		let Terms;
+		let rent = null;
 		let priceInWei = await getWei(price);
 
 		if (_offerType == OfferType.ForSale) {
@@ -39,15 +41,31 @@
 			Terms.price = priceInWei;
 		} else {
 			Terms = rentTerms;
-			Terms.rental.price = priceInWei;
+			Terms.rental.deposit = priceInWei;
 			Terms.rental.minDuration = duration * timeDropdrown.oneDay;
+			rent = true;
 		}
 
 		let modifying = await contract.modifyOffer(tokenId, _offerType, TokenType.Dragon, Terms);
-		console.log(modifying);
+
 		if (modifying.blockHash) {
+			let offer = {
+				offerType: _offerType,
+				owner: contract.contract.account,
+				rent:
+					rent == true
+						? {
+								deposit: Terms.rental.deposit,
+								minDuration: Terms.rental.minDuration
+						  }
+						: null,
+				sellPrice: priceInWei,
+				tokenId: tokenId,
+				tokenType: TokenType.Dragon
+			};
+
 			dispatch('offerModifyed', {
-				price: priceInWei,
+				offer: offer,
 				name: 'offerModifyed'
 			});
 		}
@@ -61,7 +79,7 @@
 		price = await getEth(offer.sellPrice);
 		currentPrice = await getEth(offer.sellPrice);
 		if (offer.rent) {
-			deposit = getEth(offer.rent.deposit);
+			deposit = await getEth(offer.rent.deposit);
 			duration = parseInt(offer.rent.minDuration) / timeDropdrown.oneDay;
 		}
 	});
