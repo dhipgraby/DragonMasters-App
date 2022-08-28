@@ -8,6 +8,7 @@
 	//CONTRACTS
 	import { onMount } from 'svelte';
 	import { LoadInterface, contracts, approvalRequired } from '$lib/interfaces/ICave';
+import MainContainer from '$lib/component/containers/MainContainer.svelte';
 
 	let singleApproval = false;
 	let show = 2;
@@ -30,6 +31,7 @@
 	<title>Cave - Dragon Masters</title>
 </svelte:head>
 
+<MainContainer>
 <section>
 	<div class="btn-group" role="group">
 		<button type="button" on:click={() => (show = 1)} class="btn btn-light"
@@ -47,7 +49,7 @@
 		<DragonGrid {dragons} contract={contract['market']} {singleApproval} />
 	{/if}
 </section>
-
+</MainContainer>
 <style>
 	
 	section {

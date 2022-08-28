@@ -1,10 +1,3 @@
-<script>
-	import Header from '$lib/header/Header.svelte';
-	import '../app.css';
-</script>
-
-<Header />
-
 <main>
 	<slot />
 </main>
@@ -16,7 +9,9 @@
 		display: flex;
 		flex-direction: column;		
 		width: 100%;		
+        max-width: 1200px;
 		margin: 0 auto;
+		overflow-y: hidden;
 		box-sizing: border-box;
 	}
 

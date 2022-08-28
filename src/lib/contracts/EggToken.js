@@ -16,8 +16,6 @@ export class EggContract {
 
     async mintGen0Egg(amount) {
 
-        console.log(amount)
-
         try {
             await this.contract.EggToken.methods.mintGen0EggsTo(this.contract.account,amount).send({}, function (err, txHash) {
                 console.log('awaiting')
