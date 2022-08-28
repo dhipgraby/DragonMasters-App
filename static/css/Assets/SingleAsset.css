@@ -1,0 +1,63 @@
+a {
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.row {
+    margin: 0;
+    margin-top: 0px !important;
+}
+
+.attrDiv {
+    background-color: white;
+    padding: 30px !important;
+    border-radius: 10px;
+    filter: drop-shadow(0px 4px 20px rgba(40, 124, 165, 0.1));
+}
+
+h3 {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.attribute {
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.first {
+    color: #6a55e2;
+}
+
+.btn-yellow {
+    font-size: 14px;
+    padding: 4px 20px !important;
+    margin-bottom: 10px;
+}
+
+i {
+    margin-right: 5px;
+}
+
+.row {
+    margin-top: 40px;
+}
+
+.dragonBg {
+    padding: 25px;
+    margin-bottom: 25px;
+    text-align: center;
+    border-radius: 20px;
+    background-color: #f2fffb;
+    background: linear-gradient(20deg, #f2fffb, #b3b3b3);
+}
+
+img {
+    width: 100%;
+}
+
+.card-text {
+    font-size: 22px;
+    text-align: left;
+    line-height: 32px;
+}

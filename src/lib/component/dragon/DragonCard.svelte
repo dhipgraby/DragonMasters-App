@@ -1,5 +1,5 @@
 <script>
-	import { onInterval, Maturity, Attribute } from '$lib/helpers/utils.js';
+	import { onInterval, Maturity,Attributes } from '$lib/helpers/utils.js';
 	import { getImg, iconElement, iconAttr } from '$lib/storage/dragonImg';
 	import { fade } from 'svelte/transition';
 	import ProgressBar from './ProgressBar.svelte';
@@ -73,7 +73,7 @@
 		<div class="row p-0 mt-2">
 			{#each dragon.attributes as attribute, i}
 				<div class="w-50 ta-l">
-					<p>{@html iconAttr(Object.keys(Attribute)[i])}: {attribute}</p>
+					<p>{@html iconAttr(Object.keys(Attributes)[i])}: {attribute}</p>
 				</div>
 			{/each}
 		</div>

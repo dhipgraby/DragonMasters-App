@@ -25,7 +25,7 @@ const SubSpecies = {
     Water: 3
 }
 
-export const Attribute = {
+export const Attributes = {
     Strength:0,
     Endurance:1,
     Agility:2,
@@ -49,7 +49,7 @@ const dayInSeconds = 86400
 
 Object.freeze(Maturity)
 Object.freeze(SubSpecies)
-Object.freeze(Attribute)
+Object.freeze(Attributes)
 Object.freeze(Skill)
 
 export function subSpeciesName(SubSpecies) {

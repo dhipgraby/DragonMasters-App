@@ -9,34 +9,56 @@
 </script>
 
 <script>
-	import SingleDragon from '$lib/component/dragon/SingleDragon.svelte';
 	import { DragonContract } from '$lib/contracts/DragonToken';
-	import { onMount } from 'svelte';
+	import { onMount, afterUpdate } from 'svelte';
+	import SingleDragon from '$lib/component/dragon/SingleDragon.svelte';
 
 	export let dragonId;
+	export let doPromise = false;
 
 	let contract;
-	let dragon = [];	
-
-	onMount(async () => {
-		contract = await new DragonContract();
-		dragon = await contract.getDragon(dragonId);
-		console.log(dragon)
-	});
+	let dragon = [];
+	let promise
 	
 
-	async function updateDragon(){		
-		dragon = await contract.getDragon(dragonId);		
+	onMount(async () => {
+		contract = await new DragonContract();		
+		dragon = await contract.getDragon(dragonId);
+		doPromise = true
+	});
+
+
+	async function updateDragon() {
+		dragon = await contract.getDragon(dragonId);
 	}
 
+	afterUpdate(() => {
+		if (doPromise == true) promise = later(500);
+	});
+
+	async function later(delay) {
+		return new Promise(async (resolve) =>
+		setTimeout(resolve, delay, true)			
+		);
+	}
 </script>
 
 <svelte:head>
 	<title>Cave - Dragon ID - {dragonId}</title>
 </svelte:head>
 
-{#if dragon.tokenId}
-	<SingleDragon on:update={updateDragon} {dragon} {contract} />
+{#if doPromise == true}
+	{#await promise}
+		<h2>Loading...</h2>
+		{:then ready}
+		{#if dragon.tokenId}				
+			<SingleDragon on:update={updateDragon} {dragon} {contract} />
+		{:else}
+			<h2>Dragon not found...</h2>
+		{/if}
+	{:catch error}
+		<p style="color: red">{error.message}</p>
+	{/await}
 {:else}
 	<h2>Dragon not found...</h2>
 {/if}

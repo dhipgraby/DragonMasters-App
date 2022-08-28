@@ -6,7 +6,7 @@
 	import BasicModal from '../BasicModal.svelte';
 	import AppoveToken from '../marketplace/appoveToken.svelte';
 	import OfferForm from './OfferForm.svelte';
-import { OfferType } from '$lib/contracts/LoanBook';
+	import { OfferType } from '$lib/contracts/LoanBook';
 
 	export let dragonProps;
 	export let contract;
@@ -36,19 +36,18 @@ import { OfferType } from '$lib/contracts/LoanBook';
 		);
 	}
 
-	function formHanlders(event){
-		
-		let eventName = event.detail.name		
-		switch(eventName){			
-			case 'offerCreated' : 
-			handleSetOffer(event);
-			break;
-			case 'offerModifyed' : 
-			handleModifyOffer(event);
-			break;
-			case 'offerRemoved' : 
-			handleRemoveOffer(event);
-			break;
+	function formHanlders(event) {
+		let eventName = event.detail.name;
+		switch (eventName) {
+			case 'offerCreated':
+				handleSetOffer(event);
+				break;
+			case 'offerModifyed':
+				handleModifyOffer(event);
+				break;
+			case 'offerRemoved':
+				handleRemoveOffer(event);
+				break;
 		}
 	}
 
@@ -57,45 +56,39 @@ import { OfferType } from '$lib/contracts/LoanBook';
 		dragonProps.isApproved = true;
 	}
 
-	function handleSetOffer(event) {			
-		console.log('handling setOffer ',event)
-		updateDragonOffer(event.detail.offer)
+	function handleSetOffer(event) {
+		console.log('handling setOffer ', event);
+		updateDragonOffer(event.detail.offer);
 	}
 
 	function handleModifyOffer(event) {
-		console.log('handling modifyOffer')
-		updateDragonOffer(event.detail.offer)
+		console.log('handling modifyOffer');
+		updateDragonOffer(event.detail.offer);
 	}
 
 	function handleRemoveOffer(event) {
-		console.log('handling removeOffer')
-		let offerType = event.detail.offerType
-		if(offerType == OfferType.ForSale){
-			dragonProps.offer.sellOffer = null
+		console.log('handling removeOffer');
+		let offerType = event.detail.offerType;
+		if (offerType == OfferType.ForSale) {
+			dragonProps.offer.sellOffer = null;
 		} else {
-			dragonProps.offer.rentOffer = null
+			dragonProps.offer.rentOffer = null;
 		}
 	}
 
-	function updateDragonOffer(offer){
-		if(offer.offerType == OfferType.ForSale){
-			dragonProps.offer.sellOffer = offer
+	function updateDragonOffer(offer) {
+		if (offer.offerType == OfferType.ForSale) {
+			dragonProps.offer.sellOffer = offer;
 		} else {
-			dragonProps.offer.rentOffer = offer
+			dragonProps.offer.rentOffer = offer;
 		}
 	}
-
 </script>
 
 <BasicModal bind:this={modaComponent} btnName={false} id={'dragonModal' + dragonProps.tokenId}>
 	<!-- CHECK APPROVE FOR ALL -->
 	{#if dragonProps.isApproved == true}
-		<OfferForm
-			offer={dragonProps.offer}
-			tokenId={dragonProps.tokenId}
-			{formHanlders}
-			{contract}
-		/>
+		<OfferForm offer={dragonProps.offer} tokenId={dragonProps.tokenId} {formHanlders} {contract} />
 		<!-- IF IS NOT APPROVE FOR ALL CHECK SINGLE APPROVE  -->
 	{:else if doPromise == true}
 		{#await promise}
@@ -106,7 +99,7 @@ import { OfferType } from '$lib/contracts/LoanBook';
 				<OfferForm
 					offer={dragonProps.offer}
 					tokenId={dragonProps.tokenId}
-					{formHanlders}					
+					{formHanlders}
 					{contract}
 				/>
 			{:else}

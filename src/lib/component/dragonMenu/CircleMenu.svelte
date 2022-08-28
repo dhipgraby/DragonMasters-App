@@ -1,4 +1,5 @@
 <script>
+	import '/static/css/Assets/CircleMenu.css'
 	import { onMount } from 'svelte';
 	import SellOption from './SellOption.svelte';
 
@@ -64,57 +65,3 @@
 </div>
 
 <SellOption bind:this={modaComponent} {dragonProps} {singleApproval} {contract} {doPromise} />
-
-<style>
-	.menu {
-        opacity: 0.8;
-		cursor: pointer;
-		color: #000000;
-		background: #ffffff;
-		width: 40px;
-		height: 40px;
-		padding: 8px;
-		border-radius: 50px;
-		position: absolute;
-		right: 5%;
-		top: 15px;
-		transition: 0.3s;
-		box-shadow: 0px 1px 25px -9px rgba(0, 0, 0, 0.75);
-        z-index: 2;
-	}
-
-	.menu:hover {
-        opacity: 1;
-		transform: scale(1.1);
-	}
-	.firstItem {
-		top: 65px;
-	}
-
-	.secondItem {
-		top: 115px;
-	}
-
-	a {
-		color: black;
-	}
-
-	.maindiv {
-		transition: 0.2s;
-	}
-	.d-block {
-		display: block;
-	}
-
-	.d-hide {
-		display: none;
-	}
-
-	.show {
-		opacity: 1;
-	}
-
-	.hide {
-		opacity: 0;
-	}
-</style>
