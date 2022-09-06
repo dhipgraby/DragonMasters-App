@@ -2,13 +2,14 @@
 	import EggToken from './EggToken.svelte';
 	import DragonToken from './DragonToken.svelte';
 	import Marketplace from './Marketplace.svelte';
+	import Approvals from './Approvals.svelte';
+	import LoanBook from './LoanBook.svelte';
+	import SideMenu from './SideMenu.svelte';
 	import { EggContract } from '$lib/contracts/EggToken';
 	import { DragonContract } from '$lib/contracts/DragonToken';
 	import { MarketplaceContract } from '$lib/contracts/Marketplace';
 	import { LoanBookContract } from '$lib/contracts/LoanBook';
 	import { onMount } from 'svelte';
-	import LoanBook from './LoanBook.svelte';
-	import SideMenu from './sideMenu.svelte';
 
 	let egg_contract;
 	let dragon_contract;
@@ -47,6 +48,10 @@
 		{/if}
 
 		{#if show == 4}
+			<Approvals contract={marketplace_contract} />
+		{/if}
+
+		{#if show == 5}
 			<LoanBook contract={loanbook_contract} />
 		{/if}
 	</div>

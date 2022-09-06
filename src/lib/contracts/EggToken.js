@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { setAlert } from "$lib/storage/alerts";
 import { userEggs } from "$lib/storage/eggs";
 import { subSpeciesName } from "$lib/helpers/utils"
