@@ -1,19 +1,10 @@
-<script context="module">
-	export async function load({ params }) {
-		return {
-			props: {
-				dragonId: params.dragonId
-			}
-		};
-	}
-</script>
-
 <script>
 	import { DragonContract } from '$lib/contracts/DragonToken';
 	import { onMount, afterUpdate } from 'svelte';
 	import SingleDragon from '$lib/component/dragon/SingleDragon.svelte';
 
-	export let dragonId;
+	export let data;
+	export let dragonId = data.dragonId;
 	export let doPromise = false;
 
 	let contract;
@@ -21,7 +12,7 @@
 	let promise
 	
 
-	onMount(async () => {
+	onMount(async () => {		
 		contract = await new DragonContract();		
 		dragon = await contract.getDragon(dragonId);
 		doPromise = true
@@ -46,6 +37,8 @@
 <svelte:head>
 	<title>Cave - Dragon ID - {dragonId}</title>
 </svelte:head>
+<div class="container">
+
 
 {#if doPromise == true}
 	{#await promise}
@@ -62,7 +55,7 @@
 {:else}
 	<h2>Dragon not found...</h2>
 {/if}
-
+</div>
 <style>
 	h2 {
 		margin-top: 50px;
