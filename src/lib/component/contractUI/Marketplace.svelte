@@ -6,6 +6,7 @@
 	let offerId,
 		sellId,
 		rentId,
+		buyId,
 		removeId,
 		removeRentId,
 		removeAllId,
@@ -21,6 +22,12 @@
 
 	function rentOffer() {
 		contract.setOffer(rentId, OfferType.ForRent, TokenType.Dragon, rentTerms);
+	}
+
+	async function buy() {
+
+		let offer = await contract.getOffer(buyId, TokenType.Dragon)
+		contract.buyToken(buyId,TokenType.Dragon, offer.sellPrice);
 	}
 
 	function removeSellOffer() {
@@ -59,6 +66,14 @@
 				<input type="text" bind:value={rentId} class="form-control" placeholder="Token Id" />
 			</div>
 			<button class="btn btn-dark" on:click={() => rentOffer()}>SET RENT OFFER</button>
+		</div>
+
+		<div class="grid">
+			<h2>Buy Token</h2>
+			<div class="mb-3">
+				<input type="text" bind:value={buyId} class="form-control" placeholder="Token Id" />
+			</div>
+			<button class="btn btn-dark" on:click={() => buy()}>Buy Token</button>
 		</div>
 	</div>
 	<!-- GETTERS -->

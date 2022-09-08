@@ -37,6 +37,28 @@ export class MarketplaceContract {
         })();
     }
 
+    async buyToken(tokenId,tokenType,price){
+
+           try {
+            let offer = await this.contract.Marketplace.methods.buy(
+                tokenId,                
+                tokenType,                
+            ).send({from:this.contract.account, 
+                value: price}, function (err, txHash) {
+                if (err) setAlert(err, 'warning')
+                else {
+                    setAlert('Token id: '+ tokenId +' Bought!', 'success')
+                    return txHash
+                }
+            })
+
+            return offer
+        } catch (err) {
+            setAlert('Buy token error ', 'warning')
+            console.log("Error at: buyToken " + err)
+        }
+    }
+
     async setOffer(tokenId, offerType, tokenType, terms) {
         try {
             let offer = await this.contract.Marketplace.methods.setOffer(
