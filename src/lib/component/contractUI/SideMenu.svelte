@@ -15,24 +15,15 @@
 		<ul class="list-unstyled ps-0">
 			<li class="mb-1">
 				<button on:click={() => changeView(1)} class="btn align-items-center rounded">
-					Egg Token
+					<i class="fas fa-egg" /> Egg Token
 				</button>
 			</li>
 			<li class="mb-1">
 				<button on:click={() => changeView(2)} class="btn align-items-center rounded">
-					Dragon Token
+					<i class="fas fa-dragon" /> Dragon Token
 				</button>
 			</li>
-			<li class="mb-1">
-				<button on:click={() => changeView(3)} class="btn align-items-center rounded">
-					Marketplace
-				</button>
-			</li>
-			<li class="mb-1">
-				<button on:click={() => changeView(4)} class="btn align-items-center rounded">
-					LoanBook
-				</button>
-			</li>
+
 			<li class="border-top my-3" />
 			<li class="mb-1">
 				<button
@@ -41,18 +32,23 @@
 					data-bs-target="#marketplace-collapse"
 					aria-expanded="false"
 				>
-					Marketplace
+					<i class="fas fa-store me-2" />  Marketplace
 				</button>
 				<div class="collapse" id="marketplace-collapse">
 					<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
 						<li>
-							<button on:click={() => changeView(4)} class="btn align-items-center rounded">
-								Approval
+							<button on:click={() => changeView(3)} class="btn align-items-center rounded">
+								<i class="fas fa-book" aria-hidden="true" /> Offers
 							</button>
 						</li>
 						<li>
 							<button on:click={() => changeView(4)} class="btn align-items-center rounded">
-								Approval
+								<i class="fas fa-paste" /> LoanBook
+							</button>
+						</li>
+						<li>
+							<button on:click={() => changeView(5)} class="btn align-items-center rounded">
+								<i class="fas fa-check-circle" /> Approvals
 							</button>
 						</li>
 
@@ -66,3 +62,9 @@
 		</ul>
 	</div>
 </main>
+
+<style>
+	button {
+		font-weight: 600;
+	}
+</style>

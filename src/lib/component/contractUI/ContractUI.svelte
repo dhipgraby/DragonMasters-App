@@ -16,7 +16,7 @@
 	let marketplace_contract;
 	let loanbook_contract;
 
-	let show = 4;
+	let show = 1;
 
 	const changeView = (screen) => (show = screen);
 
@@ -32,7 +32,7 @@
 	<div class="col-2">
 		<SideMenu {changeView} />
 	</div>
-	<div class="col-10 pt-5">
+	<div class="col-10 pt-5 p-5">
 		<!-- CREATE TAP FOR CONTRACTS INTERFACES -->
 
 		{#if show == 1}
@@ -48,11 +48,11 @@
 		{/if}
 
 		{#if show == 4}
-			<Approvals contract={marketplace_contract} />
-		{/if}
-
-		{#if show == 5}
 			<LoanBook contract={loanbook_contract} />
+		{/if}
+		
+		{#if show == 5}
+			<Approvals contract={marketplace_contract} />
 		{/if}
 	</div>
 </div>

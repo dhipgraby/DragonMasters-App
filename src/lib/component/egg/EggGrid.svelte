@@ -2,7 +2,6 @@
 	import EggCard from '$lib/component/egg/EggCard.svelte';
 	import Pagination from '../pagination/Pagination.svelte';
 	import { afterUpdate } from 'svelte';
-	import { fade } from 'svelte/transition';	
 	export let eggs;
 	export let contract;
 	export let loadPage;
@@ -23,7 +22,7 @@
 <div class="row">
 	{#if eggs.length}
 		{#each eggs as egg}
-			<div class="col" transition:fade={{ delay: 500 }}>
+			<div class="col">
 				<EggCard {egg} {contract} />
 			</div>
 		{/each}

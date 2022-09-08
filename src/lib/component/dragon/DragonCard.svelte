@@ -1,7 +1,6 @@
 <script>
 	import { onInterval, Maturity,Attributes } from '$lib/helpers/utils.js';
 	import { getImg, iconElement, iconAttr } from '$lib/storage/dragonImg';
-	import { fade } from 'svelte/transition';
 	import ProgressBar from './ProgressBar.svelte';
 	import CircleMenu from '../dragonMenu/CircleMenu.svelte';
 
@@ -29,8 +28,7 @@
 	}
 </script>
 
-<div
-	transition:fade={{ delay: 500 }}
+<div	
 	on:mouseenter={enter}
 	on:mouseleave={leave}
 	class="card"
