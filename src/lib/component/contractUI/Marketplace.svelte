@@ -1,6 +1,6 @@
 <script>
 	import { TokenType, OfferType, rentTerms, saleTerms } from '$lib/contracts/Marketplace';
-
+	
 	export let contract;
 
 	let offerId,
@@ -16,6 +16,15 @@
 		account,
 		_tokenType;
 
+	async function test(){
+		await contract.getAssets(
+			0,
+			10,			
+			OfferType.ForSale,
+			TokenType.Dragon,
+		);
+		}
+
 	function sellOffer() {
 		contract.setOffer(sellId, OfferType.ForSale, TokenType.Dragon, saleTerms);
 	}
@@ -25,9 +34,8 @@
 	}
 
 	async function buy() {
-
-		let offer = await contract.getOffer(buyId, TokenType.Dragon)
-		contract.buyToken(buyId,TokenType.Dragon, offer.sellPrice);
+		let offer = await contract.getOffer(buyId, TokenType.Dragon);
+		contract.buyToken(buyId, TokenType.Dragon, offer.sellPrice);
 	}
 
 	function removeSellOffer() {
@@ -42,12 +50,20 @@
 		contract.removeAllOffers(removeAllId, TokenType.Dragon);
 	}
 
-	function getOffers() {
+	function getOffersBy() {
 		contract.getOfferedBy(startIndex, endIndex, _offerType, _tokenType, account, true);
+	}
+
+	function getAllOffers() {
+		contract.getOffered(startIndex, endIndex, _offerType, _tokenType, true);
 	}
 </script>
 
 <h1 class="mb-4">Offers</h1>
+
+<button on:click={()=>test()} class="btn btn-dark text-light">
+	test
+</button>
 
 <div class="row">
 	<!-- SETTERS -->
@@ -96,6 +112,22 @@
 
 		<div class="grid">
 			<h2>Get All Offers</h2>
+			<p class="bold">Offer Type</p>
+			<select class="form-select mb-3" bind:value={_offerType}>
+				<option value={OfferType.ForSale} selected>For Sale</option>
+				<option value={OfferType.ForRent}>For Rent</option>
+			</select>
+			<p class="bold">Token Type</p>
+			<select class="form-select mb-3" bind:value={_tokenType}>
+				<option value={TokenType.Dragon} selected>Dragon</option>
+				<option value={TokenType.Egg}>Egg</option>
+			</select>
+			<button class="btn btn-dark" on:click={() => getAllOffers()}>GET ALL</button>
+		</div>
+
+		<div class="grid">
+			<h2>Get Offers By</h2>
+			<p>From specific address (if pass address, will use current one)</p>
 			<p class="bold">Address</p>
 			<input type="text" bind:value={account} class="form-control mb-3" placeholder="Address" />
 
@@ -112,7 +144,7 @@
 				<option value={TokenType.Dragon} selected>Dragon</option>
 				<option value={TokenType.Egg}>Egg</option>
 			</select>
-			<button class="btn btn-dark" on:click={() => getOffers()}>GET ALL</button>
+			<button class="btn btn-dark" on:click={() => getOffersBy()}>GET ALL</button>
 		</div>
 	</div>
 

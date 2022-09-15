@@ -19,7 +19,7 @@
 			<div class="mb-3">
 				<input type="text" bind:value={getDragonId} class="form-control" placeholder="Dragon Id" />
 			</div>
-			<button class="btn btn-dark" on:click={() => contract.getDragon(getDragonId)}>GET</button>
+			<button class="btn btn-dark" on:click={() => contract.getDragon(getDragonId,true)}>GET</button>
 		</div>
 	</div>
 

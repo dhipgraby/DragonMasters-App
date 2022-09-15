@@ -1,14 +1,14 @@
 <script>
 	//COMPONENTS
 	import EggGrid from '$lib/component/egg/EggGrid.svelte';
-	import DragonGrid from '$lib/component/dragon/DragonGrid.svelte';	
+	import DragonGrid from '$lib/component/dragon/DragonGrid.svelte';
 	//STORAGE
-	import { userDragons } from '$lib/storage/dragon';	
+	import { userDragons } from '$lib/storage/dragon';
 	import { userEggs } from '$lib/storage/eggs';
 	//CONTRACTS
 	import { onMount } from 'svelte';
 	import { LoadInterface, contracts, approvalRequired } from '$lib/interfaces/ICave';
-import MainContainer from '$lib/component/containers/MainContainer.svelte';
+	import MainContainer from '$lib/component/containers/MainContainer.svelte';
 
 	let singleApproval = false;
 	let show = 2;
@@ -23,7 +23,7 @@ import MainContainer from '$lib/component/containers/MainContainer.svelte';
 	onMount(async () => {
 		// userDragons.useLocalStorage()
 		LoadInterface(fromId, toId);
-		console.log(dragons)
+		console.log(dragons);
 	});
 </script>
 
@@ -32,7 +32,6 @@ import MainContainer from '$lib/component/containers/MainContainer.svelte';
 </svelte:head>
 
 <MainContainer>
-<section>
 	<div class="btn-group" role="group">
 		<button type="button" on:click={() => (show = 1)} class="btn btn-light"
 			><i class="fas fa-egg" /> EGGS
@@ -48,28 +47,12 @@ import MainContainer from '$lib/component/containers/MainContainer.svelte';
 	{#if show == 2}
 		<DragonGrid {dragons} contract={contract['market']} {singleApproval} />
 	{/if}
-</section>
 </MainContainer>
-<style>
-	
-	section {
-		padding-top: 50px;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 1;
-	}
 
+<style>
 	.btn-group .btn {
 		margin: 8px;
 		font-weight: 600;
 		letter-spacing: 0.8px;
 	}
-
-	.btn-group {
-		margin-top: 20px;
-		margin-bottom: 20px;
-	}
-
 </style>

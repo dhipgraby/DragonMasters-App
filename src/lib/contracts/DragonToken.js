@@ -25,13 +25,17 @@ export class DragonContract {
         })();
     }
 
-    async getDragon(dragonId) {
+    async getDragon(dragonId, alert = false) {
+
         try {
             let dragonDetails = await this.contract.DragonToken.methods.getDragon(dragonId).call()
+            console.log(dragonDetails)
             const toNumbers2D = arr => arr.map(arr => arr.map(Number));
-            dragonDetails = { ...dragonDetails[0], skills: toNumbers2D(dragonDetails[1]) }
+            dragonDetails = {
+                ...dragonDetails[0], skills: toNumbers2D(dragonDetails[1])
+            }
 
-            return {
+            let dragon = {
                 tokenId: dragonId,
                 dnaId: dragonDetails.dnaId,
                 subSpecies: subSpeciesName(dragonDetails.subSpecies),
@@ -44,6 +48,10 @@ export class DragonContract {
                 skills: dragonDetails.skills,
                 attributes: dragonDetails.attributes,
             }
+
+            if (alert == true) setAlert('Dragon Details: '+ JSON.stringify(dragon), 'success')
+
+            return dragon
 
         } catch (err) {
             setAlert('Error getting this Dragon id ', 'warning')
@@ -65,9 +73,9 @@ export class DragonContract {
         }
     }
 
-    async getUserDragons(from,to) {
+    async getUserDragons(from, to) {
 
-        let allDragons = await this.getDragonIds(from,to)
+        let allDragons = await this.getDragonIds(from, to)
         let dragons = []
 
         for (let i = 0; i < allDragons.tokenIds.length; i++) {

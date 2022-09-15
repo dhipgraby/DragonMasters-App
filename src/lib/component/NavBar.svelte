@@ -18,6 +18,9 @@
 					<a class="nav-link active" aria-current="page" href="/ui">UI</a>
 				</li>
 				<li class="nav-item">
+					<a class="nav-link" href="/marketplace">Marketplace</a>
+				</li>
+				<li class="nav-item">
 					<a class="nav-link" href="/cave">Cave</a>
 				</li>
         <li class="nav-item">

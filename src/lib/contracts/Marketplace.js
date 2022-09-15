@@ -1,6 +1,7 @@
 import { setAlert } from "$lib/storage/alerts";
-import { userOffers } from "$lib/storage/marketplace";
+import { dragonsForSale } from "$lib/storage/marketplace";
 import { dragonApproval, userDragons } from '$lib/storage/dragon'
+import { DragonContract } from '$lib/contracts/DragonToken';
 import { contracts } from "./contracts";
 import { get } from 'svelte/store';
 
@@ -9,8 +10,8 @@ const rentPriceInWei = '10000000000000000'  // 0.01ETH
 const rentDepositInWei = '300000000000000000'  //0.3 ETH
 const rentMinTime = '2419200' //seconds: 2419200 == 4 weeks
 
-export const TokenType = { Unknown: 0, Dna: 1, Egg: 2, Dragon: 3 }
-export const OfferType = { NoOffer: 0, ForSale: 1, ForRent: 2, ForSaleOrRent: 3 }
+export const TokenType = { Unknown: 0, Dna: 1, Egg: 2, Dragon: 3 }                                                                                                                                                                                                                                                                                                                    
+export const OfferType = { NoOffer: 0, ForSale: 1, ForRent: 2, ForSaleOrent: 3 }
 
 export const rentTerms = {
     price: rentPriceInWei,
@@ -31,23 +32,27 @@ export const saleTerms = {
 export class MarketplaceContract {
     constructor() {
         this.contract
+        this.marketplace
         return (async () => {
             this.contract = await contracts();
+            this.dragonInterface = await new DragonContract()
             return this;
         })();
     }
 
-    async buyToken(tokenId,tokenType,price){
+    async buyToken(tokenId, tokenType, price) {
 
-           try {
+        try {
             let offer = await this.contract.Marketplace.methods.buy(
-                tokenId,                
-                tokenType,                
-            ).send({from:this.contract.account, 
-                value: price}, function (err, txHash) {
+                tokenId,
+                tokenType,
+            ).send({
+                from: this.contract.account,
+                value: price
+            }, function (err, txHash) {
                 if (err) setAlert(err, 'warning')
                 else {
-                    setAlert('Token id: '+ tokenId +' Bought!', 'success')
+                    setAlert('Token id: ' + tokenId + ' Bought!', 'success')
                     return txHash
                 }
             })
@@ -80,7 +85,7 @@ export class MarketplaceContract {
             console.log("Error at: setOffer " + err)
         }
     }
-    
+
     async modifyOffer(tokenId, offerType, tokenType, terms) {
         try {
             let offer = await this.contract.Marketplace.methods.modifyOffer(
@@ -102,6 +107,31 @@ export class MarketplaceContract {
             console.log("Error at: setOffer " + err)
         }
     }
+
+    async getAssets(
+        from,
+        to,
+        _offerType,
+        _tokenType
+        ) {
+
+        let allDragons = await this.getOffered(from, to,_offerType,_tokenType)
+        let dragons = []
+        
+        let tokenIds = allDragons.map((el) => {
+            return el.tokenId
+        })
+
+        for (let i = 0; i < tokenIds.length; i++) {
+            let dragonDetails = await this.dragonInterface.getDragon(tokenIds[i])            
+            dragons.push(dragonDetails)
+        }
+
+        console.log(dragons)
+
+        dragonsForSale.set(dragons)
+    }
+
 
     async getOffer(
         tokenId,
@@ -129,13 +159,57 @@ export class MarketplaceContract {
                 rent: rental
             }
 
-            if(alert == true) setAlert('Offer:<br>' + JSON.stringify(result), 'success')
+            if (alert == true) setAlert('Offer:<br>' + JSON.stringify(result), 'success')
 
             return result
 
         } catch (err) {
             setAlert('getOffer error ', 'warning')
             console.log('Error at: getOffer ' + err)
+        }
+    }
+
+    async getOffered(
+        startIndex,
+        endIndex,
+        _offerType,
+        _tokenType,
+        alert = false
+    ) {
+
+        let offers = []
+
+        try {
+
+            let ids = await this.contract.Marketplace.methods.getOffered(startIndex, endIndex, _offerType, _tokenType).call()
+            let tokenIds = ids.tokenIds
+
+            for (let i = 0; i < tokenIds.length; i++) {
+                let currentOffer = await this.getOffer(ids.tokenIds[i], _tokenType)
+                offers.push(currentOffer)
+            }
+
+            let dragons = get(dragonsForSale)
+            let offerName = (_offerType == OfferType.ForSale) ? 'sellOffer' : 'rentOffer';
+            let dragonOffers = dragons.map(el => {
+                let TID = el.tokenId
+                if (tokenIds.includes(TID)) {
+                    if (el.offer == undefined) el.offer = []
+                    el.offer[offerName] = offers.find(function (offer) {
+                        return offer.tokenId === TID;
+                    });
+                }
+                return el
+            })
+            dragonsForSale.set(dragonOffers)
+            console.log(dragonOffers)
+
+            if (alert == true) setAlert('There is a total of ' + ids.totalOffered + ' offers.<p class="bold m-0">Token Ids: ' + tokenIds + '</p>', 'success')
+            return offers;
+
+        } catch (err) {
+            setAlert('getOffered error', 'warning')
+            console.log("Error at: getOffered" + err)
         }
     }
 
@@ -152,7 +226,7 @@ export class MarketplaceContract {
 
         try {
 
-            let ownAccount = false 
+            let ownAccount = false
             if (_account == '' | !_account | _account == undefined) {
                 ownAccount = true
                 _account = this.contract.account
@@ -166,24 +240,25 @@ export class MarketplaceContract {
                 offers.push(currentOffer)
             }
 
-            if(ownAccount == true){
-                let dragons = get(userDragons)    
-                let offerName = (_offerType == OfferType.ForSale) ? 'sellOffer': 'rentOffer'; 
+            //ITS ONLY UPDATES THE OFFER OF EXISTING DRAGON TOKEN ON STORAGE
+            if (ownAccount == true) {
+                let dragons = get(userDragons)
+                let offerName = (_offerType == OfferType.ForSale) ? 'sellOffer' : 'rentOffer';
                 let dragonOffers = dragons.map(el => {
-                    let TID = el.tokenId                    
+                    let TID = el.tokenId
                     if (tokenIds.includes(TID)) {
-                        if(el.offer == undefined) el.offer = []
+                        if (el.offer == undefined) el.offer = []
                         el.offer[offerName] = offers.find(function (offer) {
                             return offer.tokenId === TID;
-                        });                                            
+                        });
                     }
                     return el
                 })
-                userDragons.set(dragonOffers)    
+                userDragons.set(dragonOffers)
                 console.log(dragonOffers)
-            }                        
+            }
 
-            if (alert == true) setAlert('You have a total of ' + ids.totalOffered + ' offers.<p class="bold m-0">Token Ids: ' + tokenIds + '</p>', 'success')            
+            if (alert == true) setAlert('You have a total of ' + ids.totalOffered + ' offers.<p class="bold m-0">Token Ids: ' + tokenIds + '</p>', 'success')
             return offers;
 
         } catch (err) {
