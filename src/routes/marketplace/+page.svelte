@@ -1,10 +1,15 @@
 <script>
-	//COMPONENTS
-	import DragonGrid from '$lib/component/dragon/DragonGrid.svelte';
-	import { onMount } from 'svelte';
+	import { onMount } from 'svelte';	
+	import { LoadInterface } from '$lib/interfaces/IMarket';
 	import MainContainer from '$lib/component/containers/MainContainer.svelte';
+	import { dragonsForSale } from "$lib/storage/marketplace";
 
-	onMount(async () => {});
+	$: dragons = $dragonsForSale
+
+	onMount(async () => {	
+		await LoadInterface();		
+		console.log(dragons)
+	});
 </script>
 
 <svelte:head>

@@ -10,7 +10,7 @@ const rentPriceInWei = '10000000000000000'  // 0.01ETH
 const rentDepositInWei = '300000000000000000'  //0.3 ETH
 const rentMinTime = '2419200' //seconds: 2419200 == 4 weeks
 
-export const TokenType = { Unknown: 0, Dna: 1, Egg: 2, Dragon: 3 }                                                                                                                                                                                                                                                                                                                    
+export const TokenType = { Unknown: 0, Dna: 1, Egg: 2, Dragon: 3 }
 export const OfferType = { NoOffer: 0, ForSale: 1, ForRent: 2, ForSaleOrent: 3 }
 
 export const rentTerms = {
@@ -113,23 +113,32 @@ export class MarketplaceContract {
         to,
         _offerType,
         _tokenType
-        ) {
-
-        let allDragons = await this.getOffered(from, to,_offerType,_tokenType)
+    ) {
+        //Collecting all offers and details 
+        let allOffers = await this.getOffered(from, to, _offerType, _tokenType)
+        let tokenIds = allOffers.map((el) => { return el.tokenId });
         let dragons = []
-        
-        let tokenIds = allDragons.map((el) => {
-            return el.tokenId
-        })
 
         for (let i = 0; i < tokenIds.length; i++) {
-            let dragonDetails = await this.dragonInterface.getDragon(tokenIds[i])            
+            let dragonDetails = await this.dragonInterface.getDragon(tokenIds[i])
             dragons.push(dragonDetails)
         }
 
-        console.log(dragons)
+        let offerName = (_offerType == OfferType.ForSale) ? 'sellOffer' : 'rentOffer';
+        let dragonOffers = dragons.map(el => {
+            let TID = el.tokenId
+            if (tokenIds.includes(TID)) {                    
+                el[offerName] = allOffers.find(function (offer) {
+                    return offer.tokenId === TID;
+                });
+            }
+            return el
+        })
+        
+        dragonsForSale.set(dragonOffers)
 
-        dragonsForSale.set(dragons)
+        return dragonOffers
+
     }
 
 
@@ -188,21 +197,6 @@ export class MarketplaceContract {
                 let currentOffer = await this.getOffer(ids.tokenIds[i], _tokenType)
                 offers.push(currentOffer)
             }
-
-            let dragons = get(dragonsForSale)
-            let offerName = (_offerType == OfferType.ForSale) ? 'sellOffer' : 'rentOffer';
-            let dragonOffers = dragons.map(el => {
-                let TID = el.tokenId
-                if (tokenIds.includes(TID)) {
-                    if (el.offer == undefined) el.offer = []
-                    el.offer[offerName] = offers.find(function (offer) {
-                        return offer.tokenId === TID;
-                    });
-                }
-                return el
-            })
-            dragonsForSale.set(dragonOffers)
-            console.log(dragonOffers)
 
             if (alert == true) setAlert('There is a total of ' + ids.totalOffered + ' offers.<p class="bold m-0">Token Ids: ' + tokenIds + '</p>', 'success')
             return offers;

@@ -28,8 +28,7 @@ export class DragonContract {
     async getDragon(dragonId, alert = false) {
 
         try {
-            let dragonDetails = await this.contract.DragonToken.methods.getDragon(dragonId).call()
-            console.log(dragonDetails)
+            let dragonDetails = await this.contract.DragonToken.methods.getDragon(dragonId).call()            
             const toNumbers2D = arr => arr.map(arr => arr.map(Number));
             dragonDetails = {
                 ...dragonDetails[0], skills: toNumbers2D(dragonDetails[1])
