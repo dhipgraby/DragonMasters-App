@@ -30,7 +30,7 @@
 <div class="row">
 	{#if dragons.length}
 		{#each dragons as dragon}
-			<div class="col">
+			<div class="col-sm">
 				<DragonCard {dragon} {contract} {singleApproval} />
 			</div>
 		{/each}

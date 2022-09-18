@@ -4,6 +4,7 @@ import { DragonContract } from '$lib/contracts/DragonToken';
 import { MarketplaceContract, TokenType, OfferType } from '$lib/contracts/Marketplace';
 //STORAGE
 import { createWritableStore } from '$lib/helpers/storage';
+import { get } from "svelte/store";
 
 export const contracts = createWritableStore('contract', []);
 

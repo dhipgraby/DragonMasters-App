@@ -121,6 +121,7 @@ export class MarketplaceContract {
 
         for (let i = 0; i < tokenIds.length; i++) {
             let dragonDetails = await this.dragonInterface.getDragon(tokenIds[i])
+            dragonDetails['dna'] = await this.dragonInterface.getDna(dragonDetails.dnaId)
             dragons.push(dragonDetails)
         }
 
@@ -134,7 +135,7 @@ export class MarketplaceContract {
             }
             return el
         })
-        
+
         dragonsForSale.set(dragonOffers)
 
         return dragonOffers

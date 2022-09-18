@@ -76,9 +76,9 @@ export function subSpeciesName(SubSpecies) {
 
 
 export function shortAddr(address) {
-    var firstPart = address.substr(0, 6);
+    var firstPart = address.substr(0, 3);
     var secondPart = address.substr(38, 4);
-    var userAddr = firstPart + "...." + secondPart
+    var userAddr = firstPart + "..." + secondPart
 
     return userAddr;
 }
