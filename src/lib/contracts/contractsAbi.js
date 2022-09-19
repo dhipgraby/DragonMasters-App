@@ -56,34 +56,9 @@ export const contractsAbi = {
       "inputs": [
         {
           "indexed": false,
-          "internalType": "address",
-          "name": "toOwner",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "firstEggId",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        }
-      ],
-      "name": "BatchGen0EggsMinted",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "eggId",
-          "type": "uint256"
+          "internalType": "uint256[]",
+          "name": "eggIds",
+          "type": "uint256[]"
         },
         {
           "indexed": false,
@@ -106,12 +81,12 @@ export const contractsAbi = {
         },
         {
           "indexed": false,
-          "internalType": "uint256",
-          "name": "eggId",
-          "type": "uint256"
+          "internalType": "uint256[]",
+          "name": "eggIds",
+          "type": "uint256[]"
         }
       ],
-      "name": "Gen0EggMinted",
+      "name": "Gen0EggsMinted",
       "type": "event"
     },
     {
@@ -119,15 +94,15 @@ export const contractsAbi = {
       "inputs": [
         {
           "indexed": false,
-          "internalType": "uint256",
-          "name": "eggId",
-          "type": "uint256"
+          "internalType": "uint256[]",
+          "name": "eggIds",
+          "type": "uint256[]"
         },
         {
           "indexed": false,
-          "internalType": "uint256",
-          "name": "dragonId",
-          "type": "uint256"
+          "internalType": "uint256[]",
+          "name": "hatchlingIds",
+          "type": "uint256[]"
         },
         {
           "indexed": false,
@@ -614,26 +589,6 @@ export const contractsAbi = {
       "type": "function"
     },
     {
-      "inputs": [],
-      "name": "mintGen0Egg",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "owner",
-          "type": "address"
-        }
-      ],
-      "name": "mintGen0EggTo",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
       "inputs": [
         {
           "internalType": "address",
@@ -646,7 +601,7 @@ export const contractsAbi = {
           "type": "uint256"
         }
       ],
-      "name": "mintBatchEggsTo",
+      "name": "mintGen0EggsTo",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -654,9 +609,9 @@ export const contractsAbi = {
     {
       "inputs": [
         {
-          "internalType": "uint256",
-          "name": "eggId",
-          "type": "uint256"
+          "internalType": "uint256[]",
+          "name": "eggIds",
+          "type": "uint256[]"
         }
       ],
       "name": "startIncubation",
@@ -667,9 +622,9 @@ export const contractsAbi = {
     {
       "inputs": [
         {
-          "internalType": "uint256",
-          "name": "eggId",
-          "type": "uint256"
+          "internalType": "uint256[]",
+          "name": "eggIds",
+          "type": "uint256[]"
         }
       ],
       "name": "hatch",
@@ -685,27 +640,39 @@ export const contractsAbi = {
           "type": "address"
         },
         {
-          "internalType": "uint256",
-          "name": "mumId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "dadId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "enum SubSpecies",
-          "name": "subSpecies",
-          "type": "uint8"
+          "components": [
+            {
+              "internalType": "enum SubSpecies",
+              "name": "subSpecies",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "generation",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "mumId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "dadId",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct IDnaToken.Conception[]",
+          "name": "conceptions",
+          "type": "tuple[]"
         }
       ],
-      "name": "procreateEgg",
+      "name": "procreateEggs",
       "outputs": [
         {
-          "internalType": "uint256",
-          "name": "eggId",
-          "type": "uint256"
+          "internalType": "uint256[]",
+          "name": "eggIds",
+          "type": "uint256[]"
         }
       ],
       "stateMutability": "nonpayable",
@@ -789,6 +756,11 @@ export const contractsAbi = {
               "internalType": "enum SubSpecies",
               "name": "subSpecies",
               "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "generation",
+              "type": "uint256"
             },
             {
               "internalType": "uint256",
@@ -990,33 +962,27 @@ export const contractsAbi = {
       "inputs": [
         {
           "indexed": false,
-          "internalType": "uint256",
-          "name": "dragonId",
-          "type": "uint256"
+          "internalType": "uint256[]",
+          "name": "dragonIds",
+          "type": "uint256[]"
         },
         {
           "indexed": false,
-          "internalType": "enum Maturity",
-          "name": "fromAgeGroup",
-          "type": "uint8"
-        },
-        {
-          "indexed": false,
-          "internalType": "enum Maturity",
+          "internalType": "enum Maturity[]",
           "name": "toAgeGroup",
-          "type": "uint8"
+          "type": "uint8[]"
         },
         {
           "indexed": false,
-          "internalType": "uint8[6]",
+          "internalType": "uint8[6][]",
           "name": "attributes",
-          "type": "uint8[6]"
+          "type": "uint8[6][]"
         },
         {
           "indexed": false,
-          "internalType": "uint8[8]",
+          "internalType": "uint8[8][]",
           "name": "baseSkills",
-          "type": "uint8[8]"
+          "type": "uint8[8][]"
         }
       ],
       "name": "DragonMatured",
@@ -1027,36 +993,46 @@ export const contractsAbi = {
       "inputs": [
         {
           "indexed": false,
-          "internalType": "enum SubSpecies",
-          "name": "subSpecies",
-          "type": "uint8"
-        },
-        {
-          "indexed": false,
           "internalType": "address",
           "name": "owner",
           "type": "address"
         },
         {
           "indexed": false,
-          "internalType": "uint256",
-          "name": "eggId",
-          "type": "uint256"
+          "internalType": "uint256[]",
+          "name": "eggIds",
+          "type": "uint256[]"
         },
         {
+          "components": [
+            {
+              "internalType": "enum SubSpecies",
+              "name": "subSpecies",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "generation",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "mumId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "dadId",
+              "type": "uint256"
+            }
+          ],
           "indexed": false,
-          "internalType": "uint256",
-          "name": "mumId",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "dadId",
-          "type": "uint256"
+          "internalType": "struct IDnaToken.Conception[]",
+          "name": "provenance",
+          "type": "tuple[]"
         }
       ],
-      "name": "EggLaid",
+      "name": "EggsLaid",
       "type": "event"
     },
     {
@@ -1549,27 +1525,49 @@ export const contractsAbi = {
           "type": "address"
         },
         {
-          "internalType": "uint256",
-          "name": "mumId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "dadId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "enum SubSpecies",
-          "name": "subSpecies",
-          "type": "uint8"
+          "components": [
+            {
+              "internalType": "enum SubSpecies",
+              "name": "subSpecies",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "generation",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "mumId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "dadId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "laidTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "incubationCompleteAt",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct IEggToken.Egg[]",
+          "name": "fromEggs",
+          "type": "tuple[]"
         }
       ],
-      "name": "mintTo",
+      "name": "mintDragonsTo",
       "outputs": [
         {
-          "internalType": "uint256",
-          "name": "dragonId",
-          "type": "uint256"
+          "internalType": "uint256[]",
+          "name": "hatchlingIds",
+          "type": "uint256[]"
         }
       ],
       "stateMutability": "nonpayable",
@@ -1578,9 +1576,9 @@ export const contractsAbi = {
     {
       "inputs": [
         {
-          "internalType": "uint256",
-          "name": "dragonId",
-          "type": "uint256"
+          "internalType": "uint256[]",
+          "name": "dragonIds",
+          "type": "uint256[]"
         }
       ],
       "name": "raiseMaturity",
@@ -1591,14 +1589,14 @@ export const contractsAbi = {
     {
       "inputs": [
         {
-          "internalType": "uint256",
-          "name": "idDragonMateA",
-          "type": "uint256"
+          "internalType": "uint256[]",
+          "name": "dragonAIds",
+          "type": "uint256[]"
         },
         {
-          "internalType": "uint256",
-          "name": "idDragonMateB",
-          "type": "uint256"
+          "internalType": "uint256[]",
+          "name": "dragonBIds",
+          "type": "uint256[]"
         }
       ],
       "name": "breed",
@@ -1691,7 +1689,7 @@ export const contractsAbi = {
                   "type": "uint256"
                 }
               ],
-              "internalType": "struct IDragonToken.Age",
+              "internalType": "struct Age",
               "name": "age",
               "type": "tuple"
             },
@@ -1707,6 +1705,16 @@ export const contractsAbi = {
             },
             {
               "internalType": "uint256",
+              "name": "mumId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "dadId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
               "name": "fullEnergyAt",
               "type": "uint256"
             },
@@ -1716,7 +1724,7 @@ export const contractsAbi = {
               "type": "uint256"
             }
           ],
-          "internalType": "struct IDragonToken.Dragon",
+          "internalType": "struct Dragon",
           "name": "",
           "type": "tuple"
         },
@@ -1824,6 +1832,31 @@ export const contractsAbi = {
           "internalType": "uint8[][2]",
           "name": "skills",
           "type": "uint8[][2]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "dragonId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "toDragonId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getRelationship",
+      "outputs": [
+        {
+          "internalType": "enum Relationship",
+          "name": "relationship",
+          "type": "uint8"
         }
       ],
       "stateMutability": "view",
@@ -2030,15 +2063,43 @@ export const contractsAbi = {
       "inputs": [
         {
           "indexed": false,
-          "internalType": "uint256",
-          "name": "dnaId",
-          "type": "uint256"
+          "internalType": "address",
+          "name": "bySpecies",
+          "type": "address"
+        },
+        {
+          "components": [
+            {
+              "internalType": "enum SubSpecies",
+              "name": "subSpecies",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "generation",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "mumId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "dadId",
+              "type": "uint256"
+            }
+          ],
+          "indexed": false,
+          "internalType": "struct IDnaToken.Conception[]",
+          "name": "fromConceptions",
+          "type": "tuple[]"
         },
         {
           "indexed": false,
-          "internalType": "address",
-          "name": "owner",
-          "type": "address"
+          "internalType": "uint256[]",
+          "name": "dnaIds",
+          "type": "uint256[]"
         }
       ],
       "name": "DnaMinted",
@@ -2049,30 +2110,12 @@ export const contractsAbi = {
       "inputs": [
         {
           "indexed": false,
-          "internalType": "uint256",
-          "name": "dnaId",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "mumDnaId",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "dadDnaId",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "address",
-          "name": "owner",
-          "type": "address"
+          "internalType": "uint256[]",
+          "name": "dnaIds",
+          "type": "uint256[]"
         }
       ],
-      "name": "DnaProcreated",
+      "name": "DnaMintedByTESTHELP",
       "type": "event"
     },
     {
@@ -2556,12 +2599,12 @@ export const contractsAbi = {
               "type": "uint256"
             }
           ],
-          "internalType": "struct IDnaToken.Dna",
-          "name": "dna",
-          "type": "tuple"
+          "internalType": "struct IDnaToken.Dna[]",
+          "name": "dnas",
+          "type": "tuple[]"
         }
       ],
-      "name": "mintDna",
+      "name": "mintDnaTESTHELP",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -2569,50 +2612,53 @@ export const contractsAbi = {
     {
       "inputs": [
         {
-          "internalType": "enum SubSpecies",
-          "name": "subSpecies",
-          "type": "uint8"
+          "internalType": "uint256[][2]",
+          "name": "mateAIds",
+          "type": "uint256[][2]"
+        },
+        {
+          "internalType": "uint256[][2]",
+          "name": "mateBIds",
+          "type": "uint256[][2]"
         }
       ],
-      "name": "mintGen0Dna",
+      "name": "whoAreFertilised",
       "outputs": [
         {
-          "internalType": "uint256",
-          "name": "dnaId",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
+          "components": [
+            {
+              "internalType": "enum SubSpecies",
+              "name": "subSpecies",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "generation",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "mumId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "dadId",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct IDnaToken.Conception[]",
+          "name": "conceptions",
+          "type": "tuple[]"
+        },
         {
-          "internalType": "uint256",
-          "name": "dnaIdMateA",
-          "type": "uint256"
+          "internalType": "uint256[]",
+          "name": "atProbability",
+          "type": "uint256[]"
         },
         {
           "internalType": "uint256",
-          "name": "dnaIdMateB",
-          "type": "uint256"
-        }
-      ],
-      "name": "whoIsFertilised",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "fertilisedMateA",
-          "type": "bool"
-        },
-        {
-          "internalType": "bool",
-          "name": "fertilisedMateB",
-          "type": "bool"
-        },
-        {
-          "internalType": "uint256",
-          "name": "fertilityPercentage",
+          "name": "blockTime",
           "type": "uint256"
         }
       ],
@@ -2623,27 +2669,39 @@ export const contractsAbi = {
     {
       "inputs": [
         {
-          "internalType": "enum SubSpecies",
-          "name": "subSpecies",
-          "type": "uint8"
-        },
-        {
-          "internalType": "uint256",
-          "name": "mumDnaId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "dadDnaId",
-          "type": "uint256"
+          "components": [
+            {
+              "internalType": "enum SubSpecies",
+              "name": "subSpecies",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "generation",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "mumId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "dadId",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct IDnaToken.Conception[]",
+          "name": "conceptions",
+          "type": "tuple[]"
         }
       ],
-      "name": "procreateDna",
+      "name": "mintDna",
       "outputs": [
         {
-          "internalType": "uint256",
-          "name": "dnaId",
-          "type": "uint256"
+          "internalType": "uint256[]",
+          "name": "dnaIds",
+          "type": "uint256[]"
         }
       ],
       "stateMutability": "nonpayable",
@@ -2724,6 +2782,26 @@ export const contractsAbi = {
           "internalType": "enum SubSpecies",
           "name": "",
           "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "dnaId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getGeneration",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
         }
       ],
       "stateMutability": "view",
@@ -3865,6 +3943,615 @@ export const contractsAbi = {
           "internalType": "bool",
           "name": "onOffer",
           "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "pause",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "unpause",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  LoanBook:[
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "Paused",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "Unpaused",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "paused",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "init_LoanBook",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "editor",
+          "type": "address"
+        }
+      ],
+      "name": "setEditor",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "token",
+          "type": "address"
+        },
+        {
+          "internalType": "enum TokenType",
+          "name": "tokenType",
+          "type": "uint8"
+        }
+      ],
+      "name": "addTokenSupport",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "operator",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "lender",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "loanData",
+          "type": "bytes"
+        }
+      ],
+      "name": "onERC721Received",
+      "outputs": [
+        {
+          "internalType": "bytes4",
+          "name": "",
+          "type": "bytes4"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum TokenType",
+          "name": "tokenType",
+          "type": "uint8"
+        }
+      ],
+      "name": "returnLoan",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function",
+      "payable": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum TokenType",
+          "name": "tokenType",
+          "type": "uint8"
+        }
+      ],
+      "name": "isOnLoan",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum TokenType",
+          "name": "tokenType",
+          "type": "uint8"
+        }
+      ],
+      "name": "borrowerOf",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum TokenType",
+          "name": "tokenType",
+          "type": "uint8"
+        }
+      ],
+      "name": "lenderOf",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "borrower",
+          "type": "address"
+        },
+        {
+          "internalType": "enum TokenType",
+          "name": "tokenType",
+          "type": "uint8"
+        }
+      ],
+      "name": "borrowerBalance",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "lender",
+          "type": "address"
+        },
+        {
+          "internalType": "enum TokenType",
+          "name": "tokenType",
+          "type": "uint8"
+        }
+      ],
+      "name": "lenderBalance",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "candidate",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum TokenType",
+          "name": "tokenType",
+          "type": "uint8"
+        }
+      ],
+      "name": "isBorrower",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "candidate",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum TokenType",
+          "name": "tokenType",
+          "type": "uint8"
+        }
+      ],
+      "name": "isLender",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "borrower",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "startIndex",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "endIndex",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum TokenType",
+          "name": "tokenType",
+          "type": "uint8"
+        }
+      ],
+      "name": "getBorrowedBy",
+      "outputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "tokenIds",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "uint256",
+          "name": "totalBorrowed",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "lender",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "startIndex",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "endIndex",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum TokenType",
+          "name": "tokenType",
+          "type": "uint8"
+        }
+      ],
+      "name": "getLoanedBy",
+      "outputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "tokenIds",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "uint256",
+          "name": "totalLoaned",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum TokenType",
+          "name": "tokenType",
+          "type": "uint8"
+        }
+      ],
+      "name": "getLoan",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "lender",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "borrower",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "lenderIndex",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "borrowerIndex",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "loanIndex",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "tokenId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "enum TokenType",
+              "name": "tokenType",
+              "type": "uint8"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "uint256",
+                  "name": "deposit",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "startTime",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "minDuration",
+                  "type": "uint256"
+                }
+              ],
+              "internalType": "struct ILoanBook.Terms",
+              "name": "terms",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct ILoanBook.Loan",
+          "name": "loan",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum TokenType",
+          "name": "tokenType",
+          "type": "uint8"
+        }
+      ],
+      "name": "getNumOnLoan",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "startIndex",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "endIndex",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum TokenType",
+          "name": "tokenType",
+          "type": "uint8"
+        }
+      ],
+      "name": "getOnLoan",
+      "outputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "tokenIds",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "uint256",
+          "name": "totalOnLoan",
+          "type": "uint256"
         }
       ],
       "stateMutability": "view",

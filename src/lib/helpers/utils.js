@@ -25,7 +25,7 @@ const SubSpecies = {
     Water: 3
 }
 
-export const Attribute = {
+export const Attributes = {
     Strength:0,
     Endurance:1,
     Agility:2,
@@ -45,9 +45,11 @@ export const Skill = {
     Dig:7
 }
 
+const dayInSeconds = 86400
+
 Object.freeze(Maturity)
 Object.freeze(SubSpecies)
-Object.freeze(Attribute)
+Object.freeze(Attributes)
 Object.freeze(Skill)
 
 export function subSpeciesName(SubSpecies) {
@@ -72,3 +74,36 @@ export function subSpeciesName(SubSpecies) {
     return speciesName
 }
 
+
+export function shortAddr(address) {
+    var firstPart = address.substr(0, 3);
+    var secondPart = address.substr(38, 4);
+    var userAddr = firstPart + "..." + secondPart
+
+    return userAddr;
+}
+
+//ether to wei
+export const getWei = async (value) => { 
+    if(typeof value != 'string') value = String(value)   
+    let res = await web3.utils.toWei(value)
+    return res
+}
+
+//Wei to ether
+export const getEth = async (value) => {    
+    if(typeof value != 'string') value = String(value)
+    let res = await web3.utils.fromWei(value)
+    return res
+}
+
+export const timeDropdrown = {    
+    oneDay:dayInSeconds,
+    twoDays:dayInSeconds * 2,
+    threeDays:dayInSeconds * 3,                
+    week:dayInSeconds * 7,
+    twoWeeks:dayInSeconds * 14,
+    month:dayInSeconds * 30,
+    twoMonths:dayInSeconds * 60,
+    oneYear:dayInSeconds * 365
+}

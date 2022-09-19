@@ -1,8 +1,22 @@
+// @ts-nocheck
 import { setAlert } from "$lib/storage/alerts";
-import { userDragons }  from "$lib/storage/dragon";
+import { userDragons } from "$lib/storage/dragon";
 import { subSpeciesName } from "$lib/helpers/utils"
 import { contracts } from "./contracts";
 import { getErrors } from "./errorHandling";
+import { dragonsForSale } from "$lib/storage/marketplace";
+import { get } from 'svelte/store';
+
+const Relationship = {
+    None: 0, ExPartner: 1, Oneself: 2, Mother: 3,
+    Father: 4, Child: 5, FullSibling: 6, HalfSibling: 7,
+    GrandmotherOnMumsSide: 8, GrandmotherOnDadsSide: 9,
+    GrandfatherOnMumsSide: 10, GrandfatherOnDadsSide: 11,
+    Grandchild: 12, UncleAuntOnMumsSide: 13, UncleAuntOnDadsSide: 14,
+    NephewNeice: 15, GrandNephewNeice: 16, FirstCousin: 17,
+    FirstCousinOnceRemoved: 18, FirstCousinTwiceRemoved: 19
+}
+Object.freeze(Relationship);
 
 export class DragonContract {
     constructor() {
@@ -13,25 +27,32 @@ export class DragonContract {
         })();
     }
 
-    async getDragon(dragonId) {
+    async getDragon(dragonId, alert = false) {
+
         try {
-            let dragonDetails = await this.contract.DragonToken.methods.getDragon(dragonId).call()
-            const toNumbers2D = arr => arr.map(arr => arr.map(Number)); 
-            dragonDetails = { ...dragonDetails[0], skills: toNumbers2D(dragonDetails[1])}            
-            
-            return {
-                tokenId:dragonId,                
+            let dragonDetails = await this.contract.DragonToken.methods.getDragon(dragonId).call()            
+            const toNumbers2D = arr => arr.map(arr => arr.map(Number));
+            dragonDetails = {
+                ...dragonDetails[0], skills: toNumbers2D(dragonDetails[1])
+            }
+
+            let dragon = {
+                tokenId: dragonId,
                 dnaId: dragonDetails.dnaId,
-                subSpecies: subSpeciesName(dragonDetails.subSpecies), 
+                subSpecies: subSpeciesName(dragonDetails.subSpecies),
                 fullEnergyAt: dragonDetails.fullEnergyAt,
                 ageGroup: dragonDetails.age.group,
-                birthTime: dragonDetails.age.birthTime,              
-                maturesAt: dragonDetails.age.maturesAt,    
-                mumId:0,                          
-                dadId:0,
-                skills:dragonDetails.skills,
-                attributes:dragonDetails.attributes,
+                birthTime: dragonDetails.age.birthTime,
+                maturesAt: dragonDetails.age.maturesAt,
+                mumId: 0,
+                dadId: 0,
+                skills: dragonDetails.skills,
+                attributes: dragonDetails.attributes,
             }
+
+            if (alert == true) setAlert('Dragon Details: '+ JSON.stringify(dragon), 'success')
+
+            return dragon
 
         } catch (err) {
             setAlert('Error getting this Dragon id ', 'warning')
@@ -45,7 +66,7 @@ export class DragonContract {
     ) {
         try {
             let dragonsIds = await this.contract.DragonToken.methods.getDragonIds(this.contract.account, startIndex, endIndex).call()
-            
+
             return dragonsIds
         } catch (err) {
             setAlert('getDragonIds error', 'warning')
@@ -53,68 +74,79 @@ export class DragonContract {
         }
     }
 
-    async getUserDragons() {
+    async getUserDragons(from, to) {
 
-        let allDragons = await this.getDragonIds(10, 20)
+        let allDragons = await this.getDragonIds(from, to)
         let dragons = []
-
+        // let dragonOffers = get(dragonsForSale)
         for (let i = 0; i < allDragons.tokenIds.length; i++) {
 
-            let dragonDetails = await this.getDragon(allDragons.tokenIds[i])                    
-            dragonDetails['dna'] = await this.getDna(dragonDetails.dnaId)                   
+            let dragonDetails = await this.getDragon(allDragons.tokenIds[i])
+            dragonDetails['dna'] = await this.getDna(dragonDetails.dnaId)
+            // if(dragonOffers.length){
+                
+            //     let offerIds = temp1.map((el)=>{
+            //         return el.tokenId 
+            //     })
+            // if(allDragons.tokenIds[i].includes(offerIds))  {
+            //     dragonDetails['forSale'] = true
+            // }
+
+            // }
             dragons.push(dragonDetails)
         }
-        userDragons.set(dragons)               
+        dragons.totalOwned = allDragons.totalOwned
+        userDragons.set(dragons)
     }
 
     async getDna(dnaId) {
         try {
-            let dna = await this.contract.DnaToken.methods.getDna(dnaId).call()                        
+            let dna = await this.contract.DnaToken.methods.getDna(dnaId).call()
             return dna
 
-        } catch (err) {            
+        } catch (err) {
             let errMsg = getErrors('getDna', err)
             console.log("Error at: getDragon" + errMsg)
         }
     }
 
-    async checkEnergy(dragonId, msg = false){
+    async checkEnergy(dragonId, msg = false) {
         try {
-            let energy = await this.contract.DragonToken.methods.checkEnergy(dragonId).call()                                    
-           
-            if(energy == 0){
-               if(msg == true) setAlert('This dragon have full energy!','success')        
+            let energy = await this.contract.DragonToken.methods.checkEnergy(dragonId).call()
+
+            if (energy == 0) {
+                if (msg == true) setAlert('This dragon have full energy!', 'success')
             } else {
-                if(msg == true) setAlert('Dragon energy: ' + energy,'info')   
+                if (msg == true) setAlert('Dragon energy: ' + energy, 'info')
             }
             return energy
 
-        } catch (err) {            
+        } catch (err) {
             let errMsg = getErrors('checkEnergy', err)
             console.log("Error at: checkEnergy " + errMsg)
         }
     }
 
-    
-    async checkMaturity(dragonId, msg = false){
+    async checkMaturity(dragonId, msg = false) {
         try {
-            let maturity = await this.contract.DragonToken.methods.checkMaturity(dragonId).call()                        
+            let maturity = await this.contract.DragonToken.methods.checkMaturity(dragonId).call()
             let secondsRemaining = maturity.secondsRemaining
-           
-            if(secondsRemaining == 0){
-                if(msg == true) setAlert('This dragon is Mature ready to Raise!','success')        
+
+            if (secondsRemaining == 0) {
+                if (msg == true) setAlert('This dragon is Mature ready to Raise!', 'success')
             } else {
-                if(msg == true)  setAlert('Dragon Matures at : ' + secondsRemaining,'info')   
+                if (msg == true) setAlert('Dragon Matures at : ' + secondsRemaining, 'info')
             }
             return secondsRemaining
 
-        } catch (err) {            
+        } catch (err) {
             let errMsg = getErrors('checkMaturity', err)
             console.log("Error at: checkMaturity " + errMsg)
         }
     }
 
-    async raiseMaturity(dragonId){
+    async raiseMaturity(dragonId) {
+        dragonId = dragonId.split(',')
         try {
             await this.contract.DragonToken.methods.raiseMaturity(dragonId).send({}, function (err, txHash) {
                 if (err) setAlert(err, 'warning')
@@ -128,15 +160,26 @@ export class DragonContract {
         }
     }
 
-    async breed(idDragonMateA,idDragonMateB){
+    async breed(idDragonMateA, idDragonMateB) {
+        idDragonMateA = idDragonMateA.split(',')
+        idDragonMateB = idDragonMateB.split(',')
         try {
-            await this.contract.DragonToken.methods.breed(idDragonMateA,idDragonMateB).send({}, function (err, txHash) {
+            await this.contract.DragonToken.methods.breed(idDragonMateA, idDragonMateB).send({}, function (err, txHash) {
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert(txHash, 'success')
                     return txHash
                 }
             })
+        } catch (err) {
+            console.log("Error at: Breeding function" + err)
+        }
+    }
+
+    async getRelationship(dragonId, toDragonId) {
+        try {
+            let relationship = await this.contract.DragonToken.methods.getRelationship(dragonId, toDragonId).call()
+            console.log(relationship)
         } catch (err) {
             console.log("Error at: Breeding function" + err)
         }

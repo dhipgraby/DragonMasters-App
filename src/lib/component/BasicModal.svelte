@@ -39,7 +39,7 @@
   <div class="modalContainer">
     <div class="modal hidden" {id}>
       <slot />
-      <div clasS="btn-group">
+      <div class="btn-group closeBtn mt-2">
         <button class="btn btn-dark" on:click={() => closeModal()}>Close</button
         >
       </div>
@@ -50,6 +50,11 @@
 <div class="overlay hidden" />
 
 <style>
+
+  .closeBtn {
+    float: right;
+  }
+
   .modalDiv {
     position: absolute;
     width: 250px;
@@ -78,7 +83,7 @@
     width: fit-content;
     max-width: 800px !important;
     background-color: #fff;
-    padding: 20px;
+    padding: 30px;
     border-radius: 10px;
     border: solid 2px #5c5c5c;
     z-index: 12;

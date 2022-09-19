@@ -38,7 +38,7 @@
 		await initEventListener(contractEvents, updater, 'DragonToken');
 
 		if (dragons.length > 0) return;
-		await contract.getUserDragons();		
+		await contract.getUserDragons(0,10);		
 	});
 
 	$: dad_dragon = $dragonA;

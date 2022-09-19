@@ -1,16 +1,21 @@
 <script>
-	import { onInterval, Maturity, Attribute } from '$lib/helpers/utils.js';
+	import { onInterval, Maturity, Attributes } from '$lib/helpers/utils.js';
 	import { getImg, iconElement, iconAttr } from '$lib/storage/dragonImg';
-	import { fade } from 'svelte/transition';
 	import ProgressBar from './ProgressBar.svelte';
 	import CircleMenu from '../dragonMenu/CircleMenu.svelte';
+	import '$lib/css/marketplace/dragon.css';
 
 	export let dragon;
-	export let contract
-	export let singleApproval
+	export let contract;
+	export let singleApproval;
 	export let checkBtn = true;
 	export let fullEnergy = null;
 	export let callback = null;
+
+	var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+	var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+		return new bootstrap.Tooltip(tooltipTriggerEl);
+	});
 
 	if (callback != null) onInterval(callback, 1000);
 
@@ -29,19 +34,27 @@
 	}
 </script>
 
-<div
-	transition:fade={{ delay: 500 }}
-	on:mouseenter={enter}
-	on:mouseleave={leave}
-	class="card"
-	style="width: 18rem;"
->
+<div on:mouseenter={enter} on:mouseleave={leave} class="card" style="width: 18rem;">
 	<div class="card-header">
 		<CircleMenu {hovering} dragonProps={dragon} {singleApproval} {contract} />
 
 		<img src={img} alt="dragon" />
 		<!-- ELEMENT -->
 		<div class="pabsolute bottom10 right10">{@html element}</div>
+		{#if dragon?.offer?.sellOffer}
+			<!-- FOR SALE -->
+			<div class="pabsolute bottom10 right50">
+				<div
+					class="elemCircle"
+					data-bs-html="true"
+					data-bs-toggle="tooltip"
+					data-bs-placement="right"
+					title="<b>On Offer</b>"				>
+					<i class="fas fa-comments-dollar text-light" />
+				</div>
+			</div>
+		{/if}
+
 		<!-- GENERATION -->
 		<div class="pabsolute top10 left10">
 			<span class="badge rounded-pill bg-light text-dark mt-2">
@@ -73,7 +86,7 @@
 		<div class="row p-0 mt-2">
 			{#each dragon.attributes as attribute, i}
 				<div class="w-50 ta-l">
-					<p>{@html iconAttr(Object.keys(Attribute)[i])}: {attribute}</p>
+					<p>{@html iconAttr(Object.keys(Attributes)[i])}: {attribute}</p>
 				</div>
 			{/each}
 		</div>
@@ -86,72 +99,3 @@
 		{/if}
 	</div>
 </div>
-
-<style>
-	.maturity {
-		font-size: 11px;
-		text-align: center;
-		background-color: #c7ffe3;
-		width: fit-content;
-		border-radius: 50px;
-		padding: 1px 10px;
-		margin: auto;
-	}
-
-	.badge {
-		font-weight: 400;
-		letter-spacing: 1px;
-		font-size: 11px;
-	}
-
-	.btn-dark {
-		width: 100%;
-	}
-
-	img {
-		width: 280px;
-		margin-left: auto;
-		margin-right: auto;
-		display: block;
-	}
-
-	p {
-		font-size: 16px;
-		font-weight: 600;
-		color: rgb(56, 56, 56);
-		margin: 0px;
-	}
-	.card {
-		border-radius: 20px;
-		margin: 10px;
-		transition: 0.5s;
-	}
-
-	.card:hover {
-		box-shadow: 0px 10px 20px -8px;
-	}
-
-	.card-title {
-		color: #737373;
-		font-size: 20px;
-		font-weight: 600;
-	}
-
-	.card-header {
-		position: relative;
-		border-radius: 20px 20px 0px 0px;
-		cursor: pointer;
-		padding: 20px 0px;
-		background-color: #f2fffb;
-		background: linear-gradient(20deg, #f2fffb, #b3b3b3);
-	}
-
-	.card-body {
-		position: relative;
-		text-align: center;
-	}
-
-	.card-text {
-		text-align: left;
-	}
-</style>
