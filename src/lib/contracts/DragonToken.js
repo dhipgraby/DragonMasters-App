@@ -4,6 +4,8 @@ import { userDragons } from "$lib/storage/dragon";
 import { subSpeciesName } from "$lib/helpers/utils"
 import { contracts } from "./contracts";
 import { getErrors } from "./errorHandling";
+import { dragonsForSale } from "$lib/storage/marketplace";
+import { get } from 'svelte/store';
 
 const Relationship = {
     None: 0, ExPartner: 1, Oneself: 2, Mother: 3,
@@ -76,11 +78,21 @@ export class DragonContract {
 
         let allDragons = await this.getDragonIds(from, to)
         let dragons = []
-
+        // let dragonOffers = get(dragonsForSale)
         for (let i = 0; i < allDragons.tokenIds.length; i++) {
 
             let dragonDetails = await this.getDragon(allDragons.tokenIds[i])
             dragonDetails['dna'] = await this.getDna(dragonDetails.dnaId)
+            // if(dragonOffers.length){
+                
+            //     let offerIds = temp1.map((el)=>{
+            //         return el.tokenId 
+            //     })
+            // if(allDragons.tokenIds[i].includes(offerIds))  {
+            //     dragonDetails['forSale'] = true
+            // }
+
+            // }
             dragons.push(dragonDetails)
         }
         dragons.totalOwned = allDragons.totalOwned

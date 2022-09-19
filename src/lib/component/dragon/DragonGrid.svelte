@@ -1,7 +1,7 @@
 <script>
 	import DragonCard from '$lib/component/dragon/DragonCard.svelte';
 	import Pagination from '../pagination/Pagination.svelte';
-	import { afterUpdate } from 'svelte';
+	import { afterUpdate, onMount } from 'svelte';
 	export let dragons;
 	export let singleApproval;
 	export let contract;
@@ -11,8 +11,7 @@
 
 	afterUpdate(() => {
 		let totalDragonPages = Math.round(parseInt(dragons.totalOwned) / 10);
-		pages = (totalDragonPages > 0) ? new Array(totalDragonPages) : []; 
-		console.log(dragons)
+		pages = (totalDragonPages > 0) ? new Array(totalDragonPages) : []; 		
 	});
 
 </script>

@@ -1,16 +1,21 @@
 <script>
-	import { onInterval, Maturity,Attributes } from '$lib/helpers/utils.js';
+	import { onInterval, Maturity, Attributes } from '$lib/helpers/utils.js';
 	import { getImg, iconElement, iconAttr } from '$lib/storage/dragonImg';
 	import ProgressBar from './ProgressBar.svelte';
 	import CircleMenu from '../dragonMenu/CircleMenu.svelte';
 	import '$lib/css/marketplace/dragon.css';
 
 	export let dragon;
-	export let contract
-	export let singleApproval
+	export let contract;
+	export let singleApproval;
 	export let checkBtn = true;
 	export let fullEnergy = null;
 	export let callback = null;
+
+	var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+	var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+		return new bootstrap.Tooltip(tooltipTriggerEl);
+	});
 
 	if (callback != null) onInterval(callback, 1000);
 
@@ -29,18 +34,27 @@
 	}
 </script>
 
-<div	
-	on:mouseenter={enter}
-	on:mouseleave={leave}
-	class="card"
-	style="width: 18rem;"
->
+<div on:mouseenter={enter} on:mouseleave={leave} class="card" style="width: 18rem;">
 	<div class="card-header">
 		<CircleMenu {hovering} dragonProps={dragon} {singleApproval} {contract} />
 
 		<img src={img} alt="dragon" />
 		<!-- ELEMENT -->
 		<div class="pabsolute bottom10 right10">{@html element}</div>
+		{#if dragon?.offer?.sellOffer}
+			<!-- FOR SALE -->
+			<div class="pabsolute bottom10 right50">
+				<div
+					class="elemCircle"
+					data-bs-html="true"
+					data-bs-toggle="tooltip"
+					data-bs-placement="right"
+					title="<b>On Offer</b>"				>
+					<i class="fas fa-comments-dollar text-light" />
+				</div>
+			</div>
+		{/if}
+
 		<!-- GENERATION -->
 		<div class="pabsolute top10 left10">
 			<span class="badge rounded-pill bg-light text-dark mt-2">

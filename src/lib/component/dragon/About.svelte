@@ -32,7 +32,7 @@ export let maturity
     {/if}
 </div>
 <div class="attrDiv mt-3">
-    <h3>About</h3>
+   
     <p class="card-text">
         <b>Dragon ID: #{dragon.tokenId}</b>
         <br />

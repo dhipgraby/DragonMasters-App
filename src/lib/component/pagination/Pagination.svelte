@@ -2,6 +2,7 @@
 
 export let pages
 export let loadPage
+export let perpage
 
 </script>
 <div>
@@ -9,7 +10,7 @@ export let loadPage
         {#if pages}
             {#each pages as button, i}
                 <button
-                    on:click={() => loadPage(i * 10, i * 10 + 10, true)}
+                    on:click={() => loadPage(i * perpage, i * perpage + perpage, true)}
                     type="button"
                     class="btn btn-light">{i}</button
                 >

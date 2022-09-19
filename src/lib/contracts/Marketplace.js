@@ -135,9 +135,8 @@ export class MarketplaceContract {
             }
             return el
         })
-
-        dragonsForSale.set(dragonOffers)
-
+        dragonOffers['totalOffers'] = allOffers.totalOffers
+        dragonsForSale.set(dragonOffers)        
         return dragonOffers
 
     }
@@ -200,6 +199,7 @@ export class MarketplaceContract {
             }
 
             if (alert == true) setAlert('There is a total of ' + ids.totalOffered + ' offers.<p class="bold m-0">Token Ids: ' + tokenIds + '</p>', 'success')
+            offers['totalOffers'] = ids.totalOffered
             return offers;
 
         } catch (err) {
@@ -249,8 +249,7 @@ export class MarketplaceContract {
                     }
                     return el
                 })
-                userDragons.set(dragonOffers)
-                console.log(dragonOffers)
+                userDragons.set(dragonOffers)                
             }
 
             if (alert == true) setAlert('You have a total of ' + ids.totalOffered + ' offers.<p class="bold m-0">Token Ids: ' + tokenIds + '</p>', 'success')

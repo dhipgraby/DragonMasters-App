@@ -35,7 +35,7 @@
 	<div class="card-header">
 		<img src={img} alt="dragon" />
 		<!-- ELEMENT -->
-		<div class="pabsolute bottom10 right10">{@html element}</div>
+		<div class="pabsolute bottom10 right10">{@html element}</div>        
 		<!-- GENERATION -->
 		<div class="pabsolute top10 left10">
 			<span class="badge rounded-pill bg-light text-dark mt-2">
@@ -69,8 +69,8 @@
         
 		<button
 			class="btn btn-dark"
-			on:click={() => {
-				buy(dragon.tokenId,dragon.sellOffer.sellPrice);
+			on:click={async () => {
+				await buy(dragon.tokenId,dragon.sellOffer.sellPrice);
 			}}
 		>
 			Buy now <i class="fas fa-shopping-cart"></i>

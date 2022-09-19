@@ -8,9 +8,11 @@
 	$: contractsData = $contracts;
 	$: dragons = $dragonsForSale;
 
+	//Per page is not correctly Integrated. Only pages are been produced
+	let perpage = 10
+	perpage--
 	onMount(async () => {
-		await LoadInterface();
-		console.log(dragons);
+		await LoadInterface(0,perpage);		
 	});
 </script>
 
@@ -20,5 +22,5 @@
 
 <MainContainer>
 	<h1>Marketplace</h1>
-	<MarketGrid {dragons} contract={contractsData} />
+	<MarketGrid {dragons} contract={contractsData} loadPage={LoadInterface} {perpage} />
 </MainContainer>

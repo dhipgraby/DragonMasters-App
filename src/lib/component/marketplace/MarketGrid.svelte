@@ -6,31 +6,31 @@
 	export let dragons;
 	export let contract;
 	export let loadPage;
+    export let perpage
 
-	let pages = new Array(5);
+	let pages
 
-	afterUpdate(() => {		
-        console.log(contract)        
+    afterUpdate(() => {		       
         // calculating total pages
-		// let totalPages = Math.round(parseInt(eggs.totalOwned) / 10);
-		// if (totalPages > 0) pages = new Array(totalEggPages);
+		let totalPages = Math.round(parseInt(dragons.totalOffers) / perpage);
+		if (totalPages > 0) pages = new Array(totalPages);
 	});
 
-    const buyToken = (tokenId,price) => {
-        contract['market'].buyToken(tokenId,TokenType.Dragon,price)
-        
+    const buyToken = async (tokenId,price) => {
+        await contract['market'].buyToken(tokenId,TokenType.Dragon,price)
+        await loadPage(0,perpage)
     }
 
 </script>
 
 <div class="mt-4 mb-4 w-100 ta-c">	
-	<Pagination {pages} {loadPage} />
+	<Pagination {pages} {loadPage} {perpage} />
 </div>
 
-<div class="row">
+<div class="row col-sm-12">
 	{#if dragons.length}
 		{#each dragons as dragon}
-			<div class="col-4">
+			<div class="col-sm-3">
 				<DragonCard account={contract['market'].contract.account} {dragon} buy={buyToken} />
 			</div>
 		{/each}
