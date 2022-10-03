@@ -16,15 +16,6 @@
 		account,
 		_tokenType;
 
-	async function test(){
-		await contract.getAssets(
-			0,
-			10,			
-			OfferType.ForSale,
-			TokenType.Dragon,
-		);
-		}
-
 	function sellOffer() {
 		contract.setOffer(sellId, OfferType.ForSale, TokenType.Dragon, saleTerms);
 	}
@@ -60,10 +51,6 @@
 </script>
 
 <h1 class="mb-4">Offers</h1>
-
-<button on:click={()=>test()} class="btn btn-dark text-light">
-	test
-</button>
 
 <div class="row">
 	<!-- SETTERS -->
