@@ -29,7 +29,7 @@
 <div class="row">
 	{#if dragons.length}
 		{#each dragons as dragon}
-			<div class="col-sm">
+			<div class="col-4">
 				<DragonCard {dragon} {contract} {singleApproval} />
 			</div>
 		{/each}
