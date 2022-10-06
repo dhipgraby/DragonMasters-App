@@ -1,3 +1,7 @@
+<script>
+	export let uriPath
+</script>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 	<div class="container-fluid">
 		<a class="navbar-brand" href="/"><i class="fas fa-dragon" /></a>
@@ -15,16 +19,16 @@
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 				<li class="nav-item">
-					<a class="nav-link active" aria-current="page" href="/ui">UI</a>
+					<a class="nav-link {uriPath == '/ui' ? 'active' : ''}" aria-current="page" href="/ui">UI</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="/marketplace">Marketplace</a>
+					<a class="nav-link {uriPath == '/marketplace' ? 'active' : ''}" href="/marketplace">Marketplace</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="/cave">Cave</a>
+					<a class="nav-link {uriPath == '/cave' ? 'active' : ''}" href="/cave">Cave</a>
 				</li>
-        <li class="nav-item">
-					<a class="nav-link" href="/breed">Breed</a>
+				<li class="nav-item">
+					<a class="nav-link {uriPath == '/breed' ? 'active' : ''}" href="/breed">Breed</a>
 				</li>
 			</ul>
 		</div>
@@ -32,10 +36,9 @@
 </nav>
 
 <style>
-
-  .nav-link{
-    font-weight: 600;
-  }
+	.nav-link {
+		font-weight: 600;
+	}
 
 	.navbar-nav {
 		width: 100%;

@@ -3,6 +3,7 @@
 	import Alert from '$lib/component/AlertMsg.svelte';
 	import { alertTrigger } from '$lib/storage/alerts';
 
+	export let uriPath
 	let lastAlerts;
 
 	const unsubscribe = alertTrigger.subscribe((alerts) => {
@@ -10,7 +11,7 @@
 	});
 </script>
 
-<NavBar />
+<NavBar {uriPath} />
 
 {#each lastAlerts as alert, i}
 	<Alert {...alert} alert_number={i} />
