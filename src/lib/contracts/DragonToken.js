@@ -48,6 +48,7 @@ export class DragonContract {
                 dadId: 0,
                 skills: dragonDetails.skills,
                 attributes: dragonDetails.attributes,
+                offer:[]
             }
 
             if (alert == true) setAlert('Dragon Details: '+ JSON.stringify(dragon), 'success')

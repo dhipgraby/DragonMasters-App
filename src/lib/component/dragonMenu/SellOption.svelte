@@ -3,10 +3,11 @@
 <script>
 	import { afterUpdate, onMount } from 'svelte';
 	import { dragonApproval } from '$lib/storage/dragon';
-	import BasicModal from '../BasicModal.svelte';
-	import AppoveToken from '../marketplace/appoveToken.svelte';
-	import OfferForm from './OfferForm.svelte';
 	import { OfferType } from '$lib/contracts/LoanBook';
+	import BasicModal from '../BasicModal.svelte';	
+	import OfferForm from './OfferForm.svelte';
+	import AppoveToken from '$lib/component/marketplace/AppoveToken.svelte';
+	
 
 	export let dragonProps;
 	export let contract;
@@ -77,6 +78,7 @@
 	}
 
 	function updateDragonOffer(offer) {
+		console.log('offer update',dragonProps)
 		if (offer.offerType == OfferType.ForSale) {
 			dragonProps.offer.sellOffer = offer;
 		} else {
