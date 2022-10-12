@@ -1,7 +1,7 @@
 <script>
 	import { TokenType, OfferType, saleTerms, rentTerms } from '$lib/contracts/Marketplace';
 	import { getWei, timeDropdrown } from '$lib/helpers/utils';
-	import { createEventDispatcher, onMount } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 	import TimeInputs from './TimeInputs.svelte';
 
 	const dispatch = createEventDispatcher();
@@ -23,8 +23,10 @@
 			Terms = saleTerms;
 			Terms.price = priceInWei;
 		} else {
+			let depositInWei = await getWei(deposit);
 			Terms = rentTerms;
-			Terms.rental.price = priceInWei;
+			Terms.price = priceInWei;
+			Terms.rental.deposit = depositInWei;
 			Terms.rental.minDuration = duration * timeDropdrown.oneDay;
 			rent = true;
 		}
@@ -47,6 +49,7 @@
 				tokenType: TokenType.Dragon
 			};
 
+			console.log('offer created:' + JSON.stringify(offer));
 			dispatch('offerCreated', {
 				offer: offer,
 				name: 'offerCreated'

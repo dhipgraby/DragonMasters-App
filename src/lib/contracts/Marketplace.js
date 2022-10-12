@@ -151,8 +151,8 @@ export class MarketplaceContract {
             let offer = await this.contract.Marketplace.methods.getOffer(
                 tokenId,
                 tokenType
-            ).call()
-
+            ).call()    
+            
             let rental = {
                 price: offer.terms.rent.price,
                 deposit: offer.terms.rent.rental.deposit,

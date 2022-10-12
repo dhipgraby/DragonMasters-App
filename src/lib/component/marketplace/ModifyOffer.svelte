@@ -34,14 +34,16 @@
 	async function modifyOffer() {
 		let Terms;
 		let rent = null;
-		let priceInWei = await getWei(price);
+		let priceInWei = await getWei(price);	
 
 		if (_offerType == OfferType.ForSale) {
 			Terms = saleTerms;
 			Terms.price = priceInWei;
 		} else {
+			let depositInWei = await getWei(deposit);
 			Terms = rentTerms;
-			Terms.rental.deposit = priceInWei;
+			Terms.price = priceInWei;
+			Terms.rental.deposit = depositInWei;
 			Terms.rental.minDuration = duration * timeDropdrown.oneDay;
 			rent = true;
 		}
@@ -55,11 +57,11 @@
 				rent:
 					rent == true
 						? {
+								price: priceInWei,	
 								deposit: Terms.rental.deposit,
 								minDuration: Terms.rental.minDuration
 						  }
-						: null,
-				sellPrice: priceInWei,
+						: null,				
 				tokenId: tokenId,
 				tokenType: TokenType.Dragon
 			};
@@ -76,9 +78,10 @@
 	}
 
 	onMount(async () => {
+		console.log('md' + JSON.stringify(offer))
 		price = await getEth(offer.sellPrice);
-		currentPrice = await getEth(offer.sellPrice);
 		if (offer.rent) {
+			price = await getEth(offer.rent.price);
 			deposit = await getEth(offer.rent.deposit);
 			duration = parseInt(offer.rent.minDuration) / timeDropdrown.oneDay;
 		}
@@ -101,7 +104,7 @@
 <div class="cardBody">
 	{#if tap == 1}
 		<p class="bold mb-2 mt-3 f-right">
-			<i class="fab fa-ethereum" /> Current Price : {currentPrice}
+			<i class="fab fa-ethereum" /> Current Price : {price}
 		</p>
 
 		<div class="form-floating mb-3">

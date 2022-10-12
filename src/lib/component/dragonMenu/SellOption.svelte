@@ -57,18 +57,15 @@
 		dragonProps.isApproved = true;
 	}
 
-	function handleSetOffer(event) {
-		console.log('handling setOffer ', event);
+	function handleSetOffer(event) {	
 		updateDragonOffer(event.detail.offer);
 	}
 
-	function handleModifyOffer(event) {
-		console.log('handling modifyOffer');
+	function handleModifyOffer(event) {		
 		updateDragonOffer(event.detail.offer);
 	}
 
-	function handleRemoveOffer(event) {
-		console.log('handling removeOffer');
+	function handleRemoveOffer(event) {		
 		let offerType = event.detail.offerType;
 		if (offerType == OfferType.ForSale) {
 			dragonProps.offer.sellOffer = null;
@@ -77,8 +74,7 @@
 		}
 	}
 
-	function updateDragonOffer(offer) {
-		console.log('offer update',dragonProps)
+	function updateDragonOffer(offer) {		
 		if (offer.offerType == OfferType.ForSale) {
 			dragonProps.offer.sellOffer = offer;
 		} else {

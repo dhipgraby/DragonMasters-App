@@ -1,5 +1,5 @@
 <script>
-	import ModifyOffer from '../marketplace/modifyOffer.svelte';
+	import ModifyOffer from '../marketplace/ModifyOffer.svelte';
 	import CreateOffer from '../marketplace/CreateOffer.svelte';
 	import SwitchOfferType from './SwitchOfferType.svelte';
 	import { OfferType } from '$lib/contracts/Marketplace';
