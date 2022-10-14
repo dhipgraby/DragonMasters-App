@@ -12,6 +12,8 @@ export const approvalRequired = writable(true)
 
 export async function LoadInterface(from, to) {
 
+    console.log('num from interface:'+ from + '-' + to)
+
     let contractData = []
     contractData['egg'] = await new EggContract();
     contractData['dragon'] = await new DragonContract();

@@ -66,9 +66,10 @@ export class EggContract {
     }
 
     async getUserEggs(from,to) {
-
+        console.log('from to:'+ from + ' ' +to)
         let allEggs = await this.getEggIds(from,to)                
         let eggs = []
+        
 
         for (let i = 0; i < allEggs.tokenIds.length; i++) {
             let eggDetails = await this.getEgg(allEggs.tokenIds[i])                                    

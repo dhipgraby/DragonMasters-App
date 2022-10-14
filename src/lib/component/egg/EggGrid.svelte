@@ -6,7 +6,7 @@
 	export let contract;
 	export let loadPage;
 
-	let pages;
+	let pages = 0
 
 	afterUpdate(() => {		
 		let totalEggPages = Math.round(parseInt(eggs.totalOwned) / 10);
@@ -22,7 +22,7 @@
 <div class="row">
 	{#if eggs.length}
 		{#each eggs as egg}
-			<div class="col">
+			<div class="col-xl-3 col-lg-4 col-md-6">
 				<EggCard {egg} {contract} />
 			</div>
 		{/each}
@@ -30,3 +30,10 @@
 		<h2>Not Eggs found</h2>
 	{/if}
 </div>
+
+
+<style>
+	.row div {
+		text-align: -webkit-center;
+	}
+</style>

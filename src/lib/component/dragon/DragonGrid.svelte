@@ -29,7 +29,7 @@
 <div class="row">
 	{#if dragons.length}
 		{#each dragons as dragon}
-			<div class="col-4">
+			<div class="col-xl-3 col-lg-4 col-md-6">
 				<DragonCard {dragon} {contract} {singleApproval} />
 			</div>
 		{/each}
@@ -39,6 +39,10 @@
 </div>
 
 <style>
+	.row div {
+		text-align: -webkit-center;
+	}
+	
 	.extended {
 		width: 100%;
 	}

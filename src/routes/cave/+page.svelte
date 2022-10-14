@@ -11,7 +11,7 @@
 	import MainContainer from '$lib/component/containers/MainContainer.svelte';
 
 	let singleApproval = false;
-	let show = 2;
+	let show = 1;
 	let fromId = 0;
 	let toId = 10;
 

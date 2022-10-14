@@ -54,7 +54,7 @@
 					<div class="egg-top-shadow" />
 				{/if}
 
-				<div class="pabsolute top10 right10">{@html element}</div>
+				<div class="pabsolute top10 left10">{@html element}</div>
 			</div>
 		</a>
 	</div>

@@ -1,8 +1,8 @@
 <script>
 
+let perpage = 9
 export let pages
 export let loadPage
-export let perpage
 
 </script>
 <div>
