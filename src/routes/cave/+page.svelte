@@ -13,7 +13,7 @@
 	let singleApproval = false;
 	let show = 1;
 	let fromId = 0;
-	let toId = 10;
+	let toId = 7;
 
 	$: contract = $contracts;
 	$: eggs = $userEggs;
@@ -41,7 +41,7 @@
 		</button>
 	</div>
 	{#if show == 1}
-		<EggGrid {eggs} contract={contract['egg']} loadPage={LoadInterface} />
+		<EggGrid {eggs} contract={contract['egg']} loadPage={LoadInterface} inferfaceName={'Eggs'} />
 	{/if}
 
 	{#if show == 2}

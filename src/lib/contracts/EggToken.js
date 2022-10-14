@@ -19,7 +19,7 @@ export class EggContract {
 
         try {
             await this.contract.EggToken.methods.mintGen0EggsTo(this.contract.account,amount).send({}, function (err, txHash) {
-                console.log('awaiting')
+            
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert(txHash, 'success')
@@ -65,8 +65,7 @@ export class EggContract {
         }
     }
 
-    async getUserEggs(from,to) {
-        console.log('from to:'+ from + ' ' +to)
+    async getUserEggs(from,to) {        
         let allEggs = await this.getEggIds(from,to)                
         let eggs = []
         

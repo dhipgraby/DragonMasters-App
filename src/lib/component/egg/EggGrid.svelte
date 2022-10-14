@@ -5,10 +5,11 @@
 	export let eggs;
 	export let contract;
 	export let loadPage;
+	export let inferfaceName;
 
-	let pages = 0
+	let pages = 0;
 
-	afterUpdate(() => {		
+	afterUpdate(() => {
 		let totalEggPages = Math.round(parseInt(eggs.totalOwned) / 10);
 		if (totalEggPages > 0) pages = new Array(totalEggPages);
 	});
@@ -16,7 +17,7 @@
 
 <div class="mt-4 mb-4 w-100 ta-c">
 	<h1>Your Eggs</h1>
-	<Pagination {pages} {loadPage} />
+	<Pagination {pages} {loadPage} {inferfaceName} />
 </div>
 
 <div class="row">
@@ -30,7 +31,6 @@
 		<h2>Not Eggs found</h2>
 	{/if}
 </div>
-
 
 <style>
 	.row div {

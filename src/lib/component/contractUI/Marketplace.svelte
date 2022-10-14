@@ -60,6 +60,10 @@
 			<div class="mb-3">
 				<input type="text" bind:value={sellId} class="form-control" placeholder="Token Id" />
 			</div>
+			<select class="form-select mb-3" bind:value={_tokenType}>
+				<option value={TokenType.Dragon} selected>Dragon</option>
+				<option value={TokenType.Egg}>Egg</option>
+			</select>
 			<button class="btn btn-dark" on:click={() => sellOffer()}>SET FOR SELL OFFER</button>
 		</div>
 

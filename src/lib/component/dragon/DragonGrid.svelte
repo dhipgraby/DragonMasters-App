@@ -1,11 +1,12 @@
 <script>
 	import DragonCard from '$lib/component/dragon/DragonCard.svelte';
 	import Pagination from '../pagination/Pagination.svelte';
-	import { afterUpdate, onMount } from 'svelte';
+	import { afterUpdate } from 'svelte';
 	export let dragons;
 	export let singleApproval;
 	export let contract;
 	export let loadPage;
+	export let inferfaceName;
 	
 	let pages;
 
@@ -19,7 +20,7 @@
 <div class="row extended mt-4 mb-4">
 	<div class="col-6 ta-l">
 		<h1>Your Dragons</h1>
-		<Pagination {pages} {loadPage} />
+		<Pagination {pages} {loadPage} {inferfaceName} />
 	</div>
 	<div class="col-6 ta-r">
 		<a href="/breed" class="btn btn-danger"> Breed </a>
@@ -42,7 +43,7 @@
 	.row div {
 		text-align: -webkit-center;
 	}
-	
+
 	.extended {
 		width: 100%;
 	}
