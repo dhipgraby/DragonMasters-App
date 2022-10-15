@@ -14,6 +14,7 @@
 	export let singleApproval;
 	export let openModal;
 	export let doPromise = false;
+	export let _tokenType;
 
 	let modaComponent;
 	let promise;
@@ -33,7 +34,7 @@
 
 	async function later(delay) {
 		return new Promise(async (resolve) =>
-			setTimeout(resolve, delay, await contract.getApproved(dragonProps.tokenId))
+			setTimeout(resolve, delay, await contract.getApproved(dragonProps.tokenId,_tokenType))
 		);
 	}
 

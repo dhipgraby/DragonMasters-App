@@ -1,24 +1,17 @@
-<script context="module">
-	export async function load({ params }) {
-		return {
-			props: {
-				EggId: params.EggId
-			}
-		};
-	}
-</script>
-
 <script>
 	import EggCard from '$lib/component/egg/EggCard.svelte';
 	import { EggContract } from '$lib/contracts/EggToken';
 	import { onMount } from 'svelte';
 
-	export let EggId;
+	export let data;
+	
+	export let EggId = data.eggId;
 
 	let contract;
 	let egg = [];
 
 	onMount(async () => {
+		console.log('data:'+ JSON.stringify(data))
 		contract = await new EggContract();
 		egg = await contract.getEgg(EggId)
 		console.log(egg)

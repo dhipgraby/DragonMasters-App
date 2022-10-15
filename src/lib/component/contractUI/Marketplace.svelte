@@ -16,12 +16,20 @@
 		account,
 		_tokenType;
 
-	function sellOffer() {
-		contract.setOffer(sellId, OfferType.ForSale, TokenType.Dragon, saleTerms);
+	function setSellOffer() {	
+		contract.setOffer(sellId, OfferType.ForSale, _tokenType, saleTerms);
 	}
 
-	function rentOffer() {
+	function setRentOffer() {
 		contract.setOffer(rentId, OfferType.ForRent, TokenType.Dragon, rentTerms);
+	}
+	
+	function getOffersBy() {
+		contract.getOfferedBy(startIndex, endIndex, _offerType, _tokenType, account, true);
+	}
+
+	function getAllOffers() {
+		contract.getOffered(startIndex, endIndex, _offerType, _tokenType, true);
 	}
 
 	async function buy() {
@@ -41,17 +49,12 @@
 		contract.removeAllOffers(removeAllId, TokenType.Dragon);
 	}
 
-	function getOffersBy() {
-		contract.getOfferedBy(startIndex, endIndex, _offerType, _tokenType, account, true);
-	}
-
-	function getAllOffers() {
-		contract.getOffered(startIndex, endIndex, _offerType, _tokenType, true);
-	}
 </script>
 
 <h1 class="mb-4">Offers</h1>
-
+<p>
+	Dragons and Eggs need to grant different approval to operate in the marketplace
+</p>
 <div class="row">
 	<!-- SETTERS -->
 	<div class="col-sm-4">
@@ -64,7 +67,7 @@
 				<option value={TokenType.Dragon} selected>Dragon</option>
 				<option value={TokenType.Egg}>Egg</option>
 			</select>
-			<button class="btn btn-dark" on:click={() => sellOffer()}>SET FOR SELL OFFER</button>
+			<button class="btn btn-dark" on:click={() => setSellOffer()}>SET FOR SELL OFFER</button>
 		</div>
 
 		<div class="grid">
@@ -72,7 +75,7 @@
 			<div class="mb-3">
 				<input type="text" bind:value={rentId} class="form-control" placeholder="Token Id" />
 			</div>
-			<button class="btn btn-dark" on:click={() => rentOffer()}>SET RENT OFFER</button>
+			<button class="btn btn-dark" on:click={() => setRentOffer()}>SET RENT OFFER</button>
 		</div>
 
 		<div class="grid">

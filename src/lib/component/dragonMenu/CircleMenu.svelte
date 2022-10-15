@@ -1,7 +1,7 @@
 <script>
-	import '/static/css/Assets/CircleMenu.css'
 	import { onMount } from 'svelte';
 	import SellOption from './SellOption.svelte';
+	import '/static/css/Assets/CircleMenu.css'
 
 	export let dragonProps;
 	export let contract

@@ -16,7 +16,7 @@
 	let marketplace_contract;
 	let loanbook_contract;
 
-	let show = 3;
+	let show = 5;
 
 	const changeView = (screen) => (show = screen);
 
