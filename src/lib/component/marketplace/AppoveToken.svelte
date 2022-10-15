@@ -18,7 +18,7 @@
 	}
 
 	async function approveForAll() {
-		let approval = await contract.approveForAll(tokenId,_tokenType);
+		let approval = await contract.approveForAll(_tokenType);
 		console.log(approval)
 		if (approval.blockHash) {
 			dispatch('approved', {

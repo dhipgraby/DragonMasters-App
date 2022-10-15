@@ -325,12 +325,10 @@ export class MarketplaceContract {
     // APPROVAL FUNCTIONS
     async approveToken(tokenId, _tokenType) {
         switch (_tokenType) {
-            case _tokenType == TokenType.Dragon:
-                approveDragon(tokenId)
-                break;
-            case _tokenType == TokenType.Egg:
-                approveEgg(tokenId)
-                break;
+            case TokenType.Dragon:
+                return this.approveDragon(tokenId)                
+            case TokenType.Egg:
+                return this.approveEgg(tokenId)                
         }
     }
 
@@ -433,11 +431,9 @@ export class MarketplaceContract {
     async approveForAll(_tokenType) {
         switch (_tokenType) {
             case TokenType.Dragon:
-                this.approveAllDragons()
-                break;
+                return this.approveAllDragons()                
             case TokenType.Egg:
-                this.approveAllEggs()
-                break;
+                return this.approveAllEggs()                
         }
     }
 

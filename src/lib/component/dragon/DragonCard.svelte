@@ -4,6 +4,7 @@
 	import ProgressBar from './ProgressBar.svelte';
 	import CircleMenu from '../dragonMenu/CircleMenu.svelte';	
 	import { onMount } from 'svelte';
+	import { TokenType } from '$lib/contracts/Marketplace';
 	import '$lib/css/marketplace/dragon.css';
 
 	export let dragon;
@@ -39,7 +40,7 @@
 
 <div on:mouseenter={enter} on:mouseleave={leave} class="card" style="width: 18rem;">
 	<div class="card-header">
-		<CircleMenu {hovering} dragonProps={dragon} {singleApproval} {contract} />
+		<CircleMenu {hovering} dragonProps={dragon} {singleApproval} {contract} _tokenType={TokenType.Dragon} />
 
 		<img src={img} alt="dragon" />
 		<!-- ELEMENT -->

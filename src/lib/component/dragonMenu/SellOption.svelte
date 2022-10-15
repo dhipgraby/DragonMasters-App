@@ -102,7 +102,7 @@
 					{contract}
 				/>
 			{:else}
-				<AppoveToken on:approved={handleApprove} tokenId={dragonProps.tokenId} {contract} />
+				<AppoveToken on:approved={handleApprove} tokenId={dragonProps.tokenId} {contract} {_tokenType} />
 			{/if}
 		{:catch error}
 			<p style="color: red">{error.message}</p>

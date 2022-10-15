@@ -7,6 +7,7 @@
 	export let contract
 	export let singleApproval
 	export let hovering;	
+	export let _tokenType
 
 	let active = false;
 	let openModal;
@@ -64,4 +65,4 @@
 	</div>
 </div>
 
-<SellOption bind:this={modaComponent} {dragonProps} {singleApproval} {contract} {doPromise} />
+<SellOption bind:this={modaComponent} {dragonProps} {singleApproval} {contract} {doPromise} {_tokenType} />
