@@ -6,21 +6,19 @@
 	export let singleApproval;
 	export let contract;
 	export let loadPage;
-	export let inferfaceName;
-	
+
 	let pages;
 
 	afterUpdate(() => {
 		let totalDragonPages = Math.round(parseInt(dragons.totalOwned) / 10);
-		pages = (totalDragonPages > 0) ? new Array(totalDragonPages) : []; 		
+		pages = totalDragonPages > 0 ? new Array(totalDragonPages) : [];
 	});
-
 </script>
 
 <div class="row extended mt-4 mb-4">
 	<div class="col-6 ta-l">
 		<h1>Your Dragons</h1>
-		<Pagination {pages} {loadPage} {inferfaceName} />
+		<Pagination {pages} {loadPage} inferfaceName="Dragon" />
 	</div>
 	<div class="col-6 ta-r">
 		<a href="/breed" class="btn btn-danger"> Breed </a>
@@ -40,10 +38,6 @@
 </div>
 
 <style>
-	.row div {
-		text-align: -webkit-center;
-	}
-
 	.extended {
 		width: 100%;
 	}

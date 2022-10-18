@@ -7,18 +7,16 @@
 	import { userEggs } from '$lib/storage/eggs';
 	//CONTRACTS
 	import { onMount } from 'svelte';
-	import { LoadInterface, contracts, approvalRequired } from '$lib/interfaces/ICave';
+	import { LoadInterface, contracts } from '$lib/interfaces/ICave';
 	import MainContainer from '$lib/component/containers/MainContainer.svelte';
-
-	let singleApproval = false;
-	let show = 2;
+	
+	let show = 1;
 	let fromId = 0;
 	let toId = 7;
 
 	$: contract = $contracts;
 	$: eggs = $userEggs;
-	$: dragons = $userDragons;
-	$: singleApproval = $approvalRequired;
+	$: dragons = $userDragons;	
 
 	onMount(async () => {
 		// userDragons.useLocalStorage()
@@ -41,11 +39,11 @@
 		</button>
 	</div>
 	{#if show == 1}
-		<EggGrid {eggs} contract={contract['egg']} loadPage={LoadInterface} inferfaceName={'Eggs'} />
+		<EggGrid {eggs} contract={contract} loadPage={LoadInterface} />
 	{/if}
 
 	{#if show == 2}
-		<DragonGrid {dragons} contract={contract['market']} {singleApproval} />
+		<DragonGrid {dragons} contract={contract['market']} />
 	{/if}
 </MainContainer>
 

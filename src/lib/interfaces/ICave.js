@@ -1,5 +1,5 @@
 //CONTRACT
-import { writable, get } from 'svelte/store';
+import { writable,get } from 'svelte/store';
 import { EggContract } from '$lib/contracts/EggToken';
 import { DragonContract } from '$lib/contracts/DragonToken';
 import { MarketplaceContract, TokenType, OfferType } from '$lib/contracts/Marketplace';
@@ -7,20 +7,21 @@ import { initEventListener } from '$lib/contracts/events';
 //STORAGE
 import { createWritableStore } from '$lib/helpers/storage';
 
+export const approvalRequired = writable({dragon:true,egg:true})
 export const contracts = createWritableStore('contract', []);
-export const approvalRequired = writable(true)
 
 export async function LoadInterface(from, to, interfaceName = 'All') {
 
     let contractData = await loadContractData()
-    await checkApproval(contractData)
+    await contractData['market'].isApprovedForAll(TokenType.Egg);
+    await contractData['market'].isApprovedForAll(TokenType.Dragon);
 
     switch (interfaceName) {
-        case 'Eggs':
+        case 'Egg':
             await loadEggs(contractData, from, to)
             console.log('load eggs')
             break;
-        case 'Dragons':
+        case 'Dragon':
             await loadDragons(contractData, from, to)
             await loadDragonOffers(contractData, from, to)
             console.log('load dragons')
@@ -50,15 +51,6 @@ async function loadContractData() {
         contractData = contractsInterface     
     }
     return contractData
-}
-
-async function checkApproval(contract) {
-    let approveForAll = await contract['market'].isApprovedForAll();
-    if (approveForAll == true) {
-        approvalRequired.set(false)
-    } else {
-        approvalRequired.set(true)
-    }
 }
 
 async function loadEggs(contract, from, to) {

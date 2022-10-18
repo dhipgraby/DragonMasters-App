@@ -3,22 +3,23 @@
 <script>
 	import { afterUpdate, onMount } from 'svelte';
 	import { dragonApproval } from '$lib/storage/dragon';
-	import { OfferType } from '$lib/contracts/LoanBook';
+	import { eggApproval } from '$lib/storage/eggs';
+	import { OfferType,TokenType } from '$lib/contracts/LoanBook';
 	import BasicModal from '../BasicModal.svelte';	
 	import OfferForm from './OfferForm.svelte';
 	import AppoveToken from '$lib/component/marketplace/AppoveToken.svelte';
+	import { approvalRequired } from '$lib/interfaces/ICave';
 	
-
-	export let dragonProps;
-	export let contract;
-	export let singleApproval;
+	export let tokenProps;
+	export let contract;	
 	export let openModal;
 	export let doPromise = false;
 	export let _tokenType;
 
 	let modaComponent;
 	let promise;
-	$: CheckApproval = $dragonApproval;
+	$: singleApproval = (_tokenType == TokenType.Egg) ? $approvalRequired.egg : $approvalRequired.dragon;
+	$: CheckApproval = (_tokenType == TokenType.Egg) ? $eggApproval : $dragonApproval;
 
 	onMount(() => {
 		openModal = function () {
@@ -28,13 +29,13 @@
 
 	afterUpdate(() => {
 		if (CheckApproval == true) singleApproval = false;
-		dragonProps.isApproved = singleApproval == false ? true : false;
+		tokenProps.isApproved = singleApproval == false ? true : false;
 		if (doPromise == true && singleApproval == true) promise = later(500);
 	});
 
 	async function later(delay) {
 		return new Promise(async (resolve) =>
-			setTimeout(resolve, delay, await contract.getApproved(dragonProps.tokenId,_tokenType))
+			setTimeout(resolve, delay, await contract.getApproved(tokenProps.tokenId,_tokenType))
 		);
 	}
 
@@ -55,7 +56,7 @@
 
 	function handleApprove(event) {
 		singleApproval = false;
-		dragonProps.isApproved = true;
+		tokenProps.isApproved = true;
 	}
 
 	function handleSetOffer(event) {	
@@ -69,25 +70,25 @@
 	function handleRemoveOffer(event) {		
 		let offerType = event.detail.offerType;
 		if (offerType == OfferType.ForSale) {
-			dragonProps.offer.sellOffer = null;
+			tokenProps.offer.sellOffer = null;
 		} else {
-			dragonProps.offer.rentOffer = null;
+			tokenProps.offer.rentOffer = null;
 		}
 	}
 
 	function updateDragonOffer(offer) {		
 		if (offer.offerType == OfferType.ForSale) {
-			dragonProps.offer.sellOffer = offer;
+			tokenProps.offer.sellOffer = offer;
 		} else {
-			dragonProps.offer.rentOffer = offer;
+			tokenProps.offer.rentOffer = offer;
 		}
 	}
 </script>
 
-<BasicModal bind:this={modaComponent} btnName={false} id={'dragonModal' + dragonProps.tokenId}>
+<BasicModal bind:this={modaComponent} btnName={false} id={'dragonModal' + tokenProps.tokenId}>
 	<!-- CHECK APPROVE FOR ALL -->
-	{#if dragonProps.isApproved == true}
-		<OfferForm offer={dragonProps.offer} tokenId={dragonProps.tokenId} {formHanlders} {contract} />
+	{#if tokenProps.isApproved == true}
+		<OfferForm offer={tokenProps.offer} tokenId={tokenProps.tokenId} {formHanlders} {contract} />
 		<!-- IF IS NOT APPROVE FOR ALL CHECK SINGLE APPROVE  -->
 	{:else if doPromise == true}
 		{#await promise}
@@ -96,13 +97,13 @@
 			<!-- ADDRESS IS APPROVE -->
 			{#if approval == true}
 				<OfferForm
-					offer={dragonProps.offer}
-					tokenId={dragonProps.tokenId}
+					offer={tokenProps.offer}
+					tokenId={tokenProps.tokenId}
 					{formHanlders}
 					{contract}
 				/>
 			{:else}
-				<AppoveToken on:approved={handleApprove} tokenId={dragonProps.tokenId} {contract} {_tokenType} />
+				<AppoveToken on:approved={handleApprove} tokenId={tokenProps.tokenId} {contract} {_tokenType} />
 			{/if}
 		{:catch error}
 			<p style="color: red">{error.message}</p>

@@ -1,18 +1,19 @@
 <script>
-	
 	import { readable } from 'svelte/store';
-	import Message from '../Message.svelte';
 	import { getImg, iconElement } from '$lib/storage/dragonImg';
 	import { afterUpdate } from 'svelte';
+	import { TokenType } from '$lib/contracts/Marketplace';
+	import Message from '../Message.svelte';
+	import CircleMenu from '../dragonMenu/CircleMenu.svelte';
 
 	export let egg;
 	export let contract;
 
 	let eggImg;
 	let element;
+	let hovering;
 
 	$: incTime = Number(egg.incubationTime);
-
 	$: incubating = incTime > 0 ? true : false;
 
 	afterUpdate(async () => {
@@ -36,27 +37,31 @@
 		};
 	});
 
-	function hatch() {
-		contract.hatch(egg.tokenId);
-	}
+	const hatch = () => contract['egg'].hatch(egg.tokenId);
 
-	function startIncubation() {
-		contract.startIncubation(egg.tokenId);
-	}
+	const startIncubation = () => contract['egg'].startIncubation(egg.tokenId);
+
+	const enter = () => (hovering = true);
+
+	const leave = () => (hovering = false);
 </script>
 
-<div class="card" style="width: 18rem;">
+<div on:mouseenter={enter} on:mouseleave={leave} class="card" style="width: 18rem;">
 	<div class="card-header">
-		<a href="/egg/{egg.tokenId}">
-			<div class="egg-top-container">
-				{#if eggImg}
-					<img class="eggImg egg-top" alt="egg" src={eggImg} />
-					<div class="egg-top-shadow" />
-				{/if}
+		<CircleMenu
+			_tokenType={TokenType.Egg}
+			tokenProps={egg}
+			contract={contract['market']}
+			{hovering}
+		/>
+		<div class="egg-top-container">
+			{#if eggImg}
+				<img class="eggImg egg-top" alt="egg" src={eggImg} />
+				<div class="egg-top-shadow" />
+			{/if}
 
-				<div class="pabsolute top10 left10">{@html element}</div>
-			</div>
-		</a>
+			<div class="pabsolute top10 left10">{@html element}</div>
+		</div>
 	</div>
 	<div class="card-body">
 		<h5 class="card-title">Egg : #{egg.tokenId}</h5>

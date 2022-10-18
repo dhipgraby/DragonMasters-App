@@ -9,7 +9,6 @@
 
 	export let dragon;
 	export let contract;
-	export let singleApproval;
 	export let checkBtn = true;
 	export let fullEnergy = null;
 	export let callback = null;
@@ -29,18 +28,14 @@
 	let element = iconElement(dragon.subSpecies);
 	let hovering;
 
-	function enter() {
-		hovering = true;
-	}
-
-	function leave() {
-		hovering = false;
-	}
+	const enter = () => hovering = true
+	const leave = () => hovering = false
+	
 </script>
 
 <div on:mouseenter={enter} on:mouseleave={leave} class="card" style="width: 18rem;">
 	<div class="card-header">
-		<CircleMenu {hovering} dragonProps={dragon} {singleApproval} {contract} _tokenType={TokenType.Dragon} />
+		<CircleMenu {hovering} tokenProps={dragon} {contract} _tokenType={TokenType.Dragon} />
 
 		<img src={img} alt="dragon" />
 		<!-- ELEMENT -->

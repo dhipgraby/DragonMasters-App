@@ -1,5 +1,8 @@
+import { get } from 'svelte/store';
 import { setAlert } from "$lib/storage/alerts";
 import { dragonApproval } from '$lib/storage/dragon'
+import { eggApproval } from '$lib/storage/eggs'
+import { approvalRequired } from "$lib/interfaces/ICave"
 import { contracts } from "./contracts";
 
 export const TokenType = { Unknown: 0, Dna: 1, Egg: 2, Dragon: 3 }
@@ -35,7 +38,6 @@ export class MarketApproval {
                     return true
                 }
             })
-
             return dragonsIds
         } catch (err) {
             setAlert('ApproveToken error ', 'warning')
@@ -56,7 +58,6 @@ export class MarketApproval {
                     return true
                 }
             })
-
             return EggsIds
         } catch (err) {
             setAlert('ApproveToken error ', 'warning')
@@ -88,7 +89,6 @@ export class MarketApproval {
                     return true
                 }
             })
-
             return dragonsIds
         } catch (err) {
             setAlert('revokeToken error ', 'warning')
@@ -109,7 +109,6 @@ export class MarketApproval {
                     return true
                 }
             })
-
             return Eggs
         } catch (err) {
             setAlert('revokeToken error ', 'warning')
@@ -157,12 +156,11 @@ export class MarketApproval {
             ).send({}, function (err, txHash) {
                 if (err) setAlert(err, 'warning')
                 else {
-                    dragonApproval.set(true)
+                    eggApproval.set(true)
                     setAlert('Maketplace approved for all', 'success')
                     return true
                 }
             })
-
             return EggsIds
         } catch (err) {
             setAlert('setApprovalForAll error ', 'warning')
@@ -211,12 +209,11 @@ export class MarketApproval {
             ).send({}, function (err, txHash) {
                 if (err) setAlert(err, 'warning')
                 else {
-                    dragonApproval.set(false)
+                    eggApproval.set(false)
                     setAlert('Maketplace approved for all removed!', 'success')
                     return txHash
                 }
             })
-
             return EggsIds
         } catch (err) {
             setAlert('setApprovalForAll error ', 'warning')
@@ -227,11 +224,9 @@ export class MarketApproval {
     async getApproved(tokenId,_tokenType, msg = false) {
         switch (_tokenType) {
             case TokenType.Dragon:
-                this.getApprovedDragon(tokenId, msg)
-                break;
+                return this.getApprovedDragon(tokenId, msg)                
             case TokenType.Egg:
-                this.getApprovedEgg(tokenId, msg)
-                break;
+                return this.getApprovedEgg(tokenId, msg)            
         }
     }
 
@@ -245,14 +240,12 @@ export class MarketApproval {
 
                 if (err) console.log(err)
                 if (contractAddress == approved) {
-
                     if (msg == true) setAlert(tokenId + ' is approved', 'success')
                     isApproved = true;
                 } else {
                     if (msg == true) setAlert(tokenId + ' is not approved', 'warning')
                     isApproved = false
                 }
-
             })
         }
         catch (err) {
@@ -271,14 +264,12 @@ export class MarketApproval {
 
                 if (err) console.log(err)
                 if (contractAddress == approved) {
-
                     if (msg == true) setAlert(tokenId + ' is approved', 'success')
                     isApproved = true;
                 } else {
                     if (msg == true) setAlert(tokenId + ' is not approved', 'warning')
                     isApproved = false
                 }
-
             })
         }
         catch (err) {
@@ -304,7 +295,12 @@ export class MarketApproval {
             const isMarketplaceAnOperator = await this.contract.DragonToken.methods.isApprovedForAll(this.contract.account, this.contract.address.Marketplace).call()
 
             if (isMarketplaceAnOperator == true) {
+                
+                let _approvalRequired = get(approvalRequired)
+                _approvalRequired.dragon = false
+                approvalRequired.set(_approvalRequired)
                 dragonApproval.set(true)
+
                 if (msg == true) setAlert('This account is Aprrove for All', 'success')
             } else {
                 if (msg == true) setAlert('Not approve for All', 'warning')
@@ -321,7 +317,11 @@ export class MarketApproval {
             const isMarketplaceAnOperator = await this.contract.EggToken.methods.isApprovedForAll(this.contract.account, this.contract.address.Marketplace).call()
 
             if (isMarketplaceAnOperator == true) {
-                dragonApproval.set(true)
+                
+                let _approvalRequired = get(approvalRequired)
+                _approvalRequired.egg = false
+                approvalRequired.set(_approvalRequired)
+                eggApproval.set(true)
                 if (msg == true) setAlert('This account is Aprrove for All', 'success')
             } else {
                 if (msg == true) setAlert('Not approve for All', 'warning')
