@@ -64,9 +64,7 @@
             <p><b>Price:</b>
                 {price} <i class="fab fa-ethereum"></i>
             </p>
-        </div>
-        
-        
+        </div>               
 		<button
 			class="btn btn-dark"
 			on:click={async () => {

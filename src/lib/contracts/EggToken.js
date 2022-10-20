@@ -43,7 +43,8 @@ export class EggContract {
                 dadId: eggDetails.dadId,
                 incubation: eggDetails.incubationCompleteAt,
                 laidTime: eggDetails.laidTime,
-                subSpecies:subSpeciesName(eggDetails.subSpecies)
+                subSpecies:subSpeciesName(eggDetails.subSpecies),
+                offer:[]
             }
 
         } catch (err) {

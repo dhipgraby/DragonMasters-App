@@ -9,6 +9,7 @@
 	export let contract;
 	export let tokenId;
 	export let _offerType;
+	export let _tokenType;
 
 	let price;
 	let deposit;
@@ -31,7 +32,7 @@
 			rent = true;
 		}
 
-		let offering = await contract.setOffer(tokenId, _offerType, TokenType.Dragon, Terms);
+		let offering = await contract.setOffer(tokenId, _offerType, _tokenType, Terms);
 
 		if (offering.blockHash) {
 			let offer = {
@@ -46,7 +47,7 @@
 						: null,
 				sellPrice: priceInWei,
 				tokenId: tokenId,
-				tokenType: TokenType.Dragon
+				tokenType: _tokenType
 			};
 
 			console.log('offer created:' + JSON.stringify(offer));

@@ -18,19 +18,18 @@ export async function LoadInterface(from, to, interfaceName = 'All') {
 
     switch (interfaceName) {
         case 'Egg':
-            await loadEggs(contractData, from, to)
-            console.log('load eggs')
+            await loadEggs(contractData, from, to)         
+            await loadEggOffers(contractData, from, to)   
             break;
         case 'Dragon':
             await loadDragons(contractData, from, to)
-            await loadDragonOffers(contractData, from, to)
-            console.log('load dragons')
+            await loadDragonOffers(contractData, from, to)            
             break; 
-        case 'All':
-            console.log('load all')
+        case 'All':            
             await loadEggs(contractData, from, to)
             await loadDragons(contractData, from, to)
             await loadDragonOffers(contractData, from, to)
+            await loadEggOffers(contractData, from, to)
             await loadEvents(contractData, from, to)
             break;
     }
@@ -63,7 +62,12 @@ async function loadDragons(contract, from, to) {
 
 async function loadDragonOffers(contract, from, to) {
     await contract['market'].getOfferedBy(from, to, OfferType.ForSale, TokenType.Dragon)
-    await contract['market'].getOfferedBy(from, to, OfferType.ForRent, TokenType.Dragon)
+    await contract['market'].getOfferedBy(from, to, OfferType.ForRent, TokenType.Dragon)    
+}
+
+async function loadEggOffers(contract, from, to) {    
+    await contract['market'].getOfferedBy(from, to, OfferType.ForSale, TokenType.Egg)
+    await contract['market'].getOfferedBy(from, to, OfferType.ForRent, TokenType.Egg)
 }
 
 async function loadEvents(contract, from, to) {

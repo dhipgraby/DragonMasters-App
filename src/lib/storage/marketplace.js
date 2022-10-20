@@ -14,7 +14,7 @@ const OfferObj = {
 }
 
 export const dragonsForSale = createWritableStore('dragonsForSale',[])
-export const eggsForSale = createWritableStore('dragonsForSale',[])
+export const eggsForSale = createWritableStore('eggsForSale',[])
 export const userOffers = createWritableStore('userOffers', {eggs:[],dragons:[]})
 
 

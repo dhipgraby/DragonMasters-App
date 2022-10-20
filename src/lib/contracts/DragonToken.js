@@ -4,8 +4,6 @@ import { userDragons } from "$lib/storage/dragon";
 import { subSpeciesName } from "$lib/helpers/utils"
 import { contracts } from "./contracts";
 import { getErrors } from "./errorHandling";
-import { dragonsForSale } from "$lib/storage/marketplace";
-import { get } from 'svelte/store';
 
 const Relationship = {
     None: 0, ExPartner: 1, Oneself: 2, Mother: 3,
@@ -28,7 +26,7 @@ export class DragonContract {
     }
 
     async getDragon(dragonId, alert = false) {
-
+        
         try {
             let dragonDetails = await this.contract.DragonToken.methods.getDragon(dragonId).call()            
             const toNumbers2D = arr => arr.map(arr => arr.map(Number));

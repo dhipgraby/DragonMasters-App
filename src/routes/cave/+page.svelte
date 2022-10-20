@@ -21,7 +21,7 @@
 	onMount(async () => {
 		// userDragons.useLocalStorage()
 		await LoadInterface(fromId, toId);
-		console.log(dragons);
+		console.log(eggs);		
 	});
 </script>
 
@@ -49,6 +49,7 @@
 
 <style>
 	.btn-group .btn {
+		white-space: nowrap;
 		margin: 8px;
 		font-weight: 600;
 		letter-spacing: 0.8px;

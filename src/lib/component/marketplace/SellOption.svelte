@@ -6,7 +6,7 @@
 	import { eggApproval } from '$lib/storage/eggs';
 	import { OfferType,TokenType } from '$lib/contracts/LoanBook';
 	import BasicModal from '../BasicModal.svelte';	
-	import OfferForm from './OfferForm.svelte';
+	import OfferForm from '../dragonMenu/OfferForm.svelte';
 	import AppoveToken from '$lib/component/marketplace/AppoveToken.svelte';
 	import { approvalRequired } from '$lib/interfaces/ICave';
 	
@@ -60,11 +60,11 @@
 	}
 
 	function handleSetOffer(event) {	
-		updateDragonOffer(event.detail.offer);
+		updateOffer(event.detail.offer);
 	}
 
 	function handleModifyOffer(event) {		
-		updateDragonOffer(event.detail.offer);
+		updateOffer(event.detail.offer);
 	}
 
 	function handleRemoveOffer(event) {		
@@ -76,7 +76,7 @@
 		}
 	}
 
-	function updateDragonOffer(offer) {		
+	function updateOffer(offer) {		
 		if (offer.offerType == OfferType.ForSale) {
 			tokenProps.offer.sellOffer = offer;
 		} else {
@@ -85,10 +85,10 @@
 	}
 </script>
 
-<BasicModal bind:this={modaComponent} btnName={false} id={'dragonModal' + tokenProps.tokenId}>
+<BasicModal bind:this={modaComponent} btnName={false} id={'tokenModal' + tokenProps.tokenId}>
 	<!-- CHECK APPROVE FOR ALL -->
 	{#if tokenProps.isApproved == true}
-		<OfferForm offer={tokenProps.offer} tokenId={tokenProps.tokenId} {formHanlders} {contract} />
+		<OfferForm offer={tokenProps.offer} tokenId={tokenProps.tokenId} {formHanlders} {contract} {_tokenType} />
 		<!-- IF IS NOT APPROVE FOR ALL CHECK SINGLE APPROVE  -->
 	{:else if doPromise == true}
 		{#await promise}

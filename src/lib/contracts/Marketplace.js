@@ -1,7 +1,10 @@
 import { setAlert } from "$lib/storage/alerts";
-import { dragonsForSale } from "$lib/storage/marketplace";
-import { dragonApproval, userDragons } from '$lib/storage/dragon'
+import { dragonsForSale,eggsForSale } from "$lib/storage/marketplace";
+import { subSpeciesName } from "$lib/helpers/utils"
+import { userDragons } from '$lib/storage/dragon'
+import { userEggs } from '$lib/storage/eggs'
 import { DragonContract } from '$lib/contracts/DragonToken';
+import { EggContract } from '$lib/contracts/EggToken';
 import { MarketApproval } from '$lib/contracts/MarketApproval';
 import { contracts } from "./contracts";
 import { get } from 'svelte/store';
@@ -36,6 +39,7 @@ export class MarketplaceContract extends MarketApproval {
         return (async () => {
             this.contract = await contracts();
             this.dragonInterface = await new DragonContract()
+            this.eggInterface = await new EggContract()
             return this;
         })();
     }
@@ -117,16 +121,21 @@ export class MarketplaceContract extends MarketApproval {
         //Collecting all offers and details 
         let allOffers = await this.getOffered(from, to, _offerType, _tokenType)
         let tokenIds = allOffers.map((el) => { return el.tokenId });
-        let dragons = []
+        let assets = []
 
         for (let i = 0; i < tokenIds.length; i++) {
-            let dragonDetails = await this.dragonInterface.getDragon(tokenIds[i])
-            dragonDetails['dna'] = await this.dragonInterface.getDna(dragonDetails.dnaId)
-            dragons.push(dragonDetails)
+            let assetsDetails
+            if(_tokenType == TokenType.Dragon){                
+                assetsDetails = await this.getDragon(tokenIds[i])
+                assetsDetails['dna'] = await this.getDna(assetsDetails.dnaId)
+            } else {
+                assetsDetails = await this.getEgg(tokenIds[i])
+            }            
+            assets.push(assetsDetails)
         }
 
         let offerName = (_offerType == OfferType.ForSale) ? 'sellOffer' : 'rentOffer';
-        let dragonOffers = dragons.map(el => {
+        let offers = assets.map(el => {
             let TID = el.tokenId
             if (tokenIds.includes(TID)) {
                 el[offerName] = allOffers.find(function (offer) {
@@ -135,10 +144,13 @@ export class MarketplaceContract extends MarketApproval {
             }
             return el
         })
-        dragonOffers['totalOffers'] = allOffers.totalOffers
-        dragonsForSale.set(dragonOffers)
-        return dragonOffers
-
+        offers['totalOffers'] = allOffers.totalOffers
+        if(_tokenType == TokenType.Dragon){
+            dragonsForSale.set(offers)
+        } else {
+            eggsForSale.set(offers)
+        }              
+        return offers
     }
 
     async getOffer(
@@ -234,11 +246,12 @@ export class MarketplaceContract extends MarketApproval {
                 offers.push(currentOffer)
             }
 
-            //ITS ONLY UPDATES THE OFFER OF EXISTING DRAGON TOKEN ON STORAGE
+            //ITS ONLY UPDATES THE OFFER OF EXISTING TOKEN TYPE ON STORAGE
             if (ownAccount == true) {
-                let dragons = get(userDragons)
+                
+                let assets = (_tokenType == TokenType.Dragon) ? get(userDragons) :  get(userEggs)
                 let offerName = (_offerType == OfferType.ForSale) ? 'sellOffer' : 'rentOffer';
-                let dragonOffers = dragons.map(el => {
+                let assetOffers = assets.map(el => {
                     let TID = el.tokenId
                     if (tokenIds.includes(TID)) {
                         if (el.offer == undefined) el.offer = []
@@ -248,7 +261,15 @@ export class MarketplaceContract extends MarketApproval {
                     }
                     return el
                 })
-                userDragons.set(dragonOffers)
+
+                switch(_tokenType){
+                    case TokenType.Dragon :
+                    userDragons.set(assetOffers)    
+                    break;    
+                    case TokenType.Egg :
+                    userEggs.set(assetOffers)    
+                    break;    
+                }                
             }
 
             if (alert == true) setAlert('You have a total of ' + ids.totalOffered + ' offers.<p class="bold m-0">Token Ids: ' + tokenIds + '</p>', 'success')
@@ -322,7 +343,71 @@ export class MarketplaceContract extends MarketApproval {
             console.log("Error at: removeAllOffers " + err)
         }
     }
-    
+
+    async getDragon(dragonId, alert = false) {
+        
+        try {
+            let dragonDetails = await this.contract.DragonToken.methods.getDragon(dragonId).call()            
+            const toNumbers2D = arr => arr.map(arr => arr.map(Number));
+            dragonDetails = {
+                ...dragonDetails[0], skills: toNumbers2D(dragonDetails[1])
+            }
+
+            let dragon = {
+                tokenId: dragonId,
+                dnaId: dragonDetails.dnaId,
+                subSpecies: subSpeciesName(dragonDetails.subSpecies),
+                fullEnergyAt: dragonDetails.fullEnergyAt,
+                ageGroup: dragonDetails.age.group,
+                birthTime: dragonDetails.age.birthTime,
+                maturesAt: dragonDetails.age.maturesAt,
+                mumId: 0,
+                dadId: 0,
+                skills: dragonDetails.skills,
+                attributes: dragonDetails.attributes,             
+            }
+
+            if (alert == true) setAlert('Dragon Details: '+ JSON.stringify(dragon), 'success')
+
+            return dragon
+
+        } catch (err) {
+            setAlert('Error getting this Dragon id ', 'warning')
+            console.log("Error at: getDragon" + err)
+        }
+    }
+
+    async getDna(dnaId) {
+        try {
+            let dna = await this.contract.DnaToken.methods.getDna(dnaId).call()
+            return dna
+
+        } catch (err) {
+            let errMsg = getErrors('getDna', err)
+            console.log("Error at: getDragon" + errMsg)
+        }
+    }
+
+    async getEgg(eggId,message = false) {
+
+        try {
+            let eggDetails = await this.contract.EggToken.methods.getEgg(eggId).call()
+            
+            if(message == true) setAlert(eggDetails,'success')
+            return {
+                tokenId: eggId,
+                mumId: eggDetails.mumId,
+                dadId: eggDetails.dadId,
+                incubation: eggDetails.incubationCompleteAt,
+                laidTime: eggDetails.laidTime,
+                subSpecies:subSpeciesName(eggDetails.subSpecies),                
+            }
+
+        } catch (err) {
+            setAlert('Error getting this egg id ', 'warning')
+            console.log("Error at: cgetEgg" + err)
+        }
+    }    
 }
 
 

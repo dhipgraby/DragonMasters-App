@@ -2,7 +2,7 @@
 	import { onInterval, Maturity, Attributes } from '$lib/helpers/utils.js';
 	import { getImg, iconElement, iconAttr } from '$lib/storage/dragonImg';
 	import ProgressBar from './ProgressBar.svelte';
-	import CircleMenu from '../dragonMenu/CircleMenu.svelte';	
+	import CircleMenu from '../marketplace/CircleMenu.svelte';	
 	import { onMount } from 'svelte';
 	import { TokenType } from '$lib/contracts/Marketplace';
 	import '$lib/css/marketplace/dragon.css';
