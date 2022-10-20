@@ -13,9 +13,11 @@ export async function LoadInterface(from, to) {
     let LoadedContracts = get(contracts)
     if (LoadedContracts.lenght) {
         await loadDragons(LoadedContracts, from, to)
+        await loadEggs(LoadedContracts, from, to)
     } else {
         let contractData = await loadContractData()        
         await loadDragons(contractData, from, to)
+        await loadEggs(contractData, from, to)
     }
 }
 

@@ -1,25 +1,24 @@
 <script>
 	import DragonCard from '$lib/component/dragon/DragonCard.svelte';
 	import Pagination from '../pagination/Pagination.svelte';
-	import { afterUpdate, onMount } from 'svelte';
+	import { afterUpdate } from 'svelte';
 	export let dragons;
 	export let singleApproval;
 	export let contract;
 	export let loadPage;
-	
+
 	let pages;
 
 	afterUpdate(() => {
 		let totalDragonPages = Math.round(parseInt(dragons.totalOwned) / 10);
-		pages = (totalDragonPages > 0) ? new Array(totalDragonPages) : []; 		
+		pages = totalDragonPages > 0 ? new Array(totalDragonPages) : [];
 	});
-
 </script>
 
 <div class="row extended mt-4 mb-4">
 	<div class="col-6 ta-l">
 		<h1>Your Dragons</h1>
-		<Pagination {pages} {loadPage} />
+		<Pagination {pages} {loadPage} inferfaceName="Dragon" />
 	</div>
 	<div class="col-6 ta-r">
 		<a href="/breed" class="btn btn-danger"> Breed </a>
@@ -29,7 +28,7 @@
 <div class="row">
 	{#if dragons.length}
 		{#each dragons as dragon}
-			<div class="col-4">
+			<div class="col-xl-3 col-lg-4 col-md-6">
 				<DragonCard {dragon} {contract} {singleApproval} />
 			</div>
 		{/each}

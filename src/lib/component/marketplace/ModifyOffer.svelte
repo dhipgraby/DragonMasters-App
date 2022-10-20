@@ -1,5 +1,5 @@
 <script>
-	import { onMount, createEventDispatcher } from 'svelte';
+	import { onMount, createEventDispatcher, afterUpdate } from 'svelte';
 	import { TokenType, OfferType, saleTerms, rentTerms } from '$lib/contracts/Marketplace';
 	import { getEth, getWei, timeDropdrown } from '$lib/helpers/utils';
 	import TimeInputs from './TimeInputs.svelte';
@@ -10,6 +10,7 @@
 	export let offer;
 	export let tokenId;
 	export let _offerType;
+	export let _tokenType;
 
 	let price;
 	let deposit;
@@ -22,11 +23,11 @@
 	};
 
 	async function removeSellOffer() {
-		let offerRemove = await contract.removeOffer(tokenId, _offerType, TokenType.Dragon);
+		let offerRemove = await contract.removeOffer(tokenId, _offerType, _tokenType);
 		if (offerRemove.blockHash) {
 			dispatch('offerRemoved', {
 				name: 'offerRemoved',
-				offerType : _offerType 
+				offerType: _offerType
 			});
 		}
 	}
@@ -34,7 +35,7 @@
 	async function modifyOffer() {
 		let Terms;
 		let rent = null;
-		let priceInWei = await getWei(price);	
+		let priceInWei = await getWei(price);
 
 		if (_offerType == OfferType.ForSale) {
 			Terms = saleTerms;
@@ -48,7 +49,7 @@
 			rent = true;
 		}
 
-		let modifying = await contract.modifyOffer(tokenId, _offerType, TokenType.Dragon, Terms);
+		let modifying = await contract.modifyOffer(tokenId, _offerType, _tokenType, Terms);
 
 		if (modifying.blockHash) {
 			let offer = {
@@ -57,11 +58,11 @@
 				rent:
 					rent == true
 						? {
-								price: priceInWei,	
+								price: priceInWei,
 								deposit: Terms.rental.deposit,
 								minDuration: Terms.rental.minDuration
 						  }
-						: null,				
+						: null,
 				tokenId: tokenId,
 				tokenType: TokenType.Dragon
 			};
@@ -78,13 +79,16 @@
 	}
 
 	onMount(async () => {
-		console.log('md' + JSON.stringify(offer))
-		price = await getEth(offer.sellPrice);
-		if (offer.rent) {
-			price = await getEth(offer.rent.price);
-			deposit = await getEth(offer.rent.deposit);
-			duration = parseInt(offer.rent.minDuration) / timeDropdrown.oneDay;
+		if (_offerType == OfferType.ForSale) {
+			price = await getEth(offer.sellPrice);			
+		} else {
+			if (_offerType == OfferType.ForRent) {
+				price = await getEth(offer.rent.price);
+				deposit = await getEth(offer.rent.deposit);
+				duration = parseInt(offer.rent.minDuration) / timeDropdrown.oneDay;
+			}
 		}
+		currentPrice = price
 	});
 </script>
 
@@ -104,7 +108,7 @@
 <div class="cardBody">
 	{#if tap == 1}
 		<p class="bold mb-2 mt-3 f-right">
-			<i class="fab fa-ethereum" /> Current Price : {price}
+			<i class="fab fa-ethereum" /> Current Price : {currentPrice}
 		</p>
 
 		<div class="form-floating mb-3">

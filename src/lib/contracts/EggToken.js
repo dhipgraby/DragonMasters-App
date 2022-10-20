@@ -19,7 +19,7 @@ export class EggContract {
 
         try {
             await this.contract.EggToken.methods.mintGen0EggsTo(this.contract.account,amount).send({}, function (err, txHash) {
-                console.log('awaiting')
+            
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert(txHash, 'success')
@@ -43,7 +43,8 @@ export class EggContract {
                 dadId: eggDetails.dadId,
                 incubation: eggDetails.incubationCompleteAt,
                 laidTime: eggDetails.laidTime,
-                subSpecies:subSpeciesName(eggDetails.subSpecies)
+                subSpecies:subSpeciesName(eggDetails.subSpecies),
+                offer:[]
             }
 
         } catch (err) {
@@ -65,10 +66,10 @@ export class EggContract {
         }
     }
 
-    async getUserEggs(from,to) {
-
+    async getUserEggs(from,to) {        
         let allEggs = await this.getEggIds(from,to)                
         let eggs = []
+        
 
         for (let i = 0; i < allEggs.tokenIds.length; i++) {
             let eggDetails = await this.getEgg(allEggs.tokenIds[i])                                    

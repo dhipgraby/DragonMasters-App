@@ -8,20 +8,19 @@
 	export let offer;
 	export let tokenId;
 	export let formHanlders;
+	export let _tokenType;
 
 	let _offerType = OfferType.NoOffer;
 	let showOptions = true;
 
 	function forSale() {
 		showOptions = false;
-		_offerType = OfferType.ForSale;
-		console.log(_offerType);
+		_offerType = OfferType.ForSale;		
 	}
 
 	function forRent() {
 		showOptions = false;
-		_offerType = OfferType.ForRent;
-		console.log(offer);
+		_offerType = OfferType.ForRent;		
 	}
 </script>
 
@@ -49,9 +48,10 @@
 					{tokenId}
 					{contract}
 					{_offerType}
+					{_tokenType}
 				/>
 			{:else}
-				<CreateOffer on:offerCreated={formHanlders} {tokenId} {contract} {_offerType} />
+				<CreateOffer on:offerCreated={formHanlders} {tokenId} {contract} {_offerType} {_tokenType} />
 			{/if}
 		{/if}
 
@@ -64,13 +64,14 @@
 					{tokenId}
 					{contract}
 					{_offerType}
+					{_tokenType}
 				/>
 			{:else}
-				<CreateOffer on:offerCreated={formHanlders} {tokenId} {contract} {_offerType} />
+				<CreateOffer on:offerCreated={formHanlders} {tokenId} {contract} {_offerType} {_tokenType} />
 			{/if}
 		{/if}
 	{:else}
-		<CreateOffer on:offerCreated={formHanlders} {tokenId} {contract} {_offerType} />
+		<CreateOffer on:offerCreated={formHanlders} {tokenId} {contract} {_offerType} {_tokenType} />
 	{/if}
 {/if}
 

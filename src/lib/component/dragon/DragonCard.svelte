@@ -2,13 +2,13 @@
 	import { onInterval, Maturity, Attributes } from '$lib/helpers/utils.js';
 	import { getImg, iconElement, iconAttr } from '$lib/storage/dragonImg';
 	import ProgressBar from './ProgressBar.svelte';
-	import CircleMenu from '../dragonMenu/CircleMenu.svelte';
-	import '$lib/css/marketplace/dragon.css';
+	import CircleMenu from '../marketplace/CircleMenu.svelte';	
 	import { onMount } from 'svelte';
+	import { TokenType } from '$lib/contracts/Marketplace';
+	import '$lib/css/marketplace/dragon.css';
 
 	export let dragon;
 	export let contract;
-	export let singleApproval;
 	export let checkBtn = true;
 	export let fullEnergy = null;
 	export let callback = null;
@@ -28,18 +28,14 @@
 	let element = iconElement(dragon.subSpecies);
 	let hovering;
 
-	function enter() {
-		hovering = true;
-	}
-
-	function leave() {
-		hovering = false;
-	}
+	const enter = () => hovering = true
+	const leave = () => hovering = false
+	
 </script>
 
 <div on:mouseenter={enter} on:mouseleave={leave} class="card" style="width: 18rem;">
 	<div class="card-header">
-		<CircleMenu {hovering} dragonProps={dragon} {singleApproval} {contract} />
+		<CircleMenu {hovering} tokenProps={dragon} {contract} _tokenType={TokenType.Dragon} />
 
 		<img src={img} alt="dragon" />
 		<!-- ELEMENT -->

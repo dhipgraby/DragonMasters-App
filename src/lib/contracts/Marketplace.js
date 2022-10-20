@@ -1,7 +1,11 @@
 import { setAlert } from "$lib/storage/alerts";
-import { dragonsForSale } from "$lib/storage/marketplace";
-import { dragonApproval, userDragons } from '$lib/storage/dragon'
+import { dragonsForSale,eggsForSale } from "$lib/storage/marketplace";
+import { subSpeciesName } from "$lib/helpers/utils"
+import { userDragons } from '$lib/storage/dragon'
+import { userEggs } from '$lib/storage/eggs'
 import { DragonContract } from '$lib/contracts/DragonToken';
+import { EggContract } from '$lib/contracts/EggToken';
+import { MarketApproval } from '$lib/contracts/MarketApproval';
 import { contracts } from "./contracts";
 import { get } from 'svelte/store';
 
@@ -12,7 +16,6 @@ const rentMinTime = '2419200' //seconds: 2419200 == 4 weeks
 
 export const TokenType = { Unknown: 0, Dna: 1, Egg: 2, Dragon: 3 }
 export const OfferType = { NoOffer: 0, ForSale: 1, ForRent: 2, ForSaleOrent: 3 }
-
 export const rentTerms = {
     price: rentPriceInWei,
     rental: {
@@ -20,7 +23,6 @@ export const rentTerms = {
         minDuration: rentMinTime
     }
 }
-
 export const saleTerms = {
     price: salePriceInWei,
     rental: {
@@ -29,13 +31,15 @@ export const saleTerms = {
     }
 }
 
-export class MarketplaceContract {
+export class MarketplaceContract extends MarketApproval {
     constructor() {
+        super()
         this.contract
-        this.marketplace
+        this.marketplace        
         return (async () => {
             this.contract = await contracts();
             this.dragonInterface = await new DragonContract()
+            this.eggInterface = await new EggContract()
             return this;
         })();
     }
@@ -117,30 +121,37 @@ export class MarketplaceContract {
         //Collecting all offers and details 
         let allOffers = await this.getOffered(from, to, _offerType, _tokenType)
         let tokenIds = allOffers.map((el) => { return el.tokenId });
-        let dragons = []
+        let assets = []
 
         for (let i = 0; i < tokenIds.length; i++) {
-            let dragonDetails = await this.dragonInterface.getDragon(tokenIds[i])
-            dragonDetails['dna'] = await this.dragonInterface.getDna(dragonDetails.dnaId)
-            dragons.push(dragonDetails)
+            let assetsDetails
+            if(_tokenType == TokenType.Dragon){                
+                assetsDetails = await this.getDragon(tokenIds[i])
+                assetsDetails['dna'] = await this.getDna(assetsDetails.dnaId)
+            } else {
+                assetsDetails = await this.getEgg(tokenIds[i])
+            }            
+            assets.push(assetsDetails)
         }
 
         let offerName = (_offerType == OfferType.ForSale) ? 'sellOffer' : 'rentOffer';
-        let dragonOffers = dragons.map(el => {
+        let offers = assets.map(el => {
             let TID = el.tokenId
-            if (tokenIds.includes(TID)) {                    
+            if (tokenIds.includes(TID)) {
                 el[offerName] = allOffers.find(function (offer) {
                     return offer.tokenId === TID;
                 });
             }
             return el
         })
-        dragonOffers['totalOffers'] = allOffers.totalOffers
-        dragonsForSale.set(dragonOffers)        
-        return dragonOffers
-
+        offers['totalOffers'] = allOffers.totalOffers
+        if(_tokenType == TokenType.Dragon){
+            dragonsForSale.set(offers)
+        } else {
+            eggsForSale.set(offers)
+        }              
+        return offers
     }
-
 
     async getOffer(
         tokenId,
@@ -151,8 +162,8 @@ export class MarketplaceContract {
             let offer = await this.contract.Marketplace.methods.getOffer(
                 tokenId,
                 tokenType
-            ).call()    
-            
+            ).call()
+
             let rental = {
                 price: offer.terms.rent.price,
                 deposit: offer.terms.rent.rental.deposit,
@@ -235,11 +246,12 @@ export class MarketplaceContract {
                 offers.push(currentOffer)
             }
 
-            //ITS ONLY UPDATES THE OFFER OF EXISTING DRAGON TOKEN ON STORAGE
+            //ITS ONLY UPDATES THE OFFER OF EXISTING TOKEN TYPE ON STORAGE
             if (ownAccount == true) {
-                let dragons = get(userDragons)
+                
+                let assets = (_tokenType == TokenType.Dragon) ? get(userDragons) :  get(userEggs)
                 let offerName = (_offerType == OfferType.ForSale) ? 'sellOffer' : 'rentOffer';
-                let dragonOffers = dragons.map(el => {
+                let assetOffers = assets.map(el => {
                     let TID = el.tokenId
                     if (tokenIds.includes(TID)) {
                         if (el.offer == undefined) el.offer = []
@@ -249,7 +261,15 @@ export class MarketplaceContract {
                     }
                     return el
                 })
-                userDragons.set(dragonOffers)                
+
+                switch(_tokenType){
+                    case TokenType.Dragon :
+                    userDragons.set(assetOffers)    
+                    break;    
+                    case TokenType.Egg :
+                    userEggs.set(assetOffers)    
+                    break;    
+                }                
             }
 
             if (alert == true) setAlert('You have a total of ' + ids.totalOffered + ' offers.<p class="bold m-0">Token Ids: ' + tokenIds + '</p>', 'success')
@@ -323,136 +343,71 @@ export class MarketplaceContract {
             console.log("Error at: removeAllOffers " + err)
         }
     }
-    // APPROVAL FUNCTIONS
-    async approveToken(tokenId) {
+
+    async getDragon(dragonId, alert = false) {
+        
         try {
-            let dragonsIds = await this.contract.DragonToken.methods.approve(
-                this.contract.address.Marketplace,
-                tokenId
-            ).send({}, function (err, txHash) {
-                if (err) setAlert(err, 'warning')
-                else {
-                    setAlert('Token ' + tokenId + ' approved', 'success')
-                    return true
-                }
-            })
-
-            return dragonsIds
-        } catch (err) {
-            setAlert('ApproveToken error ', 'warning')
-            console.log('Error at: approveToken ' + err)
-            return false;
-        }
-    }
-
-    async revokeToken(tokenId) {
-        try {
-            let dragonsIds = await this.contract.DragonToken.methods.approve(
-                "0x0000000000000000000000000000000000000000",
-                tokenId
-            ).send({}, function (err, txHash) {
-                if (err) setAlert(err, 'warning')
-                else {
-                    setAlert('Token ' + tokenId + ' revoked', 'success')
-                    return true
-                }
-            })
-
-            return dragonsIds
-        } catch (err) {
-            setAlert('revokeToken error ', 'warning')
-            console.log('Error at: revokeToken ' + err)
-            return false;
-        }
-    }
-
-    async approveForAll() {
-        try {
-            let dragonsIds = await this.contract.DragonToken.methods.setApprovalForAll(
-                this.contract.address.Marketplace,
-                true
-            ).send({}, function (err, txHash) {
-                if (err) setAlert(err, 'warning')
-                else {
-                    dragonApproval.set(true)
-                    setAlert('Maketplace approved for all', 'success')
-                    return true
-                }
-            })
-
-            return dragonsIds
-        } catch (err) {
-            setAlert('setApprovalForAll error ', 'warning')
-            console.log('Error at: setApprovalForAll ' + err)
-            return false
-        }
-    }
-
-    async removeApproveForAll() {
-        try {
-            let dragonsIds = await this.contract.DragonToken.methods.setApprovalForAll(
-                this.contract.address.Marketplace,
-                false
-            ).send({}, function (err, txHash) {
-                if (err) setAlert(err, 'warning')
-                else {
-                    dragonApproval.set(false)
-                    setAlert('Maketplace approved for all removed!', 'success')
-                    return txHash
-                }
-            })
-
-            return dragonsIds
-        } catch (err) {
-            setAlert('setApprovalForAll error ', 'warning')
-            console.log('Error at: setApprovalForAll ' + err)
-        }
-    }
-
-    async getApproved(tokenId, msg = false) {
-
-        let isApproved
-        const contractAddress = this.contract.address.Marketplace
-
-        try {
-            await this.contract.DragonToken.methods.getApproved(tokenId).call({}, (err, approved) => {
-
-                if (err) console.log(err)
-                if (contractAddress == approved) {
-
-                    if (msg == true) setAlert(tokenId + ' is approved', 'success')
-                    isApproved = true;
-                } else {
-                    if (msg == true) setAlert(tokenId + ' is not approved', 'warning')
-                    isApproved = false
-                }
-
-            })
-        }
-        catch (err) {
-            console.log("Error from singleApprove(): " + err)
-        }
-        return isApproved
-    }
-
-    async isApprovedForAll(msg = false) {
-
-        try {
-            const isMarketplaceAnOperator = await this.contract.DragonToken.methods.isApprovedForAll(this.contract.account, this.contract.address.Marketplace).call()
-
-            if (isMarketplaceAnOperator == true) {
-                dragonApproval.set(true)
-                if (msg == true) setAlert('This account is Aprrove fro All', 'success')
-            } else {
-                if (msg == true) setAlert('Not approve for All', 'warning')
+            let dragonDetails = await this.contract.DragonToken.methods.getDragon(dragonId).call()            
+            const toNumbers2D = arr => arr.map(arr => arr.map(Number));
+            dragonDetails = {
+                ...dragonDetails[0], skills: toNumbers2D(dragonDetails[1])
             }
-            return isMarketplaceAnOperator
-        } catch (error) {
-            setAlert('Contract error, please check metamask account and connection', 'warning')
+
+            let dragon = {
+                tokenId: dragonId,
+                dnaId: dragonDetails.dnaId,
+                subSpecies: subSpeciesName(dragonDetails.subSpecies),
+                fullEnergyAt: dragonDetails.fullEnergyAt,
+                ageGroup: dragonDetails.age.group,
+                birthTime: dragonDetails.age.birthTime,
+                maturesAt: dragonDetails.age.maturesAt,
+                mumId: 0,
+                dadId: 0,
+                skills: dragonDetails.skills,
+                attributes: dragonDetails.attributes,             
+            }
+
+            if (alert == true) setAlert('Dragon Details: '+ JSON.stringify(dragon), 'success')
+
+            return dragon
+
+        } catch (err) {
+            setAlert('Error getting this Dragon id ', 'warning')
+            console.log("Error at: getDragon" + err)
         }
     }
 
+    async getDna(dnaId) {
+        try {
+            let dna = await this.contract.DnaToken.methods.getDna(dnaId).call()
+            return dna
 
+        } catch (err) {
+            let errMsg = getErrors('getDna', err)
+            console.log("Error at: getDragon" + errMsg)
+        }
+    }
+
+    async getEgg(eggId,message = false) {
+
+        try {
+            let eggDetails = await this.contract.EggToken.methods.getEgg(eggId).call()
+            
+            if(message == true) setAlert(eggDetails,'success')
+            return {
+                tokenId: eggId,
+                mumId: eggDetails.mumId,
+                dadId: eggDetails.dadId,
+                incubation: eggDetails.incubationCompleteAt,
+                laidTime: eggDetails.laidTime,
+                subSpecies:subSpeciesName(eggDetails.subSpecies),                
+            }
+
+        } catch (err) {
+            setAlert('Error getting this egg id ', 'warning')
+            console.log("Error at: cgetEgg" + err)
+        }
+    }    
 }
 
 

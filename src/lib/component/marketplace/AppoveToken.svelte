@@ -5,9 +5,10 @@
 
 	export let tokenId;
 	export let contract;
+	export let _tokenType;
 
 	async function singleApprove() {
-		let approval = await contract.approveToken(tokenId);
+		let approval = await contract.approveToken(tokenId,_tokenType);
 		console.log(approval);
 		if (approval.blockHash) {
 			dispatch('approved', {
@@ -17,7 +18,7 @@
 	}
 
 	async function approveForAll() {
-		let approval = await contract.approveForAll(tokenId);
+		let approval = await contract.approveForAll(_tokenType);
 		console.log(approval)
 		if (approval.blockHash) {
 			dispatch('approved', {

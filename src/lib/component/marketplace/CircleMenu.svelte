@@ -1,12 +1,12 @@
 <script>
-	import '/static/css/Assets/CircleMenu.css'
 	import { onMount } from 'svelte';
 	import SellOption from './SellOption.svelte';
+	import '/static/css/Assets/CircleMenu.css'
 
-	export let dragonProps;
+	export let tokenProps;
 	export let contract
-	export let singleApproval
 	export let hovering;	
+	export let _tokenType
 
 	let active = false;
 	let openModal;
@@ -40,7 +40,7 @@
 	<!-- content here -->
 
 	<div class={active == true ? 'd-block' : 'd-hide'}>
-		<a href="dragon/{dragonProps.tokenId}">
+		<a href="dragon/{tokenProps.tokenId}">
 			<div
 				class="menu firstItem"
 				align="center"
@@ -64,4 +64,4 @@
 	</div>
 </div>
 
-<SellOption bind:this={modaComponent} {dragonProps} {singleApproval} {contract} {doPromise} />
+<SellOption bind:this={modaComponent} {tokenProps} {contract} {doPromise} {_tokenType} />
