@@ -1,17 +1,17 @@
 <script>
 	import { onMount } from 'svelte';
-	import ProgressBar from './ProgressBar.svelte';
 	import { Maturity } from '$lib/helpers/utils.js';
+	import ProgressBar from './ProgressBar.svelte';
 
-    export let contract
-    export let tokenId    
-    export let ageGroup
+	export let contract;
+	export let tokenId;
+	export let ageGroup;
 
 	let maturity;
 	let energy;
 	let raiseDisabled = true;
 
-	onMount(async () => {		
+	onMount(async () => {
 		checkEnergy();
 		checkMaturity();
 	});
@@ -50,12 +50,11 @@
 			on:click={() => {
 				raiseDragon();
 			}}
-			emitEvent={true}
-			eventName={'isReady'}
-			on:isReady={readyToRaise}
 			class="btn btn-yellow mt-3"
-			disabled={raiseDisabled}>Raise to Adult</button
+			disabled={raiseDisabled}
 		>
+			Raise to Adult
+		</button>
 	{/if}
 
 	{#if energy > 0}

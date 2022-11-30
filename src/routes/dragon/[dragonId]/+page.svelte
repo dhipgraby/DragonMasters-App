@@ -11,13 +11,11 @@
 	let dragon = [];
 	let promise
 	
-
 	onMount(async () => {		
 		contract = await new DragonContract();		
 		dragon = await contract.getDragon(dragonId);
 		doPromise = true
 	});
-
 
 	async function updateDragon() {
 		dragon = await contract.getDragon(dragonId);
@@ -38,7 +36,6 @@
 	<title>Cave - Dragon ID - {dragonId}</title>
 </svelte:head>
 <div class="container">
-
 
 {#if doPromise == true}
 	{#await promise}

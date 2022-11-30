@@ -11,7 +11,6 @@
 
 	let percentTimer = timer;
 	let secondsLeft = timer;
-
 	let secondsUp = 0;
 
 	const percent = readable(percentTimer, function start(set) {

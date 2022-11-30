@@ -1,0 +1,1 @@
+ganache -h 127.0.0.1 -p 8545 -m "quick brown fox jumped over the lazy dog" -f --miner.timestampIncrement 13 --database.dbPath C:\wamp64\www\dragonfork
