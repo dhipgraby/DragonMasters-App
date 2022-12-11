@@ -37,7 +37,7 @@ export class DragonContract {
             let dragon = {
                 tokenId: dragonId,
                 dnaId: dragonDetails.dnaId,
-                subSpecies: subSpeciesName(dragonDetails.subSpecies),
+                subSpecies: subSpeciesName(dragonDetails.species),
                 fullEnergyAt: dragonDetails.fullEnergyAt,
                 ageGroup: dragonDetails.age.group,
                 birthTime: dragonDetails.age.birthTime,

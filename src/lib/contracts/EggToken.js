@@ -1,10 +1,9 @@
 // @ts-nocheck
 import { setAlert } from "$lib/storage/alerts";
 import { userEggs } from "$lib/storage/eggs";
-import { subSpeciesName } from "$lib/helpers/utils"
+import { subSpeciesName,EggSize } from "$lib/helpers/utils"
 import { contracts } from "./contracts";
 import { getErrors } from "./errorHandling";
-
 
 export class EggContract {
     constructor() {
@@ -18,7 +17,7 @@ export class EggContract {
     async mintGen0Egg(amount) {
 
         try {
-            await this.contract.EggToken.methods.mintGen0EggsTo(this.contract.account,amount).send({}, function (err, txHash) {
+            await this.contract.EggToken.methods.mintGen0EggsTo(this.contract.account,amount,EggSize.Medium).send({}, function (err, txHash) {
             
                 if (err) setAlert(err, 'warning')
                 else {
@@ -39,11 +38,12 @@ export class EggContract {
             if(message == true) setAlert(eggDetails,'success')
             return {
                 tokenId: eggId,
+                eggSize:eggDetails.size,
                 mumId: eggDetails.mumId,
                 dadId: eggDetails.dadId,
                 incubation: eggDetails.incubationCompleteAt,
                 laidTime: eggDetails.laidTime,
-                subSpecies:subSpeciesName(eggDetails.subSpecies),
+                subSpecies:subSpeciesName(eggDetails.species),
                 offer:[]
             }
 

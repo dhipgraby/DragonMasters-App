@@ -62,9 +62,9 @@ export const contractsAbi = {
         },
         {
           "indexed": false,
-          "internalType": "address",
-          "name": "owner",
-          "type": "address"
+          "internalType": "address[]",
+          "name": "owners",
+          "type": "address[]"
         }
       ],
       "name": "EggIncubationStarted",
@@ -106,12 +106,25 @@ export const contractsAbi = {
         },
         {
           "indexed": false,
-          "internalType": "address",
-          "name": "owner",
-          "type": "address"
+          "internalType": "address[]",
+          "name": "owners",
+          "type": "address[]"
         }
       ],
       "name": "Hatched",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "version",
+          "type": "uint8"
+        }
+      ],
+      "name": "Initialized",
       "type": "event"
     },
     {
@@ -185,6 +198,76 @@ export const contractsAbi = {
       "type": "event"
     },
     {
+      "inputs": [],
+      "name": "_BATCH_HATCH_LIMIT",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "_BATCH_INCUBATE_LIMIT",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "_BATCH_MINT_LIMIT",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "_INCUBATION_DURATION",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "_MAX_PAGE_RESULTS",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
       "inputs": [
         {
           "internalType": "address",
@@ -231,6 +314,34 @@ export const contractsAbi = {
         }
       ],
       "name": "getApproved",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "getLoanBook",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "getMarketplace",
       "outputs": [
         {
           "internalType": "address",
@@ -378,7 +489,7 @@ export const contractsAbi = {
         },
         {
           "internalType": "bytes",
-          "name": "_data",
+          "name": "data",
           "type": "bytes"
         }
       ],
@@ -401,6 +512,32 @@ export const contractsAbi = {
         }
       ],
       "name": "setApprovalForAll",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "loanBookContract",
+          "type": "address"
+        }
+      ],
+      "name": "setLoanBook",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "marketContract",
+          "type": "address"
+        }
+      ],
+      "name": "setMarketplace",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -570,20 +707,7 @@ export const contractsAbi = {
           "type": "address"
         }
       ],
-      "name": "setSpecies",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "marketContract",
-          "type": "address"
-        }
-      ],
-      "name": "setMarketplace",
+      "name": "setRace",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -599,6 +723,11 @@ export const contractsAbi = {
           "internalType": "uint256",
           "name": "amount",
           "type": "uint256"
+        },
+        {
+          "internalType": "enum EggSize",
+          "name": "size",
+          "type": "uint8"
         }
       ],
       "name": "mintGen0EggsTo",
@@ -642,8 +771,8 @@ export const contractsAbi = {
         {
           "components": [
             {
-              "internalType": "enum SubSpecies",
-              "name": "subSpecies",
+              "internalType": "enum Species",
+              "name": "species",
               "type": "uint8"
             },
             {
@@ -700,7 +829,7 @@ export const contractsAbi = {
     },
     {
       "inputs": [],
-      "name": "getSpecies",
+      "name": "getRace",
       "outputs": [
         {
           "internalType": "address",
@@ -753,9 +882,19 @@ export const contractsAbi = {
         {
           "components": [
             {
-              "internalType": "enum SubSpecies",
-              "name": "subSpecies",
+              "internalType": "enum Species",
+              "name": "species",
               "type": "uint8"
+            },
+            {
+              "internalType": "enum EggSize",
+              "name": "size",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "tokenId",
+              "type": "uint256"
             },
             {
               "internalType": "uint256",
@@ -1006,8 +1145,8 @@ export const contractsAbi = {
         {
           "components": [
             {
-              "internalType": "enum SubSpecies",
-              "name": "subSpecies",
+              "internalType": "enum Species",
+              "name": "species",
               "type": "uint8"
             },
             {
@@ -1033,6 +1172,19 @@ export const contractsAbi = {
         }
       ],
       "name": "EggsLaid",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "version",
+          "type": "uint8"
+        }
+      ],
+      "name": "Initialized",
       "type": "event"
     },
     {
@@ -1106,6 +1258,76 @@ export const contractsAbi = {
       "type": "event"
     },
     {
+      "inputs": [],
+      "name": "_BATCH_MATING_PAIRS_LIMIT",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "_BATCH_RAISE_LIMIT",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "_GROWTH_BASE_TIME",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "_MAX_PAGE_RESULTS",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "_RECOVERY_TIME",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
       "inputs": [
         {
           "internalType": "address",
@@ -1152,6 +1374,20 @@ export const contractsAbi = {
         }
       ],
       "name": "getApproved",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "getLoanBook",
       "outputs": [
         {
           "internalType": "address",
@@ -1333,7 +1569,7 @@ export const contractsAbi = {
         },
         {
           "internalType": "bytes",
-          "name": "_data",
+          "name": "data",
           "type": "bytes"
         }
       ],
@@ -1356,6 +1592,19 @@ export const contractsAbi = {
         }
       ],
       "name": "setApprovalForAll",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "loanBookContract",
+          "type": "address"
+        }
+      ],
+      "name": "setLoanBook",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -1520,16 +1769,26 @@ export const contractsAbi = {
     {
       "inputs": [
         {
-          "internalType": "address",
-          "name": "owner",
-          "type": "address"
+          "internalType": "address[]",
+          "name": "owners",
+          "type": "address[]"
         },
         {
           "components": [
             {
-              "internalType": "enum SubSpecies",
-              "name": "subSpecies",
+              "internalType": "enum Species",
+              "name": "species",
               "type": "uint8"
+            },
+            {
+              "internalType": "enum EggSize",
+              "name": "size",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "tokenId",
+              "type": "uint256"
             },
             {
               "internalType": "uint256",
@@ -1662,8 +1921,8 @@ export const contractsAbi = {
         {
           "components": [
             {
-              "internalType": "enum SubSpecies",
-              "name": "subSpecies",
+              "internalType": "enum Species",
+              "name": "species",
               "type": "uint8"
             },
             {
@@ -1711,6 +1970,11 @@ export const contractsAbi = {
             {
               "internalType": "uint256",
               "name": "dadId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "fromEggId",
               "type": "uint256"
             },
             {
@@ -1864,19 +2128,6 @@ export const contractsAbi = {
       "constant": true
     },
     {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "loanBookContract",
-          "type": "address"
-        }
-      ],
-      "name": "setLoanBook",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
       "inputs": [],
       "name": "pause",
       "outputs": [],
@@ -1973,20 +2224,6 @@ export const contractsAbi = {
       "constant": true
     },
     {
-      "inputs": [],
-      "name": "getLoanBook",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
       "inputs": [
         {
           "internalType": "bytes4",
@@ -2064,14 +2301,14 @@ export const contractsAbi = {
         {
           "indexed": false,
           "internalType": "address",
-          "name": "bySpecies",
+          "name": "byRace",
           "type": "address"
         },
         {
           "components": [
             {
-              "internalType": "enum SubSpecies",
-              "name": "subSpecies",
+              "internalType": "enum Species",
+              "name": "species",
               "type": "uint8"
             },
             {
@@ -2116,6 +2353,19 @@ export const contractsAbi = {
         }
       ],
       "name": "DnaMintedByTESTHELP",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "version",
+          "type": "uint8"
+        }
+      ],
+      "name": "Initialized",
       "type": "event"
     },
     {
@@ -2187,6 +2437,62 @@ export const contractsAbi = {
       ],
       "name": "Unpaused",
       "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "_BATCH_DNA_MINT_LIMIT",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "_FERTILITY_BASE_PERCENTAGE",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "_MINIMUM_FERTILITY_PERCENTAGE",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "_NUM_GENE_DIGITS",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -2382,7 +2688,7 @@ export const contractsAbi = {
         },
         {
           "internalType": "bytes",
-          "name": "_data",
+          "name": "data",
           "type": "bytes"
         }
       ],
@@ -2564,7 +2870,7 @@ export const contractsAbi = {
           "type": "address"
         }
       ],
-      "name": "setSpecies",
+      "name": "setRace",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -2574,8 +2880,8 @@ export const contractsAbi = {
         {
           "components": [
             {
-              "internalType": "enum SubSpecies",
-              "name": "subSpecies",
+              "internalType": "enum Species",
+              "name": "species",
               "type": "uint8"
             },
             {
@@ -2627,8 +2933,8 @@ export const contractsAbi = {
         {
           "components": [
             {
-              "internalType": "enum SubSpecies",
-              "name": "subSpecies",
+              "internalType": "enum Species",
+              "name": "species",
               "type": "uint8"
             },
             {
@@ -2671,8 +2977,8 @@ export const contractsAbi = {
         {
           "components": [
             {
-              "internalType": "enum SubSpecies",
-              "name": "subSpecies",
+              "internalType": "enum Species",
+              "name": "species",
               "type": "uint8"
             },
             {
@@ -2709,7 +3015,7 @@ export const contractsAbi = {
     },
     {
       "inputs": [],
-      "name": "getSpecies",
+      "name": "getRace",
       "outputs": [
         {
           "internalType": "address",
@@ -2734,8 +3040,8 @@ export const contractsAbi = {
         {
           "components": [
             {
-              "internalType": "enum SubSpecies",
-              "name": "subSpecies",
+              "internalType": "enum Species",
+              "name": "species",
               "type": "uint8"
             },
             {
@@ -2776,10 +3082,10 @@ export const contractsAbi = {
           "type": "uint256"
         }
       ],
-      "name": "getSubSpecies",
+      "name": "getSpecies",
       "outputs": [
         {
-          "internalType": "enum SubSpecies",
+          "internalType": "enum Species",
           "name": "",
           "type": "uint8"
         }
@@ -2869,6 +3175,19 @@ export const contractsAbi = {
     }
   ],
   Marketplace: [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "version",
+          "type": "uint8"
+        }
+      ],
+      "name": "Initialized",
+      "type": "event"
+    },
     {
       "anonymous": false,
       "inputs": [
@@ -3156,6 +3475,48 @@ export const contractsAbi = {
       ],
       "name": "Unpaused",
       "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "_MAX_PAGE_RESULTS",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "_MIN_RENTAL_DURATION_SECONDS",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "_MIN_RENTAL_NONZERO_DEPOSIT_WEI",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -3969,6 +4330,112 @@ export const contractsAbi = {
       "anonymous": false,
       "inputs": [
         {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "version",
+          "type": "uint8"
+        }
+      ],
+      "name": "Initialized",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "rentee",
+          "type": "address"
+        },
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "tId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "enum TokenType",
+              "name": "tType",
+              "type": "uint8"
+            }
+          ],
+          "indexed": false,
+          "internalType": "struct ILoanBook.Token[]",
+          "name": "tokens",
+          "type": "tuple[]"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "incomeWei",
+          "type": "uint256"
+        }
+      ],
+      "name": "LBTxRentalIncomeCollected",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "ethDeposit",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "enum TokenType",
+          "name": "tokenType",
+          "type": "uint8"
+        }
+      ],
+      "name": "LbTxDepositLodged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "depositWei",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "incomeWei",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "enum TokenType",
+          "name": "tokenType",
+          "type": "uint8"
+        }
+      ],
+      "name": "LbTxLoanReturned",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
           "indexed": true,
           "internalType": "address",
           "name": "previousOwner",
@@ -4009,6 +4476,48 @@ export const contractsAbi = {
       ],
       "name": "Unpaused",
       "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "_MAX_PAGE_RESULTS",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "_min_loan_nonzero_deposit_wei",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "_min_loan_seconds_if_deposit",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -4059,7 +4568,28 @@ export const contractsAbi = {
       "type": "function"
     },
     {
-      "inputs": [],
+      "stateMutability": "payable",
+      "type": "receive",
+      "payable": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address payable",
+          "name": "cEthContract",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "min_loan_nonzero_deposit_wei",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "min_loan_seconds_if_deposit",
+          "type": "uint256"
+        }
+      ],
       "name": "init_LoanBook",
       "outputs": [],
       "stateMutability": "nonpayable",
@@ -4115,7 +4645,7 @@ export const contractsAbi = {
         },
         {
           "internalType": "bytes",
-          "name": "loanData",
+          "name": "loan",
           "type": "bytes"
         }
       ],
@@ -4134,7 +4664,64 @@ export const contractsAbi = {
       "inputs": [
         {
           "internalType": "address",
-          "name": "to",
+          "name": "borrower",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "lender",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum TokenType",
+          "name": "tokenType",
+          "type": "uint8"
+        }
+      ],
+      "name": "lodgeDeposit",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function",
+      "payable": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "ofBorrower",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "fromTokenIds",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "toTokenIds",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "enum TokenType",
+          "name": "toTokenType",
+          "type": "uint8"
+        }
+      ],
+      "name": "swapAnyLoanTokens",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "requestor",
           "type": "address"
         },
         {
@@ -4150,9 +4737,190 @@ export const contractsAbi = {
       ],
       "name": "returnLoan",
       "outputs": [],
-      "stateMutability": "payable",
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "tokenIds",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "enum TokenType[]",
+          "name": "tokenTypes",
+          "type": "uint8[]"
+        }
+      ],
+      "name": "collectRentalIncome",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum TokenType[]",
+          "name": "tokenTypes",
+          "type": "uint8[]"
+        }
+      ],
+      "name": "collectRentalIncomeOfTypes",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "collectRentalIncomeOfAll",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "tokenIds",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "enum TokenType[]",
+          "name": "tokenTypes",
+          "type": "uint8[]"
+        }
+      ],
+      "name": "checkRentalIncome",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "weiAccrued",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function",
-      "payable": true
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum TokenType[]",
+          "name": "tokenTypes",
+          "type": "uint8[]"
+        }
+      ],
+      "name": "checkRentalIncomeOfTypes",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "weiAccrued",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "checkRentalIncomeOfAll",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "weiAccrued",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "candidate",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum TokenType",
+          "name": "tokenType",
+          "type": "uint8"
+        }
+      ],
+      "name": "isBorrower",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "candidate",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "isBorrower",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "candidate",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum TokenType",
+          "name": "tokenType",
+          "type": "uint8"
+        }
+      ],
+      "name": "isLender",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -4273,66 +5041,6 @@ export const contractsAbi = {
           "internalType": "uint256",
           "name": "",
           "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "candidate",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "tokenId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "enum TokenType",
-          "name": "tokenType",
-          "type": "uint8"
-        }
-      ],
-      "name": "isBorrower",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "candidate",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "tokenId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "enum TokenType",
-          "name": "tokenType",
-          "type": "uint8"
-        }
-      ],
-      "name": "isLender",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
         }
       ],
       "stateMutability": "view",
@@ -4551,6 +5259,84 @@ export const contractsAbi = {
         {
           "internalType": "uint256",
           "name": "totalOnLoan",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "ethTotalDeposited",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "weiAmount",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "cEthTotalHeld",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "cEthAmount",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum TokenType",
+          "name": "tokenType",
+          "type": "uint8"
+        }
+      ],
+      "name": "ethDeposited",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "weiAmount",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum TokenType",
+          "name": "tokenType",
+          "type": "uint8"
+        }
+      ],
+      "name": "cEthHeld",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "cEthAmount",
           "type": "uint256"
         }
       ],

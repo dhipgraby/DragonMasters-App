@@ -10,10 +10,10 @@ export function onInterval(callback, milliseconds) {
 
 export const Maturity = {
     Hatchling: 0,
-    Adolescent: 1,
-    YoungAdult: 2,
-    MatureAdult: 3,
-    Senior: 4,
+    Juvenile: 1,
+    Adult: 2,
+    Veteran: 3,
+    Elder: 4,
     Ancient: 5,
     Immortal: 6
 }
@@ -26,27 +26,38 @@ const SubSpecies = {
 }
 
 export const Attributes = {
-    Strength:0,
-    Endurance:1,
-    Agility:2,
-    Charisma:3,
-    Intelligence:4,
-    Wisdom:5
+    Strength: 0,
+    Endurance: 1,
+    Agility: 2,
+    Charisma: 3,
+    Intelligence: 4,
+    Wisdom: 5
 }
 
 export const Skill = {
-    Attack:0,
-    Defend:1,
-    Run:2,
-    Climb:3,
-    Jump:4,
-    Fly:5,
-    Swim:6,
-    Dig:7
+    Attack: 0,
+    Defend: 1,
+    Run: 2,
+    Climb: 3,
+    Jump: 4,
+    Fly: 5,
+    Swim: 6,
+    Dig: 7
+}
+
+export const EggSize = {
+    Tiny: 0,
+    Small: 1,
+    Medium: 2,
+    Large: 3,
+    Huge: 4,
+    Giant: 5,
+    Architectural: 6
 }
 
 const dayInSeconds = 86400
 
+Object.freeze(EggSize)
 Object.freeze(Maturity)
 Object.freeze(SubSpecies)
 Object.freeze(Attributes)
@@ -84,26 +95,26 @@ export function shortAddr(address) {
 }
 
 //ether to wei
-export const getWei = async (value) => { 
-    if(typeof value != 'string') value = String(value)   
+export const getWei = async (value) => {
+    if (typeof value != 'string') value = String(value)
     let res = await web3.utils.toWei(value)
     return res
 }
 
 //Wei to ether
-export const getEth = async (value) => {    
-    if(typeof value != 'string') value = String(value)
+export const getEth = async (value) => {
+    if (typeof value != 'string') value = String(value)
     let res = await web3.utils.fromWei(value)
     return res
 }
 
-export const timeDropdrown = {    
-    oneDay:dayInSeconds,
-    twoDays:dayInSeconds * 2,
-    threeDays:dayInSeconds * 3,                
-    week:dayInSeconds * 7,
-    twoWeeks:dayInSeconds * 14,
-    month:dayInSeconds * 30,
-    twoMonths:dayInSeconds * 60,
-    oneYear:dayInSeconds * 365
+export const timeDropdrown = {
+    oneDay: dayInSeconds,
+    twoDays: dayInSeconds * 2,
+    threeDays: dayInSeconds * 3,
+    week: dayInSeconds * 7,
+    twoWeeks: dayInSeconds * 14,
+    month: dayInSeconds * 30,
+    twoMonths: dayInSeconds * 60,
+    oneYear: dayInSeconds * 365
 }

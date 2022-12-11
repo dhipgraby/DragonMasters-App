@@ -99,7 +99,7 @@
 				class="btn btn-yellow"
 				disabled={incubating}
 				on:click={() => {
-					if (!incubating) contract.hatch(egg.tokenId);
+					if (!incubating) hatch();
 				}}>Ready to Hatch!</button
 			>
 		{/if}
