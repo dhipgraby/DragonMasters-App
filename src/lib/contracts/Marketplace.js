@@ -122,20 +122,22 @@ export class MarketplaceContract extends MarketApproval {
         let allOffers = await this.getOffered(from, to, _offerType, _tokenType)
         let tokenIds = allOffers.map((el) => { return el.tokenId });
         let assets = []
-
+        
         for (let i = 0; i < tokenIds.length; i++) {
-            let assetsDetails
+            let assetsDetails            
+            
             if(_tokenType == TokenType.Dragon){                
-                assetsDetails = await this.getDragon(tokenIds[i])
+                assetsDetails = await this.getDragon(Number(tokenIds[i]))                            
                 assetsDetails['dna'] = await this.getDna(assetsDetails.dnaId)
             } else {
                 assetsDetails = await this.getEgg(tokenIds[i])
             }            
             assets.push(assetsDetails)
         }
-
+        
         let offerName = (_offerType == OfferType.ForSale) ? 'sellOffer' : 'rentOffer';
         let offers = assets.map(el => {
+            
             let TID = el.tokenId
             if (tokenIds.includes(TID)) {
                 el[offerName] = allOffers.find(function (offer) {
@@ -347,16 +349,17 @@ export class MarketplaceContract extends MarketApproval {
     async getDragon(dragonId, alert = false) {
         
         try {
-            let dragonDetails = await this.contract.DragonToken.methods.getDragon(dragonId).call()            
+            let dragonDetails = await this.contract.DragonToken.methods.getDragon(dragonId).call()        
+            
             const toNumbers2D = arr => arr.map(arr => arr.map(Number));
             dragonDetails = {
                 ...dragonDetails[0], skills: toNumbers2D(dragonDetails[1])
             }
-
+        
             let dragon = {
                 tokenId: dragonId,
                 dnaId: dragonDetails.dnaId,
-                subSpecies: subSpeciesName(dragonDetails.subSpecies),
+                subSpecies: subSpeciesName(dragonDetails.species),
                 fullEnergyAt: dragonDetails.fullEnergyAt,
                 ageGroup: dragonDetails.age.group,
                 birthTime: dragonDetails.age.birthTime,
@@ -366,9 +369,9 @@ export class MarketplaceContract extends MarketApproval {
                 skills: dragonDetails.skills,
                 attributes: dragonDetails.attributes,             
             }
-
+            
             if (alert == true) setAlert('Dragon Details: '+ JSON.stringify(dragon), 'success')
-
+             
             return dragon
 
         } catch (err) {
@@ -400,7 +403,7 @@ export class MarketplaceContract extends MarketApproval {
                 dadId: eggDetails.dadId,
                 incubation: eggDetails.incubationCompleteAt,
                 laidTime: eggDetails.laidTime,
-                subSpecies:subSpeciesName(eggDetails.subSpecies),                
+                subSpecies:subSpeciesName(eggDetails.species),                
             }
 
         } catch (err) {
