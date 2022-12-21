@@ -11,6 +11,8 @@
     export let account;	
 	export let buy;
     
+	console.log('dragon: ' + JSON.stringify(dragon));
+
 
 	$: _maturity = Object.keys(Maturity)[dragon.ageGroup];
     

@@ -15,8 +15,7 @@
 	let perpage = 10
 	perpage--
 	onMount(async () => {
-		await LoadInterface(0,perpage);		
-		console.log(eggs)
+		await LoadInterface(0,perpage);				
 	});
 </script>
 

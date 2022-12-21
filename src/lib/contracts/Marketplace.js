@@ -138,8 +138,10 @@ export class MarketplaceContract extends MarketApproval {
         let offerName = (_offerType == OfferType.ForSale) ? 'sellOffer' : 'rentOffer';
         let offers = assets.map(el => {
             
-            let TID = el.tokenId
+            let TID = el.tokenId.toString()
+            console.log('Dragon id: ' + JSON.stringify(el));
             if (tokenIds.includes(TID)) {
+                
                 el[offerName] = allOffers.find(function (offer) {
                     return offer.tokenId === TID;
                 });
@@ -354,7 +356,7 @@ export class MarketplaceContract extends MarketApproval {
             const toNumbers2D = arr => arr.map(arr => arr.map(Number));
             dragonDetails = {
                 ...dragonDetails[0], skills: toNumbers2D(dragonDetails[1])
-            }
+            }    
         
             let dragon = {
                 tokenId: dragonId,
