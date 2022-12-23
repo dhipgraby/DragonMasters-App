@@ -13,7 +13,7 @@
 >
 
 <div class="row">
-	<div class="col-sm-4">
+	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid" align="left">
 			<h2>Get Dragon</h2>
 			<div class="mb-3">
@@ -23,7 +23,7 @@
 		</div>
 	</div>
 
-	<div class="col-sm-4">
+	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid" align="left">
 			<h2>Get Relationship</h2>
 			<div class="mb-3">

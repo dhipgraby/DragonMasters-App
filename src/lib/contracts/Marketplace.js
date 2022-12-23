@@ -45,7 +45,6 @@ export class MarketplaceContract extends MarketApproval {
     }
 
     async buyToken(tokenId, tokenType, price) {
-
         try {
             let offer = await this.contract.Marketplace.methods.buy(
                 tokenId,
@@ -53,6 +52,31 @@ export class MarketplaceContract extends MarketApproval {
             ).send({
                 from: this.contract.account,
                 value: price
+            }, function (err, txHash) {
+                if (err) setAlert(err, 'warning')
+                else {
+                    setAlert('Token id: ' + tokenId + ' Bought!', 'success')
+                    return txHash
+                }
+            })
+
+            return offer
+        } catch (err) {
+            setAlert('Buy token error ', 'warning')
+            console.log("Error at: buyToken " + err)
+        }
+    }
+
+    async rentToken(tokenId, tokenType, price,deposit) {
+        const totalAmount = (Number(price) + Number(deposit))
+        console.log('totalAmount: ' + totalAmount);
+        try {
+            let offer = await this.contract.Marketplace.methods.rent(
+                tokenId,
+                tokenType,
+            ).send({
+                from: this.contract.account,
+                value: totalAmount
             }, function (err, txHash) {
                 if (err) setAlert(err, 'warning')
                 else {
@@ -139,7 +163,7 @@ export class MarketplaceContract extends MarketApproval {
         let offers = assets.map(el => {
             
             let TID = el.tokenId.toString()
-            console.log('Dragon id: ' + JSON.stringify(el));
+            
             if (tokenIds.includes(TID)) {
                 
                 el[offerName] = allOffers.find(function (offer) {

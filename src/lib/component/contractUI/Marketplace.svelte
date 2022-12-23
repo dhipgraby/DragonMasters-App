@@ -1,12 +1,17 @@
 <script>
-	import { TokenType, OfferType, rentTerms, saleTerms } from '$lib/contracts/Marketplace';
-	
+	import { TokenType, OfferType, saleTerms } from '$lib/contracts/Marketplace';
+	import { getWei, timeDropdrown } from '$lib/helpers/utils';
+
 	export let contract;
 
 	let offerId,
 		sellId,
 		rentId,
+		rentalId,
 		buyId,
+		rent_price,
+		rent_deposit,
+		rent_duration,
 		removeId,
 		removeRentId,
 		removeAllId,
@@ -16,14 +21,22 @@
 		account,
 		_tokenType;
 
-	function setSellOffer() {	
+	function setSellOffer() {
 		contract.setOffer(sellId, OfferType.ForSale, _tokenType, saleTerms);
 	}
 
-	function setRentOffer() {
-		contract.setOffer(rentId, OfferType.ForRent, TokenType.Dragon, rentTerms);
+	async function setRentOffer() {
+		const rentTerms = {
+			price: await getWei(rent_price),
+			rental: {
+				deposit: await getWei(rent_deposit),
+				minDuration: rent_duration * timeDropdrown.oneDay
+			}
+		};
+		console.log(rentTerms);
+		contract.setOffer(rentId, OfferType.ForRent, _tokenType, rentTerms);
 	}
-	
+
 	function getOffersBy() {
 		contract.getOfferedBy(startIndex, endIndex, _offerType, _tokenType, account, true);
 	}
@@ -33,31 +46,33 @@
 	}
 
 	async function buy() {
-		let offer = await contract.getOffer(buyId, TokenType.Dragon);
-		contract.buyToken(buyId, TokenType.Dragon, offer.sellPrice);
+		let offer = await contract.getOffer(buyId, _tokenType);
+		contract.buyToken(buyId, _tokenType, offer.sellPrice);
+	}
+
+	async function rent() {
+		let offer = await contract.getOffer(rentalId, _tokenType);		
+		contract.rentToken(rentalId, _tokenType, offer.rent.price,offer.rent.deposit);
 	}
 
 	function removeSellOffer() {
-		contract.removeOffer(removeId, OfferType.ForSale, TokenType.Dragon);
+		contract.removeOffer(removeId, OfferType.ForSale, _tokenType);
 	}
 
 	function removeRentOffer() {
-		contract.removeOffer(removeRentId, OfferType.ForRent, TokenType.Dragon);
+		contract.removeOffer(removeRentId, OfferType.ForRent, _tokenType);
 	}
 
 	function removeAllOffers() {
-		contract.removeAllOffers(removeAllId, TokenType.Dragon);
+		contract.removeAllOffers(removeAllId, _tokenType);
 	}
-
 </script>
 
 <h1 class="mb-4">Offers</h1>
-<p>
-	Dragons and Eggs need to grant different approval to operate in the marketplace
-</p>
+<p>Dragons and Eggs need to grant different approval to operate in the marketplace</p>
 <div class="row">
 	<!-- SETTERS -->
-	<div class="col-sm-4">
+	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid">
 			<h2>Set Sell Offer</h2>
 			<div class="mb-3">
@@ -72,22 +87,77 @@
 
 		<div class="grid">
 			<h2>Set Rent Offer</h2>
+			<p class="bold">Token Type</p>
+			<select class="form-select mb-3" bind:value={_tokenType}>
+				<option value={TokenType.Dragon} selected>Dragon</option>
+				<option value={TokenType.Egg}>Egg</option>
+			</select>
 			<div class="mb-3">
+				<p class="bold">Token ID</p>
 				<input type="text" bind:value={rentId} class="form-control" placeholder="Token Id" />
 			</div>
+			<p class="bold">Rental Terms</p>
+			<div class="form-floating mb-3">
+				<input
+					type="number"
+					class="form-control"
+					id="price"
+					placeholder="Price in Eth"
+					bind:value={rent_price}
+				/>
+				<label for="price">Price/Fee (Eth) </label>
+			</div>
+			<div class="form-floating mb-3">
+				<input
+					type="number"
+					class="form-control"
+					id="deposit"
+					placeholder="Amount in Eth"
+					bind:value={rent_deposit}
+				/>
+				<label for="deposit">Returnable Deposit (Eth)</label>
+			</div>
+			<div class="form-floating mb-3">
+				<input
+					type="number"
+					class="form-control"
+					id="duration"
+					placeholder="Time to rent"
+					bind:value={rent_duration}
+				/>
+				<label for="floatingPassword">Minimum duration (seconds)</label>
+			</div>
+
 			<button class="btn btn-dark" on:click={() => setRentOffer()}>SET RENT OFFER</button>
 		</div>
 
 		<div class="grid">
 			<h2>Buy Token</h2>
+			<select class="form-select mb-3" bind:value={_tokenType}>
+				<option value={TokenType.Dragon} selected>Dragon</option>
+				<option value={TokenType.Egg}>Egg</option>
+			</select>
 			<div class="mb-3">
 				<input type="text" bind:value={buyId} class="form-control" placeholder="Token Id" />
 			</div>
 			<button class="btn btn-dark" on:click={() => buy()}>Buy Token</button>
 		</div>
+
+		
+		<div class="grid">
+			<h2>Rent Token</h2>
+			<select class="form-select mb-3" bind:value={_tokenType}>
+				<option value={TokenType.Dragon} selected>Dragon</option>
+				<option value={TokenType.Egg}>Egg</option>
+			</select>
+			<div class="mb-3">
+				<input type="text" bind:value={rentalId} class="form-control" placeholder="Token Id" />
+			</div>
+			<button class="btn btn-dark" on:click={() => rent()}>Rent Token</button>
+		</div>
 	</div>
 	<!-- GETTERS -->
-	<div class="col-sm-4">
+	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid">
 			<h2>Get Offer</h2>
 			<div class="mb-3">
@@ -142,10 +212,15 @@
 		</div>
 	</div>
 
-	<div class="col-sm-4">
+	<div class="col-sm-12 col-md-12 col-xl-4">
 		<!-- REMOVE -->
 		<div class="grid">
 			<h2>Remove All Offers</h2>
+			<p class="bold">Token Type</p>
+			<select class="form-select mb-3" bind:value={_tokenType}>
+				<option value={TokenType.Dragon} selected>Dragon</option>
+				<option value={TokenType.Egg}>Egg</option>
+			</select>
 			<div class="mb-3">
 				<input type="text" bind:value={removeAllId} class="form-control" placeholder="Token Id" />
 			</div>
@@ -154,6 +229,11 @@
 
 		<div class="grid">
 			<h2>Remove Sell Offer</h2>
+			<p class="bold">Token Type</p>
+			<select class="form-select mb-3" bind:value={_tokenType}>
+				<option value={TokenType.Dragon} selected>Dragon</option>
+				<option value={TokenType.Egg}>Egg</option>
+			</select>
 			<div class="mb-3">
 				<input type="text" bind:value={removeId} class="form-control" placeholder="Token Id" />
 			</div>
@@ -162,6 +242,11 @@
 
 		<div class="grid">
 			<h2>Remove Rent Offer</h2>
+			<p class="bold">Token Type</p>
+			<select class="form-select mb-3" bind:value={_tokenType}>
+				<option value={TokenType.Dragon} selected>Dragon</option>
+				<option value={TokenType.Egg}>Egg</option>
+			</select>
 			<div class="mb-3">
 				<input type="text" bind:value={removeRentId} class="form-control" placeholder="Token Id" />
 			</div>

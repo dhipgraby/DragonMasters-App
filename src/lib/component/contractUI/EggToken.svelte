@@ -21,8 +21,8 @@
 
 <div class="row">
 	<!-- MINTING -->
-	<div class="col-md-4">
-		<div class="grid mb-4">
+	<div class="col-sm-12 col-md-12 col-xl-4">
+		<div class="grid">
 			<h2>Mint Eggs</h2>
 			<p>Mint Gen 0 eggs. Mint one or many</p>
 			<div class="mb-3">
@@ -37,8 +37,8 @@
 		</div>
 	</div>
 	<!-- GET EGG -->
-	<div class="col-md-4">
-		<div class="grid mb-4">
+	<div class="col-sm-12 col-md-12 col-xl-4">
+		<div class="grid">
 			<h2>Get Egg</h2>
 			<p>Get Egg details by Id</p>
 			<div class="mb-3">
@@ -51,7 +51,7 @@
 	</div>
 	
 	<!-- INCUBATION -->
-	<div class="col-md-4">
+	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid" align="left">
 			<table class="table table-striped">
 				<tr>

@@ -24,7 +24,7 @@
 </div>
 
 <div class="row">
-	<div class="col-sm-4">
+	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid">
 			<h2>Approve Token</h2>
 			<div class="mb-3">
@@ -42,7 +42,7 @@
 			>
 		</div>
 	</div>
-	<div class="col-sm-4">
+	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid">
 			<h2>Check Single Approval</h2>
 			<div class="mb-3">
@@ -60,8 +60,7 @@
 			>
 		</div>
 	</div>
-
-	<div class="col-sm-4">
+	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid">
 			<h2>Revoke Approve for All</h2>
 			<button on:click={() => contract.removeApproveForAll(_tokenType)} class="btn btn-danger">
