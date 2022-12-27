@@ -13,7 +13,6 @@ export const DragonToken = "0x1f113ef3af96b71F01a7bbA446b41f032f10925d"
 export const DnaToken = "0xDe57d8A8390a82770282518817d0FceECBd44ff6"
 export const LoanBook = "0x5fcccDd512b3e18648F0A85fEAa0e8bdd4826989"
 
-
 export const balances = writable({ contract: 0,user: 0 });
 
 export async function contracts() {
