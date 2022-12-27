@@ -80,7 +80,7 @@ export class MarketplaceContract extends MarketApproval {
             }, function (err, txHash) {
                 if (err) setAlert(err, 'warning')
                 else {
-                    setAlert('Token id: ' + tokenId + ' Bought!', 'success')
+                    setAlert('Token id: ' + tokenId + ' Rented!', 'success')
                     return txHash
                 }
             })

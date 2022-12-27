@@ -4,7 +4,7 @@
 	import Marketplace from './Marketplace.svelte';
 	import Approvals from './Approvals.svelte';
 	import LoanBook from './LoanBook.svelte';
-	import SideMenu from './SideMenu.svelte';
+	import SideMenu from './SideMenu.svelte';	
 	import { EggContract } from '$lib/contracts/EggToken';
 	import { DragonContract } from '$lib/contracts/DragonToken';
 	import { MarketplaceContract } from '$lib/contracts/Marketplace';
@@ -16,7 +16,7 @@
 	let marketplace_contract;
 	let loanbook_contract;
 
-	let show = 3;
+	let show = 4;
 
 	const changeView = (screen) => (show = screen);
 
@@ -24,7 +24,7 @@
 		egg_contract = await new EggContract();
 		dragon_contract = await new DragonContract();
 		loanbook_contract = await new LoanBookContract();
-		marketplace_contract = await new MarketplaceContract();
+		marketplace_contract = await new MarketplaceContract();				
 	});
 </script>
 

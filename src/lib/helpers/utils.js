@@ -1,4 +1,5 @@
 import { onDestroy } from 'svelte';
+import { contractsAbi } from '$lib/contracts/contractsAbi';
 
 export function onInterval(callback, milliseconds) {
     const interval = setInterval(callback, milliseconds);
@@ -118,3 +119,9 @@ export const timeDropdrown = {
     twoMonths: dayInSeconds * 60,
     oneYear: dayInSeconds * 365
 }
+//Get stateMutability from abi solidty contract VIEW OR NonPayable
+export function functionType(contractName){
+    const fType = contractsAbi[contractName].find(element => element.name == "startIncubation").stateMutability;
+    return (fType == "view") ? "call" : "send"
+}
+

@@ -6,6 +6,7 @@
 	let eggId_details;
 	let eggId_hatch;
 	let amountToMint;
+
 </script>
 
 <div class="mb-4">

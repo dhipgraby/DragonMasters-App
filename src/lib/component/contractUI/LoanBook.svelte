@@ -3,7 +3,7 @@
     import Pagination from '$lib/component/pagination/UIpagination.svelte';
 	export let contract;
 
-    let tokenType = TokenType.Dragon
+    let _tokenType = TokenType.Dragon
     let startIndex = 1;
     let endIndex = 10;
     let borrowerIndex = 1;
@@ -18,31 +18,31 @@
 
 	async function getOnLoan() {
         console.log(startIndex +'-'+  endIndex)
-		contract.getOnLoan(startIndex, endIndex, tokenType,true);
+		contract.getOnLoan(startIndex, endIndex, _tokenType,true);
 	}
 
 	async function getLoan() {
-		contract.getLoan(singleId, tokenType);
+		contract.getLoan(singleId, _tokenType);
 	}
 
 	async function isOnLoan() {
-		contract.isOnLoan(onLoanId, tokenType);
+		contract.isOnLoan(onLoanId, _tokenType);
 	}
 
 	async function getBorrowedBy() {
-		contract.getBorrowedBy(borrower, borrowerIndex, borrowerEndIndex, tokenType);
+		contract.getBorrowedBy(borrower, borrowerIndex, borrowerEndIndex, _tokenType);
 	}
 
 	async function getLoanedBy() {
-		contract.getLoanedBy(lender,lenderIndex, lenderEndIndex, tokenType);
+		contract.getLoanedBy(lender,lenderIndex, lenderEndIndex, _tokenType);
 	}
 
 	async function getNumOnLoan() {
-		contract.getNumOnLoan(tokenType);
+		contract.getNumOnLoan(_tokenType);
 	}
 
 	async function returnLoan(to) {
-		contract.returnLoan(to, returnId, tokenType);
+		contract.returnLoan(to, returnId, _tokenType);
 	}
     
     function changeIndex(indexType,value){
@@ -58,10 +58,15 @@
 
 </script>
 
-<h1>
+<h1 class="mb-4">
     <i class="fas fa-book" />
     LoanBook     
 </h1>
+<p class="bold">Select token Type</p>
+<select class="form-select mb-3" bind:value={_tokenType}>
+	<option value={TokenType.Dragon} selected>Dragon</option>
+	<option value={TokenType.Egg}>Egg</option>
+</select>
 
 <br />
 <div class="grid" align="left">
