@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 
 	export let changeView;
+	export let activeItem
 
 	onMount(() => {
 		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -38,7 +39,7 @@
 					data-bs-placement="right"
 					title="Egg Contract"
 					on:click={() => changeView(1)}
-					class="btn align-items-center rounded sidebarBtn"
+					class="btn align-items-center rounded sidebarBtn {(activeItem == 1) ? "activeItem": "" }"
 				>
 					<i class="fas fa-egg" /> Egg Token
 				</button>
@@ -50,7 +51,7 @@
 					data-bs-placement="right"
 					title="Dragon Contract"
 					on:click={() => changeView(2)}
-					class="btn align-items-center rounded sidebarBtn"
+					class="btn align-items-center rounded sidebarBtn {(activeItem == 2) ? "activeItem": "" }"
 				>
 					<i class="fas fa-dragon" /> Dragon Token
 				</button>
@@ -75,7 +76,7 @@
 								data-bs-placement="right"
 								title="Marketplace"
 								on:click={() => changeView(3)}
-								class="btn align-items-center rounded sidebarBtn"
+								class="btn align-items-center rounded sidebarBtn {(activeItem == 3) ? "activeItem": "" }"
 							>
 								<i class="fas fa-book" aria-hidden="true" /> Offers
 							</button>
@@ -87,7 +88,7 @@
 								data-bs-placement="right"
 								title="LoanBook"
 								on:click={() => changeView(4)}
-								class="btn align-items-center rounded sidebarBtn"
+								class="btn align-items-center rounded sidebarBtn {(activeItem == 4) ? "activeItem": "" }"
 							>
 								<i class="fas fa-paste" /> LoanBook
 							</button>
@@ -99,7 +100,7 @@
 								data-bs-placement="right"
 								title="Approvals"
 								on:click={() => changeView(5)}
-								class="btn align-items-center rounded sidebarBtn"
+								class="btn align-items-center rounded sidebarBtn {(activeItem == 5) ? "activeItem": "" }"
 							>
 								<i class="fas fa-check-circle" /> Approvals
 							</button>

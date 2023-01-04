@@ -7,13 +7,12 @@
   font-weight: 800 !important;
 }
 
-#marketplace-collapse button{ 
-  font-weight: 800 !important;
+body {
+  min-height: 100%;  
 }
 
-body {
-  min-height: 100vh;
-  min-height: -webkit-fill-available;
+.activeItem {
+  font-weight: 800 !important;
 }
 
 html {
@@ -21,9 +20,7 @@ html {
 }
 
 main {
-  height: 100vh;
-  height: 100vh;
-  max-height: 100vh;
+  height: 100%;
 }
 
 .uiTitle {
