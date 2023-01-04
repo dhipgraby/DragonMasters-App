@@ -26,7 +26,7 @@
 				title="Dashboard"
 				class="fs-5 fw-semibold uiTitle"
 				><i class="fas fa-window-restore" />
-				Contracts UI
+				UI
 				<small>Call Functions and query contract data</small>
 			</span>
 		</a>
