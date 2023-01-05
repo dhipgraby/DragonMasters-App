@@ -62,6 +62,21 @@ export class LoanBookContract {
         }
     }
 
+    async isLender(candidate, tokenId,tokenType, alert = false) {
+        try {
+            let is_lender = await this.contract.LoanBook.methods.isLender(
+                candidate,
+                tokenId,
+                tokenType
+            ).call()
+            if (alert == true) setAlert('isLender: ' + is_lender, 'warning')
+            return is_lender
+        } catch (err) {
+            if (alert == true) setAlert('isLender error', 'warning')
+            console.log("Error at: isLender" + err)
+        }
+    }
+
     async getBorrowedBy(
         borrower,
         startIndex,
