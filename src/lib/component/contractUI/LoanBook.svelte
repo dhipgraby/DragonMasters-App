@@ -14,11 +14,13 @@
 		lenderEndIndex = 10,
 		lender = '',
 		borrower = '',
-		candidate_address = '',
+		lender_address = '',
+		borrower_address = '',
 		singleId,
 		onLoanId,
 		returnId,
-		candidate_tokenId,
+		lender_tokenId,
+		borrower_tokenId,
 		check_tokenIds;
 
 	let checkDragons = true;
@@ -38,7 +40,13 @@
 	}
 
 	async function isLender() {
-		contract.isLender(candidate_address, candidate_tokenId, _tokenType, true);
+		contract.isLender(lender_address, lender_tokenId,
+		 _tokenType, true);
+	}
+
+	async function isBorrower() {
+		contract.isBorrower(borrower_address, borrower_tokenId,
+		 _tokenType, true);
 	}
 
 	async function getBorrowedBy() {
@@ -99,13 +107,28 @@
 			<h2>Is Lender</h2>
 			<p class="bold">Token id</p>
 			<div class="mb-3">
-				<input type="number" class="form-control" bind:value={candidate_tokenId} placeholder="tokenId" />
+				<input type="number" class="form-control" bind:value={lender_tokenId}
+				 placeholder="tokenId" />
 			</div>
 			<p class="bold">Candidate</p>
 			<div class="mb-3">
-				<input type="text" class="form-control" bind:value={candidate_address} placeholder="Address" />
+				<input type="text" class="form-control" bind:value={lender_address} placeholder="Address" />
 			</div>
 			<button class="btn btn-dark" on:click={() => isLender()}>Check</button>
+		</div>
+
+		<div class="grid" align="left">
+			<h2>Is Borrower</h2>
+			<p class="bold">Token id</p>
+			<div class="mb-3">
+				<input type="number" class="form-control" bind:value={borrower_tokenId}
+				 placeholder="tokenId" />
+			</div>
+			<p class="bold">Candidate</p>
+			<div class="mb-3">
+				<input type="text" class="form-control" bind:value={borrower_address} placeholder="Address" />
+			</div>
+			<button class="btn btn-dark" on:click={() => isBorrower()}>Check</button>
 		</div>
 
 		<div class="grid" align="left">

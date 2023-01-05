@@ -69,11 +69,28 @@ export class LoanBookContract {
                 tokenId,
                 tokenType
             ).call()
-            if (alert == true) setAlert('isLender: ' + is_lender, 'warning')
+            if (alert == true) setAlert('isLender: ' + is_lender, is_lender ? 'success' : 'warning')
+
             return is_lender
         } catch (err) {
             if (alert == true) setAlert('isLender error', 'warning')
             console.log("Error at: isLender" + err)
+        }
+    }
+
+    async isBorrower(candidate, tokenId, tokenType, alert = false) {
+        try {
+            let is_borrower = await this.contract.LoanBook.methods.isBorrower(
+                candidate,
+                tokenId,
+                tokenType
+            ).call()
+            if (alert == true) setAlert('isBorrower: ' + is_borrower, is_borrower ? 'success' : 'warning')
+
+            return is_borrower
+        } catch (err) {
+            if (alert == true) setAlert('isBorrower error', 'warning')
+            console.log("Error at: isBorrower" + err)
         }
     }
 
