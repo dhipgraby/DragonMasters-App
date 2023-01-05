@@ -16,7 +16,7 @@
 <main class="d-flex flex-nowrap">
 	<div class="flex-shrink-0 p-3 bg-white sidebar">
 		<a
-			href="/"
+			href="/ui"
 			class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom"
 		>
 			<span
@@ -26,7 +26,7 @@
 				title="Dashboard"
 				class="fs-5 fw-semibold uiTitle"
 				><i class="fas fa-window-restore" />
-				Contracts UI
+				UI
 				<small>Call Functions and query contract data</small>
 			</span>
 		</a>
