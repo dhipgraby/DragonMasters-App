@@ -5,7 +5,7 @@
 </script>
 
 <svelte:head>
-	<title>Contract - UI</title>
+	<title>Contracts - UI</title>
 
 	<link href="/css/contractUI.css" rel="stylesheet" />
 
