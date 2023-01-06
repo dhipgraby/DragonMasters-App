@@ -77,6 +77,7 @@ export class LoanBookContract {
             console.log("Error at: isLender" + err)
         }
     }
+    
 
     async isBorrower(candidate, tokenId, tokenType, alert = false) {
         try {
