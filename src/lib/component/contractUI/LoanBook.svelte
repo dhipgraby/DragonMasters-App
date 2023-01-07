@@ -6,12 +6,12 @@
 	export let contract;
 
 	let _tokenType = TokenType.Dragon,
-		startIndex = 1,
-		endIndex = 10,
-		borrowerIndex = 1,
-		borrowerEndIndex = 10,
-		lenderIndex = 1,
-		lenderEndIndex = 10,
+		startIndex = 0,
+		endIndex = 9,
+		borrowerIndex = 0,
+		borrowerEndIndex = 9,
+		lenderIndex = 0,
+		lenderEndIndex = 9,
 		lender = '',
 		borrower = '',
 		lender_address = '',
@@ -60,11 +60,11 @@
 	}
 
 	async function getBorrowedBy() {
-		contract.getBorrowedBy(borrower, borrowerIndex, borrowerEndIndex, _tokenType);
+		contract.getBorrowedBy(borrower, borrowerIndex, borrowerEndIndex, _tokenType, true);
 	}
 
 	async function getLoanedBy() {
-		contract.getLoanedBy(lender, lenderIndex, lenderEndIndex, _tokenType);
+		contract.getLoanedBy(lender, lenderIndex, lenderEndIndex, _tokenType, true);
 	}
 
 	async function getNumOnLoan() {
@@ -114,6 +114,26 @@
 <div class="row">
 	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid" align="left">
+			<h2>Tokens Loaned By</h2>
+			<p class="bold">Address</p>
+			<div class="mb-3">
+				<input type="text" class="form-control" bind:value={lender} placeholder="Address" />
+			</div>
+			<button class="btn btn-dark" on:click={() => getLoanedBy()}>Check</button>
+		</div>
+
+
+		<div class="grid" align="left">
+			<h2>Tokens Borrowed By</h2>
+			<p class="bold">Address</p>
+			<div class="mb-3">
+				<input type="text" class="form-control" bind:value={borrower} placeholder="Address" />
+			</div>
+			<button class="btn btn-dark" on:click={() => getBorrowedBy()}>Check</button>
+		</div>
+
+
+		<div class="grid" align="left">
 			<h2>Is Lender</h2>
 			<p class="bold">Token id</p>
 			<div class="mb-3">
@@ -143,14 +163,6 @@
 
 		<div class="grid" align="left">
 			<h2>Get Loan</h2>			
-			<div class="mb-3">
-				<input type="number" class="form-control" bind:value={singleId} placeholder="tokenId" />
-			</div>
-			<button class="btn btn-dark" on:click={() => getLoan()}>GET</button>
-		</div>
-
-		<div class="grid" align="left">
-			<h2>Get Loan</h2>
 			<div class="mb-3">
 				<input type="number" class="form-control" bind:value={singleId} placeholder="tokenId" />
 			</div>
