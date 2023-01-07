@@ -77,7 +77,6 @@ export class LoanBookContract {
             console.log("Error at: isLender" + err)
         }
     }
-    
 
     async isBorrower(candidate, tokenId, tokenType, alert = false) {
         try {
@@ -94,6 +93,26 @@ export class LoanBookContract {
             console.log("Error at: isBorrower" + err)
         }
     }
+
+
+    // function checkRentalIncomeOfTypes(TokenType[] calldata tokenTypes) 
+    // external
+    // view
+    // returns (uint256 weiAccrued);
+    async checkRentalIncomeOfTypes(tokenTypes, alert = false) {
+        try {
+            const weiAccrued = await this.contract.LoanBook.methods.checkRentalIncomeOfTypes(
+                tokenTypes
+            ).call()
+            if (alert == true) setAlert('Accrued rentalIncome (Wei): ' + weiAccrued, 'success')
+
+            return weiAccrued
+        } catch (err) {
+            if (alert == true) setAlert('checkRentalIncomeOfTypes error', 'warning')
+            console.log("Error at: checkRentalIncomeOfTypes" + err)
+        }
+    }
+
 
     async getBorrowedBy(
         borrower,
@@ -184,22 +203,26 @@ export class LoanBookContract {
         }
     }
 
-    async checkRentalIncome(
+    async checkRentalIncomeOfTokens(
         tokenIds,
         tokenTypes,
         alert
     ) {
+        console.log('In checkRentalIncomeOfTokens')
+        console.log(tokenIds)
+        console.log(tokenTypes)
         try {
             const weiAccrued = await this.contract.LoanBook.methods.checkRentalIncome(
                 tokenIds,
                 tokenTypes
             ).call()
 
+            if (alert == true) setAlert('Rental Income (Wei) = ' + weiAccrued, 'success')
             return weiAccrued
 
         } catch (err) {
-            if (alert == true) setAlert('checkRentalIncome error', 'warning')
-            console.log("Error at: checkRentalIncome" + err)
+            if (alert == true) setAlert('checkRentalIncomeOfTokens error', 'warning')
+            console.log("Error at: checkRentalIncomeOfTokens" + err)
         }
     }
 

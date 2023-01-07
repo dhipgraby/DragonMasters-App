@@ -49,6 +49,16 @@
 		 _tokenType, true);
 	}
 
+	async function checkRentalIncomeOfTypes() {
+		if (checkDragons == false && checkEggs == false)
+			setAlert('Select at leat one token type', 'warning');
+		const check_tokenTypes = [];
+		if (checkDragons == true) check_tokenTypes.push(TokenType.Dragon);
+		if (checkEggs == true) check_tokenTypes.push(TokenType.Egg);
+		console.log(check_tokenTypes);
+		contract.checkRentalIncomeOfTypes(check_tokenTypes, true);
+	}
+
 	async function getBorrowedBy() {
 		contract.getBorrowedBy(borrower, borrowerIndex, borrowerEndIndex, _tokenType);
 	}
@@ -76,16 +86,16 @@
 		}
 	}
 
-	async function checkRentalIncome() {
+	async function checkRentalIncomeOfTokens() {
 		if (checkDragons == false && checkEggs == false)
 			setAlert('Select at leat one token type', 'warning');
 		const check_tokenTypes = [];
+		const check_ids = check_tokenIds.split(',').map(Number);
 		if (checkDragons == true) check_tokenTypes.push(TokenType.Dragon);
 		if (checkEggs == true) check_tokenTypes.push(TokenType.Egg);
-		console.log(check_tokenIds);
+		console.log(check_ids);
 		console.log(check_tokenTypes);
-		return;
-		contract.checkRentalIncome(check_tokenIds, check_tokenTypes, true);
+		contract.checkRentalIncomeOfTokens(check_ids, check_tokenTypes, true);
 	}
 </script>
 
@@ -163,7 +173,7 @@
 					type="text"
 					bind:value={check_tokenIds}
 					class="form-control"
-					placeholder="Token Ids"
+					placeholder="Token Ids 1,2..."
 				/>
 			</div>
 			<div class="mb-3">
@@ -186,7 +196,31 @@
 					<label class="form-check-label" for="eggCheckbox"><b>Egg</b></label>
 				</div>
 			</div>
-			<button class="btn btn-dark" on:click={() => checkRentalIncome()}>Check</button>
+			<button class="btn btn-dark" on:click={() => checkRentalIncomeOfTokens()}>Check</button>
+		</div>
+		<div class="grid" align="left">
+			<h2>Check rental Income</h2>
+			<div class="mb-3">
+				<div class="form-check form-check-inline">
+					<input
+						class="form-check-input"
+						type="checkbox"
+						id="dragonCheckbox"
+						bind:checked={checkDragons}
+					/>
+					<label class="form-check-label" for="dragonCheckbox"><b>Dragon</b></label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input
+						class="form-check-input"
+						type="checkbox"
+						id="eggCheckbox"
+						bind:checked={checkEggs}
+					/>
+					<label class="form-check-label" for="eggCheckbox"><b>Egg</b></label>
+				</div>
+			</div>
+			<button class="btn btn-dark" on:click={() => checkRentalIncomeOfTypes()}>Check</button>
 		</div>
 	</div>
 </div>
