@@ -1,43 +1,44 @@
 <script>
 	import { Maturity, Attributes } from '$lib/helpers/utils.js';
-	import { getImg, iconElement, iconAttr } from '$lib/storage/dragonImg';    
-    import { getEth,shortAddr } from '$lib/helpers/utils'
+	import { getImg, iconElement, iconAttr } from '$lib/storage/dragonImg';
+	import { getEth, shortAddr } from '$lib/helpers/utils';
 	import { onMount } from 'svelte';
-    //CSS
-    import '$lib/css/marketplace/marketplace.css';
-    import '$lib/css/marketplace/dragon.css';
-    
-    export let dragon;
-    export let account;	
-	export let buy;
-    
-	console.log('dragon: ' + JSON.stringify(dragon));
+	//CSS
+	import '$lib/css/marketplace/marketplace.css';
+	import '$lib/css/marketplace/dragon.css';
+	import OfferBox from '../../OfferBox.svelte';
 
+	export let dragon;
+	export let account;
+	export let buy;
+	export let rent;
+	export let _offerType;
 
 	$: _maturity = Object.keys(Maturity)[dragon.ageGroup];
-    
-    let price
-    let owner = dragon.sellOffer.owner     
+
+	let price;
+	let owner = dragon.owner;
 	let img = getImg(dragon.subSpecies).idle;
 	let element = iconElement(dragon.subSpecies);
 
-    onMount(async()=>{        
-        account = account.toLowerCase()
-        owner = owner.toLowerCase()
-        if(account === owner){
-            owner = 'You'
-        } else {
-            owner = shortAddr(owner)
-        } 
-        price = await getEth(dragon.sellOffer.sellPrice)
-    })
+	onMount(async () => {
+		account = account.toLowerCase();
+		owner = owner.toLowerCase();
+		if (account === owner) {
+			owner = 'You';
+		} else {
+			owner = shortAddr(owner);
+		}
+		let currentpriace = (dragon.sellOffer != undefined) ? dragon.sellOffer.sellPrice : dragon.rentOffer.rent.price;
+		price = await getEth(currentpriace);
+	});
 </script>
 
 <div class="card" style="width: 18rem;">
 	<div class="card-header">
 		<img src={img} alt="dragon" />
 		<!-- ELEMENT -->
-		<div class="pabsolute bottom10 right10">{@html element}</div>        
+		<div class="pabsolute bottom10 right10">{@html element}</div>
 		<!-- GENERATION -->
 		<div class="pabsolute top10 left10">
 			<span class="badge rounded-pill bg-light text-dark mt-2">
@@ -59,21 +60,6 @@
 				</div>
 			{/each}
 		</div>
-
-		<br />
-        <div class="priceDiv">
-            <small><b>Owner</b>: {owner}</small>
-            <p><b>Price:</b>
-                {price} <i class="fab fa-ethereum"></i>
-            </p>
-        </div>               
-		<button
-			class="btn btn-dark"
-			on:click={async () => {
-				await buy(dragon.tokenId,dragon.sellOffer.sellPrice);
-			}}
-		>
-			Buy now <i class="fas fa-shopping-cart"></i>
-		</button>
+		<OfferBox {owner} {price} {buy} {rent} {_offerType} />		
 	</div>
 </div>

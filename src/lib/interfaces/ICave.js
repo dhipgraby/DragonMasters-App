@@ -33,7 +33,6 @@ export async function LoadInterface(from, to, interfaceName = 'All') {
             await loadEvents(contractData, from, to)
             break;
     }
-
 }
 
 async function loadContractData() {

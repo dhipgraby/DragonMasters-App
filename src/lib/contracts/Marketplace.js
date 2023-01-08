@@ -1,5 +1,5 @@
 import { setAlert } from "$lib/storage/alerts";
-import { dragonsForSale,eggsForSale } from "$lib/storage/marketplace";
+import { dragonsForSale,eggsForSale,dragonsForRent,eggsForRent } from "$lib/storage/marketplace";
 import { subSpeciesName } from "$lib/helpers/utils"
 import { userDragons } from '$lib/storage/dragon'
 import { userEggs } from '$lib/storage/eggs'
@@ -143,7 +143,8 @@ export class MarketplaceContract extends MarketApproval {
         _tokenType
     ) {
         //Collecting all offers and details 
-        let allOffers = await this.getOffered(from, to, _offerType, _tokenType)
+        let allOffers = await this.getOffered(from, to, _offerType, _tokenType) 
+        console.log(allOffers);       
         let tokenIds = allOffers.map((el) => { return el.tokenId });
         let assets = []
         
@@ -164,19 +165,29 @@ export class MarketplaceContract extends MarketApproval {
             
             let TID = el.tokenId.toString()
             
-            if (tokenIds.includes(TID)) {
+            if (tokenIds.includes(TID)) {                
                 
                 el[offerName] = allOffers.find(function (offer) {
+                    el["owner"] = offer.owner
                     return offer.tokenId === TID;
                 });
             }
             return el
         })
         offers['totalOffers'] = allOffers.totalOffers
+        
         if(_tokenType == TokenType.Dragon){
-            dragonsForSale.set(offers)
+            if((_offerType == OfferType.ForSale)){
+                dragonsForSale.set(offers)
+            } else {
+                dragonsForRent.set(offers)
+            }            
         } else {
-            eggsForSale.set(offers)
+            if((_offerType == OfferType.ForSale)){
+                eggsForSale.set(offers)
+            } else {
+                eggsForRent.set(offers)
+            }            
         }              
         return offers
     }
@@ -259,13 +270,11 @@ export class MarketplaceContract extends MarketApproval {
         let offers = []
 
         try {
-
             let ownAccount = false
             if (_account == '' | !_account | _account == undefined) {
                 ownAccount = true
                 _account = this.contract.account
             }
-
             let ids = await this.contract.Marketplace.methods.getOfferedBy(_account, startIndex, endIndex, _offerType, _tokenType).call()
             let tokenIds = ids.tokenIds
 
