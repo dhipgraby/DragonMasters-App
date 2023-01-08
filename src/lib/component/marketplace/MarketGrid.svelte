@@ -9,6 +9,7 @@
 	export let loadPage;
 	export let perpage;
 	export let _tokenType;
+	export let _offerType;
 
 	let pages;
 
@@ -19,7 +20,15 @@
 	});
 
 	const buyToken = async (tokenId, price) => {
+		console.log(price);
 		await contract['market'].buyToken(tokenId, _tokenType, price);
+		await loadPage(0, perpage);
+	};
+
+	const rentToken = async (tokenId, price, deposit) => {
+		console.log('renting token');
+		console.log(price, deposit);
+		await contract['market'].rentToken(tokenId, _tokenType, price, deposit);
 		await loadPage(0, perpage);
 	};
 </script>
@@ -33,11 +42,25 @@
 		{#each assets as asset}
 			<div class="col">
 				{#if _tokenType == TokenType.Dragon}
-					<DragonCard account={contract['market'].contract.account} dragon={asset} buy={buyToken} />
+					<DragonCard
+						account={contract['market'].contract.account}
+						dragon={asset}
+						buy={() => buyToken(asset.tokenId, asset.sellOffer.sellPrice)}
+						rent={() =>
+							rentToken(asset.tokenId, asset.rentOffer.rent.price, asset.rentOffer.rent.deposit)}
+						{_offerType}
+					/>
 				{/if}
 
 				{#if _tokenType == TokenType.Egg}
-					<EggCard account={contract['market'].contract.account} egg={asset} buy={buyToken} />
+					<EggCard
+						account={contract['market'].contract.account}
+						egg={asset}
+						buy={() => buyToken(asset.tokenId, asset.sellOffer.sellPrice)}
+						rent={() =>
+							rentToken(asset.tokenId, asset.rentOffer.rent.price, asset.rentOffer.rent.deposit)}
+						{_offerType}
+					/>
 				{/if}
 			</div>
 		{/each}

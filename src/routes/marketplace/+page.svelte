@@ -84,6 +84,7 @@
 	{#if _offerType == OfferType.ForSale}
 		{#if show == TokenType.Egg}
 			<MarketGrid
+				{_offerType}
 				assets={eggs_for_sale}
 				contract={contractsData}
 				loadPage={LoadInterface}
@@ -93,6 +94,7 @@
 		{/if}
 		{#if show == TokenType.Dragon}
 			<MarketGrid
+				{_offerType}
 				assets={dragons_for_sale}
 				contract={contractsData}
 				loadPage={LoadInterface}
@@ -105,6 +107,7 @@
 	{#if _offerType == OfferType.ForRent}
 		{#if show == TokenType.Egg}
 			<MarketGrid
+				{_offerType}
 				assets={eggs_for_rent}
 				contract={contractsData}
 				loadPage={LoadInterface}
@@ -114,6 +117,7 @@
 		{/if}
 		{#if show == TokenType.Dragon}
 			<MarketGrid
+				{_offerType}
 				assets={dragons_for_rent}
 				contract={contractsData}
 				loadPage={LoadInterface}
@@ -125,8 +129,7 @@
 </MainContainer>
 
 <style>
-
-	.active {		
+	.active {
 		background-color: black;
 		color: white;
 	}
