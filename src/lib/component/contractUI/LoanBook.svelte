@@ -21,7 +21,9 @@
 		returnId,
 		lender_tokenId,
 		borrower_tokenId,
-		check_tokenIds;
+		check_egg_tokenIds = '',
+		check_dragon_tokenIds = '';
+
 
 	let checkDragons = true;
 	let checkEggs = false;
@@ -87,14 +89,26 @@
 	}
 
 	async function checkRentalIncomeOfTokens() {
-		if (checkDragons == false && checkEggs == false)
-			setAlert('Select at leat one token type', 'warning');
-		const check_tokenTypes = [];
-		const check_ids = check_tokenIds.split(',').map(Number);
-		if (checkDragons == true) check_tokenTypes.push(TokenType.Dragon);
-		if (checkEggs == true) check_tokenTypes.push(TokenType.Egg);
-		console.log(check_ids);
-		console.log(check_tokenTypes);
+		if (check_egg_tokenIds.length == 0 && check_dragon_tokenIds.length == 0)
+			setAlert('Specify at least one token id', 'warning');
+			
+		let check_egg_Ids = [];
+		let check_egg_tokenTypes = [];
+		if (check_egg_tokenIds.length > 0) {
+			check_egg_Ids = check_egg_tokenIds.split(',').map(Number);
+			check_egg_tokenTypes = new Array(check_egg_Ids.length).fill(TokenType.Egg);
+		}
+		let check_dragon_Ids = [];
+		let check_dragon_tokenTypes = [];
+		if (check_dragon_tokenIds.length > 0) {
+			check_dragon_Ids = check_dragon_tokenIds.split(',').map(Number);
+			check_dragon_tokenTypes = new Array(check_dragon_Ids.length).fill(TokenType.Dragon);
+		}
+		const check_ids = check_egg_Ids.concat(check_dragon_Ids);
+		const check_tokenTypes = check_egg_tokenTypes.concat(check_dragon_tokenTypes);
+		console.log(check_ids)
+		console.log(check_tokenTypes)
+
 		contract.checkRentalIncomeOfTokens(check_ids, check_tokenTypes, true);
 	}
 </script>
@@ -190,34 +204,23 @@
 	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid" align="left">
 			<h2>Check rental Income</h2>
-			<p class="bold">List of Token Ids</p>
+			<p class="bold">Eggs: List of Token Ids</p>
 			<div class="mb-3">
 				<input
 					type="text"
-					bind:value={check_tokenIds}
+					bind:value={check_egg_tokenIds}
 					class="form-control"
-					placeholder="0,1,..."
+					placeholder="0, 1, ..."
 				/>
 			</div>
+			<p class="bold">Dragons: List of Token Ids</p>
 			<div class="mb-3">
-				<div class="form-check form-check-inline">
-					<input
-						class="form-check-input"
-						type="checkbox"
-						id="dragonCheckbox"
-						bind:checked={checkDragons}
-					/>
-					<label class="form-check-label" for="dragonCheckbox"><b>Dragon</b></label>
-				</div>
-				<div class="form-check form-check-inline">
-					<input
-						class="form-check-input"
-						type="checkbox"
-						id="eggCheckbox"
-						bind:checked={checkEggs}
-					/>
-					<label class="form-check-label" for="eggCheckbox"><b>Egg</b></label>
-				</div>
+				<input
+					type="text"
+					bind:value={check_dragon_tokenIds}
+					class="form-control"
+					placeholder="0, 1, ..."
+				/>
 			</div>
 			<button class="btn btn-dark" on:click={() => checkRentalIncomeOfTokens()}>Check</button>
 		</div>
