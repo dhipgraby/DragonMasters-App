@@ -31,10 +31,10 @@ export class EggContract {
     }
 
     async getEgg(eggId,message = false) {
- console.log(eggId)
+ 
         try {
             let eggDetails = await this.contract.EggToken.methods.getEgg(eggId).call()
-            console.log('eggDetails '  + eggDetails)
+            
             if(message == true) setAlert(eggDetails,'success')
             return {
                 tokenId: eggId,
@@ -68,12 +68,10 @@ export class EggContract {
 
     async getUserEggs(from,to) {        
         let allEggs = await this.getEggIds(from,to)                
-        let eggs = []
+        let eggs = []        
         
-        console.log('allEggs: ' + JSON.stringify(allEggs))
         for (let i = 0; i < allEggs.tokenIds.length; i++) {
-            let eggDetails = await this.getEgg(allEggs.tokenIds[i])    
-                console.log('eggDetails : '+ eggDetails)                                
+            let eggDetails = await this.getEgg(allEggs.tokenIds[i])                                        
             let incubationTime = (eggDetails.incubation == '0') ? null : await this.checkIncubation(allEggs.tokenIds[i], false)
             eggDetails.incubationTime = incubationTime
             eggs.push(eggDetails)

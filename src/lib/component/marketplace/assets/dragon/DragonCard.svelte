@@ -10,14 +10,11 @@
     export let dragon;
     export let account;	
 	export let buy;
-    
-	console.log('dragon: ' + JSON.stringify(dragon));
-
 
 	$: _maturity = Object.keys(Maturity)[dragon.ageGroup];
-    
+	
     let price
-    let owner = dragon.sellOffer.owner     
+    let owner = dragon.owner     
 	let img = getImg(dragon.subSpecies).idle;
 	let element = iconElement(dragon.subSpecies);
 

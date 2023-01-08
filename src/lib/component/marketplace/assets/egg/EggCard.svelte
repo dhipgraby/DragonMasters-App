@@ -11,7 +11,7 @@
     let price
 	let eggImg;
 	let element;
-    let owner = egg.sellOffer.owner     
+    let owner = egg.owner     
    
     onMount(async()=>{        
         element = iconElement(egg.subSpecies);
