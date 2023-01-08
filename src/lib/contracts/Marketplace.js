@@ -8,6 +8,7 @@ import { EggContract } from '$lib/contracts/EggToken';
 import { MarketApproval } from '$lib/contracts/MarketApproval';
 import { contracts } from "./contracts";
 import { get } from 'svelte/store';
+import { awaitTransactionMined } from "$lib/helpers/web3";
 
 const salePriceInWei = '500000000000000000'  //0.5 ETH
 const rentPriceInWei = '10000000000000000'  // 0.01ETH
@@ -93,13 +94,15 @@ export class MarketplaceContract extends MarketApproval {
     }
 
     async setOffer(tokenId, offerType, tokenType, terms) {
+        console.log('setting offer');
         try {
             let offer = await this.contract.Marketplace.methods.setOffer(
                 tokenId,
                 terms,
                 offerType,
                 tokenType,
-            ).send({}, function (err, txHash) {
+            ).send({}, async function (err, txHash) {
+                console.log(txHash);                                
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert('New offer created!', 'success')
