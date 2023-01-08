@@ -119,7 +119,7 @@
 			<div class="mb-3">
 				<input type="text" class="form-control" bind:value={lender} placeholder="Address" />
 			</div>
-			<p class="bold">Paging: start/end index</p>
+			<p class="bold">Paging: start & end indexes</p>
 			<div class="mb-3">
 				<Pagination {startIndex} {endIndex} {changeIndex} />
 			</div>
@@ -133,7 +133,7 @@
 			<div class="mb-3">
 				<input type="text" class="form-control" bind:value={borrower} placeholder="Address" />
 			</div>
-			<p class="bold">Paging: start/end index</p>
+			<p class="bold">Paging: start & end indexes</p>
 			<div class="mb-3">
 				<Pagination {startIndex} {endIndex} {changeIndex} />
 			</div>
@@ -143,10 +143,10 @@
 
 		<div class="grid" align="left">
 			<h2>Is Lender</h2>
-			<p class="bold">Token id</p>
+			<p class="bold">Token Id</p>
 			<div class="mb-3">
 				<input type="number" class="form-control" bind:value={lender_tokenId}
-				 placeholder="tokenId" />
+				 placeholder="0" />
 			</div>
 			<p class="bold">Candidate</p>
 			<div class="mb-3">
@@ -157,10 +157,10 @@
 
 		<div class="grid" align="left">
 			<h2>Is Borrower</h2>
-			<p class="bold">Token id</p>
+			<p class="bold">Token Id</p>
 			<div class="mb-3">
 				<input type="number" class="form-control" bind:value={borrower_tokenId}
-				 placeholder="tokenId" />
+				 placeholder="0" />
 			</div>
 			<p class="bold">Candidate</p>
 			<div class="mb-3">
@@ -170,16 +170,17 @@
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Get Loan</h2>			
+			<h2>Get Loan</h2>
+			<p class="bold">Token Id</p>		
 			<div class="mb-3">
-				<input type="number" class="form-control" bind:value={singleId} placeholder="tokenId" />
+				<input type="number" class="form-control" bind:value={singleId} placeholder="0" />
 			</div>
 			<button class="btn btn-dark" on:click={() => getLoan()}>GET</button>
 		</div>
 
 		<div class="grid" align="left">
 			<h2>Get All Loans</h2>
-			<p class="bold">Paging: start/end index</p>
+			<p class="bold">Paging: start & end indexes</p>
 			<div class="mb-3">
 				<Pagination {startIndex} {endIndex} {changeIndex} />
 			</div>
@@ -189,12 +190,13 @@
 	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid" align="left">
 			<h2>Check rental Income</h2>
+			<p class="bold">List of Token Ids</p>
 			<div class="mb-3">
 				<input
 					type="text"
 					bind:value={check_tokenIds}
 					class="form-control"
-					placeholder="Token Ids 1,2..."
+					placeholder="0,1,..."
 				/>
 			</div>
 			<div class="mb-3">
