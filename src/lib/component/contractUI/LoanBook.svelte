@@ -119,6 +119,10 @@
 			<div class="mb-3">
 				<input type="text" class="form-control" bind:value={lender} placeholder="Address" />
 			</div>
+			<p class="bold">Paging: start/end index</p>
+			<div class="mb-3">
+				<Pagination {startIndex} {endIndex} {changeIndex} />
+			</div>
 			<button class="btn btn-dark" on:click={() => getLoanedBy()}>Check</button>
 		</div>
 
@@ -128,6 +132,10 @@
 			<p class="bold">Address</p>
 			<div class="mb-3">
 				<input type="text" class="form-control" bind:value={borrower} placeholder="Address" />
+			</div>
+			<p class="bold">Paging: start/end index</p>
+			<div class="mb-3">
+				<Pagination {startIndex} {endIndex} {changeIndex} />
 			</div>
 			<button class="btn btn-dark" on:click={() => getBorrowedBy()}>Check</button>
 		</div>
@@ -171,6 +179,7 @@
 
 		<div class="grid" align="left">
 			<h2>Get All Loans</h2>
+			<p class="bold">Paging: start/end index</p>
 			<div class="mb-3">
 				<Pagination {startIndex} {endIndex} {changeIndex} />
 			</div>
