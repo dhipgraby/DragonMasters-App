@@ -1,34 +1,26 @@
-export const transactionReceiptAsync = async function (txHash) {
-    try {
-      const receipt = await web3.eth.getTransactionReceipt(txHash)
-      if (receipt == null) {
-        throw new Error('Waiting for transaction receipt...')
-      }
-      return receipt
-    } catch (error) {
-      console.log(error);
-    }
+import { setAlert } from "$lib/storage/alerts";
+
+export async function setAwaiter(txHash) {
+  const receipt = await web3.eth.getTransaction(txHash)
+  console.log('Starting awaiter for Tx: ' + txHash + '<br> Receipt: ' + JSON.stringify(receipt))
+  if (receipt.blockNumber != null) {
+    console.log('transaction mined successfully');
+    setAlert('transaction mined successfully', 'success');
+    return
   }
 
-export async function awaitTransactionMined (txHash, interval) {
-     
-    if (interval == null) {
-      interval = 500
-    }
-  
-    return new Promise((resolve, reject) => {
-      const transactionReceiptAsyncInterval = setInterval(
-        async () => {
-          const receipt = await transactionReceiptAsync()
-          if (receipt.blockNumber != null) {
-            clearInterval(transactionReceiptAsyncInterval)
-            console.log(receipt);
-            resolve(receipt)
-          } else {
-            console.log('still waiting for tx: ' + txHash);
-          }
-        },
-        interval
-      )
-    })
-  }
+  const transactionReceiptAsyncInterval = setInterval(
+    async () => {
+      const get_receipt = await web3.eth.getTransaction(txHash)
+      if (get_receipt.blockNumber != null) {
+        clearInterval(transactionReceiptAsyncInterval)
+        console.log('transaction mined successfully');
+        setAlert('transaction mined successfully', 'success');
+      } else {
+        console.log('still waiting for tx: ' + txHash);
+        console.log(get_receipt);
+      }
+    },
+    1000
+  )
+}
