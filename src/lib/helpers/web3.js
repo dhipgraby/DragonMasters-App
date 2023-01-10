@@ -1,4 +1,4 @@
-import { setAlert } from "$lib/storage/alerts";
+import { setAlert, completeAwaiter} from "$lib/storage/alerts";
 
 export async function startAwaiter(txHash, callback, interval = 200) {
   console.log('starting an awaiter');
@@ -17,6 +17,7 @@ export async function startAwaiter(txHash, callback, interval = 200) {
       console.log('transaction mined successfully');
       callback()
       clearInterval(transactionReceiptAsyncInterval);
+      completeAwaiter(txHash)
       setAlert('transaction mined successfully', 'success');
     } else {
       console.log('still waiting for tx: ' + txHash);

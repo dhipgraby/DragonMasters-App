@@ -5,10 +5,9 @@
 	import { alertTrigger, txTrigger } from '$lib/storage/alerts';
 
 	export let uriPath;
-	
-	$: lastAlerts = $alertTrigger 
-	$: pendingTransactions = $txTrigger
 
+	$: lastAlerts = $alertTrigger;
+	$: pendingTransactions = $txTrigger;
 </script>
 
 <NavBar {uriPath} />
@@ -17,6 +16,12 @@
 	<Alert {...alert} alert_number={i} />
 {/each}
 
-{#each pendingTransactions as transaction, i}
-	<TxAwaiter {...transaction} tx_number={i} />
-{/each}
+{#if pendingTransactions.length > 0}
+	<ul class="txList">
+		{#each pendingTransactions as transaction, i}
+			<li>
+				<TxAwaiter {...transaction} tx_number={i} />
+			</li>
+		{/each}
+	</ul>
+{/if}

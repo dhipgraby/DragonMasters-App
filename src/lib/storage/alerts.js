@@ -25,9 +25,8 @@ export function addAwaiter(txHash,action,status='pending') {
 export function completeAwaiter(txHash) {
     let transactions = get(txTrigger)
     let updated = transactions.map((elem) => {
-        if (elem.txHash == txHash) {
-            console.log('matching id ' + txHash);
-            elem = txParser(txHash, 'complete')
+        if (elem.txHash == txHash) {            
+            elem.status = 'complete'
         }
         return elem
     })
