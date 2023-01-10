@@ -11,8 +11,7 @@
 	export let gender;
 	export let getEnergy;
 
-	afterUpdate(() => {
-		console.log(dragons)
+	afterUpdate(() => {		
 		gender = gender;
 		displayDragons = displayDragons;
 	});

@@ -28,6 +28,10 @@ body {
 	);
 }
 
+.yellowLink  {		
+	color: rgb(235, 182, 39) !important;
+}
+
 #svelte {
 	min-height: 80vh;
 	display: flex;

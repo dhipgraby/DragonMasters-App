@@ -95,6 +95,14 @@ export function shortAddr(address) {
     return userAddr;
 }
 
+export function shortTxHash(txHash) {
+    var firstPart = txHash.substr(0, 3);
+    var secondPart = txHash.substr(-5);
+    var userAddr = firstPart + "..." + secondPart
+
+    return userAddr;
+}
+
 //ether to wei
 export const getWei = async (value) => {
     if (typeof value != 'string') value = String(value)

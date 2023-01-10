@@ -80,7 +80,7 @@
 
 	onMount(async () => {
 		if (_offerType == OfferType.ForSale) {
-			price = await getEth(offer.sellPrice);			
+			price = await getEth(offer.sellPrice);
 		} else {
 			if (_offerType == OfferType.ForRent) {
 				price = await getEth(offer.rent.price);
@@ -88,7 +88,7 @@
 				duration = parseInt(offer.rent.minDuration) / timeDropdrown.oneDay;
 			}
 		}
-		currentPrice = price
+		currentPrice = price;
 	});
 </script>
 
@@ -106,47 +106,53 @@
 </div>
 
 <div class="cardBody">
-	{#if tap == 1}
-		<p class="bold mb-2 mt-3 f-right">
-			<i class="fab fa-ethereum" /> Current Price : {currentPrice}
-		</p>
+	<form
+		on:submit={() => {
+			false;
+		}}
+	>
+		{#if tap == 1}
+			<p class="bold mb-2 mt-3 f-right">
+				<i class="fab fa-ethereum" /> Current Price : {currentPrice}
+			</p>
 
-		<div class="form-floating mb-3">
-			<input bind:value={price} type="number" class="form-control mt-2" placeholder="Eth" />
-			<label for="price">Price</label>
-		</div>
-
-		{#if _offerType == OfferType.ForRent}
 			<div class="form-floating mb-3">
-				<input
-					type="number"
-					class="form-control"
-					id="deposit"
-					placeholder="Amount in Eth"
-					bind:value={deposit}
-				/>
-				<label for="deposit">Deposit in Eth</label>
-			</div>
-			<div class="form-floating mb-3">
-				<input
-					type="number"
-					class="form-control"
-					id="duration"
-					placeholder="Time to rent"
-					bind:value={duration}
-				/>
-				<label for="floatingPassword">Number of days</label>
+				<input bind:value={price} type="number" class="form-control mt-2" placeholder="Eth" />
+				<label for="price">Price</label>
 			</div>
 
-			<TimeInputs {addTime} />
+			{#if _offerType == OfferType.ForRent}
+				<div class="form-floating mb-3">
+					<input
+						type="number"
+						class="form-control"
+						id="deposit"
+						placeholder="Amount in Eth"
+						bind:value={deposit}
+					/>
+					<label for="deposit">Deposit in Eth</label>
+				</div>
+				<div class="form-floating mb-3">
+					<input
+						type="number"
+						class="form-control"
+						id="duration"
+						placeholder="Time to rent"
+						bind:value={duration}
+					/>
+					<label for="floatingPassword">Number of days</label>
+				</div>
+
+				<TimeInputs {addTime} />
+			{/if}
+
+			<button class="btn btn-success modifyBtn text-light" on:click={() => modifyOffer()}
+				>Confirm</button
+			>
+		{:else}
+			<button class="btn btn-danger text-light" on:click={() => removeSellOffer()}>Remove </button>
 		{/if}
-
-		<button class="btn btn-success modifyBtn text-light" on:click={() => modifyOffer()}
-			>Confirm</button
-		>
-	{:else}
-		<button class="btn btn-danger text-light" on:click={() => removeSellOffer()}>Remove </button>
-	{/if}
+	</form>
 </div>
 
 <style>

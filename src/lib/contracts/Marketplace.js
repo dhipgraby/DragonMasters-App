@@ -1,4 +1,4 @@
-import { setAlert } from "$lib/storage/alerts";
+import { addAwaiter, setAlert } from "$lib/storage/alerts";
 import { dragonsForSale, eggsForSale, dragonsForRent, eggsForRent } from "$lib/storage/marketplace";
 import { subSpeciesName } from "$lib/helpers/utils"
 import { userDragons } from '$lib/storage/dragon'
@@ -8,7 +8,6 @@ import { EggContract } from '$lib/contracts/EggToken';
 import { MarketApproval } from '$lib/contracts/MarketApproval';
 import { contracts } from "./contracts";
 import { get } from 'svelte/store';
-import { setAwaiter } from "$lib/helpers/web3";
 
 const salePriceInWei = '500000000000000000'  //0.5 ETH
 const rentPriceInWei = '10000000000000000'  // 0.01ETH
@@ -94,17 +93,14 @@ export class MarketplaceContract extends MarketApproval {
     }
 
     async setOffer(tokenId, offerType, tokenType, terms) {
-        console.log('setting offer');
+        
         try {
             let offer = await this.contract.Marketplace.methods.setOffer(
                 tokenId,
                 terms,
                 offerType,
                 tokenType,
-            ).send({}, async function (err, txHash) {
-                console.log(txHash);
-                const receipt = await web3.eth.getTransaction(txHash)
-                console.log(receipt)
+            ).send({}, async function (err, txHash) {              
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert('New offer created!', 'success')
@@ -127,7 +123,7 @@ export class MarketplaceContract extends MarketApproval {
                 offerType,
                 tokenType,
             ).send({}, async function (err, txHash) {                
-                await setAwaiter(txHash)
+                addAwaiter(txHash)
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert('Offer Modifyed!', 'success')
