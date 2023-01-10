@@ -10,22 +10,32 @@
 	export let status;
 	export let show = true;
 	export let txHash;
+	export let action;
 
 	let etherScanLink = `<a class="yellowLink" href="https://goerli.etherscan.io/tx/${txHash}" target="_blank">${shortTxHash(
 		txHash
 	)}</a>`;
 	let alertType = status == 'pending' ? 'info' : 'success';
-	let content =
+	$: message =
 		status == 'pending'
-			? `Pending Transaction TxId: ${etherScanLink}`
-			: `Transaction Complented! TxId: ${etherScanLink}`;
+			? `Pending Transaction 
+			<br>
+			<small class='txaction'>Action: ${action}</small>
+			<br>TxId: ${etherScanLink}`
+			: `Transaction Complented! 
+			<br>
+			<small class='txaction'>Action: ${action}</small>
+			<br>TxId: ${etherScanLink}`;
+
+	$: content = message;
 
 	let marginTop = tx_number * 70 + 100;
 
 	if (marginTop < 110) marginTop = 80;
 
 	function setSuccess() {
-		content = `Transaction Complented! TxId: ${etherScanLink}`;
+		status = 'complete';
+		content = message;
 		alertType = 'success';
 	}
 
@@ -43,10 +53,10 @@
 		>
 			<p>
 				{#if alertType == 'success'}
-					{@html content}					
-					<i class="fas fa-check-circle completed"></i>
+					{@html content}
+					<i class="fas fa-check-circle completed" />
 				{:else}
-					{@html content}					
+					{@html content}
 					<img class="spinner" src="/images/Spinner.gif" alt="loader" />
 				{/if}
 			</p>
@@ -75,9 +85,9 @@
 	}
 
 	.btn-close {
-		color: white;
-		top: -15px;
-		right: -5px;
+		color: white !important;
+		top: -15px !important;
+		right: -5px !important;
 	}
 
 	.alert {
@@ -106,8 +116,7 @@
 	}
 
 	.alert {
-		width: fit-content;
-		max-width: 70%;
+		width: fit-content;		
 		margin: auto;
 	}
 

@@ -13,10 +13,10 @@ export function setAlert(message, alertType) {
     });
 }
 
-export function addAwaiter(txHash,status='pending') {
+export function addAwaiter(txHash,action,status='pending') {
     txTrigger.update(value => {
         let txArray = value
-        txArray.push(txParser(txHash, status))
+        txArray.push(txParser(txHash,action, status))
         value = txArray
         return value;
     });
@@ -70,9 +70,10 @@ function alertParser(message, alertType) {
     return alertData
 }
 
-function txParser(txHash, status) {
+function txParser(txHash,action, status) {
     var txData = {
         status: status,
+        action:action,
         show: true,
         txHash:txHash,
         id: txHash

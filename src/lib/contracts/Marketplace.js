@@ -123,7 +123,7 @@ export class MarketplaceContract extends MarketApproval {
                 offerType,
                 tokenType,
             ).send({}, async function (err, txHash) {                
-                addAwaiter(txHash)
+                addAwaiter(txHash,'Modify Offer')
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert('Offer Modifyed!', 'success')
