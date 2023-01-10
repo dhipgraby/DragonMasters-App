@@ -62,7 +62,7 @@ export class LoanBookContract {
         }
     }
 
-    async isLender(candidate, tokenId,tokenType, alert = false) {
+    async isLender(candidate, tokenId, tokenType, alert = false) {
         try {
             let is_lender = await this.contract.LoanBook.methods.isLender(
                 candidate,
@@ -77,7 +77,7 @@ export class LoanBookContract {
             console.log("Error at: isLender" + err)
         }
     }
-    
+
     async isBorrower(candidate, tokenId, tokenType, alert = false) {
         try {
             let is_borrower = await this.contract.LoanBook.methods.isBorrower(
@@ -207,7 +207,6 @@ export class LoanBookContract {
         try {
             const weiAccrued = await this.contract.LoanBook.methods.checkRentalIncomeOfAll().call()
             if (alert == true) setAlert('Accrued rentalIncome (Wei): ' + weiAccrued, 'success')
-
             return weiAccrued
         } catch (err) {
             if (alert == true) setAlert('checkRentalIncomeOfAll error', 'warning')
@@ -219,19 +218,15 @@ export class LoanBookContract {
         tokenIds,
         tokenTypes,
         alert
-    ) {
-        console.log('In collectRentalIncomeOfTokens')
-        console.log(tokenIds)
-        console.log(tokenTypes)
+    ) {                
         try {
             await this.contract.LoanBook.methods.collectRentalIncome(
                 tokenIds,
                 tokenTypes
             ).send({}, function (err, txHash) {
-                //addAwaiter(txHash, "collectRentalIncomeOfAll")
+                addAwaiter(txHash, "collectRentalIncomeOfTokens, ids :" + JSON.stringify(tokenIds))
                 if (alert == true && err) setAlert(err, 'warning')
-                else 
-                {
+                else {
                     if (alert == true) setAlert('Collected rental income (Wei)', 'success')
                     return txHash
                 }
@@ -247,10 +242,9 @@ export class LoanBookContract {
             await this.contract.LoanBook.methods.collectRentalIncomeOfTypes(
                 tokenTypes
             ).send({}, function (err, txHash) {
-                //addAwaiter(txHash, "collectRentalIncomeOfAll")
+                addAwaiter(txHash, "collectRentalIncome of Types")
                 if (alert == true && err) setAlert(err, 'warning')
-                else 
-                {
+                else {
                     if (alert == true) setAlert('Collected rental income (Wei)', 'success')
                     return txHash
                 }
@@ -264,10 +258,9 @@ export class LoanBookContract {
     async collectRentalIncomeOfAll(alert = false) {
         try {
             await this.contract.LoanBook.methods.collectRentalIncomeOfAll().send({}, function (err, txHash) {
-                //addAwaiter(txHash, "collectRentalIncomeOfAll")
+                addAwaiter(txHash, "collectRentalIncomeOfAll")
                 if (alert == true && err) setAlert(err, 'warning')
-                else 
-                {
+                else {
                     if (alert == true) setAlert('Collected rental income (Wei)', 'success')
                     return txHash
                 }
