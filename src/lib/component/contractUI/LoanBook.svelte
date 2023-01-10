@@ -131,6 +131,25 @@
 
 <div class="row">
 	<div class="col-sm-12 col-md-12 col-xl-4">
+
+		<div class="grid" align="left">
+			<h2>Get All Loans</h2>
+			<p class="bold">Paging: start & end indexes</p>
+			<div class="mb-3">
+				<Pagination {startIndex} {endIndex} {changeIndex} />
+			</div>
+			<button class="btn btn-dark" on:click={() => getOnLoan()}>GET ALL</button>
+		</div>
+
+		<div class="grid" align="left">
+			<h2>Get Loan</h2>
+			<p class="bold">Token Id</p>		
+			<div class="mb-3">
+				<input type="number" class="form-control" bind:value={singleId} placeholder="0" />
+			</div>
+			<button class="btn btn-dark" on:click={() => getLoan()}>GET</button>
+		</div>
+
 		<div class="grid" align="left">
 			<h2>Tokens Loaned By</h2>
 			<p class="bold">Address</p>
@@ -144,7 +163,6 @@
 			<button class="btn btn-dark" on:click={() => getLoanedBy()}>Check</button>
 		</div>
 
-
 		<div class="grid" align="left">
 			<h2>Tokens Borrowed By</h2>
 			<p class="bold">Address</p>
@@ -157,7 +175,6 @@
 			</div>
 			<button class="btn btn-dark" on:click={() => getBorrowedBy()}>Check</button>
 		</div>
-
 
 		<div class="grid" align="left">
 			<h2>Is Lender</h2>
@@ -187,23 +204,6 @@
 			<button class="btn btn-dark" on:click={() => isBorrower()}>Check</button>
 		</div>
 
-		<div class="grid" align="left">
-			<h2>Get Loan</h2>
-			<p class="bold">Token Id</p>		
-			<div class="mb-3">
-				<input type="number" class="form-control" bind:value={singleId} placeholder="0" />
-			</div>
-			<button class="btn btn-dark" on:click={() => getLoan()}>GET</button>
-		</div>
-
-		<div class="grid" align="left">
-			<h2>Get All Loans</h2>
-			<p class="bold">Paging: start & end indexes</p>
-			<div class="mb-3">
-				<Pagination {startIndex} {endIndex} {changeIndex} />
-			</div>
-			<button class="btn btn-dark" on:click={() => getOnLoan()}>GET ALL</button>
-		</div>
 	</div>
 	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid" align="left">
