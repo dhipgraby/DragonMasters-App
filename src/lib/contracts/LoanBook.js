@@ -1,4 +1,4 @@
-import { setAlert } from "$lib/storage/alerts";
+import { setAlert,addAwaiter  } from "$lib/storage/alerts";
 import { contracts } from "./contracts";
 
 
