@@ -1,8 +1,15 @@
 <script>
-	import { shortAddr } from '$lib/helpers/utils';
+	import { getBalance, shortAddr } from '$lib/helpers/utils';
+	import { afterUpdate } from 'svelte';
 
 	export let uriPath;
 	export let user_address;
+
+	let userBalance = 0;
+
+	afterUpdate(async ()=>{
+		userBalance = (user_address) ? await getBalance(user_address) : 0;		
+	})
 
 	function copyAddress() {
 		navigator.clipboard.writeText(user_address);
@@ -45,6 +52,9 @@
 					<li class="nav-item" title="Click to Copy">
 						<span class="nav-link" href="/#" on:click={copyAddress}>{shortAddr(user_address)}</span>
 					</li>
+					<li class="nav-item" title="Click to Copy">
+						<span class="nav-link balance" href="/#">Wei: {userBalance}</span>
+					</li>
 				{/if}
 			</ul>
 		</div>
@@ -52,6 +62,11 @@
 </nav>
 
 <style>
+
+	.balance{
+		color: white;
+		letter-spacing: 1px;
+	}
 
 	li span {
 		cursor: pointer;

@@ -11,8 +11,7 @@
 
 	onMount(async ()=>{
 	contractData = await contracts()
-	user_address = await contractData.account
-	console.log(account);
+	user_address = await contractData.account	
 	})
 
 	export let uriPath;

@@ -103,6 +103,13 @@ export function shortTxHash(txHash) {
     return userAddr;
 }
 
+//get balance 
+export const getBalance = async (address) => {
+    let balance = await  web3.eth.getBalance(address);
+    return balance;
+}
+
+
 //ether to wei
 export const getWei = async (value) => {
     if (typeof value != 'string') value = String(value)
