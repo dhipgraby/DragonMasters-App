@@ -78,7 +78,6 @@ export class LoanBookContract {
         }
     }
     
-
     async isBorrower(candidate, tokenId, tokenType, alert = false) {
         try {
             let is_borrower = await this.contract.LoanBook.methods.isBorrower(

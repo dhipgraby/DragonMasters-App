@@ -23,6 +23,7 @@ export const rentTerms = {
         minDuration: rentMinTime
     }
 }
+
 export const saleTerms = {
     price: salePriceInWei,
     rental: {
@@ -53,6 +54,7 @@ export class MarketplaceContract extends MarketApproval {
                 from: this.contract.account,
                 value: price
             }, function (err, txHash) {
+                addAwaiter(txHash,'Buy Token')
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert('Token id: ' + tokenId + ' Bought!', 'success')
@@ -78,6 +80,7 @@ export class MarketplaceContract extends MarketApproval {
                 from: this.contract.account,
                 value: totalAmount
             }, function (err, txHash) {
+                addAwaiter(txHash,'Rent Token')
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert('Token id: ' + tokenId + ' Rented!', 'success')
@@ -100,7 +103,9 @@ export class MarketplaceContract extends MarketApproval {
                 terms,
                 offerType,
                 tokenType,
-            ).send({}, async function (err, txHash) {              
+            ).send({}, async function (err, txHash) { 
+                let offerName = (offerType == OfferType.ForSale) ? 'Sell' : 'Rent';
+                addAwaiter(txHash,'Set '+offerName+' Offer')                   
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert('New offer created!', 'success')
@@ -346,6 +351,8 @@ export class MarketplaceContract extends MarketApproval {
                 offerType,
                 tokenType
             ).send({}, function (err, txHash) {
+                let offerName = (offerType == OfferType.ForSale) ? 'Sell' : 'Rent';
+                addAwaiter(txHash,'Remove '+offerName+' Offer')
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert(txHash, 'success')
@@ -369,6 +376,8 @@ export class MarketplaceContract extends MarketApproval {
                 tokenId,
                 tokenType
             ).send({}, function (err, txHash) {
+                let offerName = (offerType == OfferType.ForSale) ? 'Sell' : 'Rent';
+                addAwaiter(txHash,'Remove all '+offerName+' Offers')
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert(txHash, 'success')

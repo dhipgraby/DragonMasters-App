@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { setAlert } from "$lib/storage/alerts";
+import { setAlert,addAwaiter } from "$lib/storage/alerts";
 import { userEggs } from "$lib/storage/eggs";
 import { subSpeciesName,EggSize } from "$lib/helpers/utils"
 import { contracts } from "./contracts";
@@ -18,7 +18,7 @@ export class EggContract {
 
         try {
             await this.contract.EggToken.methods.mintGen0EggsTo(this.contract.account,amount,EggSize.Medium).send({}, function (err, txHash) {
-            
+                addAwaiter(txHash,'Minting Gen 0 Egg')
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert(txHash, 'success')
@@ -85,6 +85,7 @@ export class EggContract {
         eggIds = eggIds.split(',')        
         try {
             await this.contract.EggToken.methods.startIncubation(eggIds).send({}, async function (err, txHash) {
+                addAwaiter(txHash,'Incubation tokenId: ' + JSON.stringify(eggIds))
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert('Incubation Started for Egg id: ' + eggIds, 'success')              
@@ -120,6 +121,7 @@ export class EggContract {
 
         try {
             await this.contract.EggToken.methods.hatch(eggId).send({}, function (err, txHash) {
+                addAwaiter(txHash,'Hatching egg Id: ' + JSON.stringify(eggId))
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert(txHash, 'success')

@@ -106,53 +106,47 @@
 </div>
 
 <div class="cardBody">
-	<form
-		on:submit={() => {
-			false;
-		}}
-	>
-		{#if tap == 1}
-			<p class="bold mb-2 mt-3 f-right">
-				<i class="fab fa-ethereum" /> Current Price : {currentPrice}
-			</p>
+	{#if tap == 1}
+		<p class="bold mb-2 mt-3 f-right">
+			<i class="fab fa-ethereum" /> Current Price : {currentPrice}
+		</p>
 
+		<div class="form-floating mb-3">
+			<input bind:value={price} type="number" class="form-control mt-2" placeholder="Eth" />
+			<label for="price">Price</label>
+		</div>
+
+		{#if _offerType == OfferType.ForRent}
 			<div class="form-floating mb-3">
-				<input bind:value={price} type="number" class="form-control mt-2" placeholder="Eth" />
-				<label for="price">Price</label>
+				<input
+					type="number"
+					class="form-control"
+					id="deposit"
+					placeholder="Amount in Eth"
+					bind:value={deposit}
+				/>
+				<label for="deposit">Deposit in Eth</label>
+			</div>
+			<div class="form-floating mb-3">
+				<input
+					type="number"
+					class="form-control"
+					id="duration"
+					placeholder="Time to rent"
+					bind:value={duration}
+				/>
+				<label for="floatingPassword">Number of days</label>
 			</div>
 
-			{#if _offerType == OfferType.ForRent}
-				<div class="form-floating mb-3">
-					<input
-						type="number"
-						class="form-control"
-						id="deposit"
-						placeholder="Amount in Eth"
-						bind:value={deposit}
-					/>
-					<label for="deposit">Deposit in Eth</label>
-				</div>
-				<div class="form-floating mb-3">
-					<input
-						type="number"
-						class="form-control"
-						id="duration"
-						placeholder="Time to rent"
-						bind:value={duration}
-					/>
-					<label for="floatingPassword">Number of days</label>
-				</div>
-
-				<TimeInputs {addTime} />
-			{/if}
-
-			<button class="btn btn-success modifyBtn text-light" on:click={() => modifyOffer()}
-				>Confirm</button
-			>
-		{:else}
-			<button class="btn btn-danger text-light" on:click={() => removeSellOffer()}>Remove </button>
+			<TimeInputs {addTime} />
 		{/if}
-	</form>
+
+		<button class="btn btn-success modifyBtn text-light" on:click={() => modifyOffer()}
+			>Confirm</button
+		>
+	{:else}
+		<button class="btn btn-danger text-light" on:click={() => removeSellOffer()}>Remove </button>
+	{/if}
 </div>
 
 <style>
