@@ -42,7 +42,7 @@ export class LoanBookContract {
 
     async getLoan(tokenId, tokenType, alert = false) {
         try {
-            let Loan = await this.contract.LoanBook.methods.getLoan(tokenId, tokenType).call()
+            const Loan = await this.contract.LoanBook.methods.getLoan(tokenId, tokenType).call()
             if (alert == true) setAlert('Loan: ' + Loan, 'success')
             return Loan
         } catch (err) {

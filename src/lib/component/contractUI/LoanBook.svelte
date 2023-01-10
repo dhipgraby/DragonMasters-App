@@ -34,7 +34,7 @@
 	}
 
 	async function getLoan() {
-		contract.getLoan(singleId, _tokenType);
+		contract.getLoan(singleId, _tokenType, true);
 	}
 
 	async function isOnLoan() {
