@@ -6,7 +6,7 @@
 	import { startAwaiter } from '$lib/helpers/web3';
 
 	export let id;
-	export let tx_number = 0;
+	export const tx_number = 0;
 	export let status;
 	export let show = true;
 	export let txHash;

@@ -3,6 +3,17 @@
 	import Alert from '$lib/component/AlertMsg.svelte';
 	import TxAwaiter from '$lib/component/TxAwaiter.svelte';
 	import { alertTrigger, txTrigger } from '$lib/storage/alerts';
+	import { contracts } from '$lib/contracts/contracts';	
+	import { onMount } from 'svelte';
+
+	let contractData;
+	let user_address;
+
+	onMount(async ()=>{
+	contractData = await contracts()
+	user_address = await contractData.account
+	console.log(account);
+	})
 
 	export let uriPath;
 
@@ -10,7 +21,7 @@
 	$: pendingTransactions = $txTrigger;
 </script>
 
-<NavBar {uriPath} />
+<NavBar {uriPath} {user_address} />
 
 {#each lastAlerts as alert, i}
 	<Alert {...alert} alert_number={i} />
