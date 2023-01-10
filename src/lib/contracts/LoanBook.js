@@ -94,20 +94,6 @@ export class LoanBookContract {
         }
     }
 
-    async checkRentalIncomeOfTypes(tokenTypes, alert = false) {
-        try {
-            const weiAccrued = await this.contract.LoanBook.methods.checkRentalIncomeOfTypes(
-                tokenTypes
-            ).call()
-            if (alert == true) setAlert('Accrued rentalIncome (Wei): ' + weiAccrued, 'success')
-
-            return weiAccrued
-        } catch (err) {
-            if (alert == true) setAlert('checkRentalIncomeOfTypes error', 'warning')
-            console.log("Error at: checkRentalIncomeOfTypes" + err)
-        }
-    }
-
     async getBorrowedBy(
         borrower,
         startIndex,
@@ -203,6 +189,32 @@ export class LoanBookContract {
         } catch (err) {
             if (alert == true) setAlert('checkRentalIncomeOfTokens error', 'warning')
             console.log("Error at: checkRentalIncomeOfTokens" + err)
+        }
+    }
+
+    async checkRentalIncomeOfTypes(tokenTypes, alert = false) {
+        try {
+            const weiAccrued = await this.contract.LoanBook.methods.checkRentalIncomeOfTypes(
+                tokenTypes
+            ).call()
+            if (alert == true) setAlert('Accrued rentalIncome (Wei): ' + weiAccrued, 'success')
+
+            return weiAccrued
+        } catch (err) {
+            if (alert == true) setAlert('checkRentalIncomeOfTypes error', 'warning')
+            console.log("Error at: checkRentalIncomeOfTypes" + err)
+        }
+    }
+
+    async checkRentalIncomeOfAll(alert = false) {
+        try {
+            const weiAccrued = await this.contract.LoanBook.methods.checkRentalIncomeOfAll().call()
+            if (alert == true) setAlert('Accrued rentalIncome (Wei): ' + weiAccrued, 'success')
+
+            return weiAccrued
+        } catch (err) {
+            if (alert == true) setAlert('checkRentalIncomeOfAll error', 'warning')
+            console.log("Error at: checkRentalIncomeOfAll" + err)
         }
     }
 

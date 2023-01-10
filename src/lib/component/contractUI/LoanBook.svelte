@@ -51,16 +51,6 @@
 		 _tokenType, true);
 	}
 
-	async function checkRentalIncomeOfTypes() {
-		if (checkDragons == false && checkEggs == false)
-			setAlert('Select at leat one token type', 'warning');
-		const check_tokenTypes = [];
-		if (checkDragons == true) check_tokenTypes.push(TokenType.Dragon);
-		if (checkEggs == true) check_tokenTypes.push(TokenType.Egg);
-		console.log(check_tokenTypes);
-		contract.checkRentalIncomeOfTypes(check_tokenTypes, true);
-	}
-
 	async function getBorrowedBy() {
 		contract.getBorrowedBy(borrower, borrowerIndex, borrowerEndIndex, _tokenType, true);
 	}
@@ -110,6 +100,20 @@
 		console.log(check_tokenTypes)
 
 		contract.checkRentalIncomeOfTokens(check_ids, check_tokenTypes, true);
+	}
+
+	async function checkRentalIncomeOfTypes() {
+		if (checkDragons == false && checkEggs == false)
+			setAlert('Select at leat one token type', 'warning');
+		const check_tokenTypes = [];
+		if (checkDragons == true) check_tokenTypes.push(TokenType.Dragon);
+		if (checkEggs == true) check_tokenTypes.push(TokenType.Egg);
+		console.log(check_tokenTypes);
+		contract.checkRentalIncomeOfTypes(check_tokenTypes, true);
+	}
+
+	async function checkRentalIncomeOfAll() {
+		contract.checkRentalIncomeOfAll(true);
 	}
 </script>
 
@@ -248,5 +252,10 @@
 			</div>
 			<button class="btn btn-dark" on:click={() => checkRentalIncomeOfTypes()}>Check</button>
 		</div>
+		<div class="grid" align="left">
+			<h2>Check rental Income of all</h2>
+			<button class="btn btn-dark" on:click={() => checkRentalIncomeOfAll()}>Check</button>
+		</div>
 	</div>
 </div>
+
