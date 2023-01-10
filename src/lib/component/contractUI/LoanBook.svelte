@@ -104,7 +104,7 @@
 
 	async function checkRentalIncomeOfTypes() {
 		if (checkDragons == false && checkEggs == false)
-			setAlert('Select at leat one token type', 'warning');
+			setAlert('Select at least one token type', 'warning');
 		const check_tokenTypes = [];
 		if (checkDragons == true) check_tokenTypes.push(TokenType.Dragon);
 		if (checkEggs == true) check_tokenTypes.push(TokenType.Egg);
@@ -114,6 +114,44 @@
 
 	async function checkRentalIncomeOfAll() {
 		contract.checkRentalIncomeOfAll(true);
+	}
+
+	async function collectRentalIncomeOfTokens() {
+		if (check_egg_tokenIds.length == 0 && check_dragon_tokenIds.length == 0)
+			setAlert('Specify at least one token id', 'warning');
+			
+		let check_egg_Ids = [];
+		let check_egg_tokenTypes = [];
+		if (check_egg_tokenIds.length > 0) {
+			check_egg_Ids = check_egg_tokenIds.split(',').map(Number);
+			check_egg_tokenTypes = new Array(check_egg_Ids.length).fill(TokenType.Egg);
+		}
+		let check_dragon_Ids = [];
+		let check_dragon_tokenTypes = [];
+		if (check_dragon_tokenIds.length > 0) {
+			check_dragon_Ids = check_dragon_tokenIds.split(',').map(Number);
+			check_dragon_tokenTypes = new Array(check_dragon_Ids.length).fill(TokenType.Dragon);
+		}
+		const check_ids = check_egg_Ids.concat(check_dragon_Ids);
+		const check_tokenTypes = check_egg_tokenTypes.concat(check_dragon_tokenTypes);
+		console.log(check_ids)
+		console.log(check_tokenTypes)
+
+		contract.collectRentalIncomeOfTokens(check_ids, check_tokenTypes, true);
+	}
+
+	async function collectRentalIncomeOfTypes() {
+		if (checkDragons == false && checkEggs == false)
+			setAlert('Select at least one token type', 'warning');
+		const check_tokenTypes = [];
+		if (checkDragons == true) check_tokenTypes.push(TokenType.Dragon);
+		if (checkEggs == true) check_tokenTypes.push(TokenType.Egg);
+		console.log(check_tokenTypes);
+		contract.collectRentalIncomeOfTypes(check_tokenTypes, true);
+	}
+
+	async function collectRentalIncomeOfAll() {
+		contract.collectRentalIncomeOfAll(true);
 	}
 </script>
 
@@ -133,7 +171,7 @@
 	<div class="col-sm-12 col-md-12 col-xl-4">
 
 		<div class="grid" align="left">
-			<h2>Get All Loans</h2>
+			<h2>Get all Loans (of type)</h2>
 			<p class="bold">Paging: start & end indexes</p>
 			<div class="mb-3">
 				<Pagination {startIndex} {endIndex} {changeIndex} />
@@ -228,6 +266,7 @@
 			</div>
 			<button class="btn btn-dark" on:click={() => checkRentalIncomeOfTokens()}>Check</button>
 		</div>
+
 		<div class="grid" align="left">
 			<h2>Check rental Income</h2>
 			<div class="mb-3">
@@ -252,9 +291,63 @@
 			</div>
 			<button class="btn btn-dark" on:click={() => checkRentalIncomeOfTypes()}>Check</button>
 		</div>
+
 		<div class="grid" align="left">
 			<h2>Check rental Income of all</h2>
 			<button class="btn btn-dark" on:click={() => checkRentalIncomeOfAll()}>Check</button>
+		</div>
+
+		<div class="grid" align="left">
+			<h2>Collect rental Income</h2>
+			<p class="bold">Eggs: List of Token Ids</p>
+			<div class="mb-3">
+				<input
+					type="text"
+					bind:value={check_egg_tokenIds}
+					class="form-control"
+					placeholder="0, 1, ..."
+				/>
+			</div>
+			<p class="bold">Dragons: List of Token Ids</p>
+			<div class="mb-3">
+				<input
+					type="text"
+					bind:value={check_dragon_tokenIds}
+					class="form-control"
+					placeholder="0, 1, ..."
+				/>
+			</div>
+			<button class="btn btn-dark" on:click={() => collectRentalIncomeOfTokens()}>Collect</button>
+		</div>
+
+		<div class="grid" align="left">
+			<h2>Collect rental Income</h2>
+			<div class="mb-3">
+				<div class="form-check form-check-inline">
+					<input
+						class="form-check-input"
+						type="checkbox"
+						id="dragonCheckbox"
+						bind:checked={checkDragons}
+					/>
+					<label class="form-check-label" for="dragonCheckbox"><b>Dragon</b></label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input
+						class="form-check-input"
+						type="checkbox"
+						id="eggCheckbox"
+						bind:checked={checkEggs}
+					/>
+					<label class="form-check-label" for="eggCheckbox"><b>Egg</b></label>
+				</div>
+			</div>
+			<button class="btn btn-dark" on:click={() => collectRentalIncomeOfTypes()}>Collect</button>
+		</div>
+
+		<div class="grid" align="left">
+			<h2>Collect rental Income of all</h2>
+			<button class="btn btn-dark" on:click={() => collectRentalIncomeOfAll()}>Collect</button>
 		</div>
 	</div>
 </div>
