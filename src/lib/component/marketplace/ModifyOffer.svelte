@@ -80,7 +80,7 @@
 
 	onMount(async () => {
 		if (_offerType == OfferType.ForSale) {
-			price = await getEth(offer.sellPrice);			
+			price = await getEth(offer.sellPrice);
 		} else {
 			if (_offerType == OfferType.ForRent) {
 				price = await getEth(offer.rent.price);
@@ -88,7 +88,7 @@
 				duration = parseInt(offer.rent.minDuration) / timeDropdrown.oneDay;
 			}
 		}
-		currentPrice = price
+		currentPrice = price;
 	});
 </script>
 

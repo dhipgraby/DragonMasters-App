@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { setAlert } from "$lib/storage/alerts";
+import { setAlert,addAwaiter } from "$lib/storage/alerts";
 import { userDragons } from "$lib/storage/dragon";
 import { subSpeciesName } from "$lib/helpers/utils"
 import { contracts } from "./contracts";
@@ -148,6 +148,7 @@ export class DragonContract {
         dragonId = dragonId.split(',')
         try {
             await this.contract.DragonToken.methods.raiseMaturity(dragonId).send({}, function (err, txHash) {
+                addAwaiter(txHash,'Raise dragon Id: ' + JSON.stringify(dragonId))
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert(txHash, 'success')
@@ -164,6 +165,7 @@ export class DragonContract {
         idDragonMateB = idDragonMateB.split(',')
         try {
             await this.contract.DragonToken.methods.breed(idDragonMateA, idDragonMateB).send({}, function (err, txHash) {
+                addAwaiter(txHash,'Breeding Ids: ' + JSON.stringify(idDragonMateA) +' - ' + JSON.stringify(idDragonMateB))
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert(txHash, 'success')

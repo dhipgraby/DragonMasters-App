@@ -1,5 +1,5 @@
-import { setAlert } from "$lib/storage/alerts";
-import { dragonsForSale,eggsForSale,dragonsForRent,eggsForRent } from "$lib/storage/marketplace";
+import { addAwaiter, setAlert } from "$lib/storage/alerts";
+import { dragonsForSale, eggsForSale, dragonsForRent, eggsForRent } from "$lib/storage/marketplace";
 import { subSpeciesName } from "$lib/helpers/utils"
 import { userDragons } from '$lib/storage/dragon'
 import { userEggs } from '$lib/storage/eggs'
@@ -8,7 +8,6 @@ import { EggContract } from '$lib/contracts/EggToken';
 import { MarketApproval } from '$lib/contracts/MarketApproval';
 import { contracts } from "./contracts";
 import { get } from 'svelte/store';
-import { awaitTransactionMined } from "$lib/helpers/web3";
 
 const salePriceInWei = '500000000000000000'  //0.5 ETH
 const rentPriceInWei = '10000000000000000'  // 0.01ETH
@@ -24,6 +23,7 @@ export const rentTerms = {
         minDuration: rentMinTime
     }
 }
+
 export const saleTerms = {
     price: salePriceInWei,
     rental: {
@@ -36,7 +36,7 @@ export class MarketplaceContract extends MarketApproval {
     constructor() {
         super()
         this.contract
-        this.marketplace        
+        this.marketplace
         return (async () => {
             this.contract = await contracts();
             this.dragonInterface = await new DragonContract()
@@ -54,6 +54,7 @@ export class MarketplaceContract extends MarketApproval {
                 from: this.contract.account,
                 value: price
             }, function (err, txHash) {
+                addAwaiter(txHash,'Buy Token')
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert('Token id: ' + tokenId + ' Bought!', 'success')
@@ -68,7 +69,7 @@ export class MarketplaceContract extends MarketApproval {
         }
     }
 
-    async rentToken(tokenId, tokenType, price,deposit) {
+    async rentToken(tokenId, tokenType, price, deposit) {
         const totalAmount = (Number(price) + Number(deposit))
         console.log('totalAmount: ' + totalAmount);
         try {
@@ -79,6 +80,7 @@ export class MarketplaceContract extends MarketApproval {
                 from: this.contract.account,
                 value: totalAmount
             }, function (err, txHash) {
+                addAwaiter(txHash,'Rent Token')
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert('Token id: ' + tokenId + ' Rented!', 'success')
@@ -94,15 +96,16 @@ export class MarketplaceContract extends MarketApproval {
     }
 
     async setOffer(tokenId, offerType, tokenType, terms) {
-        console.log('setting offer');
+        
         try {
             let offer = await this.contract.Marketplace.methods.setOffer(
                 tokenId,
                 terms,
                 offerType,
                 tokenType,
-            ).send({}, async function (err, txHash) {
-                console.log(txHash);                                
+            ).send({}, async function (err, txHash) { 
+                let offerName = (offerType == OfferType.ForSale) ? 'Sell' : 'Rent';
+                addAwaiter(txHash,'Set '+offerName+' Offer')                   
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert('New offer created!', 'success')
@@ -124,7 +127,8 @@ export class MarketplaceContract extends MarketApproval {
                 terms,
                 offerType,
                 tokenType,
-            ).send({}, function (err, txHash) {
+            ).send({}, async function (err, txHash) {                
+                addAwaiter(txHash,'Modify Offer')
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert('Offer Modifyed!', 'success')
@@ -146,30 +150,30 @@ export class MarketplaceContract extends MarketApproval {
         _tokenType
     ) {
         //Collecting all offers and details 
-        let allOffers = await this.getOffered(from, to, _offerType, _tokenType) 
-        console.log(allOffers);       
+        let allOffers = await this.getOffered(from, to, _offerType, _tokenType)
+        console.log(allOffers);
         let tokenIds = allOffers.map((el) => { return el.tokenId });
         let assets = []
-        
+
         for (let i = 0; i < tokenIds.length; i++) {
-            let assetsDetails            
-            
-            if(_tokenType == TokenType.Dragon){                
-                assetsDetails = await this.getDragon(Number(tokenIds[i]))                            
+            let assetsDetails
+
+            if (_tokenType == TokenType.Dragon) {
+                assetsDetails = await this.getDragon(Number(tokenIds[i]))
                 assetsDetails['dna'] = await this.getDna(assetsDetails.dnaId)
             } else {
                 assetsDetails = await this.getEgg(tokenIds[i])
-            }            
+            }
             assets.push(assetsDetails)
         }
-        
+
         let offerName = (_offerType == OfferType.ForSale) ? 'sellOffer' : 'rentOffer';
         let offers = assets.map(el => {
-            
+
             let TID = el.tokenId.toString()
-            
-            if (tokenIds.includes(TID)) {                
-                
+
+            if (tokenIds.includes(TID)) {
+
                 el[offerName] = allOffers.find(function (offer) {
                     el["owner"] = offer.owner
                     return offer.tokenId === TID;
@@ -178,20 +182,20 @@ export class MarketplaceContract extends MarketApproval {
             return el
         })
         offers['totalOffers'] = allOffers.totalOffers
-        
-        if(_tokenType == TokenType.Dragon){
-            if((_offerType == OfferType.ForSale)){
+
+        if (_tokenType == TokenType.Dragon) {
+            if ((_offerType == OfferType.ForSale)) {
                 dragonsForSale.set(offers)
             } else {
                 dragonsForRent.set(offers)
-            }            
+            }
         } else {
-            if((_offerType == OfferType.ForSale)){
+            if ((_offerType == OfferType.ForSale)) {
                 eggsForSale.set(offers)
             } else {
                 eggsForRent.set(offers)
-            }            
-        }              
+            }
+        }
         return offers
     }
 
@@ -288,8 +292,8 @@ export class MarketplaceContract extends MarketApproval {
 
             //ITS ONLY UPDATES THE OFFER OF EXISTING TOKEN TYPE ON STORAGE
             if (ownAccount == true) {
-                
-                let assets = (_tokenType == TokenType.Dragon) ? get(userDragons) :  get(userEggs)
+
+                let assets = (_tokenType == TokenType.Dragon) ? get(userDragons) : get(userEggs)
                 let offerName = (_offerType == OfferType.ForSale) ? 'sellOffer' : 'rentOffer';
                 let assetOffers = assets.map(el => {
                     let TID = el.tokenId
@@ -302,14 +306,14 @@ export class MarketplaceContract extends MarketApproval {
                     return el
                 })
 
-                switch(_tokenType){
-                    case TokenType.Dragon :
-                    userDragons.set(assetOffers)    
-                    break;    
-                    case TokenType.Egg :
-                    userEggs.set(assetOffers)    
-                    break;    
-                }                
+                switch (_tokenType) {
+                    case TokenType.Dragon:
+                        userDragons.set(assetOffers)
+                        break;
+                    case TokenType.Egg:
+                        userEggs.set(assetOffers)
+                        break;
+                }
             }
 
             if (alert == true) setAlert('You have a total of ' + ids.totalOffered + ' offers.<p class="bold m-0">Token Ids: ' + tokenIds + '</p>', 'success')
@@ -347,6 +351,8 @@ export class MarketplaceContract extends MarketApproval {
                 offerType,
                 tokenType
             ).send({}, function (err, txHash) {
+                let offerName = (offerType == OfferType.ForSale) ? 'Sell' : 'Rent';
+                addAwaiter(txHash,'Remove '+offerName+' Offer')
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert(txHash, 'success')
@@ -370,6 +376,8 @@ export class MarketplaceContract extends MarketApproval {
                 tokenId,
                 tokenType
             ).send({}, function (err, txHash) {
+                let offerName = (offerType == OfferType.ForSale) ? 'Sell' : 'Rent';
+                addAwaiter(txHash,'Remove all '+offerName+' Offers')
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert(txHash, 'success')
@@ -385,15 +393,15 @@ export class MarketplaceContract extends MarketApproval {
     }
 
     async getDragon(dragonId, alert = false) {
-        
+
         try {
-            let dragonDetails = await this.contract.DragonToken.methods.getDragon(dragonId).call()        
-            
+            let dragonDetails = await this.contract.DragonToken.methods.getDragon(dragonId).call()
+
             const toNumbers2D = arr => arr.map(arr => arr.map(Number));
             dragonDetails = {
                 ...dragonDetails[0], skills: toNumbers2D(dragonDetails[1])
-            }    
-        
+            }
+
             let dragon = {
                 tokenId: dragonId,
                 dnaId: dragonDetails.dnaId,
@@ -405,11 +413,11 @@ export class MarketplaceContract extends MarketApproval {
                 mumId: 0,
                 dadId: 0,
                 skills: dragonDetails.skills,
-                attributes: dragonDetails.attributes,             
+                attributes: dragonDetails.attributes,
             }
-            
-            if (alert == true) setAlert('Dragon Details: '+ JSON.stringify(dragon), 'success')
-             
+
+            if (alert == true) setAlert('Dragon Details: ' + JSON.stringify(dragon), 'success')
+
             return dragon
 
         } catch (err) {
@@ -429,26 +437,26 @@ export class MarketplaceContract extends MarketApproval {
         }
     }
 
-    async getEgg(eggId,message = false) {
+    async getEgg(eggId, message = false) {
 
         try {
             let eggDetails = await this.contract.EggToken.methods.getEgg(eggId).call()
-            
-            if(message == true) setAlert(eggDetails,'success')
+
+            if (message == true) setAlert(eggDetails, 'success')
             return {
                 tokenId: eggId,
                 mumId: eggDetails.mumId,
                 dadId: eggDetails.dadId,
                 incubation: eggDetails.incubationCompleteAt,
                 laidTime: eggDetails.laidTime,
-                subSpecies:subSpeciesName(eggDetails.species),                
+                subSpecies: subSpeciesName(eggDetails.species),
             }
 
         } catch (err) {
             setAlert('Error getting this egg id ', 'warning')
             console.log("Error at: cgetEgg" + err)
         }
-    }    
+    }
 }
 
 

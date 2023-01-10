@@ -67,8 +67,6 @@
         max-width: 70%;
         margin: auto;
     }
-
-
   
     p {
       margin: 0;
