@@ -42,7 +42,7 @@ export class LoanBookContract {
 
     async getLoan(tokenId, tokenType, alert = false) {
         try {
-            let Loan = await this.contract.LoanBook.methods.getLoan(tokenId, tokenType).call()
+            const Loan = await this.contract.LoanBook.methods.getLoan(tokenId, tokenType).call()
             if (alert == true) setAlert('Loan: ' + Loan, 'success')
             return Loan
         } catch (err) {
@@ -98,21 +98,14 @@ export class LoanBookContract {
         borrower,
         startIndex,
         endIndex,
-        tokenType
+        tokenType,
+        alert = false
     ) {
-
-        let offers = []
-
         try {
-            let ids = await this.contract.LoanBook.methods.getBorrowedBy(borrower, startIndex, endIndex, tokenType).call()
-            let tokenIds = ids.tokenIds
-            for (let i = 0; i < tokenIds.length; i++) {
-                let currentOffer = await this.getLoan(ids.tokenIds[i], tokenType)
-                offers.push(currentOffer)
-            }
+            const ids = await this.contract.LoanBook.methods.getBorrowedBy(borrower, startIndex, endIndex, tokenType).call()
 
-            if (alert == true) setAlert('Total Loans ' + ids.totalLoaned + '.<p class="bold m-0">Token Ids: ' + tokenIds + '</p>', 'success')
-            return offers
+            if (alert == true) setAlert('Borrowed tokens: ' + ids.totalBorrowed + '.<p class="bold m-0">Token Ids: ' + ids.tokenIds + '</p>', 'success')
+            return ids.tokenIds
 
         } catch (err) {
             setAlert('getBorrowedBy error', 'warning')
@@ -124,21 +117,14 @@ export class LoanBookContract {
         lender,
         startIndex,
         endIndex,
-        tokenType
+        tokenType,
+        alert = false
     ) {
-
-        let offers = []
-
         try {
-            let ids = await this.contract.LoanBook.methods.getLoanedBy(lender, startIndex, endIndex, tokenType).call()
-            let tokenIds = ids.tokenIds
-            for (let i = 0; i < tokenIds.length; i++) {
-                let currentOffer = await this.getLoan(ids.tokenIds[i], tokenType)
-                offers.push(currentOffer)
-            }
+            const ids = await this.contract.LoanBook.methods.getLoanedBy(lender, startIndex, endIndex, tokenType).call()
 
-            if (alert == true) setAlert('Total Loaned ' + ids.totalLoaned + '.<p class="bold m-0">Token Ids: ' + tokenIds + '</p>', 'success')
-            return offers
+            if (alert == true) setAlert('Loaned tokens: ' + ids.totalLoaned + '.<p class="bold m-0">Token Ids: ' + ids.tokenIds + '</p>', 'success')
+            return ids.tokenIds
 
         } catch (err) {
             setAlert('getLoanedBy error', 'warning')
@@ -183,7 +169,7 @@ export class LoanBookContract {
         }
     }
 
-    async checkRentalIncome(
+    async checkRentalIncomeOfTokens(
         tokenIds,
         tokenTypes,
         alert
@@ -194,15 +180,102 @@ export class LoanBookContract {
                 tokenTypes
             ).call()
 
+            if (alert == true) setAlert('Rental Income (Wei) = ' + weiAccrued, 'success')
             return weiAccrued
 
         } catch (err) {
-            if (alert == true) setAlert('checkRentalIncome error', 'warning')
-            console.log("Error at: checkRentalIncome" + err)
+            if (alert == true) setAlert('checkRentalIncomeOfTokens error', 'warning')
+            console.log("Error at: checkRentalIncomeOfTokens" + err)
+        }
+    }
+
+    async checkRentalIncomeOfTypes(tokenTypes, alert = false) {
+        try {
+            const weiAccrued = await this.contract.LoanBook.methods.checkRentalIncomeOfTypes(
+                tokenTypes
+            ).call()
+            if (alert == true) setAlert('Accrued rentalIncome (Wei): ' + weiAccrued, 'success')
+
+            return weiAccrued
+        } catch (err) {
+            if (alert == true) setAlert('checkRentalIncomeOfTypes error', 'warning')
+            console.log("Error at: checkRentalIncomeOfTypes" + err)
+        }
+    }
+
+    async checkRentalIncomeOfAll(alert = false) {
+        try {
+            const weiAccrued = await this.contract.LoanBook.methods.checkRentalIncomeOfAll().call()
+            if (alert == true) setAlert('Accrued rentalIncome (Wei): ' + weiAccrued, 'success')
+
+            return weiAccrued
+        } catch (err) {
+            if (alert == true) setAlert('checkRentalIncomeOfAll error', 'warning')
+            console.log("Error at: checkRentalIncomeOfAll" + err)
+        }
+    }
+
+    async collectRentalIncomeOfTokens(
+        tokenIds,
+        tokenTypes,
+        alert
+    ) {
+        console.log('In collectRentalIncomeOfTokens')
+        console.log(tokenIds)
+        console.log(tokenTypes)
+        try {
+            await this.contract.LoanBook.methods.collectRentalIncome(
+                tokenIds,
+                tokenTypes
+            ).send({}, function (err, txHash) {
+                //addAwaiter(txHash, "collectRentalIncomeOfAll")
+                if (alert == true && err) setAlert(err, 'warning')
+                else 
+                {
+                    if (alert == true) setAlert('Collected rental income (Wei)', 'success')
+                    return txHash
+                }
+            })
+        } catch (err) {
+            if (alert == true) setAlert('collectRentalIncomeOfTokens error', 'warning')
+            console.log("Error at: collectRentalIncomeOfTokens" + err)
+        }
+    }
+
+    async collectRentalIncomeOfTypes(tokenTypes, alert = false) {
+        try {
+            await this.contract.LoanBook.methods.collectRentalIncomeOfTypes(
+                tokenTypes
+            ).send({}, function (err, txHash) {
+                //addAwaiter(txHash, "collectRentalIncomeOfAll")
+                if (alert == true && err) setAlert(err, 'warning')
+                else 
+                {
+                    if (alert == true) setAlert('Collected rental income (Wei)', 'success')
+                    return txHash
+                }
+            })
+        } catch (err) {
+            if (alert == true) setAlert('collectRentalIncomeOfTypes error', 'warning')
+            console.log("Error at: collectRentalIncomeOfTypes" + err)
+        }
+    }
+
+    async collectRentalIncomeOfAll(alert = false) {
+        try {
+            await this.contract.LoanBook.methods.collectRentalIncomeOfAll().send({}, function (err, txHash) {
+                //addAwaiter(txHash, "collectRentalIncomeOfAll")
+                if (alert == true && err) setAlert(err, 'warning')
+                else 
+                {
+                    if (alert == true) setAlert('Collected rental income (Wei)', 'success')
+                    return txHash
+                }
+            })
+        } catch (err) {
+            if (alert == true) setAlert('collectRentalIncomeOfAll error', 'warning')
+            console.log("Error at: collectRentalIncomeOfAll" + err)
         }
     }
 
 }
-
-
-
