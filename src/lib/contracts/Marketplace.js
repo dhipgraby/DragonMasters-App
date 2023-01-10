@@ -105,7 +105,7 @@ export class MarketplaceContract extends MarketApproval {
                 tokenType,
             ).send({}, async function (err, txHash) { 
                 let offerName = (offerType == OfferType.ForSale) ? 'Sell' : 'Rent';
-                addAwaiter(txHash,'Set '+offerName+' Offer')                   
+                addAwaiter(txHash,'Create '+offerName+' Offer')                   
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert('New offer created!', 'success')
