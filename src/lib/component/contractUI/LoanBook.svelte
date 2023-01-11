@@ -28,7 +28,6 @@
 	let checkEggs = false;
 
 	async function getOnLoan() {
-		console.log(startIndex + '-' + endIndex);
 		contract.getOnLoan(startIndex, endIndex, _tokenType, true);
 	}
 
@@ -68,6 +67,15 @@
 		contract.getNumOnLoan(_tokenType, true);
 	}
 
+	async function borrowerBalance() {
+		contract.borrowerBalance(borrower, _tokenType, true);
+	}
+
+	async function lenderBalance() {
+		contract.lenderBalance(lender, _tokenType, true);
+	}
+
+
 
 	function changeIndex(indexType, value) {
 		switch (indexType) {
@@ -98,8 +106,6 @@
 		}
 		const check_ids = check_egg_Ids.concat(check_dragon_Ids);
 		const check_tokenTypes = check_egg_tokenTypes.concat(check_dragon_tokenTypes);
-		console.log(check_ids)
-		console.log(check_tokenTypes)
 
 		contract.checkRentalIncomeOfTokens(check_ids, check_tokenTypes, true);
 	}
@@ -110,7 +116,7 @@
 		const check_tokenTypes = [];
 		if (checkDragons == true) check_tokenTypes.push(TokenType.Dragon);
 		if (checkEggs == true) check_tokenTypes.push(TokenType.Egg);
-		console.log(check_tokenTypes);
+
 		contract.checkRentalIncomeOfTypes(check_tokenTypes, true);
 	}
 
@@ -136,8 +142,6 @@
 		}
 		const check_ids = check_egg_Ids.concat(check_dragon_Ids);
 		const check_tokenTypes = check_egg_tokenTypes.concat(check_dragon_tokenTypes);
-		console.log(check_ids)
-		console.log(check_tokenTypes)
 
 		contract.collectRentalIncomeOfTokens(check_ids, check_tokenTypes, true);
 	}
@@ -172,12 +176,12 @@
 <div class="row">
 	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid" align="left">
-			<h2>Get total (of type) on-loan</h2>
+			<h2>Total on-loan (of token type)</h2>
 			<button class="btn btn-dark" on:click={() => getNumOnLoan()}>GET</button>
 		</div>
 
 		<div class="grid" align="left">
-			<h2>All tokens (of type) on loan?</h2>
+			<h2>All tokens on loan (of type)</h2>
 			<p class="bold">Paging: start & end indexes</p>
 			<div class="mb-3">
 				<Pagination {startIndex} {endIndex} {changeIndex} />
@@ -195,7 +199,7 @@
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Get loan details</h2>
+			<h2>Loan details</h2>
 			<p class="bold">Token Id</p>		
 			<div class="mb-3">
 				<input type="number" class="form-control" bind:value={singleId} placeholder="0" />
@@ -204,7 +208,16 @@
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Get tokenIds loaned-out by</h2>
+			<h2>Total loaned-out by</h2>
+			<p class="bold">Address</p>
+			<div class="mb-3">
+				<input type="text" class="form-control" bind:value={lender} placeholder="Address" />
+			</div>
+			<button class="btn btn-dark" on:click={() => lenderBalance()}>GET</button>
+		</div>
+
+		<div class="grid" align="left">
+			<h2>Tokens loaned-out by</h2>
 			<p class="bold">Address</p>
 			<div class="mb-3">
 				<input type="text" class="form-control" bind:value={lender} placeholder="Address" />
@@ -217,7 +230,16 @@
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Get tokenIds borrowed by</h2>
+			<h2>Total borrowed by</h2>
+			<p class="bold">Address</p>
+			<div class="mb-3">
+				<input type="text" class="form-control" bind:value={borrower} placeholder="Address" />
+			</div>
+			<button class="btn btn-dark" on:click={() => borrowerBalance()}>GET</button>
+		</div>
+
+		<div class="grid" align="left">
+			<h2>Tokens borrowed by</h2>
 			<p class="bold">Address</p>
 			<div class="mb-3">
 				<input type="text" class="form-control" bind:value={borrower} placeholder="Address" />
@@ -231,7 +253,7 @@
 
 
 		<div class="grid" align="left">
-			<h2>Get rentee/lender (of token)</h2>
+			<h2>Rentee/lender (of token)</h2>
 			<p class="bold">Token Id</p>
 			<div class="mb-3">
 				<input type="number" class="form-control" bind:value={lender_tokenId}
@@ -241,7 +263,7 @@
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Get borrower (of token)</h2>
+			<h2>Borrower (of token)</h2>
 			<p class="bold">Token Id</p>
 			<div class="mb-3">
 				<input type="number" class="form-control" bind:value={borrower_tokenId}
@@ -282,7 +304,7 @@
 	</div>
 	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid" align="left">
-			<h2>Accumulated rental Income?</h2>
+			<h2>Accumulated rental income</h2>
 			<p class="bold">Eggs: List of Token Ids</p>
 			<div class="mb-3">
 				<input
@@ -305,7 +327,7 @@
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Accumulated rental Income?</h2>
+			<h2>Accumulated rental income</h2>
 			<div class="mb-3">
 				<div class="form-check form-check-inline">
 					<input
@@ -330,7 +352,7 @@
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Accumulated rental Income of all?</h2>
+			<h2>All accumulated rental income</h2>
 			<button class="btn btn-dark" on:click={() => checkRentalIncomeOfAll()}>GET</button>
 		</div>
 
@@ -383,7 +405,7 @@
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Collect rental Income of all</h2>
+			<h2>Collect all rental Income</h2>
 			<button class="btn btn-dark" on:click={() => collectRentalIncomeOfAll()}>COLLECT</button>
 		</div>
 	</div>
