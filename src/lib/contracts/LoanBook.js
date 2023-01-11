@@ -137,16 +137,50 @@ export class LoanBookContract {
 
     }
 
-    async getNumOnLoan(tokenType) {
+
+    async borrowerOf(tokenId, tokenType, alert = false) {
+        try {
+            const borrower = await this.contract.LoanBook.methods.borrowerOf(
+                tokenId,
+                tokenType
+            ).call()
+            if (alert == true) setAlert('borrowerOf token is: ' + borrower, 'success')
+
+            return borrower
+        } catch (err) {
+            if (alert == true) setAlert('borrowerOf error', 'warning')
+            console.log("Error at: borrowerOf" + err)
+        }
+    }
+
+
+    async lenderOf(tokenId, tokenType, alert = false) {
+        try {
+            const lender = await this.contract.LoanBook.methods.lenderOf(
+                tokenId,
+                tokenType
+            ).call()
+            if (alert == true) setAlert('lenderOf token is: ' + lender, 'success')
+
+            return lender
+        } catch (err) {
+            if (alert == true) setAlert('lenderOf error', 'warning')
+            console.log("Error at: lenderOf" + err)
+        }
+    }
+
+
+    async getNumOnLoan(tokenType, alert = false) {
         try {
             let onLoan = await this.contract.LoanBook.methods.getNumOnLoan(tokenType).call()
-            if (alert == true) setAlert('total loans: ' + onLoan, 'warning')
+            if (alert == true) setAlert('Total tokens on-loan: ' + onLoan, 'success')
             return onLoan
         } catch (err) {
             if (alert == true) setAlert('getNumOnLoan error', 'warning')
             console.log("Error at: getNumOnLoan" + err)
         }
     }
+
 
     async checkRentalIncomeOfTokens(
         tokenIds,
@@ -192,6 +226,7 @@ export class LoanBookContract {
             console.log("Error at: checkRentalIncomeOfAll" + err)
         }
     }
+
 
     async collectRentalIncomeOfTokens(
         tokenIds,

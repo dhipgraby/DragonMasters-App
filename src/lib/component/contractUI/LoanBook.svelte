@@ -40,12 +40,20 @@
 		contract.isOnLoan(onLoanId, _tokenType, true);
 	}
 
-	async function isLender() {
-		contract.isLender(lender_address, lender_tokenId, _tokenType, true);
+	async function borrowerOf() {
+		contract.borrowerOf(lender_tokenId, _tokenType, true);
+	}
+
+	async function lenderOf() {
+		contract.lenderOf(lender_tokenId, _tokenType, true);
 	}
 
 	async function isBorrower() {
 		contract.isBorrower(borrower_address, borrower_tokenId, _tokenType, true);
+	}
+
+	async function isLender() {
+		contract.isLender(lender_address, lender_tokenId, _tokenType, true);
 	}
 
 	async function getBorrowedBy() {
@@ -57,7 +65,7 @@
 	}
 
 	async function getNumOnLoan() {
-		contract.getNumOnLoan(_tokenType);
+		contract.getNumOnLoan(_tokenType, true);
 	}
 
 
@@ -163,6 +171,10 @@
 
 <div class="row">
 	<div class="col-sm-12 col-md-12 col-xl-4">
+		<div class="grid" align="left">
+			<h2>Get total (of type) on-loan</h2>
+			<button class="btn btn-dark" on:click={() => getNumOnLoan()}>GET</button>
+		</div>
 
 		<div class="grid" align="left">
 			<h2>All tokens (of type) on loan?</h2>
@@ -170,7 +182,7 @@
 			<div class="mb-3">
 				<Pagination {startIndex} {endIndex} {changeIndex} />
 			</div>
-			<button class="btn btn-dark" on:click={() => getOnLoan()}>GET ALL</button>
+			<button class="btn btn-dark" on:click={() => getOnLoan()}>GET</button>
 		</div>
 
 		<div class="grid" align="left">
@@ -192,16 +204,7 @@
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Token loan details?</h2>
-			<p class="bold">Token Id</p>		
-			<div class="mb-3">
-				<input type="number" class="form-control" bind:value={singleId} placeholder="0" />
-			</div>
-			<button class="btn btn-dark" on:click={() => getLoan()}>GET</button>
-		</div>
-
-		<div class="grid" align="left">
-			<h2>Tokens loaned by?</h2>
+			<h2>Get tokenIds loaned-out by</h2>
 			<p class="bold">Address</p>
 			<div class="mb-3">
 				<input type="text" class="form-control" bind:value={lender} placeholder="Address" />
@@ -210,11 +213,11 @@
 			<div class="mb-3">
 				<Pagination {startIndex} {endIndex} {changeIndex} />
 			</div>
-			<button class="btn btn-dark" on:click={() => getLoanedBy()}>Check</button>
+			<button class="btn btn-dark" on:click={() => getLoanedBy()}>GET</button>
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Tokens borrowed by?</h2>
+			<h2>Get tokenIds borrowed by</h2>
 			<p class="bold">Address</p>
 			<div class="mb-3">
 				<input type="text" class="form-control" bind:value={borrower} placeholder="Address" />
@@ -223,11 +226,33 @@
 			<div class="mb-3">
 				<Pagination {startIndex} {endIndex} {changeIndex} />
 			</div>
-			<button class="btn btn-dark" on:click={() => getBorrowedBy()}>Check</button>
+			<button class="btn btn-dark" on:click={() => getBorrowedBy()}>GET</button>
+		</div>
+
+
+		<div class="grid" align="left">
+			<h2>Get rentee/lender (of token)</h2>
+			<p class="bold">Token Id</p>
+			<div class="mb-3">
+				<input type="number" class="form-control" bind:value={lender_tokenId}
+				 placeholder="0" />
+			</div>
+			<button class="btn btn-dark" on:click={() => lenderOf()}>GET</button>
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Is lender of token?</h2>
+			<h2>Get borrower (of token)</h2>
+			<p class="bold">Token Id</p>
+			<div class="mb-3">
+				<input type="number" class="form-control" bind:value={borrower_tokenId}
+				 placeholder="0" />
+			</div>
+			<button class="btn btn-dark" on:click={() => borrowerOf()}>GET</button>
+		</div>
+
+
+		<div class="grid" align="left">
+			<h2>Is rentee/lender of token?</h2>
 			<p class="bold">Token Id</p>
 			<div class="mb-3">
 				<input type="number" class="form-control" bind:value={lender_tokenId}
@@ -237,7 +262,7 @@
 			<div class="mb-3">
 				<input type="text" class="form-control" bind:value={lender_address} placeholder="Address" />
 			</div>
-			<button class="btn btn-dark" on:click={() => isLender()}>Check</button>
+			<button class="btn btn-dark" on:click={() => isLender()}>CHECK</button>
 		</div>
 
 		<div class="grid" align="left">
@@ -251,7 +276,7 @@
 			<div class="mb-3">
 				<input type="text" class="form-control" bind:value={borrower_address} placeholder="Address" />
 			</div>
-			<button class="btn btn-dark" on:click={() => isBorrower()}>Check</button>
+			<button class="btn btn-dark" on:click={() => isBorrower()}>CHECK</button>
 		</div>
 
 	</div>
@@ -276,7 +301,7 @@
 					placeholder="0, 1, ..."
 				/>
 			</div>
-			<button class="btn btn-dark" on:click={() => checkRentalIncomeOfTokens()}>Check</button>
+			<button class="btn btn-dark" on:click={() => checkRentalIncomeOfTokens()}>GET</button>
 		</div>
 
 		<div class="grid" align="left">
@@ -301,12 +326,12 @@
 					<label class="form-check-label" for="eggCheckbox"><b>Egg</b></label>
 				</div>
 			</div>
-			<button class="btn btn-dark" on:click={() => checkRentalIncomeOfTypes()}>Check</button>
+			<button class="btn btn-dark" on:click={() => checkRentalIncomeOfTypes()}>GET</button>
 		</div>
 
 		<div class="grid" align="left">
 			<h2>Accumulated rental Income of all?</h2>
-			<button class="btn btn-dark" on:click={() => checkRentalIncomeOfAll()}>Check</button>
+			<button class="btn btn-dark" on:click={() => checkRentalIncomeOfAll()}>GET</button>
 		</div>
 
 		<div class="grid" align="left">
@@ -329,7 +354,7 @@
 					placeholder="0, 1, ..."
 				/>
 			</div>
-			<button class="btn btn-dark" on:click={() => collectRentalIncomeOfTokens()}>Collect</button>
+			<button class="btn btn-dark" on:click={() => collectRentalIncomeOfTokens()}>COLLECT</button>
 		</div>
 
 		<div class="grid" align="left">
@@ -354,12 +379,12 @@
 					<label class="form-check-label" for="eggCheckbox"><b>Egg</b></label>
 				</div>
 			</div>
-			<button class="btn btn-dark" on:click={() => collectRentalIncomeOfTypes()}>Collect</button>
+			<button class="btn btn-dark" on:click={() => collectRentalIncomeOfTypes()}>COLLECT</button>
 		</div>
 
 		<div class="grid" align="left">
 			<h2>Collect rental Income of all</h2>
-			<button class="btn btn-dark" on:click={() => collectRentalIncomeOfAll()}>Collect</button>
+			<button class="btn btn-dark" on:click={() => collectRentalIncomeOfAll()}>COLLECT</button>
 		</div>
 	</div>
 </div>
