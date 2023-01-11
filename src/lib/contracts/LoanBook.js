@@ -53,8 +53,12 @@ export class LoanBookContract {
 
     async isOnLoan(tokenId, tokenType, alert = false) {
         try {
-            let onLoan = await this.contract.LoanBook.methods.isOnLoan(tokenId, tokenType).call()
-            if (alert == true) setAlert('onLoan: ' + onLoan, 'warning')
+            console.log(tokenId)
+            console.log(tokenType)
+            console.log(alert)
+
+            const onLoan = await this.contract.LoanBook.methods.isOnLoan(tokenId, tokenType).call()
+            if (alert == true) setAlert('onLoan: ' + onLoan, 'success')
             return onLoan
         } catch (err) {
             if (alert == true) setAlert('isOnLoan error', 'warning')

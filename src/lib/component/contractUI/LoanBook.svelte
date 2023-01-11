@@ -18,7 +18,6 @@
 		borrower_address = '',
 		singleId,
 		onLoanId,
-		returnId,
 		lender_tokenId,
 		borrower_tokenId,
 		check_egg_tokenIds = '',
@@ -175,7 +174,16 @@
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Is token on Loan?</h2>
+			<h2>Is token on loan?</h2>
+			<p class="bold">Token Id</p>		
+			<div class="mb-3">
+				<input type="number" class="form-control" bind:value={onLoanId} placeholder="0" />
+			</div>
+			<button class="btn btn-dark" on:click={() => isOnLoan()}>CHECK</button>
+		</div>
+
+		<div class="grid" align="left">
+			<h2>Get loan details</h2>
 			<p class="bold">Token Id</p>		
 			<div class="mb-3">
 				<input type="number" class="form-control" bind:value={singleId} placeholder="0" />
