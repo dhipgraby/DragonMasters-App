@@ -239,6 +239,7 @@ export class LoanBookContract {
         try {
             const weiAccrued = await this.contract.LoanBook.methods.checkRentalIncomeOfAll().call()
             if (alert == true) setAlert('Total accrued income on all tokens (Wei): ' + weiAccrued, 'success')
+
             return weiAccrued
         } catch (err) {
             if (alert == true) setAlert('checkRentalIncomeOfAll error', 'warning')
@@ -301,6 +302,54 @@ export class LoanBookContract {
         } catch (err) {
             if (alert == true) setAlert('collectRentalIncomeOfAll error', 'warning')
             console.log("Error at: collectRentalIncomeOfAll" + err)
+        }
+    }
+
+    async ethTotalDeposited(alert = false) {
+        try {
+            const weiAmount = await this.contract.LoanBook.methods.ethTotalDeposited().call()
+            if (alert == true) setAlert('Total rental deposits (Wei): ' + weiAmount, 'success')
+            
+            return weiAmount
+        } catch (err) {
+            if (alert == true) setAlert('ethTotalDeposited error', 'warning')
+            console.log("Error at: ethTotalDeposited" + err)
+        }
+    }
+
+    async cEthTotalHeld(alert = false) {
+        try {
+            const cEthAmount = await this.contract.LoanBook.methods.cEthTotalHeld().call()
+            if (alert == true) setAlert('Total cEth (in Compound): ' + cEthAmount, 'success')
+            
+            return cEthAmount
+        } catch (err) {
+            if (alert == true) setAlert('cEthTotalHeld error', 'warning')
+            console.log("Error at: cEthTotalHeld" + err)
+        }
+    }
+
+    async ethDeposited(tokenId, tokenType, alert = false) {
+        try {
+            const weiAmount = await this.contract.LoanBook.methods.ethDeposited(tokenId, tokenType).call()
+            if (alert == true) setAlert('Rental deposit (Wei): ' + weiAmount, 'success')
+            
+            return weiAmount
+        } catch (err) {
+            if (alert == true) setAlert('ethDeposited error', 'warning')
+            console.log("Error at: ethDeposited" + err)
+        }
+    }
+
+    async cEthHeld(tokenId, tokenType, alert = false) {
+        try {
+            const cEthAmount = await this.contract.LoanBook.methods.cEthHeld(tokenId, tokenType).call()
+            if (alert == true) setAlert("Token's current cEth (in Compound): " + cEthAmount, 'success')
+            
+            return cEthAmount
+        } catch (err) {
+            if (alert == true) setAlert('cEthHeld error', 'warning')
+            console.log("Error at: cEthHeld" + err)
         }
     }
 }

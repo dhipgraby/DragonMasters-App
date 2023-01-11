@@ -75,19 +75,6 @@
 		contract.lenderBalance(lender, _tokenType, true);
 	}
 
-
-
-	function changeIndex(indexType, value) {
-		switch (indexType) {
-			case 'start':
-				startIndex = value;
-				break;
-			case 'end':
-				endIndex = value;
-				break;
-		}
-	}
-
 	async function checkRentalIncomeOfTokens() {
 		if (check_egg_tokenIds.length == 0 && check_dragon_tokenIds.length == 0)
 			setAlert('Specify at least one token id', 'warning');
@@ -158,6 +145,34 @@
 
 	async function collectRentalIncomeOfAll() {
 		contract.collectRentalIncomeOfAll(true);
+	}
+
+    async function ethTotalDeposited() {
+		contract.ethTotalDeposited(true);
+    }
+
+    async function cEthTotalHeld() {
+		contract.cEthTotalHeld(true);
+    }
+
+    async function ethDeposited() {
+		contract.ethDeposited(singleId, _tokenType, true);
+
+    }
+
+    async function cEthHeld() {
+		contract.cEthHeld(singleId, _tokenType, true);
+    }
+
+	function changeIndex(indexType, value) {
+		switch (indexType) {
+			case 'start':
+				startIndex = value;
+				break;
+			case 'end':
+				endIndex = value;
+				break;
+		}
 	}
 </script>
 
@@ -303,6 +318,35 @@
 
 	</div>
 	<div class="col-sm-12 col-md-12 col-xl-4">
+
+		<div class="grid" align="left">
+			<h2>Total Eth deposited</h2>
+			<button class="btn btn-dark" on:click={() => ethTotalDeposited()}>GET</button>
+		</div>
+
+		<div class="grid" align="left">
+			<h2>Total cEth held (for Eth)</h2>
+			<button class="btn btn-dark" on:click={() => cEthTotalHeld()}>GET</button>
+		</div>
+
+		<div class="grid" align="left">
+			<h2>Eth deposited (for token)</h2>
+			<p class="bold">Token Id</p>		
+			<div class="mb-3">
+				<input type="number" class="form-control" bind:value={singleId} placeholder="0" />
+			</div>
+			<button class="btn btn-dark" on:click={() => ethDeposited()}>GET</button>
+		</div>
+
+		<div class="grid" align="left">
+			<h2>cEth held (for token's Eth)</h2>
+			<p class="bold">Token Id</p>		
+			<div class="mb-3">
+				<input type="number" class="form-control" bind:value={singleId} placeholder="0" />
+			</div>
+			<button class="btn btn-dark" on:click={() => cEthHeld()}>GET</button>
+		</div>
+
 		<div class="grid" align="left">
 			<h2>Accumulated rental income</h2>
 			<p class="bold">Eggs: List of Token Ids</p>
