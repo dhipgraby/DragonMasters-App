@@ -57,8 +57,8 @@ export class LoanBookContract {
             if (alert == true) setAlert('onLoan: ' + onLoan, 'warning')
             return onLoan
         } catch (err) {
-            if (alert == true) setAlert('isonLoan error', 'warning')
-            console.log("Error at: isonLoan" + err)
+            if (alert == true) setAlert('isOnLoan error', 'warning')
+            console.log("Error at: isOnLoan" + err)
         }
     }
 
@@ -141,31 +141,6 @@ export class LoanBookContract {
         } catch (err) {
             if (alert == true) setAlert('getNumOnLoan error', 'warning')
             console.log("Error at: getNumOnLoan" + err)
-        }
-    }
-
-    async returnLoan(
-        to,
-        tokenId,
-        tokenType,
-        alert
-    ) {
-        try {
-            await this.contract.LoanBook.methods.returnLoan(
-                to,
-                tokenId,
-                tokenType
-            ).send({}, function (err, txHash) {
-                if (err) setAlert(err, 'warning')
-                else {
-                    setAlert('New offer created!', 'success')
-                    return txHash
-                }
-            })
-
-        } catch (err) {
-            if (alert == true) setAlert('isonLoan error', 'warning')
-            console.log("Error at: isonLoan" + err)
         }
     }
 

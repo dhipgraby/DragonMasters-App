@@ -38,17 +38,15 @@
 	}
 
 	async function isOnLoan() {
-		contract.isOnLoan(onLoanId, _tokenType);
+		contract.isOnLoan(onLoanId, _tokenType, true);
 	}
 
 	async function isLender() {
-		contract.isLender(lender_address, lender_tokenId,
-		 _tokenType, true);
+		contract.isLender(lender_address, lender_tokenId, _tokenType, true);
 	}
 
 	async function isBorrower() {
-		contract.isBorrower(borrower_address, borrower_tokenId,
-		 _tokenType, true);
+		contract.isBorrower(borrower_address, borrower_tokenId, _tokenType, true);
 	}
 
 	async function getBorrowedBy() {
@@ -63,9 +61,6 @@
 		contract.getNumOnLoan(_tokenType);
 	}
 
-	async function returnLoan(to) {
-		contract.returnLoan(to, returnId, _tokenType);
-	}
 
 	function changeIndex(indexType, value) {
 		switch (indexType) {
@@ -171,7 +166,7 @@
 	<div class="col-sm-12 col-md-12 col-xl-4">
 
 		<div class="grid" align="left">
-			<h2>Get all Loans (of type)</h2>
+			<h2>All tokens (of type) on loan?</h2>
 			<p class="bold">Paging: start & end indexes</p>
 			<div class="mb-3">
 				<Pagination {startIndex} {endIndex} {changeIndex} />
@@ -180,7 +175,7 @@
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Get Loan</h2>
+			<h2>Is token on Loan?</h2>
 			<p class="bold">Token Id</p>		
 			<div class="mb-3">
 				<input type="number" class="form-control" bind:value={singleId} placeholder="0" />
@@ -189,7 +184,16 @@
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Tokens Loaned By</h2>
+			<h2>Token loan details?</h2>
+			<p class="bold">Token Id</p>		
+			<div class="mb-3">
+				<input type="number" class="form-control" bind:value={singleId} placeholder="0" />
+			</div>
+			<button class="btn btn-dark" on:click={() => getLoan()}>GET</button>
+		</div>
+
+		<div class="grid" align="left">
+			<h2>Tokens loaned by?</h2>
 			<p class="bold">Address</p>
 			<div class="mb-3">
 				<input type="text" class="form-control" bind:value={lender} placeholder="Address" />
@@ -202,7 +206,7 @@
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Tokens Borrowed By</h2>
+			<h2>Tokens borrowed by?</h2>
 			<p class="bold">Address</p>
 			<div class="mb-3">
 				<input type="text" class="form-control" bind:value={borrower} placeholder="Address" />
@@ -215,7 +219,7 @@
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Is Lender</h2>
+			<h2>Is lender of token?</h2>
 			<p class="bold">Token Id</p>
 			<div class="mb-3">
 				<input type="number" class="form-control" bind:value={lender_tokenId}
@@ -229,7 +233,7 @@
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Is Borrower</h2>
+			<h2>Is borrower of token?</h2>
 			<p class="bold">Token Id</p>
 			<div class="mb-3">
 				<input type="number" class="form-control" bind:value={borrower_tokenId}
@@ -245,7 +249,7 @@
 	</div>
 	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid" align="left">
-			<h2>Check rental Income</h2>
+			<h2>Accumulated rental Income?</h2>
 			<p class="bold">Eggs: List of Token Ids</p>
 			<div class="mb-3">
 				<input
@@ -268,7 +272,7 @@
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Check rental Income</h2>
+			<h2>Accumulated rental Income?</h2>
 			<div class="mb-3">
 				<div class="form-check form-check-inline">
 					<input
@@ -293,7 +297,7 @@
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Check rental Income of all</h2>
+			<h2>Accumulated rental Income of all?</h2>
 			<button class="btn btn-dark" on:click={() => checkRentalIncomeOfAll()}>Check</button>
 		</div>
 
