@@ -265,8 +265,9 @@
 			</div>
 			<button class="btn btn-dark" on:click={() => getBorrowedBy()}>GET</button>
 		</div>
+	</div>
 
-
+	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid" align="left">
 			<h2>Rentee/lender (of token)</h2>
 			<p class="bold">Token Id</p>
@@ -286,7 +287,6 @@
 			</div>
 			<button class="btn btn-dark" on:click={() => borrowerOf()}>GET</button>
 		</div>
-
 
 		<div class="grid" align="left">
 			<h2>Is rentee/lender of token?</h2>
@@ -316,9 +316,6 @@
 			<button class="btn btn-dark" on:click={() => isBorrower()}>CHECK</button>
 		</div>
 
-	</div>
-	<div class="col-sm-12 col-md-12 col-xl-4">
-
 		<div class="grid" align="left">
 			<h2>Total Eth deposited</h2>
 			<button class="btn btn-dark" on:click={() => ethTotalDeposited()}>GET</button>
@@ -346,7 +343,9 @@
 			</div>
 			<button class="btn btn-dark" on:click={() => cEthHeld()}>GET</button>
 		</div>
+	</div>
 
+	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid" align="left">
 			<h2>Accumulated rental income</h2>
 			<p class="bold">Eggs: List of Token Ids</p>
