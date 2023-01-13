@@ -1,3 +1,4 @@
+import { OfferType } from '$lib/contracts/LoanBook';
 import { onDestroy } from 'svelte';
 import { contractsAbi } from '$lib/contracts/contractsAbi';
 
@@ -105,7 +106,7 @@ export function shortTxHash(txHash) {
 
 //get balance 
 export const getBalance = async (address) => {
-    let balance = await  web3.eth.getBalance(address);
+    let balance = await web3.eth.getBalance(address);
     return balance;
 }
 
@@ -135,8 +136,37 @@ export const timeDropdrown = {
     oneYear: dayInSeconds * 365
 }
 //Get stateMutability from abi solidty contract VIEW OR NonPayable
-export function functionType(contractName){
+export function functionType(contractName) {
     const fType = contractsAbi[contractName].find(element => element.name == "startIncubation").stateMutability;
     return (fType == "view") ? "call" : "send"
 }
 
+export function get_unique_tokenid(arrayA, arrayB) {
+    const uniqueArray = [...new Set([...arrayA, ...arrayB].map((item) => item.tokenId))].map(
+        (tokenid) => [...arrayA, ...arrayB].find((item) => item.tokenId === tokenid)
+    );
+    return uniqueArray;
+}
+
+export async function loadRentTerms(asset,_offerType) {
+    if (_offerType === OfferType.ForSale) return;    
+    let currentDeposit = asset.rentOffer.rent.deposit;
+    let fee = asset.rentOffer.rent.price;
+    let minDuration = asset.rentOffer.rent.minDuration / (24 * 60 * 60) + ' days';
+    return {
+        deposit: await getEth(currentDeposit),
+        price: await getEth(fee),
+        duration: minDuration
+    };		
+}
+
+export function loadOwner(account, owner) {
+    account = account.toLowerCase();
+    owner = owner.toLowerCase();
+    if (account === owner) {
+        owner = '<b class="yellowLink">You</b>';
+    } else {
+        owner = shortAddr(owner);
+    }
+    return owner;
+}

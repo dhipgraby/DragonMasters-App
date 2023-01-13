@@ -1,7 +1,7 @@
 <script>
-	import { Maturity, Attributes } from '$lib/helpers/utils.js';
+	import { Maturity, Attributes, loadRentTerms, loadOwner } from '$lib/helpers/utils.js';
 	import { getImg, iconElement, iconAttr } from '$lib/storage/dragonImg';
-	import { getEth, shortAddr } from '$lib/helpers/utils';
+	import { getEth } from '$lib/helpers/utils';
 	import { onMount } from 'svelte';
 	//CSS
 	import '$lib/css/marketplace/marketplace.css';
@@ -20,17 +20,14 @@
 	let owner = dragon.owner;
 	let img = getImg(dragon.subSpecies).idle;
 	let element = iconElement(dragon.subSpecies);
+	let rentTerms;
 
 	onMount(async () => {
-		account = account.toLowerCase();
-		owner = owner.toLowerCase();
-		if (account === owner) {
-			owner = 'You';
-		} else {
-			owner = shortAddr(owner);
-		}
-		let currentpriace = (dragon.sellOffer != undefined) ? dragon.sellOffer.sellPrice : dragon.rentOffer.rent.price;
-		price = await getEth(currentpriace);
+		let currentprice = dragon.sellOffer != undefined ? dragon.sellOffer.sellPrice : 0;
+		price = await getEth(currentprice);
+		owner = loadOwner(account, owner);
+		rentTerms = await loadRentTerms(dragon, _offerType);
+		console.log(rentTerms);
 	});
 </script>
 
@@ -51,15 +48,18 @@
 		</div>
 	</div>
 	<div class="card-body ta-c">
-		<p class="card-title">Dragon : #{dragon.tokenId}</p>
+		<p class="card-title">Dragon : #{dragon.tokenId}</p>	
+		<div class="priceDiv">			
+			<span class="badge bg-black"><b>Owner</b>: {@html owner}</span>			
+		</div>
 		<!--   ATTRIBUTES  -->
-		<div class="row p-0 mt-2">
+		<!-- <div class="row p-0 mt-2">
 			{#each dragon.attributes as attribute, i}
 				<div class="w-50 ta-l">
 					<p>{@html iconAttr(Object.keys(Attributes)[i])}: {attribute}</p>
 				</div>
 			{/each}
-		</div>
-		<OfferBox {owner} {price} {buy} {rent} {_offerType} />		
-	</div>
+		</div> -->
+		<OfferBox {owner} {price} {rentTerms} {buy} {rent} {_offerType} />
+	</div>	
 </div>

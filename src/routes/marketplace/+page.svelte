@@ -9,12 +9,13 @@
 		dragonsForRent,
 		eggsForRent
 	} from '$lib/storage/marketplace';
-	import { TokenType, OfferType } from '$lib/contracts/LoanBook';
+	import { TokenType, OfferType } from '$lib/contracts/LoanBook';	
+	import { get_unique_tokenid } from '$lib/helpers/utils';
 	import TokenButtons from '$lib/component/marketplace/TokenButtons.svelte';
 
 	//Per page is not correctly Integrated. Only pages are been produced
 	let show = TokenType.Egg;
-	let _offerType = OfferType.ForSale;
+	let _offerType = OfferType.ForRent;
 	let perpage = 10;
 	perpage--;
 
@@ -25,34 +26,23 @@
 	//RENT OFFERS
 	$: dragons_for_rent = $dragonsForRent;
 	$: eggs_for_rent = $eggsForRent;
+	let allOffers; 
 
 	const allAssets = () => {
 		return {
-			dragons: get_all_offers(dragons_for_sale, dragons_for_rent),
-			eggs: get_all_offers(eggs_for_sale, eggs_for_rent)
+			dragons: get_unique_tokenid(dragons_for_sale, dragons_for_rent),
+			eggs: get_unique_tokenid(eggs_for_sale, eggs_for_rent)
 		};
 	};
 
-	const get_all_offers = (offersA, offersB) => {
-		let allOffers = offersA.concat(offersB);
-		console.log(allOffers);
-
-		const uniqueArray = [...new Set([...offersA, ...offersB].map((item) => item.tokenId))].map(
-			(tokenid) => [...offersA, ...offersB].find((item) => item.tokenId === tokenid)
-		);
-		return uniqueArray;
-	};
-
-	const changeToken = (_tokenType) => {
-		console.log(_tokenType);
+	const changeToken = (_tokenType) => {		
 		show = _tokenType;
 	};
 
 	onMount(async () => {
-		await LoadInterface(0, perpage);
-		console.log(dragons_for_rent);
-		console.log(eggs_for_rent);
-		console.log(allAssets());
+		await LoadInterface(0, perpage);				
+		allOffers = allAssets()		
+		console.log(allOffers);
 	});
 </script>
 
@@ -76,6 +66,13 @@
 			class="btn btn-light {_offerType === OfferType.ForRent ? 'active' : ''}"
 		>
 			<i class="fas fa-donate" /> Rent
+		</button>
+		<button
+			type="button"
+			on:click={() => (_offerType = OfferType.ForSaleOrRent)}
+			class="btn btn-light {_offerType === OfferType.ForSaleOrRent ? 'active' : ''}"
+		>
+			<i class="fas fa-donate" /> All
 		</button>
 	</div>
 
@@ -126,6 +123,28 @@
 			/>
 		{/if}
 	{/if}
+	{#if _offerType == OfferType.ForSaleOrRent}
+	{#if show == TokenType.Egg}
+		<MarketGrid
+			{_offerType}
+			assets={allOffers.eggs}
+			contract={contractsData}
+			loadPage={LoadInterface}
+			{perpage}
+			_tokenType={TokenType.Egg}
+		/>
+	{/if}
+	{#if show == TokenType.Dragon}
+		<MarketGrid
+			{_offerType}
+			assets={allOffers.dragons}
+			contract={contractsData}
+			loadPage={LoadInterface}
+			{perpage}
+			_tokenType={TokenType.Dragon}
+		/>
+	{/if}
+{/if}
 </MainContainer>
 
 <style>

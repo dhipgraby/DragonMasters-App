@@ -1,7 +1,7 @@
 <script>
 	import { getImg, iconElement } from '$lib/storage/dragonImg';
 	import { onMount } from 'svelte';
-	import { getEth, shortAddr } from '$lib/helpers/utils';
+	import { getEth, loadRentTerms, loadOwner } from '$lib/helpers/utils';
 	import '$lib/css/marketplace/egg.css';
 	import OfferBox from '../../OfferBox.svelte';
 
@@ -15,19 +15,16 @@
 	let eggImg;
 	let element;
 	let owner = egg.owner;
+	let rentTerms;
 
 	onMount(async () => {
+		let currentprice = egg.sellOffer != undefined ? egg.sellOffer.sellPrice : 0;
 		element = iconElement(egg.subSpecies);
 		eggImg = await getImg(egg.subSpecies).egg;
-		account = account.toLowerCase();
-		owner = owner.toLowerCase();
-		if (account === owner) {
-			owner = 'You';
-		} else {
-			owner = shortAddr(owner);
-		}
-		let currentpriace = (egg.sellOffer != undefined) ? egg.sellOffer.sellPrice : egg.rentOffer.rent.price;
-		price = await getEth(currentpriace);
+		price = await getEth(currentprice);
+		owner = loadOwner(account, owner);
+		rentTerms = await loadRentTerms(egg, _offerType);
+		console.log(rentTerms);
 	});
 </script>
 
@@ -44,10 +41,14 @@
 	</div>
 	<div class="card-body">
 		<div class="row w-100 mb-2">
-			<div class="col m-0 ta-l">
+			<div class="col m-0 ta-c">
 				<h5 class="card-title">Egg : #{egg.tokenId}</h5>
 			</div>
+
+			<div class="priceDiv">
+				<span class="badge bg-black"><b>Owner</b>: {@html owner}</span>
+			</div>
 		</div>
-		<OfferBox {owner} {price} {buy} {rent} {_offerType} />
+		<OfferBox {owner} {price} {rentTerms} {buy} {rent} {_offerType} />
 	</div>
 </div>

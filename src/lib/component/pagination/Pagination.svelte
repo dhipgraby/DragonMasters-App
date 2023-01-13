@@ -6,7 +6,7 @@ export let loadPage
 export let inferfaceName
 </script>
 <div>
-    <div class="btn-group mt-3" role="group">
+    <div class="btn-group mt-2" role="group">
         {#if pages}
             {#each pages as button, i}
                 <button

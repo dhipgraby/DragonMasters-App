@@ -150,8 +150,7 @@ export class MarketplaceContract extends MarketApproval {
         _tokenType
     ) {
         //Collecting all offers and details 
-        let allOffers = await this.getOffered(from, to, _offerType, _tokenType)
-        console.log(allOffers);
+        let allOffers = await this.getOffered(from, to, _offerType, _tokenType)        
         let tokenIds = allOffers.map((el) => { return el.tokenId });
         let assets = []
 

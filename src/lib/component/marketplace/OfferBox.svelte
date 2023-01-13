@@ -1,20 +1,15 @@
 <script>
 	import { OfferType } from '$lib/contracts/LoanBook';
-	export let owner;
+	import OfferTerms from './OfferTerms.svelte';
+
+	export let _offerType;	
 	export let price;
+	export let rentTerms;
 	export let buy;
 	export let rent;
-	export let _offerType;
 </script>
-
-<div class="priceDiv">
-	<small><b>Owner</b>: {owner}</small>
-	<p>
-		<b>Price:</b>
-		{price} <i class="fab fa-ethereum" />
-	</p>
-</div>
 {#if _offerType == OfferType.ForSale}
+	<OfferTerms {_offerType} {rentTerms} salePrice={price} />
 	<button
 		class="btn btn-dark"
 		on:click={async () => {
@@ -26,6 +21,7 @@
 {/if}
 
 {#if _offerType == OfferType.ForRent}
+	<OfferTerms {_offerType} {rentTerms} salePrice={price} />
 	<button
 		class="btn btn-dark"
 		on:click={async () => {
@@ -37,6 +33,7 @@
 {/if}
 
 {#if _offerType == OfferType.ForSaleOrRent}
+	<OfferTerms {_offerType} {rentTerms} salePrice={price} />
 	<div class="btn btn-group">
 		<button
 			class="btn btn-dark"
