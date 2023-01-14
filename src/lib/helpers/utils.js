@@ -149,7 +149,10 @@ export function get_unique_tokenid(arrayA, arrayB) {
 }
 
 export async function loadRentTerms(asset,_offerType) {
-    if (_offerType === OfferType.ForSale) return;    
+    if (_offerType === OfferType.ForSale){        
+        console.log('is not loading terms');
+        return;    
+    } 
     let currentDeposit = asset.rentOffer.rent.deposit;
     let fee = asset.rentOffer.rent.price;
     let minDuration = asset.rentOffer.rent.minDuration / (24 * 60 * 60) + ' days';

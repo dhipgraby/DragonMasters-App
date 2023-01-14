@@ -12,6 +12,7 @@
 	import { TokenType, OfferType } from '$lib/contracts/LoanBook';	
 	import { get_unique_tokenid } from '$lib/helpers/utils';
 	import TokenButtons from '$lib/component/marketplace/TokenButtons.svelte';
+	import OfferTypeBtn from '$lib/component/marketplace/OfferTypeBtn.svelte';
 
 	//Per page is not correctly Integrated. Only pages are been produced
 	let show = TokenType.Egg;
@@ -39,6 +40,10 @@
 		show = _tokenType;
 	};
 
+	const setOfferType = (newType) => {
+		_offerType = newType
+	}
+
 	onMount(async () => {
 		await LoadInterface(0, perpage);				
 		allOffers = allAssets()		
@@ -53,28 +58,7 @@
 <MainContainer>
 	<h1>Marketplace</h1>
 
-	<div class="btn-group" role="group">
-		<button
-			type="button"
-			on:click={() => (_offerType = OfferType.ForSale)}
-			class="btn btn-light {_offerType === OfferType.ForSale ? 'active' : ''}"
-			><i class="fas fa-shopping-cart" /> Buy
-		</button>
-		<button
-			type="button"
-			on:click={() => (_offerType = OfferType.ForRent)}
-			class="btn btn-light {_offerType === OfferType.ForRent ? 'active' : ''}"
-		>
-			<i class="fas fa-donate" /> Rent
-		</button>
-		<button
-			type="button"
-			on:click={() => (_offerType = OfferType.ForSaleOrRent)}
-			class="btn btn-light {_offerType === OfferType.ForSaleOrRent ? 'active' : ''}"
-		>
-			<i class="fas fa-donate" /> All
-		</button>
-	</div>
+	<OfferTypeBtn {setOfferType} {_offerType} />
 
 	<TokenButtons {changeToken} />
 
@@ -148,18 +132,9 @@
 </MainContainer>
 
 <style>
-	.active {
-		background-color: black;
-		color: white;
-	}
 
 	h1 {
 		margin-bottom: 25px;
 	}
-	.btn-group .btn {
-		white-space: nowrap;
-		margin: 8px;
-		font-weight: 600;
-		letter-spacing: 0.8px;
-	}
+
 </style>
