@@ -13,6 +13,7 @@
 	import { get_unique_tokenid } from '$lib/helpers/utils';
 	import TokenButtons from '$lib/component/marketplace/TokenButtons.svelte';
 	import OfferTypeBtn from '$lib/component/marketplace/OfferTypeBtn.svelte';
+	import { orderByOffer } from '$lib/helpers/utils';
 
 	//Per page is not correctly Integrated. Only pages are been produced
 	let show = TokenType.Egg;
@@ -30,10 +31,14 @@
 	let allOffers; 
 
 	const allAssets = () => {
-		return {
+		const offers =  {
 			dragons: get_unique_tokenid(dragons_for_sale, dragons_for_rent),
-			eggs: get_unique_tokenid(eggs_for_sale, eggs_for_rent)
+			eggs: get_unique_tokenid(eggs_for_sale, eggs_for_rent)			
 		};
+		return {
+			dragons: orderByOffer(offers.dragons,OfferType.ForSale),
+			eggs: orderByOffer(offers.eggs,OfferType.ForSale),
+		}
 	};
 
 	const changeToken = (_tokenType) => {		
@@ -42,6 +47,7 @@
 
 	const setOfferType = (newType) => {
 		_offerType = newType
+		console.log(_offerType);
 	}
 
 	onMount(async () => {
@@ -108,6 +114,7 @@
 		{/if}
 	{/if}
 	{#if _offerType == OfferType.ForSaleOrRent}
+
 	{#if show == TokenType.Egg}
 		<MarketGrid
 			{_offerType}

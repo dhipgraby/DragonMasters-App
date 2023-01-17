@@ -16,8 +16,6 @@ export async function startAwaiter(txHash, callback, interval = 200) {
       callback()
       clearInterval(transactionReceiptAsyncInterval);
       completeAwaiter(txHash)
-    } else {
-      console.log(get_receipt);
     }
   }, interval);
 }

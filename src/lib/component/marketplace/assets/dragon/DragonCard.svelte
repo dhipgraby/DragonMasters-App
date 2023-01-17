@@ -17,17 +17,16 @@
 	$: _maturity = Object.keys(Maturity)[dragon.ageGroup];
 
 	let price;
-	let owner = dragon.owner;
+	let owner = loadOwner(account, dragon.owner);
 	let img = getImg(dragon.subSpecies).idle;
 	let element = iconElement(dragon.subSpecies);
 	let rentTerms;
+	let isForSale = (dragon.sellOffer !== undefined) ? true : false;
 
 	onMount(async () => {
 		let currentprice = dragon.sellOffer != undefined ? dragon.sellOffer.sellPrice : 0;
-		price = await getEth(currentprice);
-		owner = loadOwner(account, owner);
-		rentTerms = await loadRentTerms(dragon, _offerType);
-		console.log(rentTerms);
+		price = await getEth(currentprice);		
+		rentTerms = await loadRentTerms(dragon, _offerType);		
 	});
 </script>
 
@@ -59,7 +58,20 @@
 					<p>{@html iconAttr(Object.keys(Attributes)[i])}: {attribute}</p>
 				</div>
 			{/each}
-		</div> -->
-		<OfferBox {owner} {price} {rentTerms} {buy} {rent} {_offerType} />
+		</div> -->		
 	</div>	
+	<OfferBox {owner} {price} {rentTerms} {isForSale} {buy} {rent} {_offerType} />
 </div>
+
+<style>
+	.badge b {
+		color:rgb(209, 209, 209);
+	}
+	.card {
+		border:solid 2px black;
+	}
+
+	.card-body {
+		padding-bottom: 0px;
+	}
+</style>

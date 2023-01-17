@@ -15,7 +15,7 @@ const rentDepositInWei = '300000000000000000'  //0.3 ETH
 const rentMinTime = '2419200' //seconds: 2419200 == 4 weeks
 
 export const TokenType = { Unknown: 0, Dna: 1, Egg: 2, Dragon: 3 }
-export const OfferType = { NoOffer: 0, ForSale: 1, ForRent: 2, ForSaleOrent: 3 }
+export const OfferType = { NoOffer: 0, ForSale: 1, ForRent: 2, ForSaleOrRent: 3 }
 export const rentTerms = {
     price: rentPriceInWei,
     rental: {

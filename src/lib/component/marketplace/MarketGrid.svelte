@@ -32,7 +32,7 @@
 	};
 </script>
 
-<div class="mt-2 mb-2 w-100 ta-c">
+<div class="w-100 ta-c">
 	<Pagination {pages} {loadPage} {perpage} />
 </div>
 
@@ -50,7 +50,6 @@
 						{_offerType}
 					/>
 				{/if}
-
 				{#if _tokenType == TokenType.Egg}
 					<EggCard
 						account={contract['market'].contract.account}

@@ -141,18 +141,46 @@ export function functionType(contractName) {
     return (fType == "view") ? "call" : "send"
 }
 
-export function get_unique_tokenid(arrayA, arrayB) {
-    const uniqueArray = [...new Set([...arrayA, ...arrayB].map((item) => item.tokenId))].map(
-        (tokenid) => [...arrayA, ...arrayB].find((item) => item.tokenId === tokenid)
-    );
+export function get_unique_tokenid(sellOffers, rentOffers) {
+    let concatArray =  sellOffers.concat(rentOffers)                 
+    let uniqueArray = []
+   
+        //look into the short array
+        concatArray.find((item) => {                                    
+            let checkunique = uniqueArray.find((unique) => unique.tokenId === item.tokenId)            
+            if (checkunique === undefined) {                
+                let checkSells = sellOffers.find(elem => elem.tokenId === item.tokenId);
+                let checkRents = rentOffers.find(elem => elem.tokenId === item.tokenId);
+                if (checkSells) {
+                    if (item.sellOffer !== undefined) {
+                        item['rentOffer'] = checkSells.rentOffer
+                    } else {
+                        item['sellOffer'] = checkSells.sellOffer
+                    }                    
+                }
+                if (checkRents) {
+                    if (item.sellOffer !== undefined) {
+                        item['rentOffer'] = checkRents.rentOffer
+                    } else {
+                        item['sellOffer'] = checkRents.sellOffer
+                    }                    
+                }                              
+                uniqueArray.push(item)
+            } 
+        })
+  
+    console.log(uniqueArray);
     return uniqueArray;
 }
 
-export async function loadRentTerms(asset,_offerType) {
-    if (_offerType === OfferType.ForSale){        
-        console.log('is not loading terms');
-        return;    
-    } 
+export function orderByOffer(assets, _offerType) {
+    const sortOffer = (_offerType === 1) ? "sellOffer" : "rentOffer";
+    return assets.sort((a, b) => (a[sortOffer] > b[sortOffer]) ? 1 : -1);
+}
+
+export async function loadRentTerms(asset, _offerType) {
+    if (_offerType === OfferType.ForSale || asset.rentOffer == undefined) return;
+
     let currentDeposit = asset.rentOffer.rent.deposit;
     let fee = asset.rentOffer.rent.price;
     let minDuration = asset.rentOffer.rent.minDuration / (24 * 60 * 60) + ' days';
@@ -160,7 +188,7 @@ export async function loadRentTerms(asset,_offerType) {
         deposit: await getEth(currentDeposit),
         price: await getEth(fee),
         duration: minDuration
-    };		
+    };
 }
 
 export function loadOwner(account, owner) {

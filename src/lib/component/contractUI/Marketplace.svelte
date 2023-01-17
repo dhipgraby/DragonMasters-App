@@ -32,8 +32,7 @@
 				deposit: await getWei(rent_deposit),
 				minDuration: rent_duration * timeDropdrown.oneDay
 			}
-		};
-		console.log(rentTerms);
+		};		
 		contract.setOffer(rentId, OfferType.ForRent, _tokenType, rentTerms);
 	}
 
