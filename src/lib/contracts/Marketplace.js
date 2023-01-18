@@ -54,7 +54,7 @@ export class MarketplaceContract extends MarketApproval {
                 from: this.contract.account,
                 value: price
             }, function (err, txHash) {
-                addAwaiter(txHash,'Buy Token')
+                addAwaiter(txHash,'Buying Token id: ' + tokenId)
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert('Token id: ' + tokenId + ' Bought!', 'success')

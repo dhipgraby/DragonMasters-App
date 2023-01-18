@@ -7,12 +7,16 @@
 
 	let userBalance = 0;
 
-	afterUpdate(async ()=>{
-		userBalance = (user_address) ? await getBalance(user_address) : 0;		
-	})
+	afterUpdate(async () => {
+		userBalance = user_address ? await getBalance(user_address) : 0;
+	});
 
 	function copyAddress() {
 		navigator.clipboard.writeText(user_address);
+	}
+
+	async function metamaskConnect() {
+		const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
 	}
 </script>
 
@@ -55,6 +59,10 @@
 					<li class="nav-item" title="Click to Copy">
 						<span class="nav-link balance" href="/#">Wei: {userBalance}</span>
 					</li>
+				{:else}
+					<li class="nav-item connectBtn">
+						<button class="btn btn-light" on:click={() => metamaskConnect()}>Connect Metamask Account</button>
+					</li>
 				{/if}
 			</ul>
 		</div>
@@ -62,8 +70,17 @@
 </nav>
 
 <style>
+	.connectBtn {
+		align-self: center;
+	}
 
-	.balance{
+	.btn-light {
+		margin-left: 20px;
+		padding: 5px 10px;
+		border-radius: 50px;
+	}
+
+	.balance {
 		color: white;
 		letter-spacing: 1px;
 	}
