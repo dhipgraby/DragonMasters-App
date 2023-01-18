@@ -10,11 +10,14 @@
 		eggsForRent
 	} from '$lib/storage/marketplace';
 	import { TokenType, OfferType } from '$lib/contracts/LoanBook';
+	import { get_unique_tokenid } from '$lib/helpers/utils';
 	import TokenButtons from '$lib/component/marketplace/TokenButtons.svelte';
+	import OfferTypeBtn from '$lib/component/marketplace/OfferTypeBtn.svelte';
+	import { orderByOffer } from '$lib/helpers/utils';
 
 	//Per page is not correctly Integrated. Only pages are been produced
 	let show = TokenType.Egg;
-	let _offerType = OfferType.ForSale;
+	let _offerType = OfferType.ForRent;
 	let perpage = 10;
 	perpage--;
 
@@ -25,34 +28,30 @@
 	//RENT OFFERS
 	$: dragons_for_rent = $dragonsForRent;
 	$: eggs_for_rent = $eggsForRent;
+	let allOffers = {
+		eggs: [],
+		dragons: []
+	};
 
 	const allAssets = () => {
 		return {
-			dragons: get_all_offers(dragons_for_sale, dragons_for_rent),
-			eggs: get_all_offers(eggs_for_sale, eggs_for_rent)
+			dragons: get_unique_tokenid(dragons_for_sale, dragons_for_rent),
+			eggs: get_unique_tokenid(eggs_for_sale, eggs_for_rent)
 		};
 	};
 
-	const get_all_offers = (offersA, offersB) => {
-		let allOffers = offersA.concat(offersB);
-		console.log(allOffers);
-
-		const uniqueArray = [...new Set([...offersA, ...offersB].map((item) => item.tokenId))].map(
-			(tokenid) => [...offersA, ...offersB].find((item) => item.tokenId === tokenid)
-		);
-		return uniqueArray;
+	const changeToken = (_tokenType) => {
+		show = _tokenType;
 	};
 
-	const changeToken = (_tokenType) => {
-		console.log(_tokenType);
-		show = _tokenType;
+	const setOfferType = (newType) => {
+		_offerType = newType;
 	};
 
 	onMount(async () => {
 		await LoadInterface(0, perpage);
-		console.log(dragons_for_rent);
-		console.log(eggs_for_rent);
-		console.log(allAssets());
+		allOffers = allAssets();
+		console.log(allOffers);
 	});
 </script>
 
@@ -63,21 +62,7 @@
 <MainContainer>
 	<h1>Marketplace</h1>
 
-	<div class="btn-group" role="group">
-		<button
-			type="button"
-			on:click={() => (_offerType = OfferType.ForSale)}
-			class="btn btn-light {_offerType === OfferType.ForSale ? 'active' : ''}"
-			><i class="fas fa-shopping-cart" /> Buy
-		</button>
-		<button
-			type="button"
-			on:click={() => (_offerType = OfferType.ForRent)}
-			class="btn btn-light {_offerType === OfferType.ForRent ? 'active' : ''}"
-		>
-			<i class="fas fa-donate" /> Rent
-		</button>
-	</div>
+	<OfferTypeBtn {setOfferType} {_offerType} />
 
 	<TokenButtons {changeToken} />
 
@@ -126,21 +111,43 @@
 			/>
 		{/if}
 	{/if}
+	{#if _offerType == OfferType.ForSaleOrRent}
+		{#if show == TokenType.Egg}
+			{#if allOffers.eggs.length >= 1}
+				<MarketGrid
+					{_offerType}
+					assets={allOffers.eggs}
+					contract={contractsData}
+					loadPage={LoadInterface}
+					{perpage}
+					_tokenType={TokenType.Egg}
+				/>
+			{:else}
+				<h2>No offers found...</h2>
+			{/if}
+		{/if}
+		{#if show == TokenType.Dragon}
+			{#if allOffers.dragons.length >= 1}
+				<MarketGrid
+					{_offerType}
+					assets={allOffers.dragons}
+					contract={contractsData}
+					loadPage={LoadInterface}
+					{perpage}
+					_tokenType={TokenType.Dragon}
+				/>
+			{:else}
+				<h2>No offers found...</h2>
+			{/if}
+		{/if}
+	{/if}
 </MainContainer>
 
 <style>
-	.active {
-		background-color: black;
-		color: white;
+	h2 {
+		margin-top: 20px;	
 	}
-
 	h1 {
 		margin-bottom: 25px;
-	}
-	.btn-group .btn {
-		white-space: nowrap;
-		margin: 8px;
-		font-weight: 600;
-		letter-spacing: 0.8px;
 	}
 </style>

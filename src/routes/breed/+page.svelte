@@ -59,7 +59,7 @@
 		</div>
 	{:else}
 		<div class="ta-c mb-3">
-			<button class="btn btn-dark" on:click={() => SubSpecies = 0 }> Change Element </button>
+			<button class="btn btn-dark" on:click={() => SubSpecies = null }> Change Element </button>
 		</div>
 		<BreedBox {SubSpecies} />
 	{/if}

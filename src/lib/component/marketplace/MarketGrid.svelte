@@ -25,15 +25,14 @@
 		await loadPage(0, perpage);
 	};
 
-	const rentToken = async (tokenId, price, deposit) => {
-		console.log('renting token');
+	const rentToken = async (tokenId, price, deposit) => {		
 		console.log(price, deposit);
 		await contract['market'].rentToken(tokenId, _tokenType, price, deposit);
 		await loadPage(0, perpage);
 	};
 </script>
 
-<div class="mt-4 mb-4 w-100 ta-c">
+<div class="w-100 ta-c">
 	<Pagination {pages} {loadPage} {perpage} />
 </div>
 
@@ -51,7 +50,6 @@
 						{_offerType}
 					/>
 				{/if}
-
 				{#if _tokenType == TokenType.Egg}
 					<EggCard
 						account={contract['market'].contract.account}

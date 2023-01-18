@@ -15,7 +15,7 @@ const rentDepositInWei = '300000000000000000'  //0.3 ETH
 const rentMinTime = '2419200' //seconds: 2419200 == 4 weeks
 
 export const TokenType = { Unknown: 0, Dna: 1, Egg: 2, Dragon: 3 }
-export const OfferType = { NoOffer: 0, ForSale: 1, ForRent: 2, ForSaleOrent: 3 }
+export const OfferType = { NoOffer: 0, ForSale: 1, ForRent: 2, ForSaleOrRent: 3 }
 export const rentTerms = {
     price: rentPriceInWei,
     rental: {
@@ -54,7 +54,7 @@ export class MarketplaceContract extends MarketApproval {
                 from: this.contract.account,
                 value: price
             }, function (err, txHash) {
-                addAwaiter(txHash,'Buy Token')
+                addAwaiter(txHash,'Buying Token id: ' + tokenId)
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert('Token id: ' + tokenId + ' Bought!', 'success')
@@ -150,8 +150,7 @@ export class MarketplaceContract extends MarketApproval {
         _tokenType
     ) {
         //Collecting all offers and details 
-        let allOffers = await this.getOffered(from, to, _offerType, _tokenType)
-        console.log(allOffers);
+        let allOffers = await this.getOffered(from, to, _offerType, _tokenType)        
         let tokenIds = allOffers.map((el) => { return el.tokenId });
         let assets = []
 

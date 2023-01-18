@@ -15,7 +15,7 @@
 	});
 </script>
 
-<div class="mt-4 mb-4 w-100 ta-c">
+<div class="w-100 ta-c">
 	<h1>Your Eggs</h1>
 	<Pagination {pages} {loadPage} inferfaceName='Egg' />
 </div>
