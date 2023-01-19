@@ -41,7 +41,9 @@
 					<h3>Fire</h3>
 				</div>
 			</div>
-
+		</div>
+		
+		<div class="row">
 			<!-- HIDROSPHERE -->
 
 			<div class="col p-1">
@@ -59,15 +61,16 @@
 		</div>
 	{:else}
 		<div class="ta-c mb-3">
-			<button class="btn btn-dark" on:click={() => SubSpecies = null }> Change Element </button>
+			<button class="btn btn-dark" on:click={() => (SubSpecies = null)}> Change Element </button>
 		</div>
 		<BreedBox {SubSpecies} />
 	{/if}
 </div>
 
 <style>
+
 	.row {
-		justify-content: center;
+		justify-content: center;				
 	}
 
 	.inner {
@@ -79,12 +82,17 @@
 	}
 
 	.col {
-		margin: 10px 20px;
-		max-width: 300px;
+		text-align: -webkit-center;
+		margin: 10px 5px;
+		max-width: 220px;
 		align-self: center;
 	}
 
 	.eggContainer:hover {
 		box-shadow: 0px 10px 20px -8px;
+	}
+
+	.fa-egg {
+		text-shadow: 0px 2px 8px #747474;
 	}
 </style>

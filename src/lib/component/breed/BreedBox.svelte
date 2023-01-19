@@ -20,13 +20,21 @@
 	let newEgg;
 
 	onMount(async () => {
-
 		// userDragons.useLocalStorage()
 		contract = await new DragonContract();
 
-		let contractEvents = await contract.contract.DragonToken.events;
-
+		let contractEvents = await contract.contract.DragonToken.events;		
+	
 		const updater = (event) => {
+			
+			const returnValues = event.returnValues
+
+			if(returnValues.eggIds.length > 0){
+				//Manage how much eggs they are and show
+			} else {
+				//Show that dragons was not successfully breed.
+			}
+			
 			newEgg = {
 				eggId:event.returnValues.eggId,
 				dadId:event.returnValues.dadId,
@@ -90,8 +98,15 @@
 		return;
 	}
 
+	async function getEvents(){
+		const events = await contract.contract.DragonToken.getPastEvents('EggsLaid', { fromBlock: 0, toBlock: 'latest' });
+		console.log(events);	}
+
 </script>
 
+<button class="btn btn-dark" on:click={getEvents}>
+get events
+</button>
 {#if breedEvent}
 	<BirthBox {...newEgg} />
 {:else}

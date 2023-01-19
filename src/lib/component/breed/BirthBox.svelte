@@ -44,18 +44,9 @@
 	h3,p {
 		color: #a1a1a1;
 	}
-
-
   
 	.eggContainer h3 {
 		color: #a1a1a1;
 	}
 
-	.eggContainer:hover h1 {
-		color: #444;
-	}
-
-	.eggContainer:hover h3 {
-		color: #444;
-	}
 </style>

@@ -1,7 +1,6 @@
 import { completeAwaiter } from "$lib/storage/alerts";
 
 export async function startAwaiter(txHash, callback, interval = 200) {
-  console.log('starting an awaiter');
   const receipt = await web3.eth.getTransaction(txHash);
   if (receipt.blockNumber != null) {
     callback()

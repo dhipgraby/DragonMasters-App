@@ -30,7 +30,7 @@ export function completeAwaiter(txHash) {
         }
         return elem
     })
-    console.log('updating txs : ' + JSON.stringify(updated));    
+    
     txTrigger.set(updated);
 }
 
