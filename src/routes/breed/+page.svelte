@@ -42,7 +42,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="row">
 			<!-- HIDROSPHERE -->
 
@@ -68,9 +68,12 @@
 </div>
 
 <style>
+	.btn {		
+		width: fit-content;
+	}
 
 	.row {
-		justify-content: center;				
+		justify-content: center;
 	}
 
 	.inner {
