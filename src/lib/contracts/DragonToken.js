@@ -25,6 +25,19 @@ export class DragonContract {
         })();
     }
 
+    async getDragonIds(owner, startIndex, endIndex, alert = false){
+        try {
+            const dragonIds = await this.contract.DragonToken.methods.getDragonIds(owner, startIndex, endIndex).call()
+            console.log(dragonIds)
+            if (alert == true) setAlert('Dragon Ids: '+ JSON.stringify(dragonIds), 'success')
+
+            return dragonsIds
+        } catch (err) {
+            if (alert == true) setAlert('getDragonIds error', 'warning')
+            console.log("Error at: getDragonIds" + err)
+        }
+    }
+
     async getDragon(dragonId, alert = false) {
         
         try {
@@ -34,7 +47,7 @@ export class DragonContract {
                 ...dragonDetails[0], skills: toNumbers2D(dragonDetails[1])
             }
 
-            let dragon = {
+            const dragon = {
                 tokenId: dragonId,
                 dnaId: dragonDetails.dnaId,
                 subSpecies: subSpeciesName(dragonDetails.species),
@@ -54,24 +67,64 @@ export class DragonContract {
             return dragon
 
         } catch (err) {
-            setAlert('Error getting this Dragon id ', 'warning')
+            if (alert == true) setAlert('Error getting this Dragon id ', 'warning')
             console.log("Error at: getDragon" + err)
         }
     }
 
-    async getDragonIds(
-        startIndex,
-        endIndex
-    ) {
+    async checkEnergy(dragonId, alert = false) {
         try {
-            let dragonsIds = await this.contract.DragonToken.methods.getDragonIds(this.contract.account, startIndex, endIndex).call()
+            const timeToFullEnergy = await this.contract.DragonToken.methods.checkEnergy(dragonId).call()
 
-            return dragonsIds
+            if (timeToFullEnergy == 0) {
+                if (alert == true) setAlert('Dragon has full energy!', 'success')
+            } else {
+                if (alert == true) setAlert('Dragon will regain full energy in ' + timeToFullEnergy + ' seconds', 'info')
+            }
+            return timeToFullEnergy
+
         } catch (err) {
-            setAlert('getDragonIds error', 'warning')
-            console.log("Error at: getDragonIds" + err)
+            // let errMsg = getErrors('checkEnergy', err)
+            if (alert == true) setAlert('checkEnergy error', 'warning')
+
+            console.log("Error at: checkEnergy " + err)
         }
     }
+
+    async checkMaturity(dragonId, alert = false) {
+        try {
+            const maturity = await this.contract.DragonToken.methods.checkMaturity(dragonId).call()
+            let secondsToMature = maturity.secondsRemaining
+
+            if (secondsToMature == 0) {
+                if (alert == true) setAlert('This dragon is mature and ready to be raised!', 'success')
+            } else {
+                if (alert == true) setAlert('Dragon will mature in ' + secondsToMature + ' seconds', 'info')
+            }
+            return secondsToMature
+
+        } catch (err) {
+            // let errMsg = getErrors('checkMaturity', err)
+            if (alert == true) setAlert('checkMaturity error', 'warning')
+
+            console.log("Error at: checkMaturity " + err)
+        }
+    }
+
+    async getRelationship(dragonId, toDragonId, alert = false) {
+        try {
+            const relationship = await this.contract.DragonToken.methods.getRelationship(dragonId, toDragonId).call()
+            console.log(relationship)
+            if (alert == true) setAlert('Relationship: '+ JSON.stringify(relationship), 'success')
+
+            return relationship
+        } catch (err) {
+            console.log("Error at: getRelationship function" + err)
+            if (alert == true) setAlert('getRelationship error', 'warning')
+        }
+    }
+
+
 
     async getUserDragons(from, to) {
 
@@ -109,40 +162,7 @@ export class DragonContract {
         }
     }
 
-    async checkEnergy(dragonId, msg = false) {
-        try {
-            let energy = await this.contract.DragonToken.methods.checkEnergy(dragonId).call()
 
-            if (energy == 0) {
-                if (msg == true) setAlert('This dragon have full energy!', 'success')
-            } else {
-                if (msg == true) setAlert('Dragon energy: ' + energy, 'info')
-            }
-            return energy
-
-        } catch (err) {
-            let errMsg = getErrors('checkEnergy', err)
-            console.log("Error at: checkEnergy " + errMsg)
-        }
-    }
-
-    async checkMaturity(dragonId, msg = false) {
-        try {
-            let maturity = await this.contract.DragonToken.methods.checkMaturity(dragonId).call()
-            let secondsRemaining = maturity.secondsRemaining
-
-            if (secondsRemaining == 0) {
-                if (msg == true) setAlert('This dragon is Mature ready to Raise!', 'success')
-            } else {
-                if (msg == true) setAlert('Dragon Matures at : ' + secondsRemaining, 'info')
-            }
-            return secondsRemaining
-
-        } catch (err) {
-            let errMsg = getErrors('checkMaturity', err)
-            console.log("Error at: checkMaturity " + errMsg)
-        }
-    }
 
     async raiseMaturity(dragonId) {
         dragonId = dragonId.split(',')
@@ -160,31 +180,134 @@ export class DragonContract {
         }
     }
 
-    async breed(idDragonMateA, idDragonMateB) {
-        idDragonMateA = idDragonMateA.split(',')
-        idDragonMateB = idDragonMateB.split(',')
+    async breed(idDragonMateA, idDragonMateB, alert = false) {
+        const mateAsIds = idDragonMateA.split(',')
+        const mateBsIds = idDragonMateB.split(',')
         try {
-            await this.contract.DragonToken.methods.breed(idDragonMateA, idDragonMateB).send({}, function (err, txHash) {
-                addAwaiter(txHash,'Breeding Ids: ' + JSON.stringify(idDragonMateA) +' - ' + JSON.stringify(idDragonMateB))
-                if (err) setAlert(err, 'warning')
+            console.log("In breed(), with mate A & B ids:")
+            console.log(mateAsIds)
+            console.log(mateBsIds)
+
+            await this.contract.DragonToken.methods.breed(mateAsIds, mateBsIds).send({}, function (err, txHash) {
+                addAwaiter(txHash,'Breeding Ids: ' + JSON.stringify(mateAsIds) +' - ' + JSON.stringify(mateBsIds))
+                if (alert == true && err) setAlert(err, 'warning')
                 else {
-                    setAlert(txHash, 'success')
+                    if (alert == true) setAlert('Breeding complete', 'success')
                     return txHash
                 }
             })
         } catch (err) {
             console.log("Error at: Breeding function" + err)
+            if (alert == true) setAlert('breed error', 'warning')
         }
     }
 
-    async getRelationship(dragonId, toDragonId) {
-        try {
-            let relationship = await this.contract.DragonToken.methods.getRelationship(dragonId, toDragonId).call()
-            console.log(relationship)
-        } catch (err) {
-            console.log("Error at: Breeding function" + err)
-        }
-    }
+
+
+      /*
+    * Get a dragon's current skills
+    * Requirement: The dragon (id) must exist
+    * Returns: List of skill identifiers (enum Skill identifiers).
+    */
+    //   function getSkills(uint256 dragonId)
+    //   external
+    //   view
+    //   returns (Skill[] memory skills);
+
+    /*
+    * Get the dragon's skill level for a specific skill (enum Skill identifier)
+    * Requirement: The dragon (id) must exist
+    * Returns: Skill level (0-255)
+    */
+    // function getSkillLevel(uint256 dragonId, Skill skill)
+    //     external
+    //     view
+    //     returns (uint8 level);
+
+    /*
+    * Get the dragon's skills with associsated skill levels
+    * Requirement: The dragon (id) must exist
+    * Returns: List of each Skill (enum identifier) with it's corresponding skill level (0-255)
+    */
+    // function getSkillsWithLevels(uint256 dragonId)
+    //     external
+    //     view
+    //     returns (uint8[][2] memory skills);
+
+
+    /************* PUBLIC FUNCTIONS  ***************/
+
+    // Public functions
+
+    // Functions to pause or unpause all functions that have
+    // the whenNotPaused or whenPaused modify applied on them
+    // function pause() public onlyOwner whenNotPaused {
+    //     _pause();
+    // }
+
+    // function unpause() public onlyOwner whenPaused {
+    //     _unpause();
+    // }
+
+
+    // function setAttributeGrowth(
+    //     uint8[_NUM_ATTRIBUTES][_NUM_MATURITIES][_NUM_SUBSPECIES] calldata attributesValues
+    // )
+    //     public
+    //     onlyOwner
+    //     whenNotPaused
+    // {
+    //     _AttributeGrowth = attributesValues;
+    // }
+
+
+    // function setBaseSkillGrowth(
+    //     uint8[_NUM_BASESKILLS][_NUM_MATURITIES][_NUM_SUBSPECIES] calldata skillsValues
+    // )
+    //     public
+    //     onlyOwner
+    //     whenNotPaused
+    // {
+    //     _BaseSkillGrowth = skillsValues;
+    // }
+
+
+    // function getAttributeGrowth()
+    //     public
+    //     view
+    //     onlyOwner
+    //     returns (uint8[_NUM_ATTRIBUTES][_NUM_MATURITIES][_NUM_SUBSPECIES] memory attributesValues)
+    // {
+    //     return(_AttributeGrowth);
+    // }
+
+    // function getBaseSkillGrowth()
+    //     public
+    //     view
+    //     onlyOwner
+    //     returns (uint8[_NUM_BASESKILLS][_NUM_MATURITIES][_NUM_SUBSPECIES] memory skillsValues)
+    // {
+    //     return(_BaseSkillGrowth);
+    // }
+
+
+    // function getDnaTokenContract()
+    //     public
+    //     view
+    //     returns (address)
+    // {
+    //     return address(_IDna);
+    // }
+
+
+    // function getEggTokenContract()
+    //     public
+    //     view
+    //     returns (address)
+    // {
+    //     return address(_IEgg);
+    // }
+
 
     /************* STANDARD CONTRACT FUNCTIONS  ***************/
 
@@ -198,6 +321,8 @@ export class DragonContract {
             console.log("Error at: totalSupply " + err)
         }
     }
+
+
 
 }
 
