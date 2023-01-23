@@ -1,7 +1,8 @@
 <script>
+	import { onMount } from 'svelte';
 	import Pagination from '$lib/component/pagination/UIpagination.svelte';
 	import { setAlert } from '$lib/storage/alerts';
-
+	import { initEventListener } from '$lib/contracts/events';
 
 	export let contract;
 
@@ -17,6 +18,52 @@
 	let tokenIdsA = ""
 	let tokenIdsB = ""
 
+	onMount(async() => {
+
+		let contractEvents = await contract.contract.DragonToken.events;		
+	
+		const updater = (event) => {
+			const newEggs = []
+			const returnValues = event.returnValues;
+			if (returnValues.eggIds.length > 0) {
+				const eggIds = event.returnValues.eggIds;
+				const provenance = event.returnValues.provenance;
+				if(eggIds[0] !== undefined)  {
+					newEggs.push(getNewEgg(eggIds[0],provenance[0]))
+					setAlert('One new egg laid! Id: '+eggIds[0], 'success')
+				}
+				if(eggIds[1] !== undefined)  {
+					newEggs.push(getNewEgg(eggIds[1],provenance[1]))
+					setAlert('A second egg laid! Id: '+eggIds[1], 'success')
+				}
+			} 
+			else {
+				setAlert('Unlucky, no eggs laid!', 'success')
+			}
+			console.log(newEggs)
+		};
+
+		await initEventListener(contractEvents, updater, 'DragonToken');
+		await getEvents();
+	})
+
+	async function getEvents() {
+        const events = await contract.contract.DragonToken.getPastEvents('EggsLaid', {
+            fromBlock: 0,
+            toBlock: 'latest'
+        });
+        console.log(events);
+    }
+
+	function getNewEgg(eggId, provenance) {
+        return {
+            eggId: eggId,
+            dadId: provenance.dadId,
+            generation: provenance.generation,
+            mumId: provenance.mumId,
+            species: provenance.species
+        };
+    }
 
 	function changeIndex(indexType, value) {
 		switch (indexType) {
