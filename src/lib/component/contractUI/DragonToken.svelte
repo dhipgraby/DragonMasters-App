@@ -108,7 +108,6 @@
 	</div>
 
 	<div class="col-sm-12 col-md-12 col-xl-4">
-
 		<div class="grid" align="left">
 			<h2>Check Energy</h2>
 			<p class="bold">Token Id</p>		
