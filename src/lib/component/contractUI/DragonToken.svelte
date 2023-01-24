@@ -14,7 +14,7 @@
 	let startIndex = 0
 	let endIndex = 9
 	let singleId
-
+	let tokenIds = ""
 	let tokenIdsA = ""
 	let tokenIdsB = ""
 
@@ -98,6 +98,10 @@
 		contract.getRelationship(relatedA, relatedB, true);
 	}
 
+	async function raiseMaturity() {
+		contract.raiseMaturity(tokenIds, true);
+	}
+
 	async function breed() {
 		if (tokenIdsA.length == 0 && tokenIdsB.length == 0)
 			setAlert('Specify at least one pair of dragons for breeding', 'warning');
@@ -117,8 +121,7 @@
 		}	
 	}
 
-
-
+	
 
 </script>
 
@@ -186,6 +189,16 @@
 	</div>
 
 	<div class="col-sm-12 col-md-12 col-xl-4">
+
+		<div class="grid" align="left">
+			<h2>Raise Maturity</h2>
+			<p class="bold">Token Ids</p>		
+			<div class="mb-3">
+				<input type="text" bind:value={tokenIds} class="form-control" placeholder="0, 1, ..."/>
+			</div>
+			<button class="btn btn-dark" on:click={() => raiseMaturity()}>Raise</button>
+		</div>
+
 		<div class="grid" align="left">
 			<h2>Breed Dragons</h2>
 			<p class="bold">Mate As: Token Ids</p>		
