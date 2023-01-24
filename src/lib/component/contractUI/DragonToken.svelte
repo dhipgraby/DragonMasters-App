@@ -167,37 +167,6 @@
 			</div>
 			<button class="btn btn-dark" on:click={() => getDragon()}>GET</button>
 		</div>
-	</div>
-
-	<div class="col-sm-12 col-md-12 col-xl-4">
-		<div class="grid" align="left">
-			<h2>Check Energy</h2>
-			<p class="bold">Token Id</p>		
-			<div class="mb-3">
-				<input type="text" bind:value={singleId} class="form-control" placeholder="0"/>
-			</div>
-			<button class="btn btn-dark" on:click={() => checkEnergy()}>CHECK</button>
-		</div>
-
-		<div class="grid" align="left">
-			<h2>Check Maturity</h2>
-			<p class="bold">Token Id</p>		
-			<div class="mb-3">
-				<input type="text" bind:value={singleId} class="form-control" placeholder="0"/>
-			</div>
-			<button class="btn btn-dark" on:click={() => checkMaturity()}>CHECK</button>
-		</div>
-
-		<div class="grid" align="left">
-			<h2>Get Relationship (A to B)</h2>
-			<p class="bold">Token Id A</p>		
-			<div class="mb-3">
-				<input type="text" bind:value={relatedA} class="form-control mb-3" placeholder="0"/>
-				<p class="bold">Token Id B</p>		
-				<input type="text" bind:value={relatedB} class="form-control" placeholder="1" />
-			</div>
-			<button class="btn btn-dark" on:click={() => getRelationship()}>GET</button>
-		</div>
 
 		<div class="grid" align="left">
 			<h2>Get Skills</h2>
@@ -229,7 +198,39 @@
 			</div>
 			<button class="btn btn-dark" on:click={() => getSkillsWithLevels()}>GET</button>
 		</div>
-		
+	</div>
+
+	<div class="col-sm-12 col-md-12 col-xl-4">
+
+		<div class="grid" align="left">
+			<h2>Check Maturity</h2>
+			<p class="bold">Token Id</p>		
+			<div class="mb-3">
+				<input type="text" bind:value={singleId} class="form-control" placeholder="0"/>
+			</div>
+			<button class="btn btn-dark" on:click={() => checkMaturity()}>CHECK</button>
+		</div>
+
+		<div class="grid" align="left">
+			<h2>Check Energy</h2>
+			<p class="bold">Token Id</p>		
+			<div class="mb-3">
+				<input type="text" bind:value={singleId} class="form-control" placeholder="0"/>
+			</div>
+			<button class="btn btn-dark" on:click={() => checkEnergy()}>CHECK</button>
+		</div>
+
+		<div class="grid" align="left">
+			<h2>Get Relationship (A to B)</h2>
+			<p class="bold">Token Id A</p>		
+			<div class="mb-3">
+				<input type="text" bind:value={relatedA} class="form-control mb-3" placeholder="0"/>
+				<p class="bold">Token Id B</p>		
+				<input type="text" bind:value={relatedB} class="form-control" placeholder="1" />
+			</div>
+			<button class="btn btn-dark" on:click={() => getRelationship()}>GET</button>
+		</div>
+
 	</div>
 
 	<div class="col-sm-12 col-md-12 col-xl-4">
@@ -244,14 +245,15 @@
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Breed Dragons</h2>
-			<p class="bold">Mate As: Token Ids</p>		
+			<h2>Breed</h2>
+			<p class="bold">Mate A: Token Ids</p>		
 			<div class="mb-3">
 				<input type="text" bind:value={tokenIdsA} class="form-control mb-3" placeholder="0, 1, ..."/>
-				<p class="bold">Mate Bs: Token Ids</p>		
+				<p class="bold">Mate B: Token Ids</p>		
 				<input type="text" bind:value={tokenIdsB} class="form-control" placeholder="3, 5, ..." />
 			</div>
-			<button class="btn btn-dark" on:click={() => breed()}>MATE</button>
+			<button class="btn btn-dark" on:click={() => breed()}>BREED</button>
 		</div>
+
 	</div>
 </div>
