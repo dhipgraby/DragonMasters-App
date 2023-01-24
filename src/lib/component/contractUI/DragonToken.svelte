@@ -77,7 +77,7 @@
 	}
 
 	async function getDragonIds() {
-		contract.getDragonIds(OwnerAddress, 0, 20, true);
+		contract.getDragonIds(OwnerAddress, startIndex, endIndex, true);
 	}
 
 	async function getDragon() {
@@ -107,8 +107,6 @@
 	async function getSkillsWithLevels() {
 		contract.getSkillsWithLevels(singleId, true);
 	}
-
-	
 
 	async function raiseMaturity() {
 		contract.raiseMaturity(tokenIds, true);
