@@ -16,6 +16,22 @@ const Relationship = {
 }
 Object.freeze(Relationship);
 
+const Maturity = {
+    Hatchling: 0, Juvenile: 1, Adult: 2, Veteran: 3, Elder: 4, Ancient: 5, Immortal:6
+}
+Object.freeze(Maturity);
+
+const Attribute = {
+    Strength: 0, Endurance: 1, Agility: 2, Charisma:3, Intelligence:4, Wisdom:5
+}
+Object.freeze(Attribute);
+
+const Skill = { //Base Skills
+    Attack: 0, Defend: 1, Run: 2, Climb: 3, Jump: 4, Fly: 5, Swim: 6, Dig: 7
+}
+Object.freeze(Skill);
+
+
 export class DragonContract {
     constructor() {
         this.contract
@@ -102,12 +118,16 @@ export class DragonContract {
     async checkMaturity(dragonId, alert = false) {
         try {
             const maturity = await this.contract.DragonToken.methods.checkMaturity(dragonId).call()
-            let secondsToMature = maturity.secondsRemaining
+            const secondsToMature = maturity.secondsRemaining
+            const currentMaturity = Object.keys(Maturity)[maturity.currentAgeGroup]
 
             if (secondsToMature == 0) {
-                if (alert == true) setAlert('This dragon is mature and ready to be raised!', 'success')
+                if (alert == true) setAlert('This dragon is a mature ' +
+                    currentMaturity + ' and is ready to be raised!', 'success')
             } else {
-                if (alert == true) setAlert('Dragon will mature in ' + secondsToMature + ' seconds', 'info')
+                if (alert == true) setAlert('Dragon is an immature '+
+                    currentMaturity + ' but will mature in ' +
+                    secondsToMature + ' seconds', 'info')
             }
             return secondsToMature
 
@@ -123,8 +143,9 @@ export class DragonContract {
     async getRelationship(dragonId, toDragonId, alert = false) {
         try {
             const relationship = await this.contract.DragonToken.methods.getRelationship(dragonId, toDragonId).call()
-            console.log(relationship)
-            if (alert == true) setAlert('Relationship: '+ JSON.stringify(relationship), 'success')
+            const relation = Object.keys(Relationship)[relationship]
+            if (alert == true) setAlert('Dragon A is ' + relation + ' of dragon B', 'success')
+            console.log(relationship, ':', relation)
 
             return relationship
         } catch (err) {
@@ -136,22 +157,20 @@ export class DragonContract {
         }
     }
 
-
-      /*
-    * Get a dragon's current skills
-    * Requirement: The dragon (id) must exist
-    * Returns: List of skill identifiers (enum Skill identifiers).
-    */
-    //   function getSkills(uint256 dragonId)
-    //   external
-    //   view
-    //   returns (Skill[] memory skills);
     async getSkills(dragonId, alert = false) {
         try {
-            const skills = await this.contract.DragonToken.methods.getSkills(dragonId).call()
+            const dragonsSkillIds = await this.contract.DragonToken.methods.getSkills(dragonId).call()
+            
+            const allSkillNames = Object.keys(Skill)
+            let dragonsSkills = ''
+            for (let i=0; i<dragonsSkillIds.length; i++) {
+                dragonsSkills += allSkillNames[dragonsSkillIds[i]]
+                if (i < dragonsSkillIds.length-1) dragonsSkills += ', '
+                if (i+1 == dragonsSkillIds.length-1) dragonsSkills += 'and '
+            }
+            if (alert == true) setAlert('Dragon has skills: ' + dragonsSkills, 'success')
 
-            if (alert == true) setAlert('Dragon Id'+dragonId+' has skills: '+JSON.stringify(skills), 'success')
-            return skills
+            return dragonsSkillIds
 
         } catch (err) {
             const errMsg = getErrors('getSkills', err)
@@ -160,20 +179,14 @@ export class DragonContract {
         }
     }
 
-    /*
-    * Get the dragon's skill level for a specific skill (enum Skill identifier)
-    * Requirement: The dragon (id) must exist
-    * Returns: Skill level (0-255)
-    */
-    // function getSkillLevel(uint256 dragonId, Skill skill)
-    //     external
-    //     view
-    //     returns (uint8 level);
     async getSkillLevel(dragonId, skill, alert = false) {
         try {
             const level = await this.contract.DragonToken.methods.getSkillLevel(dragonId, skill).call()
+            
+            const skillName = Object.keys(Skill)[skill]
+            if (alert == true)
+                setAlert("Dragon's "+skillName+' skill = ' + level, 'success')
 
-            if (alert == true) setAlert('Dragon Id'+dragonId+' has skill '+skill +' = ' +JSON.stringify(level), 'success')
             return level
 
         } catch (err) {
@@ -182,20 +195,21 @@ export class DragonContract {
             console.log(errMsg)
         }
     }
-    /*
-    * Get the dragon's skills with associsated skill levels
-    * Requirement: The dragon (id) must exist
-    * Returns: List of each Skill (enum identifier) with it's corresponding skill level (0-255)
-    */
-    // function getSkillsWithLevels(uint256 dragonId)
-    //     external
-    //     view
-    //     returns (uint8[][2] memory skills);
+
     async getSkillsWithLevels(dragonId, alert = false) {
         try {
             const skillsWithLevels = await this.contract.DragonToken.methods.getSkillsWithLevels(dragonId).call()
 
-            if (alert == true) setAlert('Dragon Id'+dragonId+' has skills with levels: '+JSON.stringify(skillsWithLevels), 'success')
+            const allSkillNames = Object.keys(Skill)
+            let dragonsSkillsWithLevels = ''
+            for (let i=0; i<skillsWithLevels[0].length; i++) {
+                const nextSkillwithLevel = allSkillNames[skillsWithLevels[0][i]] + '=' + skillsWithLevels[1][i]
+                dragonsSkillsWithLevels += nextSkillwithLevel
+                if (i < skillsWithLevels[0].length-1) dragonsSkillsWithLevels += ', '
+                if (i+1 == skillsWithLevels[0].length-1) dragonsSkillsWithLevels += 'and '
+            }
+            if (alert == true) setAlert('Dragon has skills: ' + dragonsSkillsWithLevels, 'success')
+
             return skillsWithLevels
 
         } catch (err) {
@@ -204,9 +218,6 @@ export class DragonContract {
             console.log(errMsg)
         }
     }
-
-
-
 
     async raiseMaturity(ids, alert = false) {
         const dragonIds = ids.split(',')

@@ -6,7 +6,6 @@
 
 	export let contract;
 
-	let getDragonId;
 	let relatedA;
 	let relatedB;
 
@@ -14,7 +13,7 @@
 	let startIndex = 0
 	let endIndex = 9
 	let singleId
-	let skill
+	let skillId
 	let tokenIds = ""
 	let tokenIdsA = ""
 	let tokenIdsB = ""
@@ -102,7 +101,7 @@
 	}
 
 	async function getSkillLevel() {
-		contract.getSkillLevel(singleId, skill, true);
+		contract.getSkillLevel(singleId, skillId, true);
 	}
 
 	async function getSkillsWithLevels() {
@@ -217,13 +216,13 @@
 			</div>
 			<p class="bold">Skill Id (0->7)</p>		
 			<div class="mb-3">
-				<input type="text" bind:value={skill} class="form-control" placeholder="0"/>
+				<input type="text" bind:value={skillId} class="form-control" placeholder="0"/>
 			</div>
 			<button class="btn btn-dark" on:click={() => getSkillLevel()}>GET</button>
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Get Skills with level</h2>
+			<h2>Get Skills with their levels</h2>
 			<p class="bold">Token Id</p>		
 			<div class="mb-3">
 				<input type="text" bind:value={singleId} class="form-control" placeholder="0"/>
