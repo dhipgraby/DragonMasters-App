@@ -252,6 +252,7 @@
 				<p class="bold">Mate B: Token Ids</p>		
 				<input type="text" bind:value={tokenIdsB} class="form-control" placeholder="3, 5, ..." />
 			</div>
+			<p class="normal small"><i>Note: Dragon mates (each pair) must be of the same species, maturity, and not closely-related.  They must also be adult and have full energy.</i></p>		
 			<button class="btn btn-dark" on:click={() => breed()}>BREED</button>
 		</div>
 
