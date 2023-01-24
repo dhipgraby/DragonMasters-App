@@ -148,7 +148,7 @@
 
 		<div class="grid" align="left">
 			<h2>Get Dragon Ids</h2>
-			<p class="bold">of Owner</p>		
+			<p class="bold">Of owner</p>		
 			<div class="mb-3">
 				<input type="text" bind:value={OwnerAddress} class="form-control mb-3" placeholder="address"/>
 			</div>
@@ -222,10 +222,10 @@
 
 		<div class="grid" align="left">
 			<h2>Get Relationship (A to B)</h2>
-			<p class="bold">Token Id A</p>		
+			<p class="bold">A: Token Id</p>		
 			<div class="mb-3">
 				<input type="text" bind:value={relatedA} class="form-control mb-3" placeholder="0"/>
-				<p class="bold">Token Id B</p>		
+				<p class="bold">B: Token Id</p>		
 				<input type="text" bind:value={relatedB} class="form-control" placeholder="1" />
 			</div>
 			<button class="btn btn-dark" on:click={() => getRelationship()}>GET</button>
@@ -245,7 +245,7 @@
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Breed</h2>
+			<h2>Breed (A with B)</h2>
 			<p class="bold">Mate A: Token Ids</p>		
 			<div class="mb-3">
 				<input type="text" bind:value={tokenIdsA} class="form-control mb-3" placeholder="0, 1, ..."/>
