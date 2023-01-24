@@ -45,7 +45,7 @@ export class DragonContract {
     async getDragonIds(owner, startIndex, endIndex, alert = false){
         try {
             const dragonIds = await this.contract.DragonToken.methods.getDragonIds(owner, startIndex, endIndex).call()
-            console.log(dragonIds)
+
             if (alert == true) setAlert('Dragon Ids: '+ JSON.stringify(dragonIds), 'success')
 
             return dragonsIds
@@ -220,8 +220,9 @@ export class DragonContract {
     }
 
     async raiseMaturity(ids, alert = false) {
-        const dragonIds = ids.split(',')
         try {
+            const dragonIds = ids.split(',')
+
             await this.contract.DragonToken.methods.raiseMaturity(dragonIds).send({}, function (err, txHash) {
                 addAwaiter(txHash,'Raise dragon Ids: ' + JSON.stringify(dragonIds))
                 if (err) setAlert(err, 'warning')
@@ -240,12 +241,9 @@ export class DragonContract {
     }
 
     async breed(idDragonMateA, idDragonMateB, alert = false) {
-        const mateAsIds = idDragonMateA.split(',')
-        const mateBsIds = idDragonMateB.split(',')
         try {
-            console.log("In breed(), with mate A & B ids:")
-            console.log(mateAsIds)
-            console.log(mateBsIds)
+            const mateAsIds = idDragonMateA.split(',')
+            const mateBsIds = idDragonMateB.split(',')
 
             await this.contract.DragonToken.methods.breed(mateAsIds, mateBsIds).send({}, function (err, txHash) {
                 addAwaiter(txHash,'Breeding Ids: ' + JSON.stringify(mateAsIds) +' - ' + JSON.stringify(mateBsIds))
@@ -354,7 +352,7 @@ export class DragonContract {
             // console.log("Error at: totalSupply " + err)
             const errMsg = getErrors('totalSupply', err)
             if (alert == true) setAlert(errMsg, 'warning')
-            console.log("Error at totalSupply: " + errMsg)
+            console.log(errMsg)
         }
     }
 
@@ -397,5 +395,4 @@ export class DragonContract {
         }
     }
 
-    
 }
