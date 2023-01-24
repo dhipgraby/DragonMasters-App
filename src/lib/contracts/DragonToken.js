@@ -224,16 +224,21 @@ export class DragonContract {
             const dragonIds = ids.split(',')
 
             await this.contract.DragonToken.methods.raiseMaturity(dragonIds).send({}, function (err, txHash) {
-                addAwaiter(txHash,'Raise dragon Ids: ' + JSON.stringify(dragonIds))
-                if (err) setAlert(err, 'warning')
-                else {
-                    setAlert(txHash, 'success')
-                    return txHash
+                addAwaiter(txHash,'Raise maturity Ids: ' + JSON.stringify(dragonIds))
+                if (alert == true ) {
+                    if (err) {
+                        setAlert(err, 'warning')
+                        console.log('Awaiter err: ', err)
+                    }
+                    else {
+                        setAlert('Raise Maturity Tx: '+txHash, 'success')
+                    }
                 }
+                return txHash
             })
         } catch (err) {
             // console.log("Error at: raiseMaturity function" + err)
-            // console.log("Error at breed: " + errMsg)
+            // if (alert == true) setAlert('raiseMaturity error', 'warning')
             const errMsg = getErrors('raiseMaturity', err)
             if (alert == true) setAlert(errMsg, 'warning')
             console.log(errMsg)
@@ -246,12 +251,17 @@ export class DragonContract {
             const mateBsIds = idDragonMateB.split(',')
 
             await this.contract.DragonToken.methods.breed(mateAsIds, mateBsIds).send({}, function (err, txHash) {
-                addAwaiter(txHash,'Breeding Ids: ' + JSON.stringify(mateAsIds) +' - ' + JSON.stringify(mateBsIds))
-                if (alert == true && err) setAlert(err, 'warning')
-                else {
-                    if (alert == true) setAlert('Mating complete', 'success')
-                    return txHash
+                addAwaiter(txHash,'Breed mate Ids: ' + JSON.stringify(mateAsIds) +' - ' + JSON.stringify(mateBsIds))
+                if (alert == true ) {
+                    if (err) {
+                        setAlert(err, 'warning')
+                        console.log('Awaiter err: ', err)
+                    }
+                    else {
+                        setAlert('Breed Tx: '+txHash, 'success')
+                    }
                 }
+                return txHash
             })
         } catch (err) {
             // console.log("Error at: Breeding function" + err)
@@ -262,6 +272,50 @@ export class DragonContract {
         }
     }
 
+
+// Admin Functions (eecutable by DragonToken contract owner)
+
+    async pause(alert = false) {
+        try {
+            await this.contract.DragonToken.methods.pause().send({}, function (err, txHash) {
+                addAwaiter(txHash,'Pause DragonToken contract')
+                if (alert == true) {
+                    if (err) setAlert(err, 'warning')
+                    else {
+                        setAlert(txHash, 'success')
+                        return txHash
+                    }
+                }
+            })
+        } catch (err) {
+            // console.log("Error at: pause function" + err)
+            // if (alert == true) setAlert('pause error', 'warning')
+            const errMsg = getErrors('pause', err)
+            if (alert == true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
+
+    async unpause(alert = false) {
+        try {
+            await this.contract.DragonToken.methods.unpause().send({}, function (err, txHash) {
+                addAwaiter(txHash,'Unpause DragonToken contract')
+                if (alert == true) {
+                    if (err) setAlert(err, 'warning')
+                    else {
+                        setAlert(txHash, 'success')
+                        return txHash
+                    }
+                }
+            })
+        } catch (err) {
+            // console.log("Error at: unpause function" + err)
+            // if (alert == true) setAlert('unpause error', 'warning')
+            const errMsg = getErrors('unpause', err)
+            if (alert == true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
 
 
 
