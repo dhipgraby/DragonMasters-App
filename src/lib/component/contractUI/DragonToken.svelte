@@ -131,15 +131,22 @@
 		}	
 	}
 
+	async function pause() {
+		contract.pause(true);
+	}
 
+	async function unpause() {
+		contract.unpause(true);
+	}
 
 </script>
 
 <h1>DragonToken</h1>
 
-<button class="btn btn-info text-light bold mb-3 mt-3" on:click={() => contract.totalSupply()}
-	>Total Supply</button
->
+<p class="bold">Contract Status: UNPAUSED"</p>		
+<button class="btn btn-dark text-light bold mb-3 mt-3" on:click={() => pause()}>Pause</button>
+<button class="btn btn-dark text-light bold mb-3 mt-3" on:click={() => unpause()}>Unpause</button>
+<button class="btn btn-info text-light bold mb-3 mt-3" on:click={() => contract.totalSupply()}>Total Supply</button>
 
 <div class="row">
 	<div class="col-sm-12 col-md-12 col-xl-4">
