@@ -25,6 +25,7 @@ export class DragonContract {
         })();
     }
 
+
     async getDragonIds(owner, startIndex, endIndex, alert = false){
         try {
             const dragonIds = await this.contract.DragonToken.methods.getDragonIds(owner, startIndex, endIndex).call()
@@ -136,42 +137,74 @@ export class DragonContract {
     }
 
 
+      /*
+    * Get a dragon's current skills
+    * Requirement: The dragon (id) must exist
+    * Returns: List of skill identifiers (enum Skill identifiers).
+    */
+    //   function getSkills(uint256 dragonId)
+    //   external
+    //   view
+    //   returns (Skill[] memory skills);
+    async getSkills(dragonId, alert = false) {
+        try {
+            const skills = await this.contract.DragonToken.methods.getSkills(dragonId).call()
 
-    async getUserDragons(from, to) {
+            if (alert == true) setAlert('Dragon Id'+dragonId+' has skills: '+JSON.stringify(skills), 'success')
+            return skills
 
-        const allDragons = await this.getDragonIds(this.contract.account,from, to)
-        let dragons = []
-        // let dragonOffers = get(dragonsForSale)
-        for (let i = 0; i < allDragons.tokenIds.length; i++) {
-
-            let dragonDetails = await this.getDragon(allDragons.tokenIds[i])
-            dragonDetails['dna'] = await this.getDna(dragonDetails.dnaId)
-            // if(dragonOffers.length){
-                
-            //     let offerIds = temp1.map((el)=>{
-            //         return el.tokenId 
-            //     })
-            // if(allDragons.tokenIds[i].includes(offerIds))  {
-            //     dragonDetails['forSale'] = true
-            // }
-
-            // }
-            dragons.push(dragonDetails)
+        } catch (err) {
+            const errMsg = getErrors('getSkills', err)
+            if (alert == true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
         }
-        dragons.totalOwned = allDragons.totalOwned
-        userDragons.set(dragons)
     }
 
-    // async getDna(dnaId) {
-    //     try {
-    //         let dna = await this.contract.DnaToken.methods.getDna(dnaId).call()
-    //         return dna
+    /*
+    * Get the dragon's skill level for a specific skill (enum Skill identifier)
+    * Requirement: The dragon (id) must exist
+    * Returns: Skill level (0-255)
+    */
+    // function getSkillLevel(uint256 dragonId, Skill skill)
+    //     external
+    //     view
+    //     returns (uint8 level);
+    async getSkillLevel(dragonId, skill, alert = false) {
+        try {
+            const level = await this.contract.DragonToken.methods.getSkillLevel(dragonId, skill).call()
 
-    //     } catch (err) {
-    //         const errMsg = getErrors('getDna', err)
-    //         console.log(errMsg)
-    //     }
-    // }
+            if (alert == true) setAlert('Dragon Id'+dragonId+' has skill '+skill +' = ' +JSON.stringify(level), 'success')
+            return level
+
+        } catch (err) {
+            const errMsg = getErrors('getSkillLevel', err)
+            if (alert == true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
+    /*
+    * Get the dragon's skills with associsated skill levels
+    * Requirement: The dragon (id) must exist
+    * Returns: List of each Skill (enum identifier) with it's corresponding skill level (0-255)
+    */
+    // function getSkillsWithLevels(uint256 dragonId)
+    //     external
+    //     view
+    //     returns (uint8[][2] memory skills);
+    async getSkillsWithLevels(dragonId, alert = false) {
+        try {
+            const skillsWithLevels = await this.contract.DragonToken.methods.getSkillsWithLevels(dragonId).call()
+
+            if (alert == true) setAlert('Dragon Id'+dragonId+' has skills with levels: '+JSON.stringify(skillsWithLevels), 'success')
+            return skillsWithLevels
+
+        } catch (err) {
+            const errMsg = getErrors('getSkillsWithLevels', err)
+            if (alert == true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
+
 
 
 
@@ -222,35 +255,6 @@ export class DragonContract {
 
 
 
-      /*
-    * Get a dragon's current skills
-    * Requirement: The dragon (id) must exist
-    * Returns: List of skill identifiers (enum Skill identifiers).
-    */
-    //   function getSkills(uint256 dragonId)
-    //   external
-    //   view
-    //   returns (Skill[] memory skills);
-
-    /*
-    * Get the dragon's skill level for a specific skill (enum Skill identifier)
-    * Requirement: The dragon (id) must exist
-    * Returns: Skill level (0-255)
-    */
-    // function getSkillLevel(uint256 dragonId, Skill skill)
-    //     external
-    //     view
-    //     returns (uint8 level);
-
-    /*
-    * Get the dragon's skills with associsated skill levels
-    * Requirement: The dragon (id) must exist
-    * Returns: List of each Skill (enum identifier) with it's corresponding skill level (0-255)
-    */
-    // function getSkillsWithLevels(uint256 dragonId)
-    //     external
-    //     view
-    //     returns (uint8[][2] memory skills);
 
 
     /************* PUBLIC FUNCTIONS  ***************/
@@ -342,4 +346,45 @@ export class DragonContract {
             console.log("Error at totalSupply: " + errMsg)
         }
     }
+
+
+    // KENNETH'S FUNCTIONS - Q. ARE THESE NEEDED FOR APP?  IF NOT DELETE THEM!??
+    
+    async getUserDragons(from, to) {
+
+        const allDragons = await this.getDragonIds(this.contract.account,from, to)
+        let dragons = []
+        // let dragonOffers = get(dragonsForSale)
+        for (let i = 0; i < allDragons.tokenIds.length; i++) {
+
+            let dragonDetails = await this.getDragon(allDragons.tokenIds[i])
+            dragonDetails['dna'] = await this.getDna(dragonDetails.dnaId)
+            // if(dragonOffers.length){
+                
+            //     let offerIds = temp1.map((el)=>{
+            //         return el.tokenId 
+            //     })
+            // if(allDragons.tokenIds[i].includes(offerIds))  {
+            //     dragonDetails['forSale'] = true
+            // }
+
+            // }
+            dragons.push(dragonDetails)
+        }
+        dragons.totalOwned = allDragons.totalOwned
+        userDragons.set(dragons)
+    }
+
+    async getDna(dnaId) {
+        try {
+            let dna = await this.contract.DnaToken.methods.getDna(dnaId).call()
+            return dna
+
+        } catch (err) {
+            const errMsg = getErrors('getDna', err)
+            console.log(errMsg)
+        }
+    }
+
+    
 }

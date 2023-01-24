@@ -14,6 +14,7 @@
 	let startIndex = 0
 	let endIndex = 9
 	let singleId
+	let skill
 	let tokenIds = ""
 	let tokenIdsA = ""
 	let tokenIdsB = ""
@@ -84,11 +85,9 @@
 		contract.getDragon(singleId, true);
 	}
 
-
 	async function checkEnergy() {
 		contract.checkEnergy(singleId, true);
 	}
-
 
 	async function checkMaturity() {
 		contract.checkMaturity(singleId, true);
@@ -97,6 +96,20 @@
 	async function getRelationship() {
 		contract.getRelationship(relatedA, relatedB, true);
 	}
+
+	async function getSkills() {
+		contract.getSkills(singleId, true);
+	}
+
+	async function getSkillLevel() {
+		contract.getSkillLevel(singleId, skill, true);
+	}
+
+	async function getSkillsWithLevels() {
+		contract.getSkillsWithLevels(singleId, true);
+	}
+
+	
 
 	async function raiseMaturity() {
 		contract.raiseMaturity(tokenIds, true);
@@ -121,7 +134,7 @@
 		}	
 	}
 
-	
+
 
 </script>
 
@@ -186,6 +199,38 @@
 			</div>
 			<button class="btn btn-dark" on:click={() => getRelationship()}>GET</button>
 		</div>
+
+		<div class="grid" align="left">
+			<h2>Get Skills</h2>
+			<p class="bold">Token Id</p>		
+			<div class="mb-3">
+				<input type="text" bind:value={singleId} class="form-control" placeholder="0"/>
+			</div>
+			<button class="btn btn-dark" on:click={() => getSkills()}>GET</button>
+		</div>
+
+		<div class="grid" align="left">
+			<h2>Get Skill Level</h2>
+			<p class="bold">Token Id</p>		
+			<div class="mb-3">
+				<input type="text" bind:value={singleId} class="form-control" placeholder="0"/>
+			</div>
+			<p class="bold">Skill Id (0->7)</p>		
+			<div class="mb-3">
+				<input type="text" bind:value={skill} class="form-control" placeholder="0"/>
+			</div>
+			<button class="btn btn-dark" on:click={() => getSkillLevel()}>GET</button>
+		</div>
+
+		<div class="grid" align="left">
+			<h2>Get Skills with level</h2>
+			<p class="bold">Token Id</p>		
+			<div class="mb-3">
+				<input type="text" bind:value={singleId} class="form-control" placeholder="0"/>
+			</div>
+			<button class="btn btn-dark" on:click={() => getSkillsWithLevels()}>GET</button>
+		</div>
+		
 	</div>
 
 	<div class="col-sm-12 col-md-12 col-xl-4">
