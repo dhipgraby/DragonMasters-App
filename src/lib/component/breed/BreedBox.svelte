@@ -1,60 +1,28 @@
 <script>
-	import { onMount } from 'svelte';
 	import { dragonA, dragonB, userDragons } from '$lib/storage/dragon';
-	import { subSpeciesName } from '$lib/helpers/utils';
-	import { DragonContract } from '$lib/contracts/DragonToken';
-	import { initEventListener } from '$lib/contracts/events';
-
+	import { subSpeciesName } from '$lib/helpers/utils';	
 	//COMPONENTS
 	import UserDragons from './UserDragons.svelte';
 	import BreedBtn from './BreedBtn.svelte';
 	import DragonSelection from './DragonSelection.svelte';
 	import BirthBox from './BirthBox.svelte';
 
-	export let SubSpecies
-	$: SubSpeciesName = subSpeciesName(SubSpecies)
-	let gender;
-	let displayDragons = false;
-	let breedEvent = false;
-	let contract;
-	let newEgg;
-
-	onMount(async () => {
-		// userDragons.useLocalStorage()
-		contract = await new DragonContract();
-
-		let contractEvents = await contract.contract.DragonToken.events;		
+	export let SubSpecies;
+	export let newEggs;
+	export let breedEvent;
+	export let contract;
 	
-		const updater = (event) => {
-			
-			const returnValues = event.returnValues
-
-			if(returnValues.eggIds.length > 0){
-				//Manage how much eggs they are and show
-			} else {
-				//Show that dragons was not successfully breed.
-			}
-			
-			newEgg = {
-				eggId:event.returnValues.eggId,
-				dadId:event.returnValues.dadId,
-				mumId:event.returnValues.mumId,
-			}		
-			breedEvent = true			
-		};
-
-		await initEventListener(contractEvents, updater, 'DragonToken');
-
-		if (dragons.length > 0) return;
-		await contract.getUserDragons(0,10);		
-	});
-
+	$: SubSpeciesName = subSpeciesName(SubSpecies);
+	let gender;
+	let displayDragons = false;	
+	
+	
 	$: dad_dragon = $dragonA;
 	$: mum_dragon = $dragonB;
 	$: dragons = $userDragons;
 
 	$: Parents = {
-		SubSpecies:SubSpeciesName,
+		SubSpecies: SubSpeciesName,
 		mum_dragon,
 		dad_dragon,
 		showDragons: (dragonGender) => {
@@ -65,7 +33,7 @@
 	};
 
 	$: DragonsInfo = {
-		SubSpecies:SubSpeciesName,
+		SubSpecies: SubSpeciesName,
 		dragons,
 		mum_dragon,
 		dad_dragon,
@@ -82,12 +50,8 @@
 	$: BreedInfo = {
 		mum_dragon,
 		dad_dragon,
-		breed
+		breed:async (mumId, dadId) => await contract.breed(mumId, dadId)
 	};
-	
-	async function breed(mumId, dadId) {
-		await contract.breed(mumId, dadId);
-	}
 
 	function switchGender() {
 		let old_dad = dad_dragon;
@@ -97,18 +61,10 @@
 		dad_dragon.gender = 'dad';
 		return;
 	}
-
-	async function getEvents(){
-		const events = await contract.contract.DragonToken.getPastEvents('EggsLaid', { fromBlock: 0, toBlock: 'latest' });
-		console.log(events);	}
-
 </script>
 
-<button class="btn btn-dark" on:click={getEvents}>
-get events
-</button>
 {#if breedEvent}
-	<BirthBox {...newEgg} />
+	<BirthBox {newEggs} />
 {:else}
 	<DragonSelection {...Parents} />
 	<BreedBtn {...BreedInfo} />

@@ -262,11 +262,11 @@ export class DragonContract {
                 return txHash
             })
         } catch (err) {
-            // console.log("Error at: Breeding function" + err)
-            // if (alert == true) setAlert('breed error', 'warning')
-            const errMsg = getErrors('breed', err)
-            if (alert == true) setAlert(errMsg, 'warning')
-            console.log(errMsg)
+           console.log("Error at: Breeding function" + err)
+           if (alert == true) setAlert('breed error', 'warning');
+            //const errMsg = getErrors('breed', err);
+            //if (alert == true) setAlert(errMsg, 'warning');
+            console.log(errMsg);
         }
     }
 

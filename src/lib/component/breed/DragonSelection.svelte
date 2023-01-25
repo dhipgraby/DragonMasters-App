@@ -40,11 +40,18 @@
 </div>
 
 <style>
+	.row {
+		justify-content: center;
+	}
 	.col-sm-4 {
-		align-self: center;
+		align-self: center;	
 	}
 
 	.egg {
 		color: #ff6d6d;
+	}
+
+	.egg:hover {
+		color: black;
 	}
 </style>

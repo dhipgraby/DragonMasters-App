@@ -1,15 +1,41 @@
 <script>
-	import BreedBox from '$lib/component/breed/BreedBox.svelte';
 	import { onMount } from 'svelte';
+	import BreedBox from '$lib/component/breed/BreedBox.svelte';
+	import ChooseElement from '$lib/component/breed/ChooseElement.svelte';
+	import { DragonContract } from '$lib/contracts/DragonToken';
+	import { initEventListener } from '$lib/contracts/events';
+	import { getNewEgg } from '$lib/data/egg';
 
 	let SubSpecies = null;
+	let contract;
+	let newEggs;
+	let breedEvent = false;
 
-	onMount(() => {
-		SubSpecies = null;
+	onMount(async () => {
+		contract = await new DragonContract();
+		let contractEvents = await contract.contract.DragonToken.events;
+		const updater = (event) => {
+			newEggs = [];
+			const returnValues = event.returnValues;
+			setNewEggs(returnValues, event);
+			breedEvent = true;
+		};
+		await initEventListener(contractEvents, updater, 'DragonToken');
+		// userDragons.useLocalStorage()
+		await contract.getUserDragons(0, 10);
 	});
 
 	function selectSubSpecie(number) {
 		SubSpecies = number;
+	}
+
+	function setNewEggs(returnValues) {
+		const eggIds = returnValues.eggIds;
+		const provenance = returnValues.provenance;
+		if (eggIds.length > 0) {
+			if (eggIds[0] !== undefined) newEggs.push(getNewEgg(eggIds[0], provenance[0]));
+			if (eggIds[1] !== undefined) newEggs.push(getNewEgg(eggIds[1], provenance[1]));
+		}
 	}
 </script>
 
@@ -27,50 +53,18 @@
 	</div>
 
 	{#if SubSpecies == null}
-		<!-- LITHOSPHERE -->
-		<div class="row">
-			<div class="col p-1">
-				<div class="eggContainer pointer" id="mum" on:click={() => selectSubSpecie(0)}>
-					<h1 class="egg earth"><i class="fas fa-egg" /></h1>
-					<h3>Earth</h3>
-				</div>
-			</div>
-			<div class="col p-1">
-				<div class="eggContainer pointer" id="mum" on:click={() => selectSubSpecie(1)}>
-					<h1 class="egg fire"><i class="fas fa-egg" /></h1>
-					<h3>Fire</h3>
-				</div>
-			</div>
-		</div>
-		
-		<div class="row">
-			<!-- HIDROSPHERE -->
-
-			<div class="col p-1">
-				<div class="eggContainer pointer" id="mum" on:click={() => selectSubSpecie(2)}>
-					<h1 class="egg air"><i class="fas fa-egg" /></h1>
-					<h3>Air</h3>
-				</div>
-			</div>
-			<div class="col p-1">
-				<div class="eggContainer pointer" id="mum" on:click={() => selectSubSpecie(3)}>
-					<h1 class="egg water"><i class="fas fa-egg" /></h1>
-					<h3>Water</h3>
-				</div>
-			</div>
-		</div>
+		<ChooseElement {selectSubSpecie} />
 	{:else}
 		<div class="ta-c mb-3">
 			<button class="btn btn-dark" on:click={() => (SubSpecies = null)}> Change Element </button>
 		</div>
-		<BreedBox {SubSpecies} />
+		<BreedBox {SubSpecies} {breedEvent} {newEggs} {contract} />
 	{/if}
 </div>
 
 <style>
-
-	.row {
-		justify-content: center;				
+	.btn {
+		width: fit-content;
 	}
 
 	.inner {
@@ -79,17 +73,6 @@
 
 	.egg {
 		color: #ff6d6d;
-	}
-
-	.col {
-		text-align: -webkit-center;
-		margin: 10px 5px;
-		max-width: 220px;
-		align-self: center;
-	}
-
-	.eggContainer:hover {
-		box-shadow: 0px 10px 20px -8px;
 	}
 
 	.fa-egg {

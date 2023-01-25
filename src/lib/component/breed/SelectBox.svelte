@@ -19,6 +19,8 @@ export let SubSpecies
 <style>
     
     .col-sm-4 {
+        max-width: 250px;
+        margin-top: 50px;
         align-self: center;
     }
 
