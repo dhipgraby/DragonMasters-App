@@ -4,12 +4,12 @@
 	import { subSpeciesName } from '$lib/helpers/utils';
 	import { DragonContract } from '$lib/contracts/DragonToken';
 	import { initEventListener } from '$lib/contracts/events';
-
 	//COMPONENTS
 	import UserDragons from './UserDragons.svelte';
 	import BreedBtn from './BreedBtn.svelte';
 	import DragonSelection from './DragonSelection.svelte';
 	import BirthBox from './BirthBox.svelte';
+	import { getNewEgg } from '$lib/data/egg';
 
 	export let SubSpecies;
 	$: SubSpeciesName = subSpeciesName(SubSpecies);
@@ -26,14 +26,9 @@
 		let contractEvents = await contract.contract.DragonToken.events;
 
 		const updater = (event) => {
-			newEggs = []
+			newEggs = [];
 			const returnValues = event.returnValues;
-			if (returnValues.eggIds.length > 0) {
-				const eggIds = event.returnValues.eggIds;
-				const provenance = event.returnValues.provenance;
-				if(eggIds[0] !== undefined)  newEggs.push(getNewEgg(eggIds[0],provenance[0]))
-				if(eggIds[1] !== undefined)  newEggs.push(getNewEgg(eggIds[1],provenance[1]))
-			} 
+			setNewEggs(returnValues, event);
 			breedEvent = true;
 		};
 
@@ -41,7 +36,6 @@
 
 		if (dragons.length > 0) return;
 		await contract.getUserDragons(0, 10);
-		testNewEggs()
 	});
 
 	$: dad_dragon = $dragonA;
@@ -77,11 +71,16 @@
 	$: BreedInfo = {
 		mum_dragon,
 		dad_dragon,
-		breed
+		breed:async (mumId, dadId) => await contract.breed(mumId, dadId)
 	};
 
-	async function breed(mumId, dadId) {
-		await contract.breed(mumId, dadId);
+	function setNewEggs(returnValues) {
+		const eggIds = returnValues.eggIds;
+		const provenance = returnValues.provenance;
+		if (eggIds.length > 0) {
+			if (eggIds[0] !== undefined) newEggs.push(getNewEgg(eggIds[0], provenance[0]));
+			if (eggIds[1] !== undefined) newEggs.push(getNewEgg(eggIds[1], provenance[1]));
+		}
 	}
 
 	function switchGender() {
@@ -92,35 +91,8 @@
 		dad_dragon.gender = 'dad';
 		return;
 	}
-
-	async function getEvents() {
-		const events = await contract.contract.DragonToken.getPastEvents('EggsLaid', {
-			fromBlock: 0,
-			toBlock: 'latest'
-		});
-		console.log(events);
-	}
-
-	function getNewEgg(eggId, provenance) {
-		return {
-			eggId: eggId,
-			dadId: provenance.dadId,
-			generation: provenance.generation,
-			mumId: provenance.mumId,
-			species: provenance.species
-		};		
-	}
-
-	function testNewEggs(){		
-		const egg1 = {eggId: 3,dadId: 0,mumId: 0,generation:1,species: 3};
-		const egg2 = {eggId: 4,dadId: 0,mumId: 0,generation:1,species: 3};
-		newEggs.push(egg1)
-		newEggs.push(egg2)
-		breedEvent = true
-	}
 </script>
 
-<button class="btn btn-dark" on:click={getEvents}> Log pass  EggsLaid Events </button>
 {#if breedEvent}
 	<BirthBox {newEggs} />
 {:else}
@@ -128,10 +100,3 @@
 	<BreedBtn {...BreedInfo} />
 	<UserDragons {...DragonsInfo} />
 {/if}
-
-<style>
-	.btn {
-		margin-bottom: 25px;
-		width: fit-content;
-	}
-</style>

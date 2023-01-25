@@ -2,12 +2,10 @@
 	import { speciesColor } from '$lib/helpers/utils';
 	import { fly } from 'svelte/transition';
 	export let newEggs;
-	
-	
 </script>
 
-<div class="row">
-	{#each newEggs as egg}
+{#each newEggs as egg}
+	<div class="row">
 		<div class="col-sm-4 p-1">
 			<div class="eggContainer pointer">
 				<h1 class="egg"><i class="fas fa-egg {speciesColor(egg.species)}" /></h1>
@@ -22,18 +20,17 @@
 				<a href="/egg/{egg.eggId}" class="btn btn-dark mt-3">Check it out!</a>
 			</div>
 		</div>
-	{:else}
-		<div class="heartContainer">
-			<h1><i class="fas fa-heart-broken" /></h1>
-		</div>
-		<div class="alert alert-info fade show" role="alert" transition:fly={{ y: 100, duration: 700 }}>
-			<p>No eggs from Breeding.<br /> Let your dragons recover energy and try again later.</p>
-		</div>
-	{/each}
-</div>
+	</div>
+{:else}
+	<div class="heartContainer">
+		<h1><i class="fas fa-heart-broken" /></h1>
+	</div>
+	<div class="alert alert-info fade show" role="alert" transition:fly={{ y: 100, duration: 700 }}>
+		<p>No eggs from Breeding.<br /> Let your dragons recover energy and try again later.</p>
+	</div>
+{/each}
 
 <style>
-
 	.row {
 		max-width: 800px;
 		margin: auto;

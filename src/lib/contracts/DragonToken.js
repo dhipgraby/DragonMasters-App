@@ -174,6 +174,7 @@ export class DragonContract {
             })
         } catch (err) {
             console.log("Error at: Breeding function" + err)
+            setAlert(err, 'warning')
         }
     }
 
