@@ -45,13 +45,11 @@ export class DragonContract {
     async getDragonIds(owner, startIndex, endIndex, alert = false){
         try {
             const dragonIds = await this.contract.DragonToken.methods.getDragonIds(owner, startIndex, endIndex).call()
-
             if (alert == true) setAlert('Dragon Ids: '+ JSON.stringify(dragonIds), 'success')
-
-            return dragonsIds
+            return dragonIds
         } catch (err) {
             // if (alert == true) setAlert('getDragonIds error', 'warning')
-            // console.log("Error at: getDragonIds" + err)
+            console.log("Error at: getDragonIds", err)
             const errMsg = getErrors('getDragonIds', err)
             if (alert == true) setAlert(errMsg, 'warning')
             console.log(errMsg)
