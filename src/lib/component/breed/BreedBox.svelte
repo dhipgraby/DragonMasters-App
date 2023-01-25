@@ -41,6 +41,7 @@
 
 		if (dragons.length > 0) return;
 		await contract.getUserDragons(0, 10);
+		testNewEggs()
 	});
 
 	$: dad_dragon = $dragonA;
@@ -107,7 +108,15 @@
 			generation: provenance.generation,
 			mumId: provenance.mumId,
 			species: provenance.species
-		};
+		};		
+	}
+
+	function testNewEggs(){		
+		const egg1 = {eggId: 3,dadId: 0,mumId: 0,generation:1,species: 3};
+		const egg2 = {eggId: 4,dadId: 0,mumId: 0,generation:1,species: 3};
+		newEggs.push(egg1)
+		newEggs.push(egg2)
+		breedEvent = true
 	}
 </script>
 

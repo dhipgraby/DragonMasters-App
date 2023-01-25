@@ -142,33 +142,33 @@ export function functionType(contractName) {
 }
 
 export function get_unique_tokenid(sellOffers, rentOffers) {
-    let concatArray =  sellOffers.concat(rentOffers)                 
+    let concatArray = sellOffers.concat(rentOffers)
     let uniqueArray = []
-   
-        //look into the short array
-        concatArray.find((item) => {                                    
-            let checkunique = uniqueArray.find((unique) => unique.tokenId === item.tokenId)            
-            if (checkunique === undefined) {                
-                let checkSells = sellOffers.find(elem => elem.tokenId === item.tokenId);
-                let checkRents = rentOffers.find(elem => elem.tokenId === item.tokenId);
-                if (checkSells) {
-                    if (item.sellOffer !== undefined) {
-                        item['rentOffer'] = checkSells.rentOffer
-                    } else {
-                        item['sellOffer'] = checkSells.sellOffer
-                    }                    
+
+    //look into the short array
+    concatArray.find((item) => {
+        let checkunique = uniqueArray.find((unique) => unique.tokenId === item.tokenId)
+        if (checkunique === undefined) {
+            let checkSells = sellOffers.find(elem => elem.tokenId === item.tokenId);
+            let checkRents = rentOffers.find(elem => elem.tokenId === item.tokenId);
+            if (checkSells) {
+                if (item.sellOffer !== undefined) {
+                    item['rentOffer'] = checkSells.rentOffer
+                } else {
+                    item['sellOffer'] = checkSells.sellOffer
                 }
-                if (checkRents) {
-                    if (item.sellOffer !== undefined) {
-                        item['rentOffer'] = checkRents.rentOffer
-                    } else {
-                        item['sellOffer'] = checkRents.sellOffer
-                    }                    
-                }                              
-                uniqueArray.push(item)
-            } 
-        })
-  
+            }
+            if (checkRents) {
+                if (item.sellOffer !== undefined) {
+                    item['rentOffer'] = checkRents.rentOffer
+                } else {
+                    item['sellOffer'] = checkRents.sellOffer
+                }
+            }
+            uniqueArray.push(item)
+        }
+    })
+
     console.log(uniqueArray);
     return uniqueArray;
 }
@@ -200,4 +200,23 @@ export function loadOwner(account, owner) {
         owner = shortAddr(owner);
     }
     return owner;
+}
+
+export function speciesColor(specie) {
+    let color;
+    switch (specie) {
+        case 1:
+            color = "earth"
+            break;
+        case 2:
+            color = "fire"
+            break;
+        case 3:
+            color = "air"
+            break;
+        case 4:
+            color = "water"
+            break;
+    }
+    return color
 }
