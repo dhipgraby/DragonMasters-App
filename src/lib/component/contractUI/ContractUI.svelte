@@ -6,23 +6,20 @@
 	import LoanBook from './LoanBook.svelte';
 	import SideMenu from './SideMenu.svelte';
 	import { EggContract } from '$lib/contracts/EggToken';
-	import { DragonContract } from '$lib/contracts/DragonToken';
 	import { MarketplaceContract } from '$lib/contracts/Marketplace';
 	import { LoanBookContract } from '$lib/contracts/LoanBook';
 	import { onMount } from 'svelte';
 
-	let egg_contract;
-	let dragon_contract;
+	let egg_contract;	
 	let marketplace_contract;
 	let loanbook_contract;
 
-	let show = 4;
+	let show = 2;
 
 	const changeView = (screen) => (show = screen);
 
 	onMount(async () => {
-		egg_contract = await new EggContract();
-		dragon_contract = await new DragonContract();
+		egg_contract = await new EggContract();		
 		loanbook_contract = await new LoanBookContract();
 		marketplace_contract = await new MarketplaceContract();
 	});
@@ -34,24 +31,24 @@
 	</div>
 	<div class="col-10 p-4">
 		<!-- CREATE TAP FOR CONTRACTS INTERFACES -->
-			{#if show == 1}
-				<EggToken contract={egg_contract} />
-			{/if}
+		{#if show == 1}
+			<EggToken contract={egg_contract} />
+		{/if}
 
-			{#if show == 2}
-				<DragonToken contract={dragon_contract} />
-			{/if}
+		{#if show == 2}
+			<DragonToken />
+		{/if}
 
-			{#if show == 3}
-				<Marketplace contract={marketplace_contract} />
-			{/if}
+		{#if show == 3}
+			<Marketplace contract={marketplace_contract} />
+		{/if}
 
-			{#if show == 4}
-				<LoanBook contract={loanbook_contract} />
-			{/if}
+		{#if show == 4}
+			<LoanBook contract={loanbook_contract} />
+		{/if}
 
-			{#if show == 5}
-				<Approvals contract={marketplace_contract} />
-			{/if}		
+		{#if show == 5}
+			<Approvals contract={marketplace_contract} />
+		{/if}
 	</div>
 </div>
