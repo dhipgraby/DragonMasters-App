@@ -205,16 +205,16 @@ export function loadOwner(account, owner) {
 export function speciesColor(specie) {
     let color;
     switch (specie) {
-        case 1:
+        case '0':
             color = "earth"
             break;
-        case 2:
+        case '1':
             color = "fire"
             break;
-        case 3:
+        case '2':
             color = "air"
             break;
-        case 4:
+        case '3':
             color = "water"
             break;
     }
