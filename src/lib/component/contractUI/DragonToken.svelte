@@ -143,7 +143,7 @@
 
 <h1>DragonToken</h1>
 
-<p class="bold">Contract Status: UNPAUSED"</p>		
+<p class="bold">Contract Status: UNPAUSED</p>		
 <button class="btn btn-dark text-light bold mb-3 mt-3" on:click={() => pause()}>Pause</button>
 <button class="btn btn-dark text-light bold mb-3 mt-3" on:click={() => unpause()}>Unpause</button>
 <button class="btn btn-info text-light bold mb-3 mt-3" on:click={() => contract.totalSupply()}>Total Supply</button>
