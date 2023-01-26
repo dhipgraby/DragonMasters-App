@@ -1,6 +1,6 @@
 <script>
 	import { setAlert } from '$lib/storage/alerts';
-	import { update_current_dragon,updateSingle,remove_current_dragon } from '$lib/storage/dragon';		
+	import { update_current_dragon, updateSingle, remove_current_dragon } from '$lib/storage/dragon';
 	import { onMount } from 'svelte';
 	import DragonCard from '../dragon/DragonCard.svelte';
 	import SwitchButton from './SwitchButton.svelte';
@@ -19,7 +19,7 @@
 		if (getEnergy == null && dragon.energy != undefined) return;
 		if (dragon.energy <= 0 || dragon.energy > 0) return;
 		dragon.energy = parseInt(await getEnergy(dragonProps.tokenId));
-		// dragon.energy -= 50;		
+		// dragon.energy -= 50;
 		updateSingle(dragon);
 	});
 
@@ -29,8 +29,8 @@
 	}
 
 	const updateEnergy = () => {
-		if(dragon.energy < 1) return
-		dragon.energy -= 1		
+		if (dragon.energy < 1) return;
+		dragon.energy -= 1;
 	};
 
 	function chooseDragon() {
@@ -46,10 +46,9 @@
 
 	function removeDragon() {
 		if (removeBtn != null) {
-			remove_current_dragon(dragon,gender);
+			remove_current_dragon(dragon, gender);
 		}
 	}
-
 </script>
 
 <div
@@ -58,7 +57,14 @@
 	class="col-lg-4 pointer"
 	align="left"
 >
-	<DragonCard {removeBtn} {removeDragon} {dragon} callback={updateEnergy} checkBtn={false} {fullEnergy} />
+	<DragonCard
+		{removeBtn}
+		{removeDragon}
+		{dragon}
+		callback={updateEnergy}
+		checkDragonBtn={true}
+		{fullEnergy}
+	/>
 
 	{#if switchBtn}
 		<SwitchButton {gender} {callback} />

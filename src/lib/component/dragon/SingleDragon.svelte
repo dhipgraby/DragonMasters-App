@@ -31,16 +31,18 @@
 			<img src={img} alt="dragon" />
 			<div class="pabsolute bottom10 right10">{@html element}</div>
 		</div>
-		<About {dragon} {dna} maturity={maturity} />
+		<About {dragon} {dna} {maturity} />
 	</div>
 
 	<!-- RIGHT-SIDE ->ATTRIBUTES AND RAISE -->
 	<div class="col-8">
 		<div class="attrDiv">
 			<h3>Create Offer</h3>
-
 		</div>
-		<DragonAttributes attributes={dragon.attributes} />
+		<div class="attrDiv">
+			<DragonAttributes attributes={dragon.attributes} />
+		</div>
+
 		<RaiseAndEnergy {contract} tokenId={dragon.tokenId} ageGroup={dragon.ageGroup} />
 	</div>
 </div>

@@ -6,11 +6,11 @@ export let attributes
     
 </script>
 
-<div class="attrDiv mb-3">    
+<div class="mb-3">    
     <div class="row p-0">
         {#each attributes as attribute, i}
             <div class="w-50 ta-l">
-                <p class="attribute">{@html iconAttr(Object.keys(Attributes)[i])}: {attribute}</p>
+                <p>{@html iconAttr(Object.keys(Attributes)[i])}: {attribute}</p>
             </div>
         {/each}
     </div>
