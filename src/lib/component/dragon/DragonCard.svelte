@@ -2,16 +2,20 @@
 	import { onInterval, Maturity, Attributes } from '$lib/helpers/utils.js';
 	import { getImg, iconElement, iconAttr } from '$lib/storage/dragonImg';
 	import ProgressBar from './ProgressBar.svelte';
-	import CircleMenu from '../marketplace/CircleMenu.svelte';	
+	import CircleMenu from '../marketplace/CircleMenu.svelte';
 	import { onMount } from 'svelte';
 	import { TokenType } from '$lib/contracts/Marketplace';
 	import '$lib/css/marketplace/dragon.css';
 
 	export let dragon;
 	export let contract;
-	export let checkBtn = true;
-	export let fullEnergy = null;
 	export let callback = null;
+	export let fullEnergy = null;
+	// settings
+	export let checkDragon = true;
+	export let showCircleMenu = false;
+	export let removeBtn = false
+	export let removeDragon = false;
 
 	onMount(() => {
 		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -28,14 +32,22 @@
 	let element = iconElement(dragon.subSpecies);
 	let hovering;
 
-	const enter = () => hovering = true
-	const leave = () => hovering = false
-	
+	const enter = () => (hovering = true);
+	const leave = () => (hovering = false);
+
 </script>
 
 <div on:mouseenter={enter} on:mouseleave={leave} class="card" style="width: 18rem;">
 	<div class="card-header">
-		<CircleMenu {hovering} tokenProps={dragon} {contract} _tokenType={TokenType.Dragon} />
+		{#if showCircleMenu}
+			<CircleMenu {hovering} tokenProps={dragon} {contract} _tokenType={TokenType.Dragon} />
+		{/if}
+
+		{#if removeBtn == true}
+			<span on:click={() => removeDragon()} class="removeBtn">
+				<i class="fas fa-times-circle" />
+			</span>
+		{/if}
 
 		<img src={img} alt="dragon" />
 		<!-- ELEMENT -->
@@ -95,10 +107,27 @@
 			{/each}
 		</div>
 
-		{#if checkBtn}
+		{#if checkDragon}
 			<a href="/dragon/{dragon.tokenId}">
 				<button class="btn btn-dark">Checkout <i class="fas fa-arrow-circle-right" /> </button>
 			</a>
 		{/if}
 	</div>
 </div>
+
+<style>
+	.removeBtn {
+		font-size: 24px;
+		color: rgb(0, 0, 0);
+		position: absolute;
+		top: 10px;
+		right: 15px;
+		cursor: pointer;
+		transition: 0.3s;
+	}
+
+	.removeBtn:hover {
+		color: rgb(240, 76, 76);
+		transform: scale(1.2);
+	}
+</style>

@@ -29,7 +29,7 @@
 	{#if dragons.length}
 		{#each dragons as dragon}
 			<div class="col">
-				<DragonCard {dragon} {contract} {singleApproval} />
+				<DragonCard showCircleMenu={true} {dragon} {contract} {singleApproval} />
 			</div>
 		{/each}
 	{:else}

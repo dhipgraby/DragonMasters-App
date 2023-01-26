@@ -23,8 +23,8 @@
 
 	$: Parents = {
 		SubSpecies: SubSpeciesName,
-		mum_dragon,
 		dad_dragon,
+		mum_dragon,		
 		showDragons: (dragonGender) => {
 			displayDragons = true;
 			gender = dragonGender;

@@ -1,12 +1,12 @@
 <script>
 	import { setAlert } from '$lib/storage/alerts';
-
-	import { update_current_dragon,updateSingle } from '$lib/storage/dragon';		
+	import { update_current_dragon,updateSingle,remove_current_dragon } from '$lib/storage/dragon';		
 	import { onMount } from 'svelte';
 	import DragonCard from '../dragon/DragonCard.svelte';
 	import SwitchButton from './SwitchButton.svelte';
 
 	export let dragonProps;
+	export let removeBtn = null;
 	export let gender;
 	export let switchBtn = false;
 	export let callback = null;
@@ -43,6 +43,13 @@
 			setAlert('Dragons need full energy to Breed', 'warning');
 		}
 	}
+
+	function removeDragon() {
+		if (removeBtn != null) {
+			remove_current_dragon(dragon,gender);
+		}
+	}
+
 </script>
 
 <div
@@ -51,7 +58,7 @@
 	class="col-lg-4 pointer"
 	align="left"
 >
-	<DragonCard {dragon} callback={updateEnergy} checkBtn={false} {fullEnergy} />
+	<DragonCard {removeBtn} {removeDragon} {dragon} callback={updateEnergy} checkBtn={false} {fullEnergy} />
 
 	{#if switchBtn}
 		<SwitchButton {gender} {callback} />
