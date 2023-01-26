@@ -6,9 +6,8 @@ export let attributes
     
 </script>
 
-<div class="attrDiv mt-3">
-    <h3 class="mb-3">Attributes</h3>
-    <div class="row p-0 mt-3">
+<div class="attrDiv mb-3">    
+    <div class="row p-0">
         {#each attributes as attribute, i}
             <div class="w-50 ta-l">
                 <p class="attribute">{@html iconAttr(Object.keys(Attributes)[i])}: {attribute}</p>

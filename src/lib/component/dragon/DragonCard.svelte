@@ -1,10 +1,11 @@
 <script>
+	import { onMount } from 'svelte';
 	import { onInterval, Maturity, Attributes } from '$lib/helpers/utils.js';
 	import { getImg, iconElement, iconAttr } from '$lib/storage/dragonImg';
+	import { TokenType } from '$lib/contracts/Marketplace';
 	import ProgressBar from './ProgressBar.svelte';
 	import CircleMenu from '../marketplace/CircleMenu.svelte';
-	import { onMount } from 'svelte';
-	import { TokenType } from '$lib/contracts/Marketplace';
+	import DragonAttributes from './DragonAttributes.svelte';
 	import '$lib/css/marketplace/dragon.css';
 
 	export let dragon;
@@ -14,7 +15,7 @@
 	// settings
 	export let checkDragon = true;
 	export let showCircleMenu = false;
-	export let removeBtn = false
+	export let removeBtn = false;
 	export let removeDragon = false;
 
 	onMount(() => {
@@ -34,7 +35,6 @@
 
 	const enter = () => (hovering = true);
 	const leave = () => (hovering = false);
-
 </script>
 
 <div on:mouseenter={enter} on:mouseleave={leave} class="card" style="width: 18rem;">
@@ -97,14 +97,8 @@
 			{/if}
 		</p>
 		<!--   ATTRIBUTES  -->
-		<div class="row p-0 mt-2 mb-2 px-4">
-			{#each dragon.attributes as attribute, i}
-				<div class="w-50 ta-l">
-					<span class="badge bg-light dragonAttr"
-						><p>{@html iconAttr(Object.keys(Attributes)[i])}: {attribute}</p></span
-					>
-				</div>
-			{/each}
+		<div class="px-4">
+			<DragonAttributes attributes={dragon.attributes} />
 		</div>
 
 		{#if checkDragon}
