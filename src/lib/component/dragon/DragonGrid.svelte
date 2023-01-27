@@ -8,9 +8,10 @@
 	export let loadPage;
 
 	let pages;
+	let perpage = 5
 
 	afterUpdate(() => {
-		let totalDragonPages = Math.round(parseInt(dragons.totalOwned) / 10);
+		let totalDragonPages = Math.round(parseInt(dragons.totalOwned) / perpage);
 		pages = totalDragonPages > 0 ? new Array(totalDragonPages) : [];
 	});
 </script>
@@ -18,7 +19,7 @@
 <div class="row extended mt-4 mb-4">
 	<div class="col-6 ta-l">
 		<h1>Your Dragons</h1>
-		<Pagination {pages} {loadPage} inferfaceName="Dragon" />
+		<Pagination {pages} {perpage} {loadPage} inferfaceName="Dragon" />
 	</div>
 	<div class="col-6 ta-r">
 		<a href="/breed" class="btn btn-danger"> Breed </a>

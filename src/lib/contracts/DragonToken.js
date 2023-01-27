@@ -265,8 +265,7 @@ export class DragonContract {
            console.log("Error at: Breeding function" + err)
            if (alert == true) setAlert('breed error', 'warning');
             //const errMsg = getErrors('breed', err);
-            //if (alert == true) setAlert(errMsg, 'warning');
-            console.log(errMsg);
+            //if (alert == true) setAlert(errMsg, 'warning');            
         }
     }
 

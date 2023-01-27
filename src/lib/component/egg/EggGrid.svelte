@@ -8,16 +8,18 @@
 	export let loadPage;
 	
 	let pages = 0;
+	let perpage = 5
+	$: totalEggPages = Math.ceil(parseInt(eggs.totalOwned) / perpage);
 
-	afterUpdate(() => {
-		let totalEggPages = Math.round(parseInt(eggs.totalOwned) / 10);
+	afterUpdate(() => {		
+		console.log(eggs.totalOwned);
 		if (totalEggPages > 0) pages = new Array(totalEggPages);
 	});
 </script>
 
 <div class="w-100 ta-c">
 	<h1>Your Eggs</h1>
-	<Pagination {pages} {loadPage} inferfaceName='Egg' />
+	<Pagination {pages} {perpage} {loadPage} inferfaceName='Egg' />
 </div>
 
 <div class="row">
