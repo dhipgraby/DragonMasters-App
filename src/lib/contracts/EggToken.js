@@ -206,7 +206,7 @@ export class EggContract {
 
 
     async getUserEggs(from,to) {        
-        let allEggs = await this.getEggIds(from,to)                
+        let allEggs = await this.getEggIds(this.contract.account,from,to)                
         let eggs = []        
         
         for (let i = 0; i < allEggs.tokenIds.length; i++) {
