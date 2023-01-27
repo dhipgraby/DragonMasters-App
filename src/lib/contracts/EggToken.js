@@ -32,19 +32,6 @@ export class EggContract {
         }
     }
 
-    async getEggIds(owner, startIndex, endIndex, alert = false){
-        try {
-            const eggIds = await this.contract.EggToken.methods.getEggIds(owner, startIndex, endIndex).call()
-            if (alert == true) setAlert('Egg Ids: '+ JSON.stringify(eggIds), 'success')
-            return eggIds
-        } catch (err) {
-            console.log("Error at: getEggIds", err)
-            const errMsg = getErrors('getEggIds', err)
-            if (alert == true) setAlert(errMsg, 'warning')
-            console.log(errMsg)
-        }
-    }
-
     async getAllEggIds(startIndex, endIndex, alert = false){
         try {
             const eggIds = await this.contract.EggToken.methods.getAllEggIds(startIndex, endIndex).call()
@@ -55,6 +42,19 @@ export class EggContract {
         } catch (err) {
             console.log("Error at: getAllEggIds", err)
             const errMsg = getErrors('getAllEggIds', err)
+            if (alert == true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
+
+    async getEggIds(owner, startIndex, endIndex, alert = false){
+        try {
+            const eggIds = await this.contract.EggToken.methods.getEggIds(owner, startIndex, endIndex).call()
+            if (alert == true) setAlert('Egg Ids: '+ JSON.stringify(eggIds), 'success')
+            return eggIds
+        } catch (err) {
+            console.log("Error at: getEggIds", err)
+            const errMsg = getErrors('getEggIds', err)
             if (alert == true) setAlert(errMsg, 'warning')
             console.log(errMsg)
         }
@@ -87,70 +87,63 @@ export class EggContract {
         }
     }
 
-    async getUserEggs(from,to) {        
-        let allEggs = await this.getEggIds(from,to)                
-        let eggs = []        
-        
-        for (let i = 0; i < allEggs.tokenIds.length; i++) {
-            let eggDetails = await this.getEgg(allEggs.tokenIds[i])                                        
-            let incubationTime = (eggDetails.incubation == '0') ? null : await this.checkIncubation(allEggs.tokenIds[i], false)
-            eggDetails.incubationTime = incubationTime
-            eggs.push(eggDetails)
-        }
-        eggs.totalOwned = allEggs.totalOwned
-        userEggs.set(eggs)
-    }
+    async startIncubation(eggIds, alert = false) {
 
-    async startIncubation(eggIds) {
-
-        eggIds = eggIds.split(',')        
         try {
+            eggIds = eggIds.split(',')        
+
             await this.contract.EggToken.methods.startIncubation(eggIds).send({}, async function (err, txHash) {
-                addAwaiter(txHash,'Incubation tokenId: ' + JSON.stringify(eggIds))
+                addAwaiter(txHash,'Starting incubation, eggIds: ' + JSON.stringify(eggIds))
                 if (err) setAlert(err, 'warning')
                 else {
-                    setAlert('Incubation Started for Egg id: ' + eggIds, 'success')              
+                    if (alert) setAlert('Incubation started for Egg Ids: ' + eggIds, 'success')              
                     return txHash
                 }
             })
         } catch (err) {
-            setAlert('Error starting Incubation for this Egg', 'warning')
             console.log("Error at: startIncubation" + err)
+            const errMsg = getErrors('startIncubation', err)
+            if (alert) setAlert(errMsg, 'warning')
+            console.log(errMsg)
         }
     }
 
-    async checkIncubation(eggId, msg = true) {
+    async checkIncubation(eggId, alert = false) {
 
         try {
-            let incubationTime = await this.contract.EggToken.methods.checkIncubation(eggId).call()
+            const incubationTime = await this.contract.EggToken.methods.checkIncubation(eggId).call()
 
-            if (msg == true) setAlert('Incubation time for this Egg is :' + incubationTime, 'info')
+            if (alert) setAlert('Egg incubation time remaining is :' + incubationTime, 'info')
 
             return incubationTime
 
         } catch (err) {
-            let errMsg = getErrors('checkIncubation', err)
-
-            if (msg == true) setAlert(errMsg, 'warning')
-
+            console.log("Error at: checkIncubation" + err)
+            const errMsg = getErrors('checkIncubation', err)
+            if (alert) setAlert(errMsg, 'warning')
+            console.log(errMsg)
             if (errMsg == "Incubation not started") return "-1";
         }
     }
 
-    async hatch(eggId) {
-        eggId = eggId.split(',')        
-
+    async hatch(eggIds, alert = false) {
+        
         try {
-            await this.contract.EggToken.methods.hatch(eggId).send({}, function (err, txHash) {
-                addAwaiter(txHash,'Hatching egg Id: ' + JSON.stringify(eggId))
+            eggIds = eggIds.split(',')        
+
+            await this.contract.EggToken.methods.hatch(eggIds).send({}, function (err, txHash) {
+                addAwaiter(txHash,'Hatching egg Ids: ' + JSON.stringify(eggIds))
                 if (err) setAlert(err, 'warning')
                 else {
-                    setAlert(txHash, 'success')
+                    if (alert) setAlert(txHash, 'success')
                     return txHash
                 }
             })
         } catch (err) {
-            console.log("Error at: Hatch function" + err)
+            console.log("Error at: hatch" + err)
+            const errMsg = getErrors('hatch', err)
+            if (alert) setAlert(errMsg, 'warning')
+            console.log(errMsg)
         }
     }
 
@@ -211,5 +204,19 @@ export class EggContract {
         }
     }
 
+
+    async getUserEggs(from,to) {        
+        let allEggs = await this.getEggIds(from,to)                
+        let eggs = []        
+        
+        for (let i = 0; i < allEggs.tokenIds.length; i++) {
+            let eggDetails = await this.getEgg(allEggs.tokenIds[i])                                        
+            let incubationTime = (eggDetails.incubation == '0') ? null : await this.checkIncubation(allEggs.tokenIds[i], false)
+            eggDetails.incubationTime = incubationTime
+            eggs.push(eggDetails)
+        }
+        eggs.totalOwned = allEggs.totalOwned
+        userEggs.set(eggs)
+    }
 }
 
