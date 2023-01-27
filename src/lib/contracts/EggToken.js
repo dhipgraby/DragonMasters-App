@@ -33,9 +33,6 @@ export class EggContract {
     }
 
     async getEggIds(owner, startIndex, endIndex, alert = false){
-        console.log(owner)
-        console.log(startIndex)
-        console.log(endIndex)
         try {
             const eggIds = await this.contract.EggToken.methods.getEggIds(owner, startIndex, endIndex).call()
             if (alert == true) setAlert('Egg Ids: '+ JSON.stringify(eggIds), 'success')
@@ -43,6 +40,19 @@ export class EggContract {
         } catch (err) {
             console.log("Error at: getEggIds", err)
             const errMsg = getErrors('getEggIds', err)
+            if (alert == true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
+
+    async getAllEggIds(startIndex, endIndex, alert = false){
+        try {
+            const eggIds = await this.contract.EggToken.methods.getAllEggIds(startIndex, endIndex).call()
+            if (alert == true) setAlert('Egg Ids: '+ JSON.stringify(eggIds), 'success')
+            return eggIds
+        } catch (err) {
+            console.log("Error at: getAllEggIds", err)
+            const errMsg = getErrors('getAllEggIds', err)
             if (alert == true) setAlert(errMsg, 'warning')
             console.log(errMsg)
         }
@@ -142,30 +152,58 @@ export class EggContract {
         return this.contract.EggToken.events
     }
 
-    /************* STANDARD CONTRACT FUNCTIONS  ***************/
+
+    async totalSupply() {
+
+        try {
+            const totalSupply = await this.contract.EggToken.methods.getGen0Limit().call()
+            setAlert('Total Gen-0 Egg Supply : ' + totalSupply, 'info')
+        } catch (err) {
+            setAlert(err, 'warning')
+            console.log("Error at: totalSupply " + err)
+        }
+    }
 
     async currentSupply() {
 
         try {
-            let _totalSupply = await this.contract.EggToken.methods.totalSupply().call()
-            setAlert('Current Supply : ' + _totalSupply, 'info')
+            const totalSupply = await this.contract.EggToken.methods.totalSupply().call()
+            setAlert('Current Egg Supply : ' + totalSupply, 'info')
         } catch (err) {
             setAlert(err, 'warning')
             console.log("Error at: currentSupply " + err)
         }
     }
 
-    async totalSupply() {
-
+    async getAmountEggsMinted() {
         try {
-            let _totalSupply = await this.contract.EggToken.methods.getGen0Limit().call()
-            setAlert('Total Supply : ' + _totalSupply, 'info')
+            const totalEggsMinted = await this.contract.EggToken.methods.getAmountEggsMinted().call()
+            setAlert('Total Eggs Minted (incl. from breeding): ' + totalEggsMinted, 'info')
         } catch (err) {
             setAlert(err, 'warning')
-            console.log("Error at: totalSupply " + err)
+            console.log("Error at: getAmountEggsMinted " + err)
         }
     }
+
+    async getAmountGen0EggsMinted() {
+        try {
+            const totalGen0EggsMinted = await this.contract.EggToken.methods.getAmountGen0EggsMinted().call()
+            setAlert('Total Gen-0 Eggs Minted : ' + totalGen0EggsMinted, 'info')
+        } catch (err) {
+            setAlert(err, 'warning')
+            console.log("Error at: getAmountGen0EggsMinted " + err)
+        }
+    }
+
+    async getRace() {
+        try {
+            const contractAddress = await this.contract.EggToken.methods.getRace().call()
+            setAlert("Race's contract Address (DragonToken): " + contractAddress, 'info')
+        } catch (err) {
+            setAlert(err, 'warning')
+            console.log("Error at: getRace " + err)
+        }
+    }
+
 }
-
-
 

@@ -32,6 +32,10 @@
 		contract.getEggIds(ownerAddress, startIndex, endIndex, true);
 	}
 
+	async function getAllEggIds() {
+		contract.getAllEggIds(startIndex, endIndex, true);
+	}
+
 </script>
 
 <div class="mb-4">
@@ -39,10 +43,16 @@
 </div>
 
 <div class="mb-3">
-	<button class="btn btn-info t-sm text-light bold text-sa" on:click={() => contract.currentSupply()}
-		>Current Supply</button
-	>
-	<button class="btn btn-warning t-sm" on:click={() => contract.totalSupply()}>Total Supply</button>
+	<button class="btn btn-warning t-sm text-light bold text-sa"
+		on:click={() => contract.totalSupply()}>Total Supply</button>
+	<button class="btn btn-warning t-sm text-light bold text-sa"
+		on:click={() => contract.getAmountGen0EggsMinted()}>Gen-0 Minted</button>
+	<button class="btn btn-info t-sm text-light bold text-sa"
+		on:click={() => contract.currentSupply()}>Current Supply</button>
+	<button class="btn btn-info t-sm text-light bold text-sa"
+		on:click={() => contract.getAmountEggsMinted()}>Total Minted</button>
+	<button class="bbtn btn-warning t-sm"
+		on:click={() => contract.getRace()}>'Race' contract</button>
 </div>
 
 <div class="row">
@@ -92,10 +102,20 @@
 			<button class="btn btn-dark" on:click={() => getEggIds()}>GET</button>
 		</div>
 
+		<!-- GET ALL EGG IDS OF -->
+		<div class="grid" align="left">
+			<h2>Get All Egg Ids</h2>
+			<p class="bold">Paging: start & end indexes</p>
+			<div class="mb-3">
+				<Pagination {startIndex} {endIndex} {changeIndex} />
+			</div>
+			<button class="btn btn-dark" on:click={() => getAllEggIds()}>GET</button>
+		</div>
+
 	</div>
 
 	<div class="col-sm-12 col-md-12 col-xl-4">
-		
+
 		<!-- GET EGG -->
 		<div class="grid">
 			<h2>Get Egg</h2>
