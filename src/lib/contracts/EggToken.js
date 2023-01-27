@@ -15,12 +15,7 @@ export class EggContract {
     }
 
     async mintGen0EggsTo(owner, amount, alert = false) {
-        console.log(owner)
-        console.log(amount)
-        console.log(alert)
-
         try {
-            // await this.contract.EggToken.methods.mintGen0EggsTo(this.contract.account,amount,EggSize.Medium).send({}, function (err, txHash) {
             await this.contract.EggToken.methods.mintGen0EggsTo(owner,amount,EggSize.Medium).send({}, function (err, txHash) {
                 addAwaiter(txHash,'Minting Gen-0 Egg')
                 if (err) {
@@ -34,6 +29,22 @@ export class EggContract {
             })
         } catch (err) {
             console.log("Error at: mintGen0EggTo" + err)
+        }
+    }
+
+    async getEggIds(owner, startIndex, endIndex, alert = false){
+        console.log(owner)
+        console.log(startIndex)
+        console.log(endIndex)
+        try {
+            const eggIds = await this.contract.EggToken.methods.getEggIds(owner, startIndex, endIndex).call()
+            if (alert == true) setAlert('Egg Ids: '+ JSON.stringify(eggIds), 'success')
+            return eggIds
+        } catch (err) {
+            console.log("Error at: getEggIds", err)
+            const errMsg = getErrors('getEggIds', err)
+            if (alert == true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
         }
     }
 
@@ -57,19 +68,6 @@ export class EggContract {
         } catch (err) {
             setAlert('Error getting this egg id ', 'warning')
             console.log("Error at: cgetEgg" + err)
-        }
-    }
-
-    async getEggIds(
-        startIndex,
-        endIndex
-    ) {
-        try {
-            let eggsIds = await this.contract.EggToken.methods.getEggIds(this.contract.account, startIndex, endIndex).call()                  
-            return eggsIds
-        } catch (err) {
-            setAlert('getEggIds error', 'warning')
-            console.log("Error at: getEggIds" + err)
         }
     }
 

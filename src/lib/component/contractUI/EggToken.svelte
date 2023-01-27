@@ -1,18 +1,36 @@
 <script>
 	export let contract;
+	import Pagination from '$lib/component/pagination/UIpagination.svelte';
 
-	let ownerAddress
+	let ownerAddress;
+	let amountToMint;
+	let startIndex = 0;
+	let endIndex = 9;
+
 	let eggId_start;
 	let eggId_check;
 	let eggId_details;
 	let eggId_hatch;
-	let amountToMint;
+
+
+	function changeIndex(indexType, value) {
+		switch (indexType) {
+			case 'start':
+				startIndex = value;
+				break;
+			case 'end':
+				endIndex = value;
+				break;
+		}
+	}
 
 	async function mintGen0EggsTo() {
 		contract.mintGen0EggsTo(ownerAddress, amountToMint, true);
 	}
 
-
+	async function getEggIds() {
+		contract.getEggIds(ownerAddress, startIndex, endIndex, true);
+	}
 
 </script>
 
@@ -28,8 +46,9 @@
 </div>
 
 <div class="row">
-	<!-- MINTING -->
 	<div class="col-sm-12 col-md-12 col-xl-4">
+
+		<!-- MINT EGGS TO -->
 		<div class="grid">
 			<h2>Mint Eggs</h2>
 			<p>(medium size - hardcoded)</p>
@@ -53,9 +72,31 @@
 			</div>
 			<button class="btn btn-dark" on:click={() => mintGen0EggsTo()}>MINT</button>
 		</div>
+
+		<!-- GET EGG IDS OF -->
+		<div class="grid" align="left">
+			<h2>Get Egg Ids</h2>
+			<p class="bold">Of owner</p>
+			<div class="mb-3">
+				<input
+					type="text"
+					bind:value={ownerAddress}
+					class="form-control mb-3"
+					placeholder="address"
+				/>
+			</div>
+			<p class="bold">Paging: start & end indexes</p>
+			<div class="mb-3">
+				<Pagination {startIndex} {endIndex} {changeIndex} />
+			</div>
+			<button class="btn btn-dark" on:click={() => getEggIds()}>GET</button>
+		</div>
+
 	</div>
-	<!-- GET EGG -->
+
 	<div class="col-sm-12 col-md-12 col-xl-4">
+		
+		<!-- GET EGG -->
 		<div class="grid">
 			<h2>Get Egg</h2>
 			<p>Get Egg details by Id</p>
