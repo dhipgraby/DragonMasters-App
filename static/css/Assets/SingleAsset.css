@@ -9,6 +9,7 @@ a {
 }
 
 .attrDiv {
+    margin-bottom: 20px;
     background-color: white;
     padding: 30px !important;
     border-radius: 10px;

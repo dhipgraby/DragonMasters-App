@@ -23,8 +23,8 @@
 
 	$: Parents = {
 		SubSpecies: SubSpeciesName,
-		mum_dragon,
 		dad_dragon,
+		mum_dragon,		
 		showDragons: (dragonGender) => {
 			displayDragons = true;
 			gender = dragonGender;
@@ -50,7 +50,7 @@
 	$: BreedInfo = {
 		mum_dragon,
 		dad_dragon,
-		breed:async (mumId, dadId) => await contract.breed(mumId, dadId)
+		breed:async (mumId, dadId) => await contract.breed(mumId, dadId,true)
 	};
 
 	function switchGender() {

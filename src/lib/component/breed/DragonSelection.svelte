@@ -2,23 +2,24 @@
 	import DragonBox from './DragonBox.svelte';
 	import SelectBox from './SelectBox.svelte';
 
-	export let SubSpecies
+	export let SubSpecies;
 	export let switchGender;
 	export let showDragons;
 	export let mum_dragon;
-	export let dad_dragon;	
+	export let dad_dragon;
 </script>
 
 <div class="row container" id="dragonGrid">
-	{#if mum_dragon.tokenId}		
+	{#if mum_dragon.tokenId}
 		<DragonBox
-            dragonProps={mum_dragon}
-            gender={mum_dragon.gender}
-            switchBtn={true}
-            callback={showDragons}			
-        />
+			removeBtn={true}
+			dragonProps={mum_dragon}
+			gender={mum_dragon.gender}
+			switchBtn={true}
+			callback={showDragons}
+		/>
 	{:else}
-		<SelectBox callback={showDragons} gender={'mum'}  {SubSpecies} />
+		<SelectBox callback={showDragons} gender={'mum'} {SubSpecies} />
 	{/if}
 
 	<div class="col-sm-4 pointer p-1 ta-c">
@@ -27,12 +28,13 @@
 		</div>
 	</div>
 
-	{#if dad_dragon.tokenId}		
+	{#if dad_dragon.tokenId}
 		<DragonBox
+			removeBtn={true}
 			dragonProps={dad_dragon}
 			gender={dad_dragon.gender}
 			switchBtn={true}
-			callback={showDragons}		
+			callback={showDragons}
 		/>
 	{:else}
 		<SelectBox callback={showDragons} gender={'dad'} {SubSpecies} />
@@ -44,7 +46,7 @@
 		justify-content: center;
 	}
 	.col-sm-4 {
-		align-self: center;	
+		align-self: center;
 	}
 
 	.egg {

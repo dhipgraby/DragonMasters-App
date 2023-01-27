@@ -1,6 +1,6 @@
 <script>
 
-let perpage = 8 - 1
+export let perpage
 export let pages
 export let loadPage
 export let inferfaceName
