@@ -14,19 +14,26 @@ export class EggContract {
         })();
     }
 
-    async mintGen0Egg(amount) {
+    async mintGen0EggsTo(owner, amount, alert = false) {
+        console.log(owner)
+        console.log(amount)
+        console.log(alert)
 
         try {
-            await this.contract.EggToken.methods.mintGen0EggsTo(this.contract.account,amount,EggSize.Medium).send({}, function (err, txHash) {
-                addAwaiter(txHash,'Minting Gen 0 Egg')
-                if (err) setAlert(err, 'warning')
+            // await this.contract.EggToken.methods.mintGen0EggsTo(this.contract.account,amount,EggSize.Medium).send({}, function (err, txHash) {
+            await this.contract.EggToken.methods.mintGen0EggsTo(owner,amount,EggSize.Medium).send({}, function (err, txHash) {
+                addAwaiter(txHash,'Minting Gen-0 Egg')
+                if (err) {
+                    if (alert) setAlert(err, 'warning')
+                    console.log('addAwaiter error: ', err)
+                }
                 else {
-                    setAlert(txHash, 'success')
+                    if (alert) setAlert(txHash, 'success')
                     return txHash
                 }
             })
         } catch (err) {
-            console.log("Error at: mintGen0Egg" + err)
+            console.log("Error at: mintGen0EggTo" + err)
         }
     }
 

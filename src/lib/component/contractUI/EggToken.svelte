@@ -1,11 +1,18 @@
 <script>
 	export let contract;
 
+	let ownerAddress
 	let eggId_start;
 	let eggId_check;
 	let eggId_details;
 	let eggId_hatch;
 	let amountToMint;
+
+	async function mintGen0EggsTo() {
+		contract.mintGen0EggsTo(ownerAddress, amountToMint, true);
+	}
+
+
 
 </script>
 
@@ -25,16 +32,26 @@
 	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid">
 			<h2>Mint Eggs</h2>
-			<p>Mint Gen 0 eggs. Mint one or many</p>
+			<p>(medium size - hardcoded)</p>
+			<p class="bold">To owner</p>
+			<div class="mb-3">
+				<input
+					type="text"
+					bind:value={ownerAddress}
+					class="form-control mb-3"
+					placeholder="address"
+				/>
+			</div>
+			<p class="bold">Amount</p>
 			<div class="mb-3">
 				<input
 					type="number"
 					bind:value={amountToMint}
 					class="form-control"
-					placeholder="Egg Amounts"
+					placeholder="1"
 				/>
 			</div>
-			<button class="btn btn-dark" on:click={() => contract.mintGen0Egg(amountToMint)}>MINT</button>
+			<button class="btn btn-dark" on:click={() => mintGen0EggsTo()}>MINT</button>
 		</div>
 	</div>
 	<!-- GET EGG -->
