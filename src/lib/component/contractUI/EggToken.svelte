@@ -6,6 +6,7 @@
 	let amountToMint;
 	let startIndex = 0;
 	let endIndex = 9;
+	let singleEggId;
 
 	let eggId_start;
 	let eggId_check;
@@ -34,6 +35,10 @@
 
 	async function getAllEggIds() {
 		contract.getAllEggIds(startIndex, endIndex, true);
+	}
+
+	async function getEgg() {
+		contract.getEgg(singleEggId, true);
 	}
 
 </script>
@@ -119,12 +124,12 @@
 		<!-- GET EGG -->
 		<div class="grid">
 			<h2>Get Egg</h2>
-			<p>Get Egg details by Id</p>
+			<p>Token Id</p>
 			<div class="mb-3">
-				<input type="text" bind:value={eggId_details} class="form-control" placeholder="Egg Id" />
+				<input type="text" bind:value={singleEggId} class="form-control" placeholder="Egg Id" />
 			</div>
-			<button class="btn btn-dark" on:click={() => contract.getEgg(eggId_details, true)}
-				>Get Details</button
+			<button class="btn btn-dark" on:click={() => getEgg()}
+				>GET</button
 			>
 		</div>
 	</div>

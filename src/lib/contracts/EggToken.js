@@ -49,7 +49,9 @@ export class EggContract {
         try {
             const eggIds = await this.contract.EggToken.methods.getAllEggIds(startIndex, endIndex).call()
             if (alert == true) setAlert('Egg Ids: '+ JSON.stringify(eggIds), 'success')
+
             return eggIds
+
         } catch (err) {
             console.log("Error at: getAllEggIds", err)
             const errMsg = getErrors('getAllEggIds', err)
@@ -58,13 +60,12 @@ export class EggContract {
         }
     }
 
-    async getEgg(eggId,message = false) {
+    async getEgg(eggId, alert = false) {
  
         try {
             let eggDetails = await this.contract.EggToken.methods.getEgg(eggId).call()
             
-            if(message == true) setAlert(eggDetails,'success')
-            return {
+            const egg = {
                 tokenId: eggId,
                 eggSize:eggDetails.size,
                 mumId: eggDetails.mumId,
@@ -74,10 +75,15 @@ export class EggContract {
                 subSpecies:subSpeciesName(eggDetails.species),
                 offer:[]
             }
+            if (alert == true) setAlert('Egg Details: '+ JSON.stringify(egg), 'success')
+
+            return egg
 
         } catch (err) {
-            setAlert('Error getting this egg id ', 'warning')
-            console.log("Error at: cgetEgg" + err)
+            console.log("Error at: getEgg" + err)
+            const errMsg = getErrors('getAllEggIds', err)
+            if (alert == true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
         }
     }
 
