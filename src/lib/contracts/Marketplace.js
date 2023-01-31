@@ -16,21 +16,7 @@ const rentMinTime = '2419200' //seconds: 2419200 == 4 weeks
 
 export const TokenType = { Unknown: 0, Dna: 1, Egg: 2, Dragon: 3 }
 export const OfferType = { NoOffer: 0, ForSale: 1, ForRent: 2, ForSaleOrRent: 3 }
-export const rentTerms = {
-    price: rentPriceInWei,
-    rental: {
-        deposit: rentDepositInWei,
-        minDuration: rentMinTime
-    }
-}
 
-export const saleTerms = {
-    price: salePriceInWei,
-    rental: {
-        deposit: 0,
-        minDuration: 0
-    }
-}
 
 export class MarketplaceContract extends MarketApproval {
     constructor() {

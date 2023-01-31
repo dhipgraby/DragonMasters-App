@@ -1,11 +1,12 @@
 <script>
-	import { TokenType, OfferType, saleTerms } from '$lib/contracts/Marketplace';
+	import { TokenType, OfferType } from '$lib/contracts/Marketplace';
 	import { getWei, timeDropdrown } from '$lib/helpers/utils';
 
 	export let contract;
 
 	let offerId,
 		sellId,
+		sale_price,
 		rentId,
 		rentalId,
 		buyId,
@@ -21,7 +22,14 @@
 		account,
 		_tokenType;
 
-	function setSellOffer() {
+	async function setSellOffer() {
+		const saleTerms = {
+			price: await getWei(sale_price),
+			rental: {
+				deposit: 0,
+				minDuration: 0
+			}
+		}
 		contract.setOffer(sellId, OfferType.ForSale, _tokenType, saleTerms);
 	}
 
@@ -67,25 +75,39 @@
 	}
 </script>
 
-<h1 class="mb-4">Offers</h1>
-<p>Dragons and Eggs need to grant different approval to operate in the marketplace</p>
+<h1 class="mb-4">Marketplace Offers</h1>
+<p><i>Note: An owner must grant (operator) approval on their Dragon and Egg tokens before offering them in the Marketplace.</i></p>
+<br>
 <div class="row">
 	<!-- SETTERS -->
 	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid">
-			<h2>Set Sell Offer</h2>
-			<div class="mb-3">
-				<input type="text" bind:value={sellId} class="form-control" placeholder="Token Id" />
-			</div>
+			<h2>Set 'For Sale' offer</h2>
+
+			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={_tokenType}>
 				<option value={TokenType.Dragon} selected>Dragon</option>
 				<option value={TokenType.Egg}>Egg</option>
 			</select>
-			<button class="btn btn-dark" on:click={() => setSellOffer()}>SET FOR SELL OFFER</button>
+			<div class="mb-3">
+				<p class="bold">Token ID</p>
+				<input type="text" bind:value={sellId} class="form-control" placeholder="Token Id" />
+			</div>
+			<p class="bold">Price</p>
+			<div class="form-floating mb-3">
+				<input
+					type="number"
+					class="form-control"
+					id="price"
+					placeholder="0.0"
+					bind:value={sale_price}
+				/>
+				<label for="price">Asking price (Eth) </label>
+			</div>
+			<button class="btn btn-dark" on:click={() => setSellOffer()}>SET 'FOR SALE'</button>
 		</div>
-
 		<div class="grid">
-			<h2>Set Rent Offer</h2>
+			<h2>Set 'For Rent' offer</h2>
 			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={_tokenType}>
 				<option value={TokenType.Dragon} selected>Dragon</option>
@@ -104,7 +126,7 @@
 					placeholder="Price in Eth"
 					bind:value={rent_price}
 				/>
-				<label for="price">Price/Fee (Eth) </label>
+				<label for="price">Asking price/fee (Eth) </label>
 			</div>
 			<div class="form-floating mb-3">
 				<input
@@ -124,10 +146,10 @@
 					placeholder="Time to rent"
 					bind:value={rent_duration}
 				/>
-				<label for="floatingPassword">Minimum duration (seconds)</label>
+				<label for="duration">Minimum rental duration (days)</label>
 			</div>
 
-			<button class="btn btn-dark" on:click={() => setRentOffer()}>SET RENT OFFER</button>
+			<button class="btn btn-dark" on:click={() => setRentOffer()}>SET 'FOR RENT'</button>
 		</div>
 
 		<div class="grid">
