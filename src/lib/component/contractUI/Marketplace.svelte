@@ -13,6 +13,11 @@
 		rent_price,
 		rent_deposit,
 		rent_duration,
+		new_sale_price,
+		new_rent_price,
+		new_rent_deposit,
+		new_rent_duration,
+
 		removeId,
 		removeRentId,
 		removeAllId,
@@ -43,6 +48,31 @@
 		};		
 		contract.setOffer(rentId, OfferType.ForRent, _tokenType, rentTerms);
 	}
+
+	async function modifySellOffer() {
+		const saleTerms = {
+			price: await getWei(new_sale_price),
+			rental: {
+				deposit: 0,
+				minDuration: 0
+			}
+		}
+		contract.modifyOffer(sellId, OfferType.ForSale, _tokenType, saleTerms);
+	}
+
+	async function modifyRentOffer() {
+		const rentTerms = {
+			price: await getWei(new_rent_price),
+			rental: {
+				deposit: await getWei(new_rent_deposit),
+				minDuration: new_rent_duration * timeDropdrown.oneDay
+			}
+		};		
+		contract.modifyOffer(rentId, OfferType.ForRent, _tokenType, rentTerms);
+	}
+
+
+
 
 	function getOffersBy() {
 		contract.getOfferedBy(startIndex, endIndex, _offerType, _tokenType, account, true);
@@ -106,6 +136,7 @@
 			</div>
 			<button class="btn btn-dark" on:click={() => setSellOffer()}>OFFER 'FOR SALE'</button>
 		</div>
+
 		<div class="grid">
 			<h2>Create 'for rent' offer</h2>
 			<p class="bold">Token Type</p>
@@ -148,8 +179,78 @@
 				/>
 				<label for="duration">Minimum rental duration (days)</label>
 			</div>
-
 			<button class="btn btn-dark" on:click={() => setRentOffer()}>OFFER 'FOR RENT'</button>
+		</div>
+
+		<div class="grid">
+			<h2>Modify 'for sale' offer</h2>
+
+			<p class="bold">Token Type</p>
+			<select class="form-select mb-3" bind:value={_tokenType}>
+				<option value={TokenType.Dragon} selected>Dragon</option>
+				<option value={TokenType.Egg}>Egg</option>
+			</select>
+			<div class="mb-3">
+				<p class="bold">Token ID</p>
+				<input type="text" bind:value={sellId} class="form-control" placeholder="Token Id" />
+			</div>
+			<p class="bold">Price</p>
+			<div class="form-floating mb-3">
+				<input
+					type="number"
+					class="form-control"
+					id="price"
+					placeholder="0.0"
+					bind:value={new_sale_price}
+				/>
+				<label for="price">Asking price (Eth) </label>
+			</div>
+			<button class="btn btn-dark" on:click={() => modifySellOffer()}>MODIFY 'FOR SALE'</button>
+		</div>
+
+		<div class="grid">
+			<h2>Modify 'for rent' offer</h2>
+			<p class="bold">Token Type</p>
+			<select class="form-select mb-3" bind:value={_tokenType}>
+				<option value={TokenType.Dragon} selected>Dragon</option>
+				<option value={TokenType.Egg}>Egg</option>
+			</select>
+			<div class="mb-3">
+				<p class="bold">Token ID</p>
+				<input type="text" bind:value={rentId} class="form-control" placeholder="Token Id" />
+			</div>
+			<p class="bold">Rental Terms</p>
+			<div class="form-floating mb-3">
+				<input
+					type="number"
+					class="form-control"
+					id="price"
+					placeholder="Price in Eth"
+					bind:value={new_rent_price}
+				/>
+				<label for="price">Asking price/fee (Eth) </label>
+			</div>
+			<div class="form-floating mb-3">
+				<input
+					type="number"
+					class="form-control"
+					id="deposit"
+					placeholder="Amount in Eth"
+					bind:value={new_rent_deposit}
+				/>
+				<label for="deposit">Returnable Deposit (Eth)</label>
+			</div>
+			<div class="form-floating mb-3">
+				<input
+					type="number"
+					class="form-control"
+					id="duration"
+					placeholder="Time to rent"
+					bind:value={new_rent_duration}
+				/>
+				<label for="duration">Minimum rental duration (days)</label>
+			</div>
+			<button class="btn btn-dark" on:click={() => modifyRentOffer()}>OFFER 'FOR RENT'</button>
 		</div>
 
 		<div class="grid">
