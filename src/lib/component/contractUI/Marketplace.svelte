@@ -82,7 +82,7 @@
 	<!-- SETTERS -->
 	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid">
-			<h2>Set 'For Sale' offer</h2>
+			<h2>Create 'for sale' offer</h2>
 
 			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={_tokenType}>
@@ -104,10 +104,10 @@
 				/>
 				<label for="price">Asking price (Eth) </label>
 			</div>
-			<button class="btn btn-dark" on:click={() => setSellOffer()}>SET 'FOR SALE'</button>
+			<button class="btn btn-dark" on:click={() => setSellOffer()}>OFFER 'FOR SALE'</button>
 		</div>
 		<div class="grid">
-			<h2>Set 'For Rent' offer</h2>
+			<h2>Create 'for rent' offer</h2>
 			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={_tokenType}>
 				<option value={TokenType.Dragon} selected>Dragon</option>
@@ -149,7 +149,7 @@
 				<label for="duration">Minimum rental duration (days)</label>
 			</div>
 
-			<button class="btn btn-dark" on:click={() => setRentOffer()}>SET 'FOR RENT'</button>
+			<button class="btn btn-dark" on:click={() => setRentOffer()}>OFFER 'FOR RENT'</button>
 		</div>
 
 		<div class="grid">
