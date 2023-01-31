@@ -71,7 +71,19 @@
 		contract.modifyOffer(rentId, OfferType.ForRent, _tokenType, rentTerms);
 	}
 
+	async function buy() {
+		let offer = await contract.getOffer(buyId, _tokenType);
+		contract.buyToken(buyId, _tokenType, offer.sellPrice);
+	}
 
+	async function rent() {
+		let offer = await contract.getOffer(rentalId, _tokenType);		
+		contract.rentToken(rentalId, _tokenType, offer.rent.price, offer.rent.deposit);
+	}
+
+	async function endRental() {
+		contract.endRental(rentalId, _tokenType, true);
+	}
 
 
 	function getOffersBy() {
@@ -82,15 +94,7 @@
 		contract.getOffered(startIndex, endIndex, _offerType, _tokenType, true);
 	}
 
-	async function buy() {
-		let offer = await contract.getOffer(buyId, _tokenType);
-		contract.buyToken(buyId, _tokenType, offer.sellPrice);
-	}
 
-	async function rent() {
-		let offer = await contract.getOffer(rentalId, _tokenType);		
-		contract.rentToken(rentalId, _tokenType, offer.rent.price,offer.rent.deposit);
-	}
 
 	function removeSellOffer() {
 		contract.removeOffer(removeId, OfferType.ForSale, _tokenType);
@@ -264,7 +268,7 @@
 				<p class="bold">Token Id</p>
 				<input type="text" bind:value={buyId} class="form-control" placeholder="Token Id" />
 			</div>
-			<button class="btn btn-dark" on:click={() => buy()}>Buy Token</button>
+			<button class="btn btn-dark" on:click={() => buy()}>BUY</button>
 		</div>
 
 		<div class="grid">
@@ -278,8 +282,23 @@
 				<p class="bold">Token Id</p>
 				<input type="text" bind:value={rentalId} class="form-control" placeholder="Token Id" />
 			</div>
-			<button class="btn btn-dark" on:click={() => rent()}>Rent Token</button>
+			<button class="btn btn-dark" on:click={() => rent()}>RENT</button>
 		</div>
+
+		<div class="grid">
+			<h2>End Rental (of token)</h2>
+			<p class="bold">Token Type</p>
+			<select class="form-select mb-3" bind:value={_tokenType}>
+				<option value={TokenType.Dragon} selected>Dragon</option>
+				<option value={TokenType.Egg}>Egg</option>
+			</select>
+			<div class="mb-3">
+				<p class="bold">Token Id</p>
+				<input type="text" bind:value={rentalId} class="form-control" placeholder="Token Id" />
+			</div>
+			<button class="btn btn-dark" on:click={() => endRental()}>END RENTAL</button>
+		</div>
+
 	</div>
 
 	<!-- GETTERS -->

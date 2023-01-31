@@ -8,6 +8,7 @@ import { EggContract } from '$lib/contracts/EggToken';
 import { MarketApproval } from '$lib/contracts/MarketApproval';
 import { contracts } from "./contracts";
 import { get } from 'svelte/store';
+import { getErrors } from "./errorHandling";
 
 export const TokenType = { Unknown: 0, Dna: 1, Egg: 2, Dragon: 3 }
 export const OfferType = { NoOffer: 0, ForSale: 1, ForRent: 2, ForSaleOrRent: 3 }
@@ -71,8 +72,29 @@ export class MarketplaceContract extends MarketApproval {
 
             return offer
         } catch (err) {
-            setAlert('Buy token error ', 'warning')
-            console.log("Error at: buyToken " + err)
+            setAlert('Rent token error ', 'warning')
+            console.log("Error at: rentToken " + err)
+        }
+    }
+
+    async endRental(tokenId, tokenType , alert = false) {
+        try {
+            await this.contract.Marketplace.methods.endRental(
+                tokenId,
+                tokenType
+            ).send({from: this.contract.account}, function (err, txHash) {
+                addAwaiter(txHash,'Ending Rental of token id:'+tokenId)
+                if (err) setAlert(err, 'warning')
+                else {
+                    if (alert) setAlert('Ending rental for token Id ' + tokenId + '. Tx: ' + txHash, 'success')
+                    return txHash
+                }
+            })
+        } catch (err) {
+            console.log("Error at: endRental", err)
+            const errMsg = getErrors('endRental', err)
+            if (alert == true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
         }
     }
 
