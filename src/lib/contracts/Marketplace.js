@@ -13,6 +13,21 @@ import { getErrors } from "./errorHandling";
 export const TokenType = { Unknown: 0, Dna: 1, Egg: 2, Dragon: 3 }
 export const OfferType = { NoOffer: 0, ForSale: 1, ForRent: 2, ForSaleOrRent: 3 }
 
+export const rentTerms = {
+    price: '0',
+    rental: {
+        deposit: '0',
+        minDuration: '0'
+    }
+}
+
+export const saleTerms = {
+    price: '0',
+    rental: {
+        deposit: 0,
+        minDuration: 0
+    }
+}
 
 export class MarketplaceContract extends MarketApproval {
     constructor() {
