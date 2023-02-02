@@ -304,9 +304,11 @@ export class MarketplaceContract extends MarketApproval {
                     }
                     return el
                 })
-
+                
+                assetOffers.totalOwned = assets.totalOwned;
+                
                 switch (_tokenType) {
-                    case TokenType.Dragon:
+                    case TokenType.Dragon:                        
                         userDragons.set(assetOffers)
                         break;
                     case TokenType.Egg:

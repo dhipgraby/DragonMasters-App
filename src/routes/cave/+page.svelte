@@ -9,19 +9,19 @@
 	import { onMount } from 'svelte';
 	import { LoadInterface, contracts } from '$lib/interfaces/ICave';
 	import MainContainer from '$lib/component/containers/MainContainer.svelte';
-	
+
 	let show = 1;
 	let fromId = 0;
 	let toId = 5;
 
 	$: contract = $contracts;
 	$: eggs = $userEggs;
-	$: dragons = $userDragons;	
+	$: dragons = $userDragons;
 
 	onMount(async () => {
 		// userDragons.useLocalStorage()
 		await LoadInterface(fromId, toId);
-		console.log(eggs);		
+		console.log(eggs);
 	});
 </script>
 
@@ -39,7 +39,7 @@
 		</button>
 	</div>
 	{#if show == 1}
-		<EggGrid {eggs} contract={contract} loadPage={LoadInterface} />
+		<EggGrid {eggs} {contract} loadPage={LoadInterface} />
 	{/if}
 
 	{#if show == 2}
