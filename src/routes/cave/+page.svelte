@@ -13,8 +13,8 @@
 
 	let show = 1;
 	let fromId = 0;
+	let toId = $perpage;
 
-	$: toId = $perpage;
 	$: contract = $contracts;
 	$: eggs = $userEggs;
 	$: dragons = $userDragons;

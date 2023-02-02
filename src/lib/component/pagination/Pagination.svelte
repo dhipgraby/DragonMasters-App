@@ -20,13 +20,12 @@
 		} else {
 			from = page * _perpage + 1;
 			to = page * _perpage + (_perpage + 1);
-		}
-		console.log(from, to);
+		}		
 		return [from, to];
 	};
 
 	const updatePages = () => {
-		loadPage(0,(setPerpage - 1))
+		loadPage(0,(setPerpage))
 		updatePerpage(setPerpage)
 	}
 
