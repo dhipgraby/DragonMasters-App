@@ -9,17 +9,18 @@
 	import { onMount } from 'svelte';
 	import { LoadInterface, contracts } from '$lib/interfaces/ICave';
 	import MainContainer from '$lib/component/containers/MainContainer.svelte';
+	import { perpage } from '$lib/storage/pagination';
 
 	let show = 1;
 	let fromId = 0;
-	let toId = 5;
 
+	$: toId = $perpage;
 	$: contract = $contracts;
 	$: eggs = $userEggs;
 	$: dragons = $userDragons;
 
 	onMount(async () => {
-		// userDragons.useLocalStorage()
+		perpage.useLocalStorage();
 		await LoadInterface(fromId, toId);
 		console.log(eggs);
 	});
@@ -29,15 +30,16 @@
 	<title>Cave - Dragon Masters</title>
 </svelte:head>
 
+<div class="btn-group" role="group">
+	<button type="button" on:click={() => (show = 1)} class="btn btn-light"
+		><i class="fas fa-egg" /> EGGS
+	</button>
+	<button type="button" on:click={() => (show = 2)} class="btn btn-light"
+		><i class="fas fa-dragon" /> DRAGONS
+	</button>
+</div>
+
 <MainContainer>
-	<div class="btn-group" role="group">
-		<button type="button" on:click={() => (show = 1)} class="btn btn-light"
-			><i class="fas fa-egg" /> EGGS
-		</button>
-		<button type="button" on:click={() => (show = 2)} class="btn btn-light"
-			><i class="fas fa-dragon" /> DRAGONS
-		</button>
-	</div>
 	{#if show == 1}
 		<EggGrid {eggs} {contract} loadPage={LoadInterface} />
 	{/if}
@@ -48,10 +50,19 @@
 </MainContainer>
 
 <style>
+	.btn-group {		
+		max-width:520px;
+		margin: auto;
+		margin-top: 50px;
+	}
+
 	.btn-group .btn {
-		white-space: nowrap;
-		margin: 8px;
+		white-space: nowrap;		
 		font-weight: 600;
 		letter-spacing: 0.8px;
+		max-width: 200px;		
+		margin: auto;
+		margin: 5px;
 	}
+	
 </style>

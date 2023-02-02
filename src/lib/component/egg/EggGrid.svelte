@@ -7,22 +7,18 @@
 	export let contract;
 	export let loadPage;
 
-	let pages = 0;
-	let perpage = 5;
+	$: totalAssets = eggs.totalOwned;
 
-	$: totalEggPages = Math.ceil(parseInt(eggs.totalOwned) / perpage);
 	afterUpdate(() => {
 		console.log(eggs);
-		console.log(totalEggPages);
-		console.log(eggs.totalOwned);
-		if (totalEggPages > 0) pages = new Array(totalEggPages);
 	});
 </script>
 
-<div class="w-100 ta-c">
+<div class="w-100 ta-l mb-3">
 	<h1>Your Eggs</h1>
-	<Pagination {pages} {perpage} {loadPage} inferfaceName="Egg" />
 </div>
+
+	<Pagination {totalAssets} {loadPage} inferfaceName="Egg" />
 
 <div class="row">
 	{#if eggs.length}
