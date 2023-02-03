@@ -1,17 +1,13 @@
 <script>
 	import EggCard from '$lib/component/egg/EggCard.svelte';
 	import Pagination from '../pagination/Pagination.svelte';
-	import { afterUpdate } from 'svelte';
-
+	
 	export let eggs;
 	export let contract;
 	export let loadPage;
 
 	$: totalAssets = eggs.totalOwned;
 
-	afterUpdate(() => {
-		console.log(eggs);
-	});
 </script>
 
 <div class="w-100 ta-l mb-3">
