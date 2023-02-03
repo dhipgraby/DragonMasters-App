@@ -13,14 +13,14 @@
 
 	let show = 1;
 	let fromId = 0;
-	let toId = $perpage;
 
 	$: contract = $contracts;
 	$: eggs = $userEggs;
 	$: dragons = $userDragons;
 
-	onMount(async () => {
+	onMount(async () => {				
 		perpage.useLocalStorage();
+		let toId = $perpage;
 		await LoadInterface(fromId, toId);
 		console.log(eggs);
 	});

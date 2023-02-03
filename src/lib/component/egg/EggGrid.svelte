@@ -23,7 +23,7 @@
 <div class="row">
 	{#if eggs.length}
 		{#each eggs as egg}
-			<div class="col">
+			<div class="col-lg-3 col-md-4 col-sm-6">
 				<EggCard {egg} {contract} />
 			</div>
 		{/each}
