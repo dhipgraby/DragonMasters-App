@@ -15,6 +15,8 @@
 
 <style>
     div {
+		width: 100%;
+		text-align: left;
         margin-top: 20px;
     }
 	p {

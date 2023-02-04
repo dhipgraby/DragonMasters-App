@@ -23,7 +23,7 @@
 <div class="row">
 	{#if dragons.length}
 		{#each dragons as dragon}
-			<div class="col">
+			<div class="col col-lg-3 col-md-4 col-sm-6">
 				<DragonCard showCircleMenu={true} {dragon} {contract} {singleApproval} />
 			</div>
 		{/each}
@@ -33,7 +33,6 @@
 </div>
 
 <style>
-
 	.col {
 		text-align: -webkit-center;
 	}

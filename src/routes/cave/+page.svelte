@@ -31,10 +31,10 @@
 </svelte:head>
 
 <div class="btn-group" role="group">
-	<button type="button" on:click={() => (show = 1)} class="btn btn-dark"
+	<button type="button" on:click={() => (show = 1)} class="btn darkBtn"
 		><i class="fas fa-egg" /> EGGS
 	</button>
-	<button type="button" on:click={() => (show = 2)} class="btn btn-dark"
+	<button type="button" on:click={() => (show = 2)} class="btn darkBtn"
 		><i class="fas fa-dragon" /> DRAGONS
 	</button>
 </div>
@@ -55,18 +55,4 @@
 		margin: auto;
 		margin-top: 50px;
 	}
-
-	.btn-group .btn {
-		background-image: linear-gradient(119deg, black, #585858);
-		border-radius: 20px !important;
-		border: none !important;
-		white-space: nowrap;		
-		font-weight: 600;
-		letter-spacing: 0.8px;
-		max-width: 200px;		
-		padding: 8px 50px !important;
-		margin: auto;
-		margin: 20px;
-	}
-	
 </style>

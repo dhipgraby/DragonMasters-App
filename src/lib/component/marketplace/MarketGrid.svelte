@@ -39,7 +39,7 @@
 <div class="row">
 	{#if assets.length}
 		{#each assets as asset}
-			<div class="col">
+			<div class="col-lg-3 col-md-4 col-sm-6">
 				{#if _tokenType == TokenType.Dragon}
 					<DragonCard
 						account={contract['market'].contract.account}
