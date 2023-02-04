@@ -47,7 +47,7 @@
 	const leave = () => (hovering = false);
 </script>
 
-<div on:mouseenter={enter} on:mouseleave={leave} class="card" style="width: 18rem;">
+<div on:mouseenter={enter} on:mouseleave={leave} class="card">
 	<div class="card-header">
 		<CircleMenu
 			_tokenType={TokenType.Egg}

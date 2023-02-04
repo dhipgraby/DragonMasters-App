@@ -1,6 +1,7 @@
 <script>
 	import EggCard from '$lib/component/egg/EggCard.svelte';
 	import Pagination from '../pagination/Pagination.svelte';
+	import { ColumnSizes } from '$lib/css/grid';
 	
 	export let eggs;
 	export let contract;
@@ -19,7 +20,7 @@
 <div class="row">
 	{#if eggs.length}
 		{#each eggs as egg}
-			<div class="col-xl-3 col-lg-4 col-md-4 col-sm-6 col-xs-12">
+			<div class={ColumnSizes}>
 				<EggCard {egg} {contract} />
 			</div>
 		{/each}

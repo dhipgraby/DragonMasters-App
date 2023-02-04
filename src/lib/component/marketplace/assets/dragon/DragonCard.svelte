@@ -1,6 +1,6 @@
 <script>
 	import { Maturity, loadRentTerms, loadOwner } from '$lib/helpers/utils.js';
-	import { getImg, iconElement, iconAttr } from '$lib/storage/dragonImg';
+	import { getImg, iconElement } from '$lib/storage/dragonImg';
 	import { getEth } from '$lib/helpers/utils';
 	import { onMount } from 'svelte';
 	//CSS
@@ -33,7 +33,7 @@
 	});
 </script>
 
-<div class="card" style="width: 18rem;">
+<div class="card">
 	<DragonBox {img} {element} {dragon} {generation} {_maturity} {owner} {attributes} />
 	<OfferBox {owner} {price} {rentTerms} {isForSale} {buy} {rent} {_offerType} />
 </div>

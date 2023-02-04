@@ -1,12 +1,13 @@
 <script>
 	import DragonCard from '$lib/component/dragon/DragonCard.svelte';
 	import Pagination from '../pagination/Pagination.svelte';
+	import { ColumnSizes } from '$lib/css/grid';
 
 	export let dragons;
 	export let singleApproval;
 	export let contract;
 	export let loadPage;
-	
+
 	$: totalAssets = dragons.totalOwned;
 </script>
 
@@ -23,7 +24,7 @@
 <div class="row">
 	{#if dragons.length}
 		{#each dragons as dragon}
-			<div class="col col-lg-3 col-md-4 col-sm-6">
+			<div class={ColumnSizes}>
 				<DragonCard showCircleMenu={true} {dragon} {contract} {singleApproval} />
 			</div>
 		{/each}
@@ -33,7 +34,7 @@
 </div>
 
 <style>
-	.col {
+	.row div {
 		text-align: -webkit-center;
 	}
 	.extended {

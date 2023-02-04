@@ -4,6 +4,8 @@
 	import Pagination from '../pagination/Pagination.svelte';
 	import { TokenType } from '$lib/contracts/Marketplace';
 	import { afterUpdate } from 'svelte';
+	import { ColumnSizes } from '$lib/css/grid';
+
 	export let assets;
 	export let contract;
 	export let loadPage;
@@ -25,7 +27,7 @@
 		await loadPage(0, perpage);
 	};
 
-	const rentToken = async (tokenId, price, deposit) => {		
+	const rentToken = async (tokenId, price, deposit) => {
 		console.log(price, deposit);
 		await contract['market'].rentToken(tokenId, _tokenType, price, deposit);
 		await loadPage(0, perpage);
@@ -39,7 +41,7 @@
 <div class="row">
 	{#if assets.length}
 		{#each assets as asset}
-			<div class="col-lg-3 col-md-4 col-sm-6">
+			<div class={ColumnSizes}>
 				{#if _tokenType == TokenType.Dragon}
 					<DragonCard
 						account={contract['market'].contract.account}
@@ -68,7 +70,7 @@
 </div>
 
 <style>
-	.col {
+	.row div {
 		text-align: -webkit-center;
 	}
 </style>

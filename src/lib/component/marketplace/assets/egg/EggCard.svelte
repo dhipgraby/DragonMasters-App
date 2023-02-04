@@ -26,7 +26,7 @@
 	});
 </script>
 
-<div class="card" style="width: 18rem;">
+<div class="card">
 	<EggBox {eggImg} {element} {owner} tokenId={egg.tokenId}  />
 	<OfferBox {owner} {price} {rentTerms} {buy} {isForSale} {rent} {_offerType} />
 </div>
