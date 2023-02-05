@@ -8,7 +8,7 @@
 	export let buy;
 	export let rent;
 	export let isForSale;
-	console.log(isForSale);
+
 </script>
 
 <div class="offerContainer">

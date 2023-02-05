@@ -12,17 +12,14 @@
 	import { perpage } from '$lib/storage/pagination';
 
 	let show = 1;
-	let fromId = 0;
 
 	$: contract = $contracts;
 	$: eggs = $userEggs;
 	$: dragons = $userDragons;
 
 	onMount(async () => {				
-		perpage.useLocalStorage();
-		let toId = $perpage;
-		await LoadInterface(fromId, toId);
-		console.log(eggs);
+		perpage.useLocalStorage();	
+		await LoadInterface(0, $perpage);		
 	});
 </script>
 

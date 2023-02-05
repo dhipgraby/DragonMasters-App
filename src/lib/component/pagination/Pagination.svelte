@@ -25,7 +25,7 @@
 	};
 
 	const updatePages = () => {
-		loadPage(0,(setPerpage))
+		loadPage(0,setPerpage,inferfaceName)
 		updatePerpage(setPerpage)
 	}
 
