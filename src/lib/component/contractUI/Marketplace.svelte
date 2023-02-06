@@ -35,7 +35,7 @@
 				minDuration: 0
 			}
 		}
-		contract.setOffer(sellId, OfferType.ForSale, _tokenType, saleTerms);
+		contract.setOffer(sellId, OfferType.ForSale, _tokenType, saleTerms, true);
 	}
 
 	async function setRentOffer() {
@@ -46,7 +46,7 @@
 				minDuration: rent_duration * timeDropdrown.oneDay
 			}
 		};		
-		contract.setOffer(rentId, OfferType.ForRent, _tokenType, rentTerms);
+		contract.setOffer(rentId, OfferType.ForRent, _tokenType, rentTerms, true);
 	}
 
 	async function modifySellOffer() {
@@ -57,7 +57,7 @@
 				minDuration: 0
 			}
 		}
-		contract.modifyOffer(sellId, OfferType.ForSale, _tokenType, saleTerms);
+		contract.modifyOffer(sellId, OfferType.ForSale, _tokenType, saleTerms, true);
 	}
 
 	async function modifyRentOffer() {
@@ -68,23 +68,22 @@
 				minDuration: new_rent_duration * timeDropdrown.oneDay
 			}
 		};		
-		contract.modifyOffer(rentId, OfferType.ForRent, _tokenType, rentTerms);
+		contract.modifyOffer(rentId, OfferType.ForRent, _tokenType, rentTerms, true);
 	}
 
 	async function buy() {
 		let offer = await contract.getOffer(buyId, _tokenType);
-		contract.buyToken(buyId, _tokenType, offer.sellPrice);
+		contract.buy(buyId, _tokenType, offer.sellPrice, true);
 	}
 
 	async function rent() {
 		let offer = await contract.getOffer(rentalId, _tokenType);		
-		contract.rentToken(rentalId, _tokenType, offer.rent.price, offer.rent.deposit);
+		contract.rent(rentalId, _tokenType, offer.rent.price, offer.rent.deposit, true);
 	}
 
 	async function endRental() {
 		contract.endRental(rentalId, _tokenType, true);
 	}
-
 
 	function getOffersBy() {
 		contract.getOfferedBy(startIndex, endIndex, _offerType, _tokenType, account, true);
@@ -94,18 +93,16 @@
 		contract.getOffered(startIndex, endIndex, _offerType, _tokenType, true);
 	}
 
-
-
 	function removeSellOffer() {
-		contract.removeOffer(removeId, OfferType.ForSale, _tokenType);
+		contract.removeOffer(removeId, OfferType.ForSale, _tokenType, true);
 	}
 
 	function removeRentOffer() {
-		contract.removeOffer(removeRentId, OfferType.ForRent, _tokenType);
+		contract.removeOffer(removeRentId, OfferType.ForRent, _tokenType, true);
 	}
 
 	function removeAllOffers() {
-		contract.removeAllOffers(removeAllId, _tokenType);
+		contract.removeAllOffers(removeAllId, _tokenType, true);
 	}
 </script>
 

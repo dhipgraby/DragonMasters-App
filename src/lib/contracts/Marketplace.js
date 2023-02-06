@@ -42,105 +42,110 @@ export class MarketplaceContract extends MarketApproval {
         })();
     }
 
-    async buyToken(tokenId, tokenType, price) {
+    async buy(tokenId, tokenType, price, alert = false) {
         try {
-            let offer = await this.contract.Marketplace.methods.buy(
+            await this.contract.Marketplace.methods.buy(
                 tokenId,
                 tokenType,
             ).send({
                 from: this.contract.account,
                 value: price
             }, function (err, txHash) {
-                addAwaiter(txHash,'Buying Token id: ' + tokenId)
-                if (err) setAlert(err, 'warning')
+                addAwaiter(txHash,'Buy token id: ' + tokenId)
+                if (err) {
+                    if (alert === true) setAlert(err, 'warning')
+                    console.log('addAwaiter error: ', err)
+                }
                 else {
-                    setAlert('Token id: ' + tokenId + ' Bought!', 'success')
+                    if (alert === true) setAlert(txHash, 'success')
                     return txHash
                 }
             })
-
-            return offer
         } catch (err) {
-            setAlert('Buy token error ', 'warning')
-            console.log("Error at: buyToken " + err)
+            console.log("Error at: buyToken" + err)
+            const errMsg = getErrors('buyToken', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
         }
     }
 
-    async rentToken(tokenId, tokenType, price, deposit) {
-        const totalAmount = (Number(price) + Number(deposit))
-        console.log('totalAmount: ' + totalAmount);
+    async rent(tokenId, tokenType, price, deposit, alert = false) {
         try {
-            let offer = await this.contract.Marketplace.methods.rent(
+            const totalAmount = (Number(price) + Number(deposit))
+
+            await this.contract.Marketplace.methods.rent(
                 tokenId,
                 tokenType,
             ).send({
                 from: this.contract.account,
                 value: totalAmount
             }, function (err, txHash) {
-                addAwaiter(txHash,'Rent Token')
-                if (err) setAlert(err, 'warning')
+                addAwaiter(txHash,'Rent token id: '+tokenId)
+                if (err) {
+                    if (alert === true) setAlert(err, 'warning')
+                    console.log('addAwaiter error: ', err)
+                }
                 else {
-                    setAlert('Token id: ' + tokenId + ' Rented!', 'success')
+                    if (alert === true) setAlert(txHash, 'success')
                     return txHash
                 }
             })
-
-            return offer
         } catch (err) {
-            setAlert('Rent token error ', 'warning')
-            console.log("Error at: rentToken " + err)
+            console.log("Error at: rent" + err)
+            const errMsg = getErrors('rent', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
         }
     }
 
-    async endRental(tokenId, tokenType , alert = false) {
+    async endRental(tokenId, tokenType, alert = false) {
         try {
             await this.contract.Marketplace.methods.endRental(
                 tokenId,
                 tokenType
             ).send({from: this.contract.account}, function (err, txHash) {
-                addAwaiter(txHash,'Ending Rental of token id:'+tokenId)
+                addAwaiter(txHash,'End Rental of token id: '+tokenId)
                 if (err) setAlert(err, 'warning')
                 else {
-                    if (alert) setAlert('Ending rental for token Id ' + tokenId + '. Tx: ' + txHash, 'success')
+                    if (alert === true) setAlert('End rental for token Id ' + tokenId, 'success')
                     return txHash
                 }
             })
         } catch (err) {
             console.log("Error at: endRental", err)
             const errMsg = getErrors('endRental', err)
-            if (alert == true) setAlert(errMsg, 'warning')
+            if (alert === true) setAlert(errMsg, 'warning')
             console.log(errMsg)
         }
     }
 
-    async setOffer(tokenId, offerType, tokenType, terms) {
-        
+    async setOffer(tokenId, offerType, tokenType, terms, alert = false) {
         try {
-            let offer = await this.contract.Marketplace.methods.setOffer(
+            await this.contract.Marketplace.methods.setOffer(
                 tokenId,
                 terms,
                 offerType,
                 tokenType,
             ).send({}, async function (err, txHash) { 
-                let offerName = (offerType == OfferType.ForSale) ? 'Sell' : 'Rent';
-                addAwaiter(txHash,'Create '+offerName+' Offer')                   
+                const offerName = (offerType == OfferType.ForSale) ? 'Sell' : 'Rent';
+                addAwaiter(txHash,'Create '+offerName+' Offer')  
                 if (err) setAlert(err, 'warning')
                 else {
-                    setAlert('New offer created!', 'success')
+                    if (alert === true) setAlert('End rental for token Id ' + tokenId, 'success')
                     return txHash
                 }
             })
-
-            return offer
         } catch (err) {
-            setAlert('setOffer error ', 'warning')
-            console.log("Error at: setOffer " + err)
+            console.log("Error at: setOffer", err)
+            const errMsg = getErrors('setOffer', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
         }
     }
 
-    async modifyOffer(tokenId, offerType, tokenType, terms) {
+    async modifyOffer(tokenId, offerType, tokenType, terms, alert = false) {
         try {
-            let offer = await this.contract.Marketplace.methods.modifyOffer(
+            await this.contract.Marketplace.methods.modifyOffer(
                 tokenId,
                 terms,
                 offerType,
@@ -149,15 +154,15 @@ export class MarketplaceContract extends MarketApproval {
                 addAwaiter(txHash,'Modify Offer')
                 if (err) setAlert(err, 'warning')
                 else {
-                    setAlert('Offer Modifyed!', 'success')
+                    if (alert === true) setAlert('Modify offer for token Id ' + tokenId, 'success')
                     return txHash
                 }
             })
-
-            return offer
         } catch (err) {
-            setAlert('Error setting offer, try again or contact support.', 'warning')
-            console.log("Error at: setOffer " + err)
+            console.log("Error at: modifyOffer", err)
+            const errMsg = getErrors('modifyOffer', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
         }
     }
 
@@ -222,18 +227,18 @@ export class MarketplaceContract extends MarketApproval {
         alert = false
     ) {
         try {
-            let offer = await this.contract.Marketplace.methods.getOffer(
+            const offer = await this.contract.Marketplace.methods.getOffer(
                 tokenId,
                 tokenType
             ).call()
 
-            let rental = {
+            const rental = {
                 price: offer.terms.rent.price,
                 deposit: offer.terms.rent.rental.deposit,
                 minDuration: offer.terms.rent.rental.minDuration
             }
 
-            let result = {
+            const result = {
                 owner: offer.owner,
                 tokenId: offer.tokenId,
                 tokenType: offer.tokenType,
@@ -242,13 +247,15 @@ export class MarketplaceContract extends MarketApproval {
                 rent: rental
             }
 
-            if (alert == true) setAlert('Offer:<br>' + JSON.stringify(result), 'success')
+            if (alert === true) setAlert('Offer:<br>' + JSON.stringify(result), 'success')
 
             return result
 
         } catch (err) {
-            setAlert('getOffer error ', 'warning')
-            console.log('Error at: getOffer ' + err)
+            console.log("Error at: getOffer", err)
+            const errMsg = getErrors('getOffer', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
         }
     }
 
@@ -259,26 +266,26 @@ export class MarketplaceContract extends MarketApproval {
         _tokenType,
         alert = false
     ) {
-
-        let offers = []
-
         try {
+            let offers = []
 
-            let ids = await this.contract.Marketplace.methods.getOffered(startIndex, endIndex, _offerType, _tokenType).call()
-            let tokenIds = ids.tokenIds
+            const ids = await this.contract.Marketplace.methods.getOffered(startIndex, endIndex, _offerType, _tokenType).call()
+            const tokenIds = ids.tokenIds
 
             for (let i = 0; i < tokenIds.length; i++) {
-                let currentOffer = await this.getOffer(ids.tokenIds[i], _tokenType)
+                const currentOffer = await this.getOffer(ids.tokenIds[i], _tokenType)
                 offers.push(currentOffer)
             }
 
-            if (alert == true) setAlert('There is a total of ' + ids.totalOffered + ' offers.<p class="bold m-0">Token Ids: ' + tokenIds + '</p>', 'success')
+            if (alert === true) setAlert('Total of ' + ids.totalOffered + ' offers.<p class="bold m-0">Token Ids: ' + tokenIds + '</p>', 'success')
             offers['totalOffers'] = ids.totalOffered
             return offers;
 
         } catch (err) {
-            setAlert('getOffered error', 'warning')
-            console.log("Error at: getOffered" + err)
+            console.log("Error at: getOffered", err)
+            const errMsg = getErrors('getOffered', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
         }
     }
 
@@ -290,30 +297,29 @@ export class MarketplaceContract extends MarketApproval {
         _account,
         alert = false
     ) {
-
-        let offers = []
-
         try {
+            let offers = []
+
             let ownAccount = false
             if (_account == '' | !_account | _account == undefined) {
                 ownAccount = true
                 _account = this.contract.account
             }
-            let ids = await this.contract.Marketplace.methods.getOfferedBy(_account, startIndex, endIndex, _offerType, _tokenType).call()
-            let tokenIds = ids.tokenIds
+            const ids = await this.contract.Marketplace.methods.getOfferedBy(_account, startIndex, endIndex, _offerType, _tokenType).call()
+            const tokenIds = ids.tokenIds
 
             for (let i = 0; i < tokenIds.length; i++) {
-                let currentOffer = await this.getOffer(ids.tokenIds[i], _tokenType)
+                const currentOffer = await this.getOffer(ids.tokenIds[i], _tokenType)
                 offers.push(currentOffer)
             }
 
             //ITS ONLY UPDATES THE OFFER OF EXISTING TOKEN TYPE ON STORAGE
             if (ownAccount == true) {
 
-                let assets = (_tokenType == TokenType.Dragon) ? get(userDragons) : get(userEggs)
-                let offerName = (_offerType == OfferType.ForSale) ? 'sellOffer' : 'rentOffer';
-                let assetOffers = assets.map(el => {
-                    let TID = el.tokenId
+                const assets = (_tokenType == TokenType.Dragon) ? get(userDragons) : get(userEggs)
+                const offerName = (_offerType == OfferType.ForSale) ? 'sellOffer' : 'rentOffer';
+                const assetOffers = assets.map(el => {
+                    const TID = el.tokenId
                     if (tokenIds.includes(TID)) {
                         if (el.offer == undefined) el.offer = []
                         el.offer[offerName] = offers.find(function (offer) {
@@ -335,12 +341,14 @@ export class MarketplaceContract extends MarketApproval {
                 }
             }
 
-            if (alert == true) setAlert('You have a total of ' + ids.totalOffered + ' offers.<p class="bold m-0">Token Ids: ' + tokenIds + '</p>', 'success')
+            if (alert === true) setAlert('You have a total of ' + ids.totalOffered + ' offers.<p class="bold m-0">Token Ids: ' + tokenIds + '</p>', 'success')
             return offers;
 
         } catch (err) {
-            setAlert('getOfferedBy error', 'warning')
-            console.log("Error at: getOfferedBy" + err)
+            console.log("Error at: getOfferedBy", err)
+            const errMsg = getErrors('getOfferedBy', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
         }
     }
 
@@ -351,63 +359,75 @@ export class MarketplaceContract extends MarketApproval {
         alert = false
     ) {
         try {
-            let onOffer = await this.contract.Marketplace.methods.isOnOffer(tokenId, _offerType, _tokenType).call()
+            const onOffer = await this.contract.Marketplace.methods.isOnOffer(tokenId, _offerType, _tokenType).call()
+
+            if (alert === true) setAlert('Is On Offer?: ' + onOffer, 'success')
+
             return onOffer
+
         } catch (err) {
-            if (alert == true) setAlert('isOnOffer error', 'warning')
-            console.log("Error at: isOnOffer" + err)
+            console.log("Error at: isOnOffer", err)
+            const errMsg = getErrors('isOnOffer', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
         }
     }
 
     async removeOffer(
         tokenId,
         offerType,
-        tokenType
+        tokenType,
+        alert = false
     ) {
         try {
-            let offer = await this.contract.Marketplace.methods.removeOffer(
+            const offer = await this.contract.Marketplace.methods.removeOffer(
                 tokenId,
                 offerType,
                 tokenType
             ).send({}, function (err, txHash) {
-                let offerName = (offerType == OfferType.ForSale) ? 'Sell' : 'Rent';
+                const offerName = (offerType == OfferType.ForSale) ? 'Sell' : 'Rent';
                 addAwaiter(txHash,'Remove '+offerName+' Offer')
                 if (err) setAlert(err, 'warning')
                 else {
-                    setAlert(txHash, 'success')
+                    if (alert === true) setAlert('Remove offer for token Id ' + tokenId, 'success')
                     return txHash
                 }
             })
 
             return offer
         } catch (err) {
-            setAlert('removeOffer error ', 'warning')
-            console.log("Error at: removeOffer " + err)
+            console.log("Error at: removeOffer", err)
+            const errMsg = getErrors('removeOffer', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
         }
     }
 
     async removeAllOffers(
         tokenId,
-        tokenType
+        tokenType,
+        alert = false
     ) {
         try {
-            let offer = await this.contract.Marketplace.methods.removeAllOffers(
+            const offer = await this.contract.Marketplace.methods.removeAllOffers(
                 tokenId,
                 tokenType
             ).send({}, function (err, txHash) {
-                let offerName = (offerType == OfferType.ForSale) ? 'Sell' : 'Rent';
-                addAwaiter(txHash,'Remove all '+offerName+' Offers')
+                const offerName = (offerType == OfferType.ForSale) ? 'Sell' : 'Rent';
+                addAwaiter(txHash,'Remove All '+offerName+' Offers')
                 if (err) setAlert(err, 'warning')
                 else {
-                    setAlert(txHash, 'success')
+                    if (alert === true) setAlert('Remove All ' + offerName + ' offers', 'success')
                     return txHash
                 }
             })
 
             return offer
         } catch (err) {
-            setAlert('removeAllOffers error ', 'warning')
-            console.log("Error at: removeAllOffers " + err)
+            console.log("Error at: removeAllOffers", err)
+            const errMsg = getErrors('removeAllOffers', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
         }
     }
 
@@ -421,7 +441,7 @@ export class MarketplaceContract extends MarketApproval {
                 ...dragonDetails[0], skills: toNumbers2D(dragonDetails[1])
             }
 
-            let dragon = {
+            const dragon = {
                 tokenId: dragonId,
                 dnaId: dragonDetails.dnaId,
                 subSpecies: subSpeciesName(dragonDetails.species),
@@ -435,7 +455,7 @@ export class MarketplaceContract extends MarketApproval {
                 attributes: dragonDetails.attributes,
             }
 
-            if (alert == true) setAlert('Dragon Details: ' + JSON.stringify(dragon), 'success')
+            if (alert === true) setAlert('Dragon Details: ' + JSON.stringify(dragon), 'success')
 
             return dragon
 
@@ -447,7 +467,7 @@ export class MarketplaceContract extends MarketApproval {
 
     async getDna(dnaId) {
         try {
-            let dna = await this.contract.DnaToken.methods.getDna(dnaId).call()
+            const dna = await this.contract.DnaToken.methods.getDna(dnaId).call()
             return dna
 
         } catch (err) {
@@ -459,7 +479,7 @@ export class MarketplaceContract extends MarketApproval {
     async getEgg(eggId, message = false) {
 
         try {
-            let eggDetails = await this.contract.EggToken.methods.getEgg(eggId).call()
+            const eggDetails = await this.contract.EggToken.methods.getEgg(eggId).call()
 
             if (message == true) setAlert(eggDetails, 'success')
             return {
