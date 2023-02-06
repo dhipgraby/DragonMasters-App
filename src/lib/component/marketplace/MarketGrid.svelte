@@ -3,43 +3,37 @@
 	import EggCard from '$lib/component/marketplace/assets/egg/EggCard.svelte';
 	import Pagination from '../pagination/Pagination.svelte';
 	import { TokenType } from '$lib/contracts/Marketplace';
-	import { afterUpdate } from 'svelte';
+	import { ColumnSizes } from '$lib/css/grid';
+
 	export let assets;
 	export let contract;
 	export let loadPage;
-	export let perpage;
 	export let _tokenType;
 	export let _offerType;
 
-	let pages;
+	let inferfaceName = (_tokenType === TokenType.Egg) ? "Egg" : "Dragon"
+	$: totalAssets = assets.totalOffers
 
-	afterUpdate(() => {
-		// calculating total pages
-		let totalPages = Math.round(parseInt(assets.totalOffers) / perpage);
-		if (totalPages > 0) pages = new Array(totalPages);
-	});
+	console.log(assets);
 
 	const buyToken = async (tokenId, price) => {
-		console.log(price);
-		await contract['market'].buyToken(tokenId, _tokenType, price);
-		await loadPage(0, perpage);
+		await contract['market'].buyToken(tokenId, _tokenType, price);		
 	};
 
-	const rentToken = async (tokenId, price, deposit) => {		
+	const rentToken = async (tokenId, price, deposit) => {
 		console.log(price, deposit);
-		await contract['market'].rentToken(tokenId, _tokenType, price, deposit);
-		await loadPage(0, perpage);
+		await contract['market'].rentToken(tokenId, _tokenType, price, deposit);		
 	};
 </script>
 
 <div class="w-100 ta-c">
-	<Pagination {pages} {loadPage} {perpage} />
+	<Pagination {totalAssets} {loadPage} {inferfaceName} />
 </div>
 
 <div class="row">
 	{#if assets.length}
 		{#each assets as asset}
-			<div class="col">
+			<div class={ColumnSizes}>
 				{#if _tokenType == TokenType.Dragon}
 					<DragonCard
 						account={contract['market'].contract.account}
@@ -68,7 +62,7 @@
 </div>
 
 <style>
-	.col {
+	.row div {
 		text-align: -webkit-center;
 	}
 </style>

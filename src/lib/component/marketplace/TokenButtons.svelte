@@ -14,10 +14,19 @@
 </div>
 
 <style>
+
+select {
+		font-weight: 600;		
+		font-size: 20px;
+	}
+
     div {
+		width: 100%;
+		text-align: left;
         margin-top: 20px;
     }
 	p {
+		font-size: 15px;
         margin-bottom: 10px;
 		letter-spacing: 1px;
 	}

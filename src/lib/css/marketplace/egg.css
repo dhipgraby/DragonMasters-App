@@ -32,7 +32,8 @@
 
 .card {
     border-radius: 20px !important;
-    margin: 10px;
+    width: 100%;    
+    max-width: 360px;
     transition: 0.5s;
 }
 

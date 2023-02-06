@@ -1,31 +1,26 @@
 <script>
 	import EggCard from '$lib/component/egg/EggCard.svelte';
 	import Pagination from '../pagination/Pagination.svelte';
-	import { afterUpdate } from 'svelte';
+	import { ColumnSizes } from '$lib/css/grid';
 	
 	export let eggs;
 	export let contract;
 	export let loadPage;
-	
-	let pages = 0;
-	let perpage = 5
-	$: totalEggPages = Math.ceil(parseInt(eggs.totalOwned) / perpage);
 
-	afterUpdate(() => {		
-		console.log(eggs.totalOwned);
-		if (totalEggPages > 0) pages = new Array(totalEggPages);
-	});
+	$: totalAssets = eggs.totalOwned;
+
 </script>
 
-<div class="w-100 ta-c">
+<div class="w-100 ta-l mb-3">
 	<h1>Your Eggs</h1>
-	<Pagination {pages} {perpage} {loadPage} inferfaceName='Egg' />
 </div>
+
+	<Pagination {totalAssets} {loadPage} inferfaceName="Egg" />
 
 <div class="row">
 	{#if eggs.length}
 		{#each eggs as egg}
-			<div class="col">
+			<div class={ColumnSizes}>
 				<EggCard {egg} {contract} />
 			</div>
 		{/each}

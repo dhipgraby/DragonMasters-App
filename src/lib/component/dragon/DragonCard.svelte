@@ -51,7 +51,7 @@
 	};
 </script>
 
-<div on:mouseenter={enter} on:mouseleave={leave} class="card" style="width: 18rem;">
+<div on:mouseenter={enter} on:mouseleave={leave} class="card">
 	<!-- IMAGE,GENERATION & ELEMENT -->
 	<DragonHeaderDetails {...details} />
 	<div class="card-body ta-c">

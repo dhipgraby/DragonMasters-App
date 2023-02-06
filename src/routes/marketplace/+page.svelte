@@ -13,13 +13,17 @@
 	import { get_unique_tokenid } from '$lib/helpers/utils';
 	import TokenButtons from '$lib/component/marketplace/TokenButtons.svelte';
 	import OfferTypeBtn from '$lib/component/marketplace/OfferTypeBtn.svelte';
-	import { orderByOffer } from '$lib/helpers/utils';
+	import { perpage } from '$lib/storage/pagination';
 
-	//Per page is not correctly Integrated. Only pages are been produced
 	let show = TokenType.Egg;
-	let _offerType = OfferType.ForRent;
-	let perpage = 10;
-	perpage--;
+	
+	let _offerType = OfferType.ForSale;
+	$: offerTypeMsg =
+		_offerType === OfferType.ForSale
+			? 'Sale'
+			: _offerType === OfferType.ForRent
+			? 'Rent'
+			: 'Sell & Rent';
 
 	$: contractsData = $contracts;
 	//SELL OFFERS
@@ -28,6 +32,7 @@
 	//RENT OFFERS
 	$: dragons_for_rent = $dragonsForRent;
 	$: eggs_for_rent = $eggsForRent;
+
 	let allOffers = {
 		eggs: [],
 		dragons: []
@@ -49,7 +54,8 @@
 	};
 
 	onMount(async () => {
-		await LoadInterface(0, perpage);
+		perpage.useLocalStorage();
+		await LoadInterface(0, $perpage);
 		allOffers = allAssets();
 		console.log(allOffers);
 	});
@@ -62,9 +68,11 @@
 <MainContainer>
 	<h1>Marketplace</h1>
 
+	<TokenButtons {changeToken} />
 	<OfferTypeBtn {setOfferType} {_offerType} />
 
-	<TokenButtons {changeToken} />
+
+	<h3>{(show === TokenType.Egg) ? "Eggs" : "Dragons"} for {offerTypeMsg} </h3>
 
 	{#if _offerType == OfferType.ForSale}
 		{#if show == TokenType.Egg}
@@ -144,10 +152,18 @@
 </MainContainer>
 
 <style>
-	h2 {
-		margin-top: 20px;	
-	}
+	
 	h1 {
 		margin-bottom: 25px;
 	}
+	
+	h2 {
+		margin-top: 20px;
+	}
+
+	h3 {
+		color:black;
+		margin:20px 0px;
+	}
+	
 </style>

@@ -1,25 +1,21 @@
-<main>
-	<section>
+<section>
+	<div>
 		<slot />
-	</section>
-</main>
+	</div>
+</section>
 
 <style>
 	section {
 		padding-top: 50px;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 1;
+		padding-left: 25px;
+		padding-right: 25px;
+		display: inherit;
+		width: 100%;
 	}
 
-	main {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
+	div {
+		width: 100%;
 		max-width: 1200px;
-		margin: 0 auto;
-		box-sizing: border-box;
+		margin: auto;
 	}
 </style>
