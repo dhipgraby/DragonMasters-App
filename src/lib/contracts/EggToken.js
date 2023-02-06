@@ -29,20 +29,23 @@ export class EggContract {
             })
         } catch (err) {
             console.log("Error at: mintGen0EggTo" + err)
+            const errMsg = getErrors('mintGen0EggTo', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
         }
     }
 
     async getAllEggIds(startIndex, endIndex, alert = false){
         try {
             const eggIds = await this.contract.EggToken.methods.getAllEggIds(startIndex, endIndex).call()
-            if (alert == true) setAlert('Egg Ids: '+ JSON.stringify(eggIds), 'success')
+            if (alert === true) setAlert('Egg Ids: '+ JSON.stringify(eggIds), 'success')
 
             return eggIds
 
         } catch (err) {
             console.log("Error at: getAllEggIds", err)
             const errMsg = getErrors('getAllEggIds', err)
-            if (alert == true) setAlert(errMsg, 'warning')
+            if (alert === true) setAlert(errMsg, 'warning')
             console.log(errMsg)
         }
     }
@@ -50,12 +53,12 @@ export class EggContract {
     async getEggIds(owner, startIndex, endIndex, alert = false){
         try {
             const eggIds = await this.contract.EggToken.methods.getEggIds(owner, startIndex, endIndex).call()
-            if (alert == true) setAlert('Egg Ids: '+ JSON.stringify(eggIds), 'success')
+            if (alert === true) setAlert('Egg Ids: '+ JSON.stringify(eggIds), 'success')
             return eggIds
         } catch (err) {
             console.log("Error at: getEggIds", err)
             const errMsg = getErrors('getEggIds', err)
-            if (alert == true) setAlert(errMsg, 'warning')
+            if (alert === true) setAlert(errMsg, 'warning')
             console.log(errMsg)
         }
     }
@@ -75,14 +78,14 @@ export class EggContract {
                 subSpecies:subSpeciesName(eggDetails.species),
                 offer:[]
             }
-            if (alert == true) setAlert('Egg Details: '+ JSON.stringify(egg), 'success')
+            if (alert === true) setAlert('Egg Details: '+ JSON.stringify(egg), 'success')
 
             return egg
 
         } catch (err) {
             console.log("Error at: getEgg" + err)
             const errMsg = getErrors('getAllEggIds', err)
-            if (alert == true) setAlert(errMsg, 'warning')
+            if (alert === true) setAlert(errMsg, 'warning')
             console.log(errMsg)
         }
     }
@@ -103,7 +106,7 @@ export class EggContract {
         } catch (err) {
             console.log("Error at: startIncubation" + err)
             const errMsg = getErrors('startIncubation', err)
-            if (alert) setAlert(errMsg, 'warning')
+            if (alert === true) setAlert(errMsg, 'warning')
             console.log(errMsg)
         }
     }
@@ -113,14 +116,14 @@ export class EggContract {
         try {
             const incubationTime = await this.contract.EggToken.methods.checkIncubation(eggId).call()
 
-            if (alert) setAlert('Egg incubation time remaining is :' + incubationTime, 'info')
+            if (alert === true) setAlert('Egg incubation time remaining is :' + incubationTime, 'info')
 
             return incubationTime
 
         } catch (err) {
             console.log("Error at: checkIncubation" + err)
             const errMsg = getErrors('checkIncubation', err)
-            if (alert) setAlert(errMsg, 'warning')
+            if (alert === true) setAlert(errMsg, 'warning')
             console.log(errMsg)
             if (errMsg == "Incubation not started") return "-1";
         }
@@ -142,7 +145,7 @@ export class EggContract {
         } catch (err) {
             console.log("Error at: hatch" + err)
             const errMsg = getErrors('hatch', err)
-            if (alert) setAlert(errMsg, 'warning')
+            if (alert === true) setAlert(errMsg, 'warning')
             console.log(errMsg)
         }
     }
