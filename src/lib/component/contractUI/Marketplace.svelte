@@ -535,6 +535,9 @@
 			</select>
 			<button class="btn btn-dark" on:click={() => isOnOffer()}>CHECK</button>
 		</div>
+	</div>
+
+	<div class="col-sm-12 col-md-12 col-xl-4">
 
 		<div class="grid">
 			<h2>Get offer</h2>
@@ -569,9 +572,6 @@
 			<button class="btn btn-dark" on:click={() => getOfferTerms()}>GET OFFER TERMS</button>
 		</div>
 
-	</div>
-
-	<div class="col-sm-12 col-md-12 col-xl-4">
 		<!-- REMOVE OFFERS-->
 		<div class="grid">
 			<h2>Remove all offers</h2>
@@ -615,8 +615,15 @@
 			<button class="btn btn-dark" on:click={() => removeRentOffer()}>REMOVE RENT OFFER</button>
 		</div>
 
-		<!-- TAKE AN OFFER - BUY & RENT -->
+	</div>
+</div>
 
+<h1 class="mb-4">Buying & Renting</h1>
+<p><i>Accepting a 'for sale'' or 'for rent' offer.  Or returning a rental token(after minimum rental duration).</i></p>
+<br>
+<div class="row">
+	<div class="col-sm-12 col-md-12 col-xl-4">
+		<!-- BUY A TOKEN -->
 		<div class="grid">
 			<h2>Buy token</h2>
 			<p class="bold">Token Type</p>
@@ -631,6 +638,13 @@
 			<button class="btn btn-dark" on:click={() => buy()}>BUY</button>
 		</div>
 
+
+
+
+	</div>
+
+	<div class="col-sm-12 col-md-12 col-xl-4">
+		<!-- RENT A TOKEN -->
 		<div class="grid">
 			<h2>Rent token</h2>
 			<p class="bold">Token Type</p>
@@ -644,9 +658,10 @@
 			</div>
 			<button class="btn btn-dark" on:click={() => rent()}>RENT</button>
 		</div>
+	</div>
 
+	<div class="col-sm-12 col-md-12 col-xl-4">
 		<!-- END A RENTAL -->
-
 		<div class="grid">
 			<h2>End Rental (of token)</h2>
 			<p class="bold">Token Type</p>
@@ -661,6 +676,7 @@
 			<button class="btn btn-dark" on:click={() => endRental()}>END RENTAL</button>
 		</div>
 	</div>
+
 </div>
 
 <style>
