@@ -20,6 +20,54 @@
 		owner;
 
 
+	//*** Configuration of Marketplace & LoanBook ***
+	let contractAddress;
+	// let offerType;
+	// let tokenType;
+
+	async function registerToken() {
+		contract.registerToken(contractAddress, offerType, tokenType, true);
+	}
+
+	async function isRegistered() {
+		contract.isRegistered(tokenType, true);
+	}
+
+	async function getRegistered() {
+		contract.getRegistered(tokenType, true);
+	}
+
+	async function getSupportedOfferType() {
+		contract.getSupportedOfferType(tokenType, true);
+	}
+
+	async function isSellable() {
+		contract.isSellable(tokenType, true);
+	}
+
+	async function isRentable() {
+		contract.isRentable(tokenType, true);
+	}
+
+	async function pauseMarketplace() {
+		contract.pauseMarketplace(true);
+	}
+
+	async function unpauseMarketplace() {
+		contract.unpauseMarketplace(true);
+	}
+
+	async function pauseLoanBook() {
+		contract.pauseLoanBook(true);
+	}
+
+	async function unpauseLoanBook() {
+		contract.unpauseLoanBook(true);
+	}
+
+	
+	//*** Marketplace Offers ***
+
 	async function setSellOffer() {
 		const saleTerms = {
 			price: await getWei(sale_price),
@@ -120,6 +168,116 @@
 
 </script>
 
+<h1 class="mb-4">Configuration (of Marketplace & LoanBook)</h1>
+<div class="row">
+	<div class="col-sm-12 col-md-12 col-xl-4">
+		<div class="grid">
+			<h2>Register ERC721 contract</h2>
+			<p><i>Only Marketplace's owner may add support for a token contract.</i></p>
+			<p class="bold">Contract address</p>
+			<div class="mb-3">
+				<input type="text" class="form-control" bind:value={contractAddress} placeholder="Address" />
+			</div>
+			<p class="bold">Name of 'Token Type'</p>
+			<select class="form-select mb-3" bind:value={tokenType}>
+				<option value={TokenType.Dna}>Dna</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
+			</select>
+			<p class="bold">Offer Type</p>
+			<select class="form-select mb-3" bind:value={offerType}>
+				<option value={OfferType.ForSale} selected>For Sale (only)</option>
+				<option value={OfferType.ForRent}>For Rent (only)</option>
+				<option value={OfferType.ForSaleOrRent}>For Sale and/or Rent</option>
+			</select>
+			<button class="btn btn-dark" on:click={() => registerToken()}>REGISTER</button>
+		</div>
+
+		<div class="grid">
+			<h2>Is contract supported?</h2>
+			<p class="bold">Token Type</p>
+			<select class="form-select mb-3" bind:value={tokenType}>
+				<option value={TokenType.Dna}>Dna</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
+			</select>
+			<button class="btn btn-dark" on:click={() => isRegistered()}>CHECK</button>
+		</div>
+
+		<div class="grid">
+			<h2>Get contract address</h2>
+			<p class="bold">Token Type</p>
+			<select class="form-select mb-3" bind:value={tokenType}>
+				<option value={TokenType.Dna}>Dna</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
+			</select>
+			<button class="btn btn-dark" on:click={() => getRegistered()}>GET ADDRESS</button>
+		</div>
+	</div>
+
+	<div class="col-sm-12 col-md-12 col-xl-4">
+
+		<div class="grid">
+			<h2>Get supported offer types</h2>
+			<p class="bold">Token Type (contract)</p>
+			<select class="form-select mb-3" bind:value={tokenType}>
+				<option value={TokenType.Dna}>Dna</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
+			</select>
+			<button class="btn btn-dark" on:click={() => getSupportedOfferType()}>GET TYPES</button>
+		</div>
+
+		<div class="grid">
+			<h2>Is sellable?</h2>
+			<p class="bold">Token Type (contract)</p>
+			<select class="form-select mb-3" bind:value={tokenType}>
+				<option value={TokenType.Dna}>Dna</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
+			</select>
+			<button class="btn btn-dark" on:click={() => isSellable()}>CHECK</button>
+		</div>
+
+		<div class="grid">
+			<h2>Is rentable?</h2>
+			<p class="bold">Token Type (contract)</p>
+			<select class="form-select mb-3" bind:value={tokenType}>
+				<option value={TokenType.Dna}>Dna</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
+			</select>
+			<button class="btn btn-dark" on:click={() => isRentable()}>CHECK</button>
+		</div>
+
+	</div>
+
+	<div class="col-sm-12 col-md-12 col-xl-4">
+		<!-- PAUSE / UNPAUSE MARKETPALCE AND LOANBOOK-->
+		<div class="grid">
+			<h2>Pause Marketplace</h2>
+			<p><i>Executable by Marketplace's owner</i></p>
+			<button class="btn btn-dark" on:click={() => pauseMarketplace()}>PAUSE</button>
+		</div>
+		<div class="grid">
+			<h2>Unpause Marketplace</h2>
+			<p><i>Executable by Marketplace's owner</i></p>
+			<button class="btn btn-dark" on:click={() => unpauseMarketplace()}>UNPAUSE</button>
+		</div>
+		<div class="grid">
+			<h2>Pause LoanBook</h2>
+			<p><i>Executable by Marketplace's owner</i></p>
+			<button class="btn btn-dark" on:click={() => pauseLoanBook()}>PAUSE</button>
+		</div>
+		<div class="grid">
+			<h2>Unpause LoanBook</h2>
+			<p><i>Executable by Marketplace's owner</i></p>
+			<button class="btn btn-dark" on:click={() => unpauseLoanBook()}>UNPAUSE</button>
+		</div>
+	</div>
+</div>
+
 <h1 class="mb-4">Marketplace Offers</h1>
 <p><i>Note: An owner must grant (operator) approval on their Dragon and Egg tokens before offering them in the Marketplace.</i></p>
 <br>
@@ -199,7 +357,6 @@
 
 		<div class="grid">
 			<h2>Modify 'for sale' offer</h2>
-
 			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
 				<option value={TokenType.Dragon} selected>Dragon</option>
@@ -324,7 +481,7 @@
 
 		<div class="grid">
 			<h2>Get offered by</h2>
-			<p>Owner</p>
+			<p class="bold">Owner</p>
 			<input type="text" bind:value={owner} class="form-control mb-3" placeholder="Address (default current)" />
 			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={tokenType}>

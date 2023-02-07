@@ -43,7 +43,69 @@ export class MarketplaceContract extends MarketApproval {
     }
 
 
-    // Functions to check setup/support for token types in Marketplace
+    // Functions to configure & check setup of token types in Marketplace
+
+    /*
+    * Add support for an ERC721 token contract (eg. DragonTokens).
+    * Emits a MpTokenRegistered event.
+    * Requirement: Contract address may only be registered once.
+    * Requirement: A specific TokenType may only be registered once.
+    * Requirement: Must specify if the tokens may be offered ForSale,
+    * ForRent, or ForSaleOrRent.  Throws if passed OfferType.NoOffer.
+    */
+        // function registerToken(
+        //     address token,
+        //     OfferType offerType,
+        //     TokenType tokenType
+        // )
+        //     external; 
+    async registerToken(tokenContractAddress, offerType, tokenType, alert = false) {
+        try {
+
+            await this.contract.Marketplace.methods.registerToken(
+                tokenContractAddress,
+                offerType,
+                tokenType
+            ).send({}, async function (err, txHash) { 
+                const offerTypeNames = (offerType == OfferType.ForSaleOrRent) ? 'sale and/or rent' : 
+                    (offerType == OfferType.ForSale) ? 'sale' : 'rent';
+
+                addAwaiter(txHash,'Register new token contract: '+tokenType+' to allow ' + offerTypeNames + ' offers')  
+                if (err) setAlert(err, 'warning')
+                else {
+                    if (alert === true) setAlert('registerToken for contract' + tokenContractAddress, 'success')
+                    return txHash
+                }
+            })
+        } catch (err) {
+            console.log("Error at: registerToken", err)
+            const errMsg = getErrors('registerToken', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
+
+    /*
+    * Checks if the token contract has been registereed with the marketplace. 
+    * Throws if given a token type of TokenType.Unknown.
+    */
+        // function isRegistered(TokenType tokenType) external view returns(bool);
+    async isRegistered(tokenType, alert = false) {
+        try {
+            const registered = await this.contract.Marketplace.methods.isRegistered(tokenType).call()
+
+            if (alert === true) setAlert('Token contract registered?: ' + registered, 'success')
+
+            return registered
+
+        } catch (err) {
+            console.log("Error at: isRegistered", err)
+            const errMsg = getErrors('isRegistered', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
+
     /*
     * Get the token's contract address that is registed with marketplace.
     * Throws if token contract has not been registered with the marketplace.
@@ -52,12 +114,22 @@ export class MarketplaceContract extends MarketApproval {
         // external
         // view
         // returns(address tokenContract);
+    async getRegistered(tokenType, alert = false) {
+        try {
+            const contractAddress = await this.contract.Marketplace.methods.getRegistered(
+                tokenType
+            ).call()
+            if (alert === true) setAlert('Contract address: ' + contractAddress, 'success')
 
-   /*
-    * Checks if the token contract has been registereed with the marketplace. 
-    * Throws if given a token type of TokenType.Unknown.
-    */
-        // function isRegistered(TokenType tokenType) external view returns(bool);
+            return contractAddress
+
+        } catch (err) {
+            console.log("Error at: getRegistered", err)
+            const errMsg = getErrors('getRegistered', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
 
    /*
     * Get the offer types that the marketplace supports for the specified 
@@ -69,6 +141,29 @@ export class MarketplaceContract extends MarketApproval {
         //     external
         //     view
         //     returns(OfferType offerType);
+    async getSupportedOfferType(tokenType, alert = false) {
+        try {
+            const supportedOfferTypes = await this.contract.Marketplace.methods.getSupportedOfferType(
+                tokenType
+            ).call()
+            console.log("Offer type 'For Sale':", OfferType.ForSale)
+            console.log("Offer type 'For Rent':", OfferType.ForRent)
+            console.log("Offer type 'For Sale and/or Rent':", OfferType.ForSaleOrRent)
+            console.log("supportedOfferTypes:", supportedOfferTypes)
+            const offerTypeNames = (supportedOfferTypes == OfferType.ForSaleOrRent) ? 'for sale and/or rent' : 
+                (supportedOfferTypes == OfferType.ForSale) ? 'for sale only' : 'for rent only';
+
+            if (alert === true) setAlert('Supported offer types: ' + offerTypeNames, 'success')
+
+            return supportedOfferTypes
+
+        } catch (err) {
+            console.log("Error at: getSupportedOfferType", err)
+            const errMsg = getErrors('getSupportedOfferType', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
 
     /*
     * Checks that the marketplace supports setting ForSale 
@@ -78,6 +173,21 @@ export class MarketplaceContract extends MarketApproval {
     * Throws if given an unregisted token type.
     */
         // function isSellable(TokenType tokenType) external view returns(bool);
+    async isSellable(tokenType, alert = false) {
+        try {
+            const sellable = await this.contract.Marketplace.methods.isSellable(tokenType).call()
+
+            if (alert === true) setAlert('Contract tokens are sellable?: ' + sellable, 'success')
+
+            return sellable
+
+        } catch (err) {
+            console.log("Error at: isSellable", err)
+            const errMsg = getErrors('isSellable', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
 
     /*
     * Checks that the marketplace supports setting ForRent
@@ -87,6 +197,110 @@ export class MarketplaceContract extends MarketApproval {
     * Throws if given an unregisted token type.
     */
         // function isRentable(TokenType tokenType) external view returns(bool);
+    async isRentable(tokenType, alert = false) {
+        try {
+            const rentable = await this.contract.Marketplace.methods.isRentable(tokenType).call()
+
+            if (alert === true) setAlert('Contract tokens are rentable?: ' + rentable, 'success')
+
+            return rentable
+
+        } catch (err) {
+            console.log("Error at: isRentable", err)
+            const errMsg = getErrors('isRentable', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
+
+    // Functions to pause / unpause the Marketplace AND ALSO LoanBook
+        //Marketplace
+        // function pause() public onlyOwner whenNotPaused {
+        //     _pause();
+        // }
+        // function unpause() public onlyOwner whenPaused {
+        //     _unpause();
+        // }
+    async pauseMarketplace(alert = false) {
+        try {
+            await this.contract.Marketplace.methods.pause().send({}, async function (err, txHash) { 
+
+                addAwaiter(txHash,'Pause Marketplace operations')  
+                if (err) setAlert(err, 'warning')
+                else {
+                    if (alert === true) setAlert('Paused Marketplace', 'success')
+                    return txHash
+                }
+            })
+        } catch (err) {
+            console.log("Error at: pauseMarketplace", err)
+            const errMsg = getErrors('pauseMarketplace', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
+    async unpauseMarketplace(alert = false) {
+        try {
+            await this.contract.Marketplace.methods.unpause().send({}, async function (err, txHash) { 
+
+                addAwaiter(txHash,'Unpause Marketplace operations')  
+                if (err) setAlert(err, 'warning')
+                else {
+                    if (alert === true) setAlert('Unpaused Marketplace', 'success')
+                    return txHash
+                }
+            })
+        } catch (err) {
+            console.log("Error at: unpauseMarketplace", err)
+            const errMsg = getErrors('unpauseMarketplace', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
+
+        //LoanBook
+        // function pause() public onlyOwner whenNotPaused {
+        //     _pause();
+        // }
+        // function unpause() public onlyOwner whenPaused {
+        //     _unpause();
+        // }
+    async pauseLoanBook(alert = false) {
+        try {
+            await this.contract.LoanBook.methods.pause().send({}, async function (err, txHash) { 
+
+                addAwaiter(txHash,'Pause LoanBook operations')  
+                if (err) setAlert(err, 'warning')
+                else {
+                    if (alert === true) setAlert('Paused LoanBook', 'success')
+                    return txHash
+                }
+            })
+        } catch (err) {
+            console.log("Error at: pauseLoanBook", err)
+            const errMsg = getErrors('pauseLoanBook', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
+    async unpauseLoanBook(alert = false) {
+        try {
+            await this.contract.LoanBook.methods.unpause().send({}, async function (err, txHash) { 
+
+                addAwaiter(txHash,'Unpause LoanBook operations')  
+                if (err) setAlert(err, 'warning')
+                else {
+                    if (alert === true) setAlert('Unpaused LoanBook', 'success')
+                    return txHash
+                }
+            })
+        } catch (err) {
+            console.log("Error at: unpauseLoanBook", err)
+            const errMsg = getErrors('unpauseLoanBook', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
 
 
     // Functions to set, get, modify and remove offers (for sale and/or for rent)
@@ -137,7 +351,6 @@ export class MarketplaceContract extends MarketApproval {
             console.log(errMsg)
         }
     }
-
 
 
     async getNumOffered(
@@ -194,7 +407,6 @@ export class MarketplaceContract extends MarketApproval {
         }
     }
 
-
     async getNumOfferedBy(
         owner,
         offerType,
@@ -220,7 +432,6 @@ export class MarketplaceContract extends MarketApproval {
             console.log(errMsg)
         }
     }
-
 
     async getOfferedBy(
         startIndex,
@@ -323,7 +534,6 @@ export class MarketplaceContract extends MarketApproval {
         }
     }
 
-
     async getOfferTerms(
         tokenId,
         offerType,
@@ -349,7 +559,6 @@ export class MarketplaceContract extends MarketApproval {
             console.log(errMsg)
         }
     }
-
 
     async isOnOffer(
         tokenId,
