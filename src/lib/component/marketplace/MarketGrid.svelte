@@ -11,7 +11,7 @@
 	export let _tokenType;
 	export let _offerType;
 
-	let inferfaceName = (_tokenType === TokenType.Egg) ? "Egg" : "Dragon"
+	let inferfaceName = (_tokenType === TokenType.Egg) ? "Egg" : (_tokenType === TokenType.Dragons)  ? "Dragon" : "All"
 	$: totalAssets = assets.totalOffers
 
 	console.log(assets);

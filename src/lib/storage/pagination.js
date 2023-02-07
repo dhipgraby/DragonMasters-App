@@ -1,6 +1,6 @@
 import { createWritableStore } from "$lib/helpers/storage"
 
-const _PERPAGE = 6
+const _PERPAGE = 8
 
 export const perpage = createWritableStore('perpage', (_PERPAGE));//means 6 counting 0 index
 

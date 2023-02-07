@@ -144,6 +144,7 @@ export function functionType(contractName) {
 export function get_unique_tokenid(sellOffers, rentOffers) {
 
     let concatArray = sellOffers.concat(rentOffers)
+    // let maxIndex = (sellOffers.totalOffers > rentOffers.totalOffers) ? sellOffers.totalOffers : rentOffers.totalOffers
     let uniqueArray = []    
     //look into the short array
     concatArray.find((item) => {
@@ -168,7 +169,8 @@ export function get_unique_tokenid(sellOffers, rentOffers) {
             uniqueArray.push(item)
         }
     })
-    uniqueArray.totalOffers = uniqueArray.length;
+
+    uniqueArray.totalOffers = uniqueArray.length;    
     console.log(uniqueArray);
     return uniqueArray;
 }

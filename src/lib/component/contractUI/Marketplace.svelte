@@ -94,8 +94,6 @@
 		contract.getOffered(startIndex, endIndex, _offerType, _tokenType, true);
 	}
 
-
-
 	function removeSellOffer() {
 		contract.removeOffer(removeId, OfferType.ForSale, _tokenType);
 	}
