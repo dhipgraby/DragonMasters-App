@@ -1,6 +1,7 @@
 <script>
 	import { TokenType, OfferType } from '$lib/contracts/Marketplace';
 	import { getWei, timeDropdrown } from '$lib/helpers/utils';
+	import Pagination from '$lib/component/pagination/UIpagination.svelte';
 
 	export let contract;
 
@@ -24,6 +25,18 @@
 	let contractAddress;
 	// let offerType;
 	// let tokenType;
+
+	function changeIndex(indexType, value) {
+		switch (indexType) {
+			case 'start':
+				startIndex = value;
+				break;
+			case 'end':
+				endIndex = value;
+				break;
+		}
+	}
+
 
 	async function registerToken() {
 		contract.registerToken(contractAddress, offerType, tokenType, true);
@@ -279,7 +292,7 @@
 </div>
 
 <h1 class="mb-4">Marketplace Offers</h1>
-<p><i>Note: An owner must grant (operator) approval on their Dragon and Egg tokens before offering them in the Marketplace.</i></p>
+<p><i>Note: An owner must grant (operator) approval on their Egg & Dragon tokens before offering them in the Marketplace.</i></p>
 <br>
 <div class="row">
 	<!-- SETTERS -->
@@ -457,6 +470,10 @@
 				<option value={OfferType.ForSale} selected>For Sale</option>
 				<option value={OfferType.ForRent}>For Rent</option>
 			</select>
+			<p class="bold">Paging: start & end indexes</p>
+			<div class="mb-3">
+				<Pagination {startIndex} {endIndex} {changeIndex} />
+			</div>
 			<button class="btn btn-dark" on:click={() => getAllOffers()}>GET TOKEN IDS</button>
 		</div>
 
@@ -493,6 +510,10 @@
 				<option value={OfferType.ForSale} selected>For Sale</option>
 				<option value={OfferType.ForRent}>For Rent</option>
 			</select>
+			<p class="bold">Paging: start & end indexes</p>
+			<div class="mb-3">
+				<Pagination {startIndex} {endIndex} {changeIndex} />
+			</div>
 			<button class="btn btn-dark" on:click={() => getOffersBy()}>GET TOKEN IDS</button>
 		</div>
 
