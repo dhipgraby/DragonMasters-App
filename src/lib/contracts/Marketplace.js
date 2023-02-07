@@ -42,82 +42,54 @@ export class MarketplaceContract extends MarketApproval {
         })();
     }
 
-    async buy(tokenId, tokenType, price, alert = false) {
-        try {
-            await this.contract.Marketplace.methods.buy(
-                tokenId,
-                tokenType,
-            ).send({
-                from: this.contract.account,
-                value: price
-            }, function (err, txHash) {
-                addAwaiter(txHash,'Buy token id: ' + tokenId)
-                if (err) {
-                    if (alert === true) setAlert(err, 'warning')
-                    console.log('addAwaiter error: ', err)
-                }
-                else {
-                    if (alert === true) setAlert(txHash, 'success')
-                    return txHash
-                }
-            })
-        } catch (err) {
-            console.log("Error at: buyToken" + err)
-            const errMsg = getErrors('buyToken', err)
-            if (alert === true) setAlert(errMsg, 'warning')
-            console.log(errMsg)
-        }
-    }
 
-    async rent(tokenId, tokenType, price, deposit, alert = false) {
-        try {
-            const totalAmount = (Number(price) + Number(deposit))
+    // Functions to check setup/support for token types in Marketplace
+    /*
+    * Get the token's contract address that is registed with marketplace.
+    * Throws if token contract has not been registered with the marketplace.
+    */
+        // function getRegistered(TokenType tokenType)
+        // external
+        // view
+        // returns(address tokenContract);
 
-            await this.contract.Marketplace.methods.rent(
-                tokenId,
-                tokenType,
-            ).send({
-                from: this.contract.account,
-                value: totalAmount
-            }, function (err, txHash) {
-                addAwaiter(txHash,'Rent token id: '+tokenId)
-                if (err) {
-                    if (alert === true) setAlert(err, 'warning')
-                    console.log('addAwaiter error: ', err)
-                }
-                else {
-                    if (alert === true) setAlert(txHash, 'success')
-                    return txHash
-                }
-            })
-        } catch (err) {
-            console.log("Error at: rent" + err)
-            const errMsg = getErrors('rent', err)
-            if (alert === true) setAlert(errMsg, 'warning')
-            console.log(errMsg)
-        }
-    }
+   /*
+    * Checks if the token contract has been registereed with the marketplace. 
+    * Throws if given a token type of TokenType.Unknown.
+    */
+        // function isRegistered(TokenType tokenType) external view returns(bool);
 
-    async endRental(tokenId, tokenType, alert = false) {
-        try {
-            await this.contract.Marketplace.methods.endRental(
-                tokenId,
-                tokenType
-            ).send({from: this.contract.account}, function (err, txHash) {
-                addAwaiter(txHash,'End Rental of token id: '+tokenId)
-                if (err) setAlert(err, 'warning')
-                else {
-                    if (alert === true) setAlert('End rental for token Id ' + tokenId, 'success')
-                    return txHash
-                }
-            })
-        } catch (err) {
-            console.log("Error at: endRental", err)
-            const errMsg = getErrors('endRental', err)
-            if (alert === true) setAlert(errMsg, 'warning')
-            console.log(errMsg)
-        }
-    }
+   /*
+    * Get the offer types that the marketplace supports for the specified 
+    * (registered) token contract.
+    * Returns: ForSale, ForRent, or ForSaleOrRent.
+    * Throws if token contract is not registered with the marketplace.
+    */
+        // function getSupportedOfferType(TokenType tokenType)
+        //     external
+        //     view
+        //     returns(OfferType offerType);
+
+    /*
+    * Checks that the marketplace supports setting ForSale 
+    * offers for the specified token type (eg. Dragon).
+    * PreRequisite: addTokenSupport to register the TokenType
+    * with the marketplace (as offerable for sale).
+    * Throws if given an unregisted token type.
+    */
+        // function isSellable(TokenType tokenType) external view returns(bool);
+
+    /*
+    * Checks that the marketplace supports setting ForRent
+    * offers for the specified token type (eg. Dragon). 
+    * PreRequisite: addTokenSupport to register the TokenType
+    * with the marketplace (as offerable for rent).
+    * Throws if given an unregisted token type.
+    */
+        // function isRentable(TokenType tokenType) external view returns(bool);
+
+
+    // Functions to set, get, modify and remove offers (for sale and/or for rent)
 
     async setOffer(tokenId, offerType, tokenType, terms, alert = false) {
         try {
@@ -166,99 +138,32 @@ export class MarketplaceContract extends MarketApproval {
         }
     }
 
-    async getAssets(
-        from,
-        to,
-        _offerType,
-        _tokenType
-    ) {
-        //Collecting all offers and details 
-        let allOffers = await this.getOffered(from, to, _offerType, _tokenType)        
-        let tokenIds = allOffers.map((el) => { return el.tokenId });
-        let assets = []
 
-        for (let i = 0; i < tokenIds.length; i++) {
-            let assetsDetails
 
-            if (_tokenType == TokenType.Dragon) {
-                assetsDetails = await this.getDragon(Number(tokenIds[i]))
-                assetsDetails['dna'] = await this.getDna(assetsDetails.dnaId)
-            } else {
-                assetsDetails = await this.getEgg(tokenIds[i])
-            }
-            assets.push(assetsDetails)
-        }
-
-        let offerName = (_offerType == OfferType.ForSale) ? 'sellOffer' : 'rentOffer';
-        let offers = assets.map(el => {
-
-            let TID = el.tokenId.toString()
-
-            if (tokenIds.includes(TID)) {
-
-                el[offerName] = allOffers.find(function (offer) {
-                    el["owner"] = offer.owner
-                    return offer.tokenId === TID;
-                });
-            }
-            return el
-        })
-        offers['totalOffers'] = allOffers.totalOffers
-
-        if (_tokenType == TokenType.Dragon) {
-            if ((_offerType == OfferType.ForSale)) {
-                dragonsForSale.set(offers)
-            } else {
-                dragonsForRent.set(offers)
-            }
-        } else {
-            if ((_offerType == OfferType.ForSale)) {
-                eggsForSale.set(offers)
-            } else {
-                eggsForRent.set(offers)
-            }
-        }
-        return offers
-    }
-
-    async getOffer(
-        tokenId,
+    async getNumOffered(
+        offerType,
         tokenType,
         alert = false
     ) {
         try {
-            const offer = await this.contract.Marketplace.methods.getOffer(
-                tokenId,
+            const numOffered = await this.contract.Marketplace.methods.getNumOffered(
+                offerType,
                 tokenType
             ).call()
 
-            const rental = {
-                price: offer.terms.rent.price,
-                deposit: offer.terms.rent.rental.deposit,
-                minDuration: offer.terms.rent.rental.minDuration
-            }
+            const offerName = (offerType == OfferType.ForSale) ? 'for sale' : 'for rent';
+            if (alert === true) setAlert('Number offered ' + offerName + ': ' + numOffered, 'success')
 
-            const result = {
-                owner: offer.owner,
-                tokenId: offer.tokenId,
-                tokenType: offer.tokenType,
-                offerType: offer.offerType,
-                sellPrice: offer.terms.sale.price,
-                rent: rental
-            }
-
-            if (alert === true) setAlert('Offer:<br>' + JSON.stringify(result), 'success')
-
-            return result
+            return numOffered
 
         } catch (err) {
-            console.log("Error at: getOffer", err)
-            const errMsg = getErrors('getOffer', err)
+            console.log("Error at: getNumOffered", err)
+            const errMsg = getErrors('getNumOffered', err)
             if (alert === true) setAlert(errMsg, 'warning')
             console.log(errMsg)
         }
     }
-
+    
     async getOffered(
         startIndex,
         endIndex,
@@ -288,6 +193,34 @@ export class MarketplaceContract extends MarketApproval {
             console.log(errMsg)
         }
     }
+
+
+    async getNumOfferedBy(
+        owner,
+        offerType,
+        tokenType,
+        alert = false
+    ) {
+        try {
+            const numOffered = await this.contract.Marketplace.methods.getNumOfferedBy(
+                owner,
+                offerType,
+                tokenType
+            ).call()
+
+            const offerName = (offerType == OfferType.ForSale) ? 'for sale' : 'for rent';
+            if (alert === true) setAlert('Number offered ' + offerName + ': ' + numOffered, 'success')
+
+            return numOffered
+
+        } catch (err) {
+            console.log("Error at: getNumOfferedBy", err)
+            const errMsg = getErrors('getNumOfferedBy', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
+
 
     async getOfferedBy(
         startIndex,
@@ -351,6 +284,72 @@ export class MarketplaceContract extends MarketApproval {
             console.log(errMsg)
         }
     }
+
+    async getOffer(
+        tokenId,
+        tokenType,
+        alert = false
+    ) {
+        try {
+            const offer = await this.contract.Marketplace.methods.getOffer(
+                tokenId,
+                tokenType
+            ).call()
+
+            const rental = {
+                price: offer.terms.rent.price,
+                deposit: offer.terms.rent.rental.deposit,
+                minDuration: offer.terms.rent.rental.minDuration
+            }
+
+            const result = {
+                owner: offer.owner,
+                tokenId: offer.tokenId,
+                tokenType: offer.tokenType,
+                offerType: offer.offerType,
+                sellPrice: offer.terms.sale.price,
+                rent: rental
+            }
+
+            if (alert === true) setAlert('Offer:<br>' + JSON.stringify(result), 'success')
+
+            return result
+
+        } catch (err) {
+            console.log("Error at: getOffer", err)
+            const errMsg = getErrors('getOffer', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
+
+
+    async getOfferTerms(
+        tokenId,
+        offerType,
+        tokenType,
+        alert = false
+    ) {
+        try {
+            const terms = await this.contract.Marketplace.methods.getOfferTerms(
+                tokenId,
+                offerType,
+                tokenType
+            ).call()
+
+            const offerName = (offerType == OfferType.ForSale) ? 'Sell' : 'Rent';
+            if (alert === true) setAlert('Offer ' + offerName + 'Terms:<br>' + JSON.stringify(terms), 'success')
+
+            return terms
+
+        } catch (err) {
+            console.log("Error at: getOfferTerms", err)
+            const errMsg = getErrors('getOfferTerms', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
+
 
     async isOnOffer(
         tokenId,
@@ -429,6 +428,145 @@ export class MarketplaceContract extends MarketApproval {
             if (alert === true) setAlert(errMsg, 'warning')
             console.log(errMsg)
         }
+    }
+
+    // Functions to take an offer - buy & rent.
+
+    async buy(tokenId, tokenType, price, alert = false) {
+        try {
+            await this.contract.Marketplace.methods.buy(
+                tokenId,
+                tokenType,
+            ).send({
+                from: this.contract.account,
+                value: price
+            }, function (err, txHash) {
+                addAwaiter(txHash,'Buy token id: ' + tokenId)
+                if (err) {
+                    if (alert === true) setAlert(err, 'warning')
+                    console.log('addAwaiter error: ', err)
+                }
+                else {
+                    if (alert === true) setAlert(txHash, 'success')
+                    return txHash
+                }
+            })
+        } catch (err) {
+            console.log("Error at: buyToken" + err)
+            const errMsg = getErrors('buyToken', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
+
+    async rent(tokenId, tokenType, price, deposit, alert = false) {
+        try {
+            const totalAmount = (Number(price) + Number(deposit))
+
+            await this.contract.Marketplace.methods.rent(
+                tokenId,
+                tokenType,
+            ).send({
+                from: this.contract.account,
+                value: totalAmount
+            }, function (err, txHash) {
+                addAwaiter(txHash,'Rent token id: '+tokenId)
+                if (err) {
+                    if (alert === true) setAlert(err, 'warning')
+                    console.log('addAwaiter error: ', err)
+                }
+                else {
+                    if (alert === true) setAlert(txHash, 'success')
+                    return txHash
+                }
+            })
+        } catch (err) {
+            console.log("Error at: rent" + err)
+            const errMsg = getErrors('rent', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
+
+    // Function to end a rental (of token that has been previosuly rented)
+
+    async endRental(tokenId, tokenType, alert = false) {
+        try {
+            await this.contract.Marketplace.methods.endRental(
+                tokenId,
+                tokenType
+            ).send({from: this.contract.account}, function (err, txHash) {
+                addAwaiter(txHash,'End Rental of token id: '+tokenId)
+                if (err) setAlert(err, 'warning')
+                else {
+                    if (alert === true) setAlert('End rental for token Id ' + tokenId, 'success')
+                    return txHash
+                }
+            })
+        } catch (err) {
+            console.log("Error at: endRental", err)
+            const errMsg = getErrors('endRental', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
+
+
+    // Supporting functions
+
+    async getAssets(
+        from,
+        to,
+        _offerType,
+        _tokenType
+    ) {
+        //Collecting all offers and details 
+        let allOffers = await this.getOffered(from, to, _offerType, _tokenType)        
+        let tokenIds = allOffers.map((el) => { return el.tokenId });
+        let assets = []
+
+        for (let i = 0; i < tokenIds.length; i++) {
+            let assetsDetails
+
+            if (_tokenType == TokenType.Dragon) {
+                assetsDetails = await this.getDragon(Number(tokenIds[i]))
+                assetsDetails['dna'] = await this.getDna(assetsDetails.dnaId)
+            } else {
+                assetsDetails = await this.getEgg(tokenIds[i])
+            }
+            assets.push(assetsDetails)
+        }
+
+        let offerName = (_offerType == OfferType.ForSale) ? 'sellOffer' : 'rentOffer';
+        let offers = assets.map(el => {
+
+            let TID = el.tokenId.toString()
+
+            if (tokenIds.includes(TID)) {
+
+                el[offerName] = allOffers.find(function (offer) {
+                    el["owner"] = offer.owner
+                    return offer.tokenId === TID;
+                });
+            }
+            return el
+        })
+        offers['totalOffers'] = allOffers.totalOffers
+
+        if (_tokenType == TokenType.Dragon) {
+            if ((_offerType == OfferType.ForSale)) {
+                dragonsForSale.set(offers)
+            } else {
+                dragonsForRent.set(offers)
+            }
+        } else {
+            if ((_offerType == OfferType.ForSale)) {
+                eggsForSale.set(offers)
+            } else {
+                eggsForRent.set(offers)
+            }
+        }
+        return offers
     }
 
     async getDragon(dragonId, alert = false) {
