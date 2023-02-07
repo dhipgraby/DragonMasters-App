@@ -45,20 +45,6 @@ export class MarketplaceContract extends MarketApproval {
 
     // Functions to configure & check setup of token types in Marketplace
 
-    /*
-    * Add support for an ERC721 token contract (eg. DragonTokens).
-    * Emits a MpTokenRegistered event.
-    * Requirement: Contract address may only be registered once.
-    * Requirement: A specific TokenType may only be registered once.
-    * Requirement: Must specify if the tokens may be offered ForSale,
-    * ForRent, or ForSaleOrRent.  Throws if passed OfferType.NoOffer.
-    */
-        // function registerToken(
-        //     address token,
-        //     OfferType offerType,
-        //     TokenType tokenType
-        // )
-        //     external; 
     async registerToken(tokenContractAddress, offerType, tokenType, alert = false) {
         try {
 
@@ -85,11 +71,7 @@ export class MarketplaceContract extends MarketApproval {
         }
     }
 
-    /*
-    * Checks if the token contract has been registereed with the marketplace. 
-    * Throws if given a token type of TokenType.Unknown.
-    */
-        // function isRegistered(TokenType tokenType) external view returns(bool);
+
     async isRegistered(tokenType, alert = false) {
         try {
             const registered = await this.contract.Marketplace.methods.isRegistered(tokenType).call()
@@ -106,14 +88,7 @@ export class MarketplaceContract extends MarketApproval {
         }
     }
 
-    /*
-    * Get the token's contract address that is registed with marketplace.
-    * Throws if token contract has not been registered with the marketplace.
-    */
-        // function getRegistered(TokenType tokenType)
-        // external
-        // view
-        // returns(address tokenContract);
+
     async getRegistered(tokenType, alert = false) {
         try {
             const contractAddress = await this.contract.Marketplace.methods.getRegistered(
@@ -131,16 +106,7 @@ export class MarketplaceContract extends MarketApproval {
         }
     }
 
-   /*
-    * Get the offer types that the marketplace supports for the specified 
-    * (registered) token contract.
-    * Returns: ForSale, ForRent, or ForSaleOrRent.
-    * Throws if token contract is not registered with the marketplace.
-    */
-        // function getSupportedOfferType(TokenType tokenType)
-        //     external
-        //     view
-        //     returns(OfferType offerType);
+
     async getSupportedOfferType(tokenType, alert = false) {
         try {
             const supportedOfferTypes = await this.contract.Marketplace.methods.getSupportedOfferType(
@@ -165,14 +131,7 @@ export class MarketplaceContract extends MarketApproval {
         }
     }
 
-    /*
-    * Checks that the marketplace supports setting ForSale 
-    * offers for the specified token type (eg. Dragon).
-    * PreRequisite: addTokenSupport to register the TokenType
-    * with the marketplace (as offerable for sale).
-    * Throws if given an unregisted token type.
-    */
-        // function isSellable(TokenType tokenType) external view returns(bool);
+
     async isSellable(tokenType, alert = false) {
         try {
             const sellable = await this.contract.Marketplace.methods.isSellable(tokenType).call()
@@ -189,14 +148,7 @@ export class MarketplaceContract extends MarketApproval {
         }
     }
 
-    /*
-    * Checks that the marketplace supports setting ForRent
-    * offers for the specified token type (eg. Dragon). 
-    * PreRequisite: addTokenSupport to register the TokenType
-    * with the marketplace (as offerable for rent).
-    * Throws if given an unregisted token type.
-    */
-        // function isRentable(TokenType tokenType) external view returns(bool);
+
     async isRentable(tokenType, alert = false) {
         try {
             const rentable = await this.contract.Marketplace.methods.isRentable(tokenType).call()
@@ -213,14 +165,7 @@ export class MarketplaceContract extends MarketApproval {
         }
     }
 
-    // Functions to pause / unpause the Marketplace AND ALSO LoanBook
-        //Marketplace
-        // function pause() public onlyOwner whenNotPaused {
-        //     _pause();
-        // }
-        // function unpause() public onlyOwner whenPaused {
-        //     _unpause();
-        // }
+
     async pauseMarketplace(alert = false) {
         try {
             await this.contract.Marketplace.methods.pause().send({}, async function (err, txHash) { 
@@ -239,6 +184,7 @@ export class MarketplaceContract extends MarketApproval {
             console.log(errMsg)
         }
     }
+
     async unpauseMarketplace(alert = false) {
         try {
             await this.contract.Marketplace.methods.unpause().send({}, async function (err, txHash) { 
@@ -258,13 +204,7 @@ export class MarketplaceContract extends MarketApproval {
         }
     }
 
-        //LoanBook
-        // function pause() public onlyOwner whenNotPaused {
-        //     _pause();
-        // }
-        // function unpause() public onlyOwner whenPaused {
-        //     _unpause();
-        // }
+
     async pauseLoanBook(alert = false) {
         try {
             await this.contract.LoanBook.methods.pause().send({}, async function (err, txHash) { 
@@ -283,6 +223,7 @@ export class MarketplaceContract extends MarketApproval {
             console.log(errMsg)
         }
     }
+
     async unpauseLoanBook(alert = false) {
         try {
             await this.contract.LoanBook.methods.unpause().send({}, async function (err, txHash) { 
@@ -844,6 +785,3 @@ export class MarketplaceContract extends MarketApproval {
         }
     }
 }
-
-
-
