@@ -21,22 +21,10 @@
 		owner;
 
 
-	//*** Configuration of Marketplace & LoanBook ***
+	//*** Configuration of Marketplace ***
 	let contractAddress;
 	// let offerType;
 	// let tokenType;
-
-	function changeIndex(indexType, value) {
-		switch (indexType) {
-			case 'start':
-				startIndex = value;
-				break;
-			case 'end':
-				endIndex = value;
-				break;
-		}
-	}
-
 
 	async function registerToken() {
 		contract.registerToken(contractAddress, offerType, tokenType, true);
@@ -69,17 +57,19 @@
 	async function unpauseMarketplace() {
 		contract.unpauseMarketplace(true);
 	}
-
-	async function pauseLoanBook() {
-		contract.pauseLoanBook(true);
-	}
-
-	async function unpauseLoanBook() {
-		contract.unpauseLoanBook(true);
-	}
-
 	
 	//*** Marketplace Offers ***
+	
+	function changeIndex(indexType, value) {
+		switch (indexType) {
+			case 'start':
+				startIndex = value;
+				break;
+			case 'end':
+				endIndex = value;
+				break;
+		}
+	}
 
 	async function setSellOffer() {
 		const saleTerms = {

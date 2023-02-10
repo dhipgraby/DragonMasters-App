@@ -14,6 +14,85 @@ export class LoanBookContract {
         })();
     }
 
+    // *** LoanBook setup / configuration functions ***
+
+    async setEditor(editorAddress, alert = false) {
+        try {
+            await this.contract.LoanBook.methods.setEditor(
+                editorAddress
+            ).send({}, function (err, txHash) {
+                addAwaiter(txHash, "Setting editor for this LoanBook to: "+ editorAddress)
+                if (alert == true && err) setAlert(err, 'warning')
+                else {
+                    if (alert == true) setAlert("Assigning LoanBook's editor", 'success')
+                    return txHash
+                }
+            })
+        } catch (err) {
+            if (alert == true) setAlert('setEditor error', 'warning')
+            console.log("Error at: setEditor" + err)
+        }
+    }
+
+    async addTokenSupport(contractAddress, tokenType, alert = false) {
+        try {
+            await this.contract.LoanBook.methods.addTokenSupport(
+                contractAddress,
+                tokenType
+            ).send({}, function (err, txHash) {
+                addAwaiter(txHash, "Adding support of ERC721 contract to LoanBook")
+                if (alert == true && err) setAlert(err, 'warning')
+                else {
+                    if (alert == true) setAlert("Adding token contract support to LoanBook", 'success')
+                    return txHash
+                }
+            })
+        } catch (err) {
+            if (alert == true) setAlert('addTokenSupport error', 'warning')
+            console.log("Error at: addTokenSupport" + err)
+        }
+    }
+
+    async pauseLoanBook(alert = false) {
+        try {
+            await this.contract.LoanBook.methods.pause().send({}, async function (err, txHash) { 
+
+                addAwaiter(txHash,'Pause LoanBook operations')  
+                if (err) setAlert(err, 'warning')
+                else {
+                    if (alert === true) setAlert('Paused LoanBook', 'success')
+                    return txHash
+                }
+            })
+        } catch (err) {
+            console.log("Error at: pauseLoanBook", err)
+            const errMsg = getErrors('pauseLoanBook', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
+
+    async unpauseLoanBook(alert = false) {
+        try {
+            await this.contract.LoanBook.methods.unpause().send({}, async function (err, txHash) { 
+
+                addAwaiter(txHash,'Unpause LoanBook operations')  
+                if (err) setAlert(err, 'warning')
+                else {
+                    if (alert === true) setAlert('Unpaused LoanBook', 'success')
+                    return txHash
+                }
+            })
+        } catch (err) {
+            console.log("Error at: unpauseLoanBook", err)
+            const errMsg = getErrors('unpauseLoanBook', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
+
+    // *** LoanBook operation functions ***
+
     async getOnLoan(
         startIndex,
         endIndex,

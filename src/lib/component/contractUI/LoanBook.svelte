@@ -5,7 +5,9 @@
 
 	export let contract;
 
-	let tokenType = TokenType.Egg,
+	let editor_address = '',
+		contract_address,
+		tokenType = TokenType.Egg,
 		startIndex = 0,
 		endIndex = 19,
 		borrowerIndex = 0,
@@ -25,6 +27,24 @@
 
 	let checkEggs = true;
 	let checkDragons = false;
+
+	
+	async function setEditor() {
+		contract.setEditor(editor_address, true);
+	}
+
+	async function addTokenSupport() {
+		contract.addTokenSupport(contract_address, tokenType, true);
+	}
+
+	async function pauseLoanBook() {
+		contract.pauseLoanBook(true);
+	}
+
+	async function unpauseLoanBook() {
+		contract.unpauseLoanBook(true);
+	}
+
 
 	async function getOnLoan() {
 		contract.getOnLoan(startIndex, endIndex, tokenType, true);
@@ -179,11 +199,33 @@
 <br />
 <div class="row">
 	<div class="col-sm-12 col-md-12 col-xl-4">
-
+		<div class="grid">
+			<h2>Set LoanBook's Editor</h2>
+			<p><i>Set immediately after deployment! Once the editor is set it can't be reset.</i></p>
+			<p class="bold">Editor</p>
+			<div class="mb-3">
+				<input type="text" class="form-control" bind:value={editor_address} placeholder="Address" />
+			</div>
+			<button class="btn btn-dark" on:click={() => setEditor()}>SET EDITOR</button>
+		</div>
 	</div>
 
 	<div class="col-sm-12 col-md-12 col-xl-4">
-
+		<div class="grid">
+			<h2>Add ERC721 contract support</h2>
+			<p><i>Only executable by the LoanBook's editor (eg. Marketplace contract).</i></p>
+			<p class="bold">Contract address</p>
+			<div class="mb-3">
+				<input type="text" class="form-control" bind:value={contract_address} placeholder="Address" />
+			</div>
+			<p class="bold">Name of 'Token Type'</p>
+			<select class="form-select mb-3" bind:value={tokenType}>
+				<option value={TokenType.Dna}>Dna</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
+			</select>
+			<button class="btn btn-dark" on:click={() => addTokenSupport()}>ADD TOKEN SUPPORT</button>
+		</div>
 	</div>
 
 	<div class="col-sm-12 col-md-12 col-xl-4">
