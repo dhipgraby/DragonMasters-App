@@ -15,28 +15,16 @@
 		new_rent_deposit,
 		new_rent_duration,
 		startIndex = 0,
-		endIndex = 10,
+		endIndex = 19,
 		offerType,
 		tokenType,
 		owner;
 
 
-	//*** Configuration of Marketplace & LoanBook ***
+	//*** Configuration of Marketplace ***
 	let contractAddress;
 	// let offerType;
 	// let tokenType;
-
-	function changeIndex(indexType, value) {
-		switch (indexType) {
-			case 'start':
-				startIndex = value;
-				break;
-			case 'end':
-				endIndex = value;
-				break;
-		}
-	}
-
 
 	async function registerToken() {
 		contract.registerToken(contractAddress, offerType, tokenType, true);
@@ -69,17 +57,19 @@
 	async function unpauseMarketplace() {
 		contract.unpauseMarketplace(true);
 	}
-
-	async function pauseLoanBook() {
-		contract.pauseLoanBook(true);
-	}
-
-	async function unpauseLoanBook() {
-		contract.unpauseLoanBook(true);
-	}
-
 	
 	//*** Marketplace Offers ***
+	
+	function changeIndex(indexType, value) {
+		switch (indexType) {
+			case 'start':
+				startIndex = value;
+				break;
+			case 'end':
+				endIndex = value;
+				break;
+		}
+	}
 
 	async function setSellOffer() {
 		const saleTerms = {
@@ -181,12 +171,12 @@
 
 </script>
 
-<h1 class="mb-4">Configuration (of Marketplace & LoanBook)</h1>
+<h1 class="mb-4">Marketplace Configuration</h1>
 <div class="row">
 	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid">
 			<h2>Register ERC721 contract</h2>
-			<p><i>Only Marketplace's owner may add support for a token contract.</i></p>
+			<p>For marketplace to support the token contract. <i>Executable by Marketplace contract's owner</i></p>
 			<p class="bold">Contract address</p>
 			<div class="mb-3">
 				<input type="text" class="form-control" bind:value={contractAddress} placeholder="Address" />
@@ -197,7 +187,7 @@
 				<option value={TokenType.Egg} selected>Egg</option>
 				<option value={TokenType.Dragon}>Dragon</option>
 			</select>
-			<p class="bold">Offer Type</p>
+			<p class="bold">Support 'Offer Types'</p>
 			<select class="form-select mb-3" bind:value={offerType}>
 				<option value={OfferType.ForSale} selected>For Sale (only)</option>
 				<option value={OfferType.ForRent}>For Rent (only)</option>
@@ -207,7 +197,7 @@
 		</div>
 
 		<div class="grid">
-			<h2>Is contract supported?</h2>
+			<h2>Is token contract supported?</h2>
 			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
 				<option value={TokenType.Dna}>Dna</option>
@@ -218,7 +208,7 @@
 		</div>
 
 		<div class="grid">
-			<h2>Get contract address</h2>
+			<h2>Token contract address</h2>
 			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
 				<option value={TokenType.Dna}>Dna</option>
@@ -232,18 +222,18 @@
 	<div class="col-sm-12 col-md-12 col-xl-4">
 
 		<div class="grid">
-			<h2>Get supported offer types</h2>
+			<h2>Supported offer types</h2>
 			<p class="bold">Token Type (contract)</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
 				<option value={TokenType.Dna}>Dna</option>
 				<option value={TokenType.Egg} selected>Egg</option>
 				<option value={TokenType.Dragon}>Dragon</option>
 			</select>
-			<button class="btn btn-dark" on:click={() => getSupportedOfferType()}>GET TYPES</button>
+			<button class="btn btn-dark" on:click={() => getSupportedOfferType()}>GET OFFER TYPES</button>
 		</div>
 
 		<div class="grid">
-			<h2>Is sellable?</h2>
+			<h2>Tokens are sellable?</h2>
 			<p class="bold">Token Type (contract)</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
 				<option value={TokenType.Dna}>Dna</option>
@@ -254,7 +244,7 @@
 		</div>
 
 		<div class="grid">
-			<h2>Is rentable?</h2>
+			<h2>Tokens are rentable?</h2>
 			<p class="bold">Token Type (contract)</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
 				<option value={TokenType.Dna}>Dna</option>
@@ -267,32 +257,23 @@
 	</div>
 
 	<div class="col-sm-12 col-md-12 col-xl-4">
-		<!-- PAUSE / UNPAUSE MARKETPALCE AND LOANBOOK-->
+		<!-- PAUSE / UNPAUSE MARKETPALCE -->
 		<div class="grid">
 			<h2>Pause Marketplace</h2>
-			<p><i>Executable by Marketplace's owner</i></p>
+			<p><i>Executable by Marketplace contract's owner</i></p>
 			<button class="btn btn-dark" on:click={() => pauseMarketplace()}>PAUSE</button>
 		</div>
 		<div class="grid">
 			<h2>Unpause Marketplace</h2>
-			<p><i>Executable by Marketplace's owner</i></p>
+			<p><i>Executable by Marketplace contract's owner</i></p>
 			<button class="btn btn-dark" on:click={() => unpauseMarketplace()}>UNPAUSE</button>
-		</div>
-		<div class="grid">
-			<h2>Pause LoanBook</h2>
-			<p><i>Executable by Marketplace's owner</i></p>
-			<button class="btn btn-dark" on:click={() => pauseLoanBook()}>PAUSE</button>
-		</div>
-		<div class="grid">
-			<h2>Unpause LoanBook</h2>
-			<p><i>Executable by Marketplace's owner</i></p>
-			<button class="btn btn-dark" on:click={() => unpauseLoanBook()}>UNPAUSE</button>
 		</div>
 	</div>
 </div>
+<br />
 
 <h1 class="mb-4">Marketplace Offers</h1>
-<p><i>Note: An owner must grant (operator) approval on their Egg & Dragon tokens before offering them in the Marketplace.</i></p>
+<p><i>Note: A token owner must grant (operator) approval on their Egg & Dragon tokens before offering them in the Marketplace.</i></p>
 <br>
 <div class="row">
 	<!-- SETTERS -->
@@ -302,12 +283,12 @@
 
 			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
-				<option value={TokenType.Dragon} selected>Dragon</option>
-				<option value={TokenType.Egg}>Egg</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
 			</select>
 			<div class="mb-3">
 				<p class="bold">Token Id</p>
-				<input type="text" bind:value={tokenId} class="form-control" placeholder="Token Id" />
+				<input type="text" bind:value={tokenId} class="form-control" placeholder="0" />
 			</div>
 			<p class="bold">Price</p>
 			<div class="form-floating mb-3">
@@ -327,12 +308,12 @@
 			<h2>Create 'for rent' offer</h2>
 			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
-				<option value={TokenType.Dragon} selected>Dragon</option>
-				<option value={TokenType.Egg}>Egg</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
 			</select>
 			<div class="mb-3">
 				<p class="bold">Token Id</p>
-				<input type="text" bind:value={tokenId} class="form-control" placeholder="Token Id" />
+				<input type="text" bind:value={tokenId} class="form-control" placeholder="0" />
 			</div>
 			<p class="bold">Rental Terms</p>
 			<div class="form-floating mb-3">
@@ -372,12 +353,12 @@
 			<h2>Modify 'for sale' offer</h2>
 			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
-				<option value={TokenType.Dragon} selected>Dragon</option>
-				<option value={TokenType.Egg}>Egg</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
 			</select>
 			<div class="mb-3">
 				<p class="bold">Token Id</p>
-				<input type="text" bind:value={tokenId} class="form-control" placeholder="Token Id" />
+				<input type="text" bind:value={tokenId} class="form-control" placeholder="0" />
 			</div>
 			<p class="bold">Price</p>
 			<div class="form-floating mb-3">
@@ -397,12 +378,12 @@
 			<h2>Modify 'for rent' offer</h2>
 			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
-				<option value={TokenType.Dragon} selected>Dragon</option>
-				<option value={TokenType.Egg}>Egg</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
 			</select>
 			<div class="mb-3">
 				<p class="bold">Token Id</p>
-				<input type="text" bind:value={tokenId} class="form-control" placeholder="Token Id" />
+				<input type="text" bind:value={tokenId} class="form-control" placeholder="0" />
 			</div>
 			<p class="bold">Rental Terms</p>
 			<div class="form-floating mb-3">
@@ -447,8 +428,8 @@
 			<h2>Get number offered</h2>
 			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
-				<option value={TokenType.Dragon} selected>Dragon</option>
-				<option value={TokenType.Egg}>Egg</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
 			</select>
 			<p class="bold">Offer Type</p>
 			<select class="form-select mb-3" bind:value={offerType}>
@@ -462,8 +443,8 @@
 			<h2>Get all offers</h2>
 			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
-				<option value={TokenType.Dragon} selected>Dragon</option>
-				<option value={TokenType.Egg}>Egg</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
 			</select>
 			<p class="bold">Offer Type</p>
 			<select class="form-select mb-3" bind:value={offerType}>
@@ -485,8 +466,8 @@
 			</div>
 			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
-				<option value={TokenType.Dragon} selected>Dragon</option>
-				<option value={TokenType.Egg}>Egg</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
 			</select>
 			<p class="bold">Offer Type</p>
 			<select class="form-select mb-3" bind:value={offerType}>
@@ -502,8 +483,8 @@
 			<input type="text" bind:value={owner} class="form-control mb-3" placeholder="Address (default current)" />
 			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
-				<option value={TokenType.Dragon} selected>Dragon</option>
-				<option value={TokenType.Egg}>Egg</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
 			</select>
 			<p class="bold">Offer Type</p>
 			<select class="form-select mb-3" bind:value={offerType}>
@@ -521,12 +502,12 @@
 			<h2>Is on offer?</h2>
 			<div class="mb-3">
 				<p class="bold">Token Id</p>
-				<input type="text" bind:value={tokenId} class="form-control" placeholder="Token Id" />
+				<input type="text" bind:value={tokenId} class="form-control" placeholder="0" />
 			</div>
 			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
-				<option value={TokenType.Dragon} selected>Dragon</option>
-				<option value={TokenType.Egg}>Egg</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
 			</select>
 			<p class="bold">Offer Type</p>
 			<select class="form-select mb-3" bind:value={offerType}>
@@ -543,12 +524,12 @@
 			<h2>Get offer</h2>
 			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
-				<option value={TokenType.Dragon} selected>Dragon</option>
-				<option value={TokenType.Egg}>Egg</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
 			</select>
 			<div class="mb-3">
 				<p class="bold">Token Id</p>
-				<input type="text" bind:value={tokenId} class="form-control" placeholder="Token Id" />
+				<input type="text" bind:value={tokenId} class="form-control" placeholder="0" />
 			</div>
 			<button class="btn btn-dark" on:click={() => getOffer()}>GET OFFER</button>
 		</div>
@@ -557,12 +538,12 @@
 			<h2>Get offer terms</h2>
 			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
-				<option value={TokenType.Dragon} selected>Dragon</option>
-				<option value={TokenType.Egg}>Egg</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
 			</select>
 			<div class="mb-3">
 				<p class="bold">Token Id</p>
-				<input type="text" bind:value={tokenId} class="form-control" placeholder="Token Id" />
+				<input type="text" bind:value={tokenId} class="form-control" placeholder="0" />
 			</div>
 			<p class="bold">Offer Type</p>
 			<select class="form-select mb-3" bind:value={offerType}>
@@ -577,12 +558,12 @@
 			<h2>Remove all offers</h2>
 			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
-				<option value={TokenType.Dragon} selected>Dragon</option>
-				<option value={TokenType.Egg}>Egg</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
 			</select>
 			<p class="bold">Token Id</p>
 			<div class="mb-3">
-				<input type="text" bind:value={tokenId} class="form-control" placeholder="Token Id" />
+				<input type="text" bind:value={tokenId} class="form-control" placeholder="0" />
 			</div>
 			<button class="btn btn-dark" on:click={() => removeAllOffers()}>REMOVE ALL</button>
 		</div>
@@ -591,12 +572,12 @@
 			<h2>Remove 'for sale' offer</h2>
 			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
-				<option value={TokenType.Dragon} selected>Dragon</option>
-				<option value={TokenType.Egg}>Egg</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
 			</select>
 			<p class="bold">Token Id</p>
 			<div class="mb-3">
-				<input type="text" bind:value={tokenId} class="form-control" placeholder="Token Id" />
+				<input type="text" bind:value={tokenId} class="form-control" placeholder="0" />
 			</div>
 			<button class="btn btn-dark" on:click={() => removeSellOffer()}>REMOVE SELL OFFER</button>
 		</div>
@@ -605,12 +586,12 @@
 			<h2>Remove 'for rent' offer</h2>
 			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
-				<option value={TokenType.Dragon} selected>Dragon</option>
-				<option value={TokenType.Egg}>Egg</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
 			</select>
 			<p class="bold">Token Id</p>
 			<div class="mb-3">
-				<input type="text" bind:value={tokenId} class="form-control" placeholder="Token Id" />
+				<input type="text" bind:value={tokenId} class="form-control" placeholder="0" />
 			</div>
 			<button class="btn btn-dark" on:click={() => removeRentOffer()}>REMOVE RENT OFFER</button>
 		</div>
@@ -628,19 +609,15 @@
 			<h2>Buy token</h2>
 			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
-				<option value={TokenType.Dragon} selected>Dragon</option>
-				<option value={TokenType.Egg}>Egg</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
 			</select>
 			<div class="mb-3">
 				<p class="bold">Token Id</p>
-				<input type="text" bind:value={tokenId} class="form-control" placeholder="Token Id" />
+				<input type="text" bind:value={tokenId} class="form-control" placeholder="0" />
 			</div>
 			<button class="btn btn-dark" on:click={() => buy()}>BUY</button>
 		</div>
-
-
-
-
 	</div>
 
 	<div class="col-sm-12 col-md-12 col-xl-4">
@@ -649,12 +626,12 @@
 			<h2>Rent token</h2>
 			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
-				<option value={TokenType.Dragon} selected>Dragon</option>
-				<option value={TokenType.Egg}>Egg</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
 			</select>
 			<div class="mb-3">
 				<p class="bold">Token Id</p>
-				<input type="text" bind:value={tokenId} class="form-control" placeholder="Token Id" />
+				<input type="text" bind:value={tokenId} class="form-control" placeholder="0" />
 			</div>
 			<button class="btn btn-dark" on:click={() => rent()}>RENT</button>
 		</div>
@@ -666,12 +643,12 @@
 			<h2>End Rental (of token)</h2>
 			<p class="bold">Token Type</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
-				<option value={TokenType.Dragon} selected>Dragon</option>
-				<option value={TokenType.Egg}>Egg</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
 			</select>
 			<div class="mb-3">
 				<p class="bold">Token Id</p>
-				<input type="text" bind:value={tokenId} class="form-control" placeholder="Token Id" />
+				<input type="text" bind:value={tokenId} class="form-control" placeholder="0" />
 			</div>
 			<button class="btn btn-dark" on:click={() => endRental()}>END RENTAL</button>
 		</div>

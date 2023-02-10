@@ -205,45 +205,6 @@ export class MarketplaceContract extends MarketApproval {
     }
 
 
-    async pauseLoanBook(alert = false) {
-        try {
-            await this.contract.LoanBook.methods.pause().send({}, async function (err, txHash) { 
-
-                addAwaiter(txHash,'Pause LoanBook operations')  
-                if (err) setAlert(err, 'warning')
-                else {
-                    if (alert === true) setAlert('Paused LoanBook', 'success')
-                    return txHash
-                }
-            })
-        } catch (err) {
-            console.log("Error at: pauseLoanBook", err)
-            const errMsg = getErrors('pauseLoanBook', err)
-            if (alert === true) setAlert(errMsg, 'warning')
-            console.log(errMsg)
-        }
-    }
-
-    async unpauseLoanBook(alert = false) {
-        try {
-            await this.contract.LoanBook.methods.unpause().send({}, async function (err, txHash) { 
-
-                addAwaiter(txHash,'Unpause LoanBook operations')  
-                if (err) setAlert(err, 'warning')
-                else {
-                    if (alert === true) setAlert('Unpaused LoanBook', 'success')
-                    return txHash
-                }
-            })
-        } catch (err) {
-            console.log("Error at: unpauseLoanBook", err)
-            const errMsg = getErrors('unpauseLoanBook', err)
-            if (alert === true) setAlert(errMsg, 'warning')
-            console.log(errMsg)
-        }
-    }
-
-
     // Functions to set, get, modify and remove offers (for sale and/or for rent)
 
     async setOffer(tokenId, offerType, tokenType, terms, alert = false) {

@@ -49,6 +49,14 @@
 		contract.hatch(eggIds, true);
 	}
 
+	async function pause() {
+		contract.pause(true);
+	}
+
+	async function unpause() {
+		contract.unpause(true);
+	}
+
 </script>
 
 <div class="mb-4">
@@ -56,6 +64,10 @@
 </div>
 
 <div class="mb-3">
+
+	<button class="btn btn-dark text-light bold mb-3 mt-3" on:click={() => pause()}>Pause</button>
+	<button class="btn btn-dark text-light bold mb-3 mt-3" on:click={() => unpause()}>Unpause</button>
+
 	<button class="btn btn-warning t-sm text-light bold text-sa"
 		on:click={() => contract.totalSupply()}>Total Supply</button>
 	<button class="btn btn-warning t-sm text-light bold text-sa"
@@ -65,7 +77,7 @@
 	<button class="btn btn-info t-sm text-light bold text-sa"
 		on:click={() => contract.getAmountEggsMinted()}>Total Minted</button>
 	<button class="bbtn btn-warning t-sm"
-		on:click={() => contract.getRace()}>'Race' contract</button>
+		on:click={() => contract.getRace()}>Eggs' Race</button>
 </div>
 
 <div class="row">
@@ -74,7 +86,7 @@
 		<!-- MINT EGGS TO -->
 		<div class="grid">
 			<h2>Mint Eggs</h2>
-			<p>(medium size - hardcoded)</p>
+			<p>(Gen-0, medium size)</p>
 			<p class="bold">To owner</p>
 			<div class="mb-3">
 				<input
@@ -93,7 +105,7 @@
 					placeholder="1"
 				/>
 			</div>
-			<button class="btn btn-dark" on:click={() => mintGen0EggsTo()}>MINT</button>
+			<button class="btn btn-dark" on:click={() => mintGen0EggsTo()}>MINT TOKENS</button>
 		</div>
 
 	</div>
@@ -107,7 +119,7 @@
 			<div class="mb-3">
 				<Pagination {startIndex} {endIndex} {changeIndex} />
 			</div>
-			<button class="btn btn-dark" on:click={() => getAllEggIds()}>GET</button>
+			<button class="btn btn-dark" on:click={() => getAllEggIds()}>GET TOKEN IDS</button>
 		</div>
 
 		<!-- GET EGG IDS OF -->
@@ -126,18 +138,17 @@
 			<div class="mb-3">
 				<Pagination {startIndex} {endIndex} {changeIndex} />
 			</div>
-			<button class="btn btn-dark" on:click={() => getEggIds()}>GET</button>
+			<button class="btn btn-dark" on:click={() => getEggIds()}>GET TOKEN IDS</button>
 		</div>
 
 		<!-- GET EGG -->
 		<div class="grid">
-			<h2>Get Egg</h2>
-			<p>Token Id</p>
+			<h2>Get Egg Details</h2>
+			<p class="bold">Token Ids</p>		
 			<div class="mb-3">
-				<input type="text" bind:value={singleEggId} class="form-control" placeholder="Egg Id" />
+				<input type="text" bind:value={singleEggId} class="form-control" placeholder="0" />
 			</div>
-			<button class="btn btn-dark" on:click={() => getEgg()}
-				>GET</button
+			<button class="btn btn-dark" on:click={() => getEgg()}>GET DETAILS</button
 			>
 		</div>
 	</div>
@@ -145,27 +156,30 @@
 	<!-- INCUBATION -->
 	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid" align="left">
-			<h2>Start Incubation</h2>
+			<h2>Start Eggs Incubating</h2>
+			<p class="bold">Token Ids</p>		
 			<div class="mb-3">
 				<input type="text" bind:value={eggIds} class="form-control" placeholder="0, 1, ..." />
 			</div>
-			<button class="btn btn-dark" on:click={() => startIncubation()}>START</button>
+			<button class="btn btn-dark" on:click={() => startIncubation()}>START INCUBATION</button>
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Check Incubation time</h2>
+			<h2>Check Egg Incubation</h2>
+			<p class="bold">Token Id</p>		
 			<div class="mb-3">
 				<input type="text" bind:value={singleEggId} class="form-control" placeholder="0" />
 			</div>
-			<button class="btn btn-dark" on:click={() => checkIncubation()}>CHECK</button>
+			<button class="btn btn-dark" on:click={() => checkIncubation()}>GET TIME REMAINING</button>
 		</div>
 
 		<div class="grid" align="left">
 			<h2>Hatch Egg</h2>
+			<p class="bold">Token Ids</p>		
 			<div class="mb-3">
 				<input type="text" bind:value={eggIds} class="form-control" placeholder="0, 1, ..." />
 			</div>
-			<button class="btn btn-dark" on:click={() => hatch()}>HATCH</button>
+			<button class="btn btn-dark" on:click={() => hatch()}>HATCH EGG</button>
 		</div>
 	</div>
 </div>
