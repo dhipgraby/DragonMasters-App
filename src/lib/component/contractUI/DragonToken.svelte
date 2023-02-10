@@ -229,11 +229,11 @@
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Get Dragons' Relationship (A to B)</h2>
-			<p class="bold">A: Token Id</p>
+			<h2>Get Dragons' Relationship</h2>
+			<p class="bold">Dragon A: Token Id</p>
 			<div class="mb-3">
 				<input type="text" bind:value={relatedA} class="form-control mb-3" placeholder="0" />
-				<p class="bold">B: Token Id</p>
+				<p class="bold">Dragon B: Token Id</p>
 				<input type="text" bind:value={relatedB} class="form-control" placeholder="1" />
 			</div>
 			<button class="btn btn-dark" on:click={() => getRelationship()}>GET RELATIONSHIP</button>
