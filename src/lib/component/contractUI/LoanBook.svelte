@@ -175,11 +175,35 @@
 	}
 </script>
 
-<h1 class="mb-4">
-	<i class="fas fa-book" />
-	LoanBook
-</h1>
+<h1 class="mb-4"><i class="fas fa-book" /> LoanBook Configuration</h1>
 <br />
+<div class="row">
+	<div class="col-sm-12 col-md-12 col-xl-4">
+
+	</div>
+
+	<div class="col-sm-12 col-md-12 col-xl-4">
+
+	</div>
+
+	<div class="col-sm-12 col-md-12 col-xl-4">
+		<!-- PAUSE / UNPAUSE LOANBOOK -->
+		<div class="grid">
+			<h2>Pause LoanBook</h2>
+			<p><i>Executable by LoanBook contract's owner</i></p>
+			<button class="btn btn-dark" on:click={() => pauseLoanBook()}>PAUSE</button>
+		</div>
+		<div class="grid">
+			<h2>Unpause LoanBook</h2>
+			<p><i>Executable by LoanBook contract's owner</i></p>
+			<button class="btn btn-dark" on:click={() => unpauseLoanBook()}>UNPAUSE</button>
+		</div>
+	</div>
+
+</div>
+<br />
+
+<h1 class="mb-4">LoanBook Operations</h1>
 
 <div class="row">
 	<div class="col-sm-12 col-md-12 col-xl-4">

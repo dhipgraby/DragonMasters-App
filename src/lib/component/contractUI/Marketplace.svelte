@@ -181,12 +181,12 @@
 
 </script>
 
-<h1 class="mb-4">Configuration (of Marketplace & LoanBook)</h1>
+<h1 class="mb-4">Marketplace Configuration</h1>
 <div class="row">
 	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid">
 			<h2>Register ERC721 contract</h2>
-			<p><i>Only Marketplace's owner may add support for a token contract.</i></p>
+			<p>For marketplace to support the token contract. <i>Executable by Marketplace contract's owner</i></p>
 			<p class="bold">Contract address</p>
 			<div class="mb-3">
 				<input type="text" class="form-control" bind:value={contractAddress} placeholder="Address" />
@@ -197,7 +197,7 @@
 				<option value={TokenType.Egg} selected>Egg</option>
 				<option value={TokenType.Dragon}>Dragon</option>
 			</select>
-			<p class="bold">Offer Type</p>
+			<p class="bold">Support 'Offer Types'</p>
 			<select class="form-select mb-3" bind:value={offerType}>
 				<option value={OfferType.ForSale} selected>For Sale (only)</option>
 				<option value={OfferType.ForRent}>For Rent (only)</option>
@@ -243,7 +243,7 @@
 		</div>
 
 		<div class="grid">
-			<h2>Is sellable?</h2>
+			<h2>Tokens are sellable?</h2>
 			<p class="bold">Token Type (contract)</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
 				<option value={TokenType.Dna}>Dna</option>
@@ -254,7 +254,7 @@
 		</div>
 
 		<div class="grid">
-			<h2>Is rentable?</h2>
+			<h2>Tokens are rentable?</h2>
 			<p class="bold">Token Type (contract)</p>
 			<select class="form-select mb-3" bind:value={tokenType}>
 				<option value={TokenType.Dna}>Dna</option>
@@ -267,32 +267,23 @@
 	</div>
 
 	<div class="col-sm-12 col-md-12 col-xl-4">
-		<!-- PAUSE / UNPAUSE MARKETPALCE AND LOANBOOK-->
+		<!-- PAUSE / UNPAUSE MARKETPALCE -->
 		<div class="grid">
 			<h2>Pause Marketplace</h2>
-			<p><i>Executable by Marketplace's owner</i></p>
+			<p><i>Executable by Marketplace contract's owner</i></p>
 			<button class="btn btn-dark" on:click={() => pauseMarketplace()}>PAUSE</button>
 		</div>
 		<div class="grid">
 			<h2>Unpause Marketplace</h2>
-			<p><i>Executable by Marketplace's owner</i></p>
+			<p><i>Executable by Marketplace contract's owner</i></p>
 			<button class="btn btn-dark" on:click={() => unpauseMarketplace()}>UNPAUSE</button>
-		</div>
-		<div class="grid">
-			<h2>Pause LoanBook</h2>
-			<p><i>Executable by Marketplace's owner</i></p>
-			<button class="btn btn-dark" on:click={() => pauseLoanBook()}>PAUSE</button>
-		</div>
-		<div class="grid">
-			<h2>Unpause LoanBook</h2>
-			<p><i>Executable by Marketplace's owner</i></p>
-			<button class="btn btn-dark" on:click={() => unpauseLoanBook()}>UNPAUSE</button>
 		</div>
 	</div>
 </div>
+<br />
 
 <h1 class="mb-4">Marketplace Offers</h1>
-<p><i>Note: An owner must grant (operator) approval on their Egg & Dragon tokens before offering them in the Marketplace.</i></p>
+<p><i>Note: A token owner must grant (operator) approval on their Egg & Dragon tokens before offering them in the Marketplace.</i></p>
 <br>
 <div class="row">
 	<!-- SETTERS -->
