@@ -221,5 +221,47 @@ export class EggContract {
         eggs.totalOwned = allEggs.totalOwned
         userEggs.set(eggs)
     }
+
+
+    // Admin Functions (excutable by DragonToken contract owner)
+
+    async pause(alert = false) {
+        try {
+            await this.contract.EggToken.methods.pause().send({}, function (err, txHash) {
+                addAwaiter(txHash,'Pause EggToken contract')
+                if (alert == true) {
+                    if (err) setAlert(err, 'warning')
+                    else {
+                        setAlert(txHash, 'success')
+                        return txHash
+                    }
+                }
+            })
+        } catch (err) {
+            const errMsg = getErrors('pause', err)
+            if (alert == true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
+
+    async unpause(alert = false) {
+        try {
+            await this.contract.EggToken.methods.unpause().send({}, function (err, txHash) {
+                addAwaiter(txHash,'Unpause EggToken contract')
+                if (alert == true) {
+                    if (err) setAlert(err, 'warning')
+                    else {
+                        setAlert(txHash, 'success')
+                        return txHash
+                    }
+                }
+            })
+        } catch (err) {
+            const errMsg = getErrors('unpause', err)
+            if (alert == true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
+
 }
 

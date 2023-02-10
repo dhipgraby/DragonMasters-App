@@ -49,6 +49,14 @@
 		contract.hatch(eggIds, true);
 	}
 
+	async function pause() {
+		contract.pause(true);
+	}
+
+	async function unpause() {
+		contract.unpause(true);
+	}
+
 </script>
 
 <div class="mb-4">
@@ -56,6 +64,10 @@
 </div>
 
 <div class="mb-3">
+
+	<button class="btn btn-dark text-light bold mb-3 mt-3" on:click={() => pause()}>Pause</button>
+	<button class="btn btn-dark text-light bold mb-3 mt-3" on:click={() => unpause()}>Unpause</button>
+
 	<button class="btn btn-warning t-sm text-light bold text-sa"
 		on:click={() => contract.totalSupply()}>Total Supply</button>
 	<button class="btn btn-warning t-sm text-light bold text-sa"
@@ -65,7 +77,7 @@
 	<button class="btn btn-info t-sm text-light bold text-sa"
 		on:click={() => contract.getAmountEggsMinted()}>Total Minted</button>
 	<button class="bbtn btn-warning t-sm"
-		on:click={() => contract.getRace()}>'Race' contract</button>
+		on:click={() => contract.getRace()}>Eggs' Race</button>
 </div>
 
 <div class="row">
@@ -74,7 +86,7 @@
 		<!-- MINT EGGS TO -->
 		<div class="grid">
 			<h2>Mint Eggs</h2>
-			<p>(medium size - hardcoded)</p>
+			<p>(Gen-0, medium size)</p>
 			<p class="bold">To owner</p>
 			<div class="mb-3">
 				<input
@@ -153,7 +165,7 @@
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Check Egg Incubation Progress</h2>
+			<h2>Check Egg Incubation</h2>
 			<p class="bold">Token Id</p>		
 			<div class="mb-3">
 				<input type="text" bind:value={singleEggId} class="form-control" placeholder="0" />
