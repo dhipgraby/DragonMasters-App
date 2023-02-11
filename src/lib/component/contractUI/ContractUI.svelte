@@ -10,13 +10,18 @@
 	import { LoanBookContract } from '$lib/contracts/LoanBook';
 	import { onMount } from 'svelte';
 
+	export let current;
+
 	let egg_contract;	
 	let marketplace_contract;
 	let loanbook_contract;
 
-	let show = 3;
+	$: show = current;
 
-	const changeView = (screen) => (show = screen);
+	const changeView = (screen,newParam) => {        
+        window.history.replaceState({}, '', `?current=${newParam}`);
+		show = screen
+	}
 
 	onMount(async () => {
 		egg_contract = await new EggContract();		

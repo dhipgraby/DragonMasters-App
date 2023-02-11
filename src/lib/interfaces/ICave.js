@@ -98,8 +98,8 @@ async function loadEggOffers(contract, from, to) {
 }
 //USER EGG LOANBOOK
 async function loadEggLoans(contract, from, to){
-    await contract['market'].getLoans(from, to,TokenType.Egg,'loans')
-    await contract['market'].getLoans(from, to,TokenType.Egg,'borrows')
+    await contract['market'].getLoans(from, to,TokenType.Egg,LoanType.Lend)
+    await contract['market'].getLoans(from, to,TokenType.Egg,LoanType.Borrow)
 }   
 //USER DRAGONS LOANBOOK
 async function loadDragonLoans(contract, from, to){

@@ -11,6 +11,7 @@
 			return new bootstrap.Tooltip(tooltipTriggerEl);
 		});
 	});
+
 </script>
 
 <main class="d-flex flex-nowrap">
@@ -38,7 +39,7 @@
 					data-bs-trigger="hover"
 					data-bs-placement="right"
 					title="Egg Contract"
-					on:click={() => changeView(1)}
+					on:click={() => changeView(1,'eggToken')}
 					class="btn align-items-center rounded sidebarBtn {(activeItem == 1) ? "activeItem": "" }"
 				>
 					<i class="fas fa-egg" /> Egg Token
@@ -50,7 +51,7 @@
 					data-bs-trigger="hover"
 					data-bs-placement="right"
 					title="Dragon Contract"
-					on:click={() => changeView(2)}
+					on:click={() => changeView(2,'dragonToken')}
 					class="btn align-items-center rounded sidebarBtn {(activeItem == 2) ? "activeItem": "" }"
 				>
 					<i class="fas fa-dragon" /> Dragon Token
@@ -75,7 +76,7 @@
 								data-bs-trigger="hover"
 								data-bs-placement="right"
 								title="Marketplace"
-								on:click={() => changeView(3)}
+								on:click={() => changeView(3,'offers')}
 								class="btn align-items-center rounded sidebarBtn {(activeItem == 3) ? "activeItem": "" }"
 							>
 								<i class="fas fa-book" aria-hidden="true" /> Offers
@@ -87,7 +88,7 @@
 								data-bs-trigger="hover"
 								data-bs-placement="right"
 								title="LoanBook"
-								on:click={() => changeView(4)}
+								on:click={() => changeView(4,'loanbook')}
 								class="btn align-items-center rounded sidebarBtn {(activeItem == 4) ? "activeItem": "" }"
 							>
 								<i class="fas fa-paste" /> LoanBook
@@ -99,7 +100,7 @@
 								data-bs-trigger="hover"
 								data-bs-placement="right"
 								title="Approvals"
-								on:click={() => changeView(5)}
+								on:click={() => changeView(5,'approvals')}
 								class="btn align-items-center rounded sidebarBtn {(activeItem == 5) ? "activeItem": "" }"
 							>
 								<i class="fas fa-check-circle" /> Approvals
