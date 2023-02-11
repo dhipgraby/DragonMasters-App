@@ -4,6 +4,7 @@ import { contracts } from "./contracts";
 
 export const TokenType = { Unknown: 0, Dna: 1, Egg: 2, Dragon: 3 }
 export const OfferType = { NoOffer: 0, ForSale: 1, ForRent: 2, ForSaleOrRent: 3 }
+export const LoanType = { Unknown: 0, Lend: 1, Borrow: 2 }
 
 export class LoanBookContract {
     constructor() {
@@ -12,6 +13,11 @@ export class LoanBookContract {
             this.contract = await contracts();
             return this;
         })();
+    }
+
+    async getUSerLoans(startIndex, endIndex,_tokenType,_loanType){
+
+
     }
 
     async getOnLoan(

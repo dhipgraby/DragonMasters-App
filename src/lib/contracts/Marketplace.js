@@ -36,8 +36,8 @@ export class MarketplaceContract extends MarketApproval {
         this.marketplace
         return (async () => {
             this.contract = await contracts();
-            this.dragonInterface = await new DragonContract()
-            this.eggInterface = await new EggContract()
+            // this.dragonInterface = await new DragonContract()
+            // this.eggInterface = await new EggContract()
             return this;
         })();
     }
@@ -309,7 +309,6 @@ export class MarketplaceContract extends MarketApproval {
 
             //ITS ONLY UPDATES THE OFFER OF EXISTING TOKEN TYPE ON STORAGE
             if (ownAccount == true) {
-
                 let assets = (_tokenType == TokenType.Dragon) ? get(userDragons) : get(userEggs)
                 let offerName = (_offerType == OfferType.ForSale) ? 'sellOffer' : 'rentOffer';
                 let assetOffers = assets.map(el => {
