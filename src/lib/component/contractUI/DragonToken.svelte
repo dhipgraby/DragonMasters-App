@@ -11,7 +11,7 @@
 
 	let OwnerAddress;
 	let startIndex = 0;
-	let endIndex = 9;
+	let endIndex = 19;
 	let singleId;
 	let skillId;
 	let tokenIds = '';
@@ -139,14 +139,15 @@
 	}
 </script>
 
-<h1>DragonToken</h1>
+<div class="mb-4">
+	<h1>DragonToken</h1>
+</div>
 
-<p class="bold">Contract Status: UNPAUSED</p>
-<button class="btn btn-dark text-light bold mb-3 mt-3" on:click={() => pause()}>Pause</button>
-<button class="btn btn-dark text-light bold mb-3 mt-3" on:click={() => unpause()}>Unpause</button>
-<button class="btn btn-info text-light bold mb-3 mt-3" on:click={() => contract.totalSupply()}
-	>Total Supply</button
->
+<div class="mb-3">
+	<button class="btn btn-dark text-light bold mb-3 mt-3" on:click={() => pause()}>Pause</button>
+	<button class="btn btn-dark text-light bold mb-3 mt-3" on:click={() => unpause()}>Unpause</button>
+	<button class="btn btn-info text-light bold mb-3 mt-3" on:click={() => contract.totalSupply()}>Total Supply</button>
+</div>
 
 <div class="row">
 	<div class="col-sm-12 col-md-12 col-xl-4">
@@ -165,29 +166,29 @@
 			<div class="mb-3">
 				<Pagination {startIndex} {endIndex} {changeIndex} />
 			</div>
-			<button class="btn btn-dark" on:click={() => getDragonIds()}>GET</button>
+			<button class="btn btn-dark" on:click={() => getDragonIds()}>GET TOKEN IDS</button>
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Get Dragon</h2>
+			<h2>Get Dragon Details</h2>
 			<p class="bold">Token Id</p>
 			<div class="mb-3">
 				<input type="text" bind:value={singleId} class="form-control" placeholder="0" />
 			</div>
-			<button class="btn btn-dark" on:click={() => getDragon()}>GET</button>
+			<button class="btn btn-dark" on:click={() => getDragon()}>GET DETAILS</button>
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Get Skills</h2>
+			<h2>Get Dragon's Skills</h2>
 			<p class="bold">Token Id</p>
 			<div class="mb-3">
 				<input type="text" bind:value={singleId} class="form-control" placeholder="0" />
 			</div>
-			<button class="btn btn-dark" on:click={() => getSkills()}>GET</button>
+			<button class="btn btn-dark" on:click={() => getSkills()}>GET SKILLS</button>
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Get Skill Level</h2>
+			<h2>Get Dragon's Skill Level</h2>
 			<p class="bold">Token Id</p>
 			<div class="mb-3">
 				<input type="text" bind:value={singleId} class="form-control" placeholder="0" />
@@ -196,62 +197,62 @@
 			<div class="mb-3">
 				<input type="text" bind:value={skillId} class="form-control" placeholder="0" />
 			</div>
-			<button class="btn btn-dark" on:click={() => getSkillLevel()}>GET</button>
+			<button class="btn btn-dark" on:click={() => getSkillLevel()}>GET SKILL LEVEL</button>
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Get Skills with their levels</h2>
+			<h2>Get Dragon's Skills & Levels</h2>
 			<p class="bold">Token Id</p>
 			<div class="mb-3">
 				<input type="text" bind:value={singleId} class="form-control" placeholder="0" />
 			</div>
-			<button class="btn btn-dark" on:click={() => getSkillsWithLevels()}>GET</button>
+			<button class="btn btn-dark" on:click={() => getSkillsWithLevels()}>GET SKILL LEVELS</button>
 		</div>
 	</div>
 
 	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid" align="left">
-			<h2>Check Maturity</h2>
+			<h2>Check Dragon's Maturity</h2>
 			<p class="bold">Token Id</p>
 			<div class="mb-3">
 				<input type="text" bind:value={singleId} class="form-control" placeholder="0" />
 			</div>
-			<button class="btn btn-dark" on:click={() => checkMaturity()}>CHECK</button>
+			<button class="btn btn-dark" on:click={() => checkMaturity()}>CHECK MATURITY</button>
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Check Energy</h2>
+			<h2>Check Dragon's Energy</h2>
 			<p class="bold">Token Id</p>
 			<div class="mb-3">
 				<input type="text" bind:value={singleId} class="form-control" placeholder="0" />
 			</div>
-			<button class="btn btn-dark" on:click={() => checkEnergy()}>CHECK</button>
+			<button class="btn btn-dark" on:click={() => checkEnergy()}>CHECK ENERGY</button>
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Get Relationship (A to B)</h2>
-			<p class="bold">A: Token Id</p>
+			<h2>Get Dragons' Relationship</h2>
+			<p class="bold">Dragon A: Token Id</p>
 			<div class="mb-3">
 				<input type="text" bind:value={relatedA} class="form-control mb-3" placeholder="0" />
-				<p class="bold">B: Token Id</p>
+				<p class="bold">Dragon B: Token Id</p>
 				<input type="text" bind:value={relatedB} class="form-control" placeholder="1" />
 			</div>
-			<button class="btn btn-dark" on:click={() => getRelationship()}>GET</button>
+			<button class="btn btn-dark" on:click={() => getRelationship()}>GET RELATIONSHIP</button>
 		</div>
 	</div>
 
 	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid" align="left">
-			<h2>Raise Maturity</h2>
+			<h2>Raise Dragon's Maturity</h2>
 			<p class="bold">Token Ids</p>
 			<div class="mb-3">
 				<input type="text" bind:value={tokenIds} class="form-control" placeholder="0, 1, ..." />
 			</div>
-			<button class="btn btn-dark" on:click={() => raiseMaturity()}>Raise</button>
+			<button class="btn btn-dark" on:click={() => raiseMaturity()}>Raise Maturity</button>
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Breed (A with B)</h2>
+			<h2>Breed Dragons (A with B)</h2>
 			<p class="bold">Mate A: Token Ids</p>
 			<div class="mb-3">
 				<input
@@ -269,7 +270,7 @@
 					closely-related. They must also be adult and have full energy.</i
 				>
 			</p>
-			<button class="btn btn-dark" on:click={() => breed()}>BREED</button>
+			<button class="btn btn-dark" on:click={() => breed()}>BREED DRAGONS</button>
 		</div>
 	</div>
 </div>

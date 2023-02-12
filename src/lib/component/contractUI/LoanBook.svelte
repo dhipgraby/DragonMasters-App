@@ -5,9 +5,11 @@
 
 	export let contract;
 
-	let _tokenType = TokenType.Dragon,
+	let editor_address = '',
+		contract_address,
+		tokenType = TokenType.Egg,
 		startIndex = 0,
-		endIndex = 9,
+		endIndex = 19,
 		borrowerIndex = 0,
 		borrowerEndIndex = 9,
 		lenderIndex = 0,
@@ -23,56 +25,73 @@
 		check_egg_tokenIds = '',
 		check_dragon_tokenIds = '';
 
+	let checkEggs = true;
+	let checkDragons = false;
 
-	let checkDragons = true;
-	let checkEggs = false;
+	
+	async function setEditor() {
+		contract.setEditor(editor_address, true);
+	}
+
+	async function addTokenSupport() {
+		contract.addTokenSupport(contract_address, tokenType, true);
+	}
+
+	async function pauseLoanBook() {
+		contract.pauseLoanBook(true);
+	}
+
+	async function unpauseLoanBook() {
+		contract.unpauseLoanBook(true);
+	}
+
 
 	async function getOnLoan() {
-		contract.getOnLoan(startIndex, endIndex, _tokenType, true);
+		contract.getOnLoan(startIndex, endIndex, tokenType, true);
 	}
 
 	async function getLoan() {
-		contract.getLoan(singleId, _tokenType, true);
+		contract.getLoan(singleId, tokenType, true);
 	}
 
 	async function isOnLoan() {
-		contract.isOnLoan(onLoanId, _tokenType, true);
+		contract.isOnLoan(onLoanId, tokenType, true);
 	}
 
 	async function borrowerOf() {
-		contract.borrowerOf(lender_tokenId, _tokenType, true);
+		contract.borrowerOf(lender_tokenId, tokenType, true);
 	}
 
 	async function lenderOf() {
-		contract.lenderOf(lender_tokenId, _tokenType, true);
+		contract.lenderOf(lender_tokenId, tokenType, true);
 	}
 
 	async function isBorrower() {
-		contract.isBorrower(borrower_address, borrower_tokenId, _tokenType, true);
+		contract.isBorrower(borrower_address, borrower_tokenId, tokenType, true);
 	}
 
 	async function isLender() {
-		contract.isLender(lender_address, lender_tokenId, _tokenType, true);
+		contract.isLender(lender_address, lender_tokenId, tokenType, true);
 	}
 
 	async function getBorrowedBy() {
-		contract.getBorrowedBy(borrower, borrowerIndex, borrowerEndIndex, _tokenType, true);
+		contract.getBorrowedBy(borrower, borrowerIndex, borrowerEndIndex, tokenType, true);
 	}
 
 	async function getLoanedBy() {
-		contract.getLoanedBy(lender, lenderIndex, lenderEndIndex, _tokenType, true);
+		contract.getLoanedBy(lender, lenderIndex, lenderEndIndex, tokenType, true);
 	}
 
 	async function getNumOnLoan() {
-		contract.getNumOnLoan(_tokenType, true);
+		contract.getNumOnLoan(tokenType, true);
 	}
 
 	async function borrowerBalance() {
-		contract.borrowerBalance(borrower, _tokenType, true);
+		contract.borrowerBalance(borrower, tokenType, true);
 	}
 
 	async function lenderBalance() {
-		contract.lenderBalance(lender, _tokenType, true);
+		contract.lenderBalance(lender, tokenType, true);
 	}
 
 	async function checkRentalIncomeOfTokens() {
@@ -156,12 +175,12 @@
     }
 
     async function ethDeposited() {
-		contract.ethDeposited(singleId, _tokenType, true);
+		contract.ethDeposited(singleId, tokenType, true);
 
     }
 
     async function cEthHeld() {
-		contract.cEthHeld(singleId, _tokenType, true);
+		contract.cEthHeld(singleId, tokenType, true);
     }
 
 	function changeIndex(indexType, value) {
@@ -176,36 +195,91 @@
 	}
 </script>
 
-<h1 class="mb-4">
-	<i class="fas fa-book" />
-	LoanBook
-</h1>
-<p class="bold">Select token Type</p>
-<select class="form-select mb-3 " bind:value={_tokenType}>
-	<option value={TokenType.Dragon} selected>Dragon</option>
-	<option value={TokenType.Egg}>Egg</option>
-</select>
-
+<h1 class="mb-4"><i class="fas fa-book" /> LoanBook Configuration</h1>
 <br />
+<div class="row">
+	<div class="col-sm-12 col-md-12 col-xl-4">
+		<div class="grid">
+			<h2>Set LoanBook's Editor</h2>
+			<p><i>Set immediately after deployment! Once the editor is set it can't be reset.</i></p>
+			<p class="bold">Editor</p>
+			<div class="mb-3">
+				<input type="text" class="form-control" bind:value={editor_address} placeholder="Address" />
+			</div>
+			<button class="btn btn-dark" on:click={() => setEditor()}>SET EDITOR</button>
+		</div>
+	</div>
+
+	<div class="col-sm-12 col-md-12 col-xl-4">
+		<div class="grid">
+			<h2>Add ERC721 contract support</h2>
+			<p><i>Only executable by the LoanBook's editor (eg. Marketplace contract).</i></p>
+			<p class="bold">Contract address</p>
+			<div class="mb-3">
+				<input type="text" class="form-control" bind:value={contract_address} placeholder="Address" />
+			</div>
+			<p class="bold">Name of 'Token Type'</p>
+			<select class="form-select mb-3" bind:value={tokenType}>
+				<option value={TokenType.Dna}>Dna</option>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
+			</select>
+			<button class="btn btn-dark" on:click={() => addTokenSupport()}>ADD TOKEN SUPPORT</button>
+		</div>
+	</div>
+
+	<div class="col-sm-12 col-md-12 col-xl-4">
+		<!-- PAUSE / UNPAUSE LOANBOOK -->
+		<div class="grid">
+			<h2>Pause LoanBook</h2>
+			<p><i>Executable by LoanBook contract's owner</i></p>
+			<button class="btn btn-dark" on:click={() => pauseLoanBook()}>PAUSE</button>
+		</div>
+		<div class="grid">
+			<h2>Unpause LoanBook</h2>
+			<p><i>Executable by LoanBook contract's owner</i></p>
+			<button class="btn btn-dark" on:click={() => unpauseLoanBook()}>UNPAUSE</button>
+		</div>
+	</div>
+
+</div>
+<br />
+
+<h1 class="mb-4">LoanBook Operations</h1>
 
 <div class="row">
 	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid" align="left">
-			<h2>Total on-loan (of token type)</h2>
-			<button class="btn btn-dark" on:click={() => getNumOnLoan()}>GET</button>
+			<h2>Total tokens on-loan</h2>
+			<p class="bold">Token Type</p>
+			<select class="form-select mb-3" bind:value={tokenType}>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
+			</select>
+			<button class="btn btn-dark" on:click={() => getNumOnLoan()}>GET AMOUNT</button>
 		</div>
 
 		<div class="grid" align="left">
-			<h2>All tokens on loan (of type)</h2>
+			<h2>Tokens on loan</h2>
+			<p class="bold">Token Type</p>
+			<select class="form-select mb-3" bind:value={tokenType}>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
+			</select>
 			<p class="bold">Paging: start & end indexes</p>
 			<div class="mb-3">
 				<Pagination {startIndex} {endIndex} {changeIndex} />
 			</div>
-			<button class="btn btn-dark" on:click={() => getOnLoan()}>GET</button>
+			<button class="btn btn-dark" on:click={() => getOnLoan()}>GET TOKEN IDS</button>
 		</div>
 
 		<div class="grid" align="left">
 			<h2>Is token on loan?</h2>
+			<p class="bold">Token Type</p>
+			<select class="form-select mb-3" bind:value={tokenType}>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
+			</select>
 			<p class="bold">Token Id</p>		
 			<div class="mb-3">
 				<input type="number" class="form-control" bind:value={onLoanId} placeholder="0" />
@@ -215,81 +289,116 @@
 
 		<div class="grid" align="left">
 			<h2>Loan details</h2>
+			<p class="bold">Token Type</p>
+			<select class="form-select mb-3" bind:value={tokenType}>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
+			</select>
 			<p class="bold">Token Id</p>		
 			<div class="mb-3">
 				<input type="number" class="form-control" bind:value={singleId} placeholder="0" />
 			</div>
-			<button class="btn btn-dark" on:click={() => getLoan()}>GET</button>
+			<button class="btn btn-dark" on:click={() => getLoan()}>GET LOAN</button>
 		</div>
 
 		<div class="grid" align="left">
 			<h2>Total loaned-out by</h2>
-			<p class="bold">Address</p>
+			<p class="bold">Lender</p>
 			<div class="mb-3">
 				<input type="text" class="form-control" bind:value={lender} placeholder="Address" />
 			</div>
-			<button class="btn btn-dark" on:click={() => lenderBalance()}>GET</button>
+			<button class="btn btn-dark" on:click={() => lenderBalance()}>GET AMOUNT</button>
 		</div>
 
 		<div class="grid" align="left">
 			<h2>Tokens loaned-out by</h2>
-			<p class="bold">Address</p>
+			<p class="bold">Lender</p>
 			<div class="mb-3">
 				<input type="text" class="form-control" bind:value={lender} placeholder="Address" />
 			</div>
+			<p class="bold">Token Type</p>
+			<select class="form-select mb-3" bind:value={tokenType}>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
+			</select>
 			<p class="bold">Paging: start & end indexes</p>
 			<div class="mb-3">
 				<Pagination {startIndex} {endIndex} {changeIndex} />
 			</div>
-			<button class="btn btn-dark" on:click={() => getLoanedBy()}>GET</button>
+			<button class="btn btn-dark" on:click={() => getLoanedBy()}>GET TOKEN IDS</button>
 		</div>
 
 		<div class="grid" align="left">
 			<h2>Total borrowed by</h2>
-			<p class="bold">Address</p>
+			<p class="bold">Borrower</p>
 			<div class="mb-3">
 				<input type="text" class="form-control" bind:value={borrower} placeholder="Address" />
 			</div>
-			<button class="btn btn-dark" on:click={() => borrowerBalance()}>GET</button>
+			<p class="bold">Token Type</p>
+			<select class="form-select mb-3" bind:value={tokenType}>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
+			</select>
+			<button class="btn btn-dark" on:click={() => borrowerBalance()}>GET AMOUNT</button>
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Tokens borrowed by</h2>
-			<p class="bold">Address</p>
+			<h2>Tokens loaned by</h2>
+			<p class="bold">Borrower</p>
 			<div class="mb-3">
 				<input type="text" class="form-control" bind:value={borrower} placeholder="Address" />
 			</div>
+			<p class="bold">Token Type</p>
+			<select class="form-select mb-3" bind:value={tokenType}>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
+			</select>
 			<p class="bold">Paging: start & end indexes</p>
 			<div class="mb-3">
 				<Pagination {startIndex} {endIndex} {changeIndex} />
 			</div>
-			<button class="btn btn-dark" on:click={() => getBorrowedBy()}>GET</button>
+			<button class="btn btn-dark" on:click={() => getBorrowedBy()}>GET TOKEN IDS</button>
 		</div>
 	</div>
 
 	<div class="col-sm-12 col-md-12 col-xl-4">
 		<div class="grid" align="left">
 			<h2>Rentee/lender (of token)</h2>
+			<p class="bold">Token Type</p>
+			<select class="form-select mb-3" bind:value={tokenType}>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
+			</select>
 			<p class="bold">Token Id</p>
 			<div class="mb-3">
 				<input type="number" class="form-control" bind:value={lender_tokenId}
 				 placeholder="0" />
 			</div>
-			<button class="btn btn-dark" on:click={() => lenderOf()}>GET</button>
+			<button class="btn btn-dark" on:click={() => lenderOf()}>GET ADDRESS</button>
 		</div>
 
 		<div class="grid" align="left">
 			<h2>Borrower (of token)</h2>
+			<p class="bold">Token Type</p>
+			<select class="form-select mb-3" bind:value={tokenType}>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
+			</select>
 			<p class="bold">Token Id</p>
 			<div class="mb-3">
 				<input type="number" class="form-control" bind:value={borrower_tokenId}
 				 placeholder="0" />
 			</div>
-			<button class="btn btn-dark" on:click={() => borrowerOf()}>GET</button>
+			<button class="btn btn-dark" on:click={() => borrowerOf()}>GET ADDRESS</button>
 		</div>
 
 		<div class="grid" align="left">
 			<h2>Is rentee/lender of token?</h2>
+			<p class="bold">Token Type</p>
+			<select class="form-select mb-3" bind:value={tokenType}>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
+			</select>
 			<p class="bold">Token Id</p>
 			<div class="mb-3">
 				<input type="number" class="form-control" bind:value={lender_tokenId}
@@ -304,6 +413,11 @@
 
 		<div class="grid" align="left">
 			<h2>Is borrower of token?</h2>
+			<p class="bold">Token Type</p>
+			<select class="form-select mb-3" bind:value={tokenType}>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
+			</select>
 			<p class="bold">Token Id</p>
 			<div class="mb-3">
 				<input type="number" class="form-control" bind:value={borrower_tokenId}
@@ -317,31 +431,41 @@
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Total Eth deposited</h2>
-			<button class="btn btn-dark" on:click={() => ethTotalDeposited()}>GET</button>
+			<h2>Total loan deposits (ETH)</h2>
+			<button class="btn btn-dark" on:click={() => ethTotalDeposited()}>GET AMOUNT</button>
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Total cEth held (for Eth)</h2>
-			<button class="btn btn-dark" on:click={() => cEthTotalHeld()}>GET</button>
+			<h2>Total cEth held (for all deposits)</h2>
+			<button class="btn btn-dark" on:click={() => cEthTotalHeld()}>GET AMOUNT</button>
 		</div>
 
 		<div class="grid" align="left">
-			<h2>Eth deposited (for token)</h2>
+			<h2>ETH deposited (for token)</h2>
+			<p class="bold">Token Type</p>
+			<select class="form-select mb-3" bind:value={tokenType}>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
+			</select>
 			<p class="bold">Token Id</p>		
 			<div class="mb-3">
 				<input type="number" class="form-control" bind:value={singleId} placeholder="0" />
 			</div>
-			<button class="btn btn-dark" on:click={() => ethDeposited()}>GET</button>
+			<button class="btn btn-dark" on:click={() => ethDeposited()}>GET AMOUNT</button>
 		</div>
 
 		<div class="grid" align="left">
-			<h2>cEth held (for token's Eth)</h2>
+			<h2>cEth held (for token's deposit)</h2>
+			<p class="bold">Token Type</p>
+			<select class="form-select mb-3" bind:value={tokenType}>
+				<option value={TokenType.Egg} selected>Egg</option>
+				<option value={TokenType.Dragon}>Dragon</option>
+			</select>
 			<p class="bold">Token Id</p>		
 			<div class="mb-3">
 				<input type="number" class="form-control" bind:value={singleId} placeholder="0" />
 			</div>
-			<button class="btn btn-dark" on:click={() => cEthHeld()}>GET</button>
+			<button class="btn btn-dark" on:click={() => cEthHeld()}>GET AMOUNT</button>
 		</div>
 	</div>
 
@@ -366,37 +490,29 @@
 					placeholder="0, 1, ..."
 				/>
 			</div>
-			<button class="btn btn-dark" on:click={() => checkRentalIncomeOfTokens()}>GET</button>
+			<button class="btn btn-dark" on:click={() => checkRentalIncomeOfTokens()}>GET AMOUNT</button>
 		</div>
 
 		<div class="grid" align="left">
 			<h2>Accumulated rental income</h2>
 			<div class="mb-3">
 				<div class="form-check form-check-inline">
-					<input
-						class="form-check-input"
-						type="checkbox"
-						id="dragonCheckbox"
-						bind:checked={checkDragons}
-					/>
-					<label class="form-check-label" for="dragonCheckbox"><b>Dragon</b></label>
-				</div>
-				<div class="form-check form-check-inline">
-					<input
-						class="form-check-input"
-						type="checkbox"
-						id="eggCheckbox"
-						bind:checked={checkEggs}
-					/>
+					<input class="form-check-input" type="checkbox"
+						id="eggCheckbox" bind:checked={checkEggs}/>
 					<label class="form-check-label" for="eggCheckbox"><b>Egg</b></label>
 				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="checkbox" 
+						id="dragonCheckbox" bind:checked={checkDragons}/>
+					<label class="form-check-label" for="dragonCheckbox"><b>Dragon</b></label>
+				</div>
 			</div>
-			<button class="btn btn-dark" on:click={() => checkRentalIncomeOfTypes()}>GET</button>
+			<button class="btn btn-dark" on:click={() => checkRentalIncomeOfTypes()}>GET AMOUNT</button>
 		</div>
 
 		<div class="grid" align="left">
 			<h2>All accumulated rental income</h2>
-			<button class="btn btn-dark" on:click={() => checkRentalIncomeOfAll()}>GET</button>
+			<button class="btn btn-dark" on:click={() => checkRentalIncomeOfAll()}>GET AMOUNT</button>
 		</div>
 
 		<div class="grid" align="left">
@@ -419,37 +535,29 @@
 					placeholder="0, 1, ..."
 				/>
 			</div>
-			<button class="btn btn-dark" on:click={() => collectRentalIncomeOfTokens()}>COLLECT</button>
+			<button class="btn btn-dark" on:click={() => collectRentalIncomeOfTokens()}>COLLECT ETH</button>
 		</div>
 
 		<div class="grid" align="left">
 			<h2>Collect rental Income</h2>
 			<div class="mb-3">
 				<div class="form-check form-check-inline">
-					<input
-						class="form-check-input"
-						type="checkbox"
-						id="dragonCheckbox"
-						bind:checked={checkDragons}
-					/>
-					<label class="form-check-label" for="dragonCheckbox"><b>Dragon</b></label>
-				</div>
-				<div class="form-check form-check-inline">
-					<input
-						class="form-check-input"
-						type="checkbox"
-						id="eggCheckbox"
-						bind:checked={checkEggs}
-					/>
+					<input class="form-check-input" type="checkbox"
+						id="eggCheckbox" bind:checked={checkEggs}/>
 					<label class="form-check-label" for="eggCheckbox"><b>Egg</b></label>
 				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="checkbox"
+						id="dragonCheckbox" bind:checked={checkDragons}/>
+					<label class="form-check-label" for="dragonCheckbox"><b>Dragon</b></label>
+				</div>
 			</div>
-			<button class="btn btn-dark" on:click={() => collectRentalIncomeOfTypes()}>COLLECT</button>
+			<button class="btn btn-dark" on:click={() => collectRentalIncomeOfTypes()}>COLLECT ETH</button>
 		</div>
 
 		<div class="grid" align="left">
 			<h2>Collect all rental Income</h2>
-			<button class="btn btn-dark" on:click={() => collectRentalIncomeOfAll()}>COLLECT</button>
+			<button class="btn btn-dark" on:click={() => collectRentalIncomeOfAll()}>COLLECT ETH</button>
 		</div>
 	</div>
 </div>
