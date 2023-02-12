@@ -7,11 +7,15 @@ import { MarketplaceContract, TokenType, OfferType } from '$lib/contracts/Market
 import { initEventListener } from '$lib/contracts/events';
 //STORAGE
 import { createWritableStore } from '$lib/helpers/storage';
+import { setAlert } from '$lib/storage/alerts';
 
 export const approvalRequired = writable({ dragon: true, egg: true })
 export const contracts = createWritableStore('contract', []);
 
 export async function LoadInterface(from, to, interfaceName = 'All') {
+
+    setAlert('Loading user Interface','info')
+    console.log('Loading user Interface')
 
     if (from > 0) {
         from -= 1;
@@ -43,6 +47,9 @@ export async function LoadInterface(from, to, interfaceName = 'All') {
 }
 
 export async function LoanBookInterface(from, to, interfaceName = 'All') {
+
+    setAlert('Loading Loanbook interface','info')
+    console.log('Loading Loanbook interface')
 
     if (from > 0) {
         from -= 1;
