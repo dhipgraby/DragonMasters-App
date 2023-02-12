@@ -4,6 +4,7 @@
 	import { ColumnSizes } from '$lib/css/grid';
 
 	export let dragons;
+	export let displayOwner
 	export let singleApproval;
 	export let contract;
 	export let loadPage;
@@ -11,7 +12,7 @@
 	$: totalAssets = dragons.totalOwned;
 </script>
 
-<div class="row extended mt-4 mb-4">
+<div class="row extended">
 	<div class="col-6 ta-l">
 		<h1>Your Dragons</h1>
 		<Pagination {totalAssets} {loadPage} inferfaceName="Dragon" />
@@ -26,7 +27,7 @@
 	{#if dragons.length}
 		{#each dragons as dragon}
 			<div class={ColumnSizes}>
-				<DragonCard showCircleMenu={true} {dragon} {contract} {singleApproval} />
+				<DragonCard {displayOwner} showCircleMenu={true} {dragon} {contract} {singleApproval} />
 			</div>
 		{/each}
 	{:else}

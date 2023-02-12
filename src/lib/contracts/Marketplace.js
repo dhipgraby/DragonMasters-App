@@ -3,8 +3,6 @@ import { dragonsForSale, eggsForSale, dragonsForRent, eggsForRent } from "$lib/s
 import { subSpeciesName } from "$lib/helpers/utils"
 import { userDragons } from '$lib/storage/dragon'
 import { userEggs } from '$lib/storage/eggs'
-import { DragonContract } from '$lib/contracts/DragonToken';
-import { EggContract } from '$lib/contracts/EggToken';
 import { MarketApproval } from '$lib/contracts/MarketApproval';
 import { contracts } from "./contracts";
 import { get } from 'svelte/store';
@@ -32,16 +30,12 @@ export const saleTerms = {
 export class MarketplaceContract extends MarketApproval {
     constructor() {
         super()
-        this.contract
-        // this.marketplace
+        this.contract        
         return (async () => {
             this.contract = await contracts();
-            // this.dragonInterface = await new DragonContract()
-            // this.eggInterface = await new EggContract()
             return this;
         })();
     }
-
 
     // Functions to configure & check setup of token types in Marketplace
 
@@ -52,11 +46,11 @@ export class MarketplaceContract extends MarketApproval {
                 tokenContractAddress,
                 offerType,
                 tokenType
-            ).send({}, async function (err, txHash) { 
-                const offerTypeNames = (offerType == OfferType.ForSaleOrRent) ? 'sale and/or rent' : 
+            ).send({}, async function (err, txHash) {
+                const offerTypeNames = (offerType == OfferType.ForSaleOrRent) ? 'sale and/or rent' :
                     (offerType == OfferType.ForSale) ? 'sale' : 'rent';
 
-                addAwaiter(txHash,'Register new token contract: '+tokenType+' to allow ' + offerTypeNames + ' offers')  
+                addAwaiter(txHash, 'Register new token contract: ' + tokenType + ' to allow ' + offerTypeNames + ' offers')
                 if (err) setAlert(err, 'warning')
                 else {
                     if (alert === true) setAlert('registerToken for contract' + tokenContractAddress, 'success')
@@ -115,7 +109,7 @@ export class MarketplaceContract extends MarketApproval {
             console.log("Offer type 'For Rent':", OfferType.ForRent)
             console.log("Offer type 'For Sale and/or Rent':", OfferType.ForSaleOrRent)
             console.log("supportedOfferTypes:", supportedOfferTypes)
-            const offerTypeNames = (supportedOfferTypes == OfferType.ForSaleOrRent) ? 'for sale and/or rent' : 
+            const offerTypeNames = (supportedOfferTypes == OfferType.ForSaleOrRent) ? 'for sale and/or rent' :
                 (supportedOfferTypes == OfferType.ForSale) ? 'for sale only' : 'for rent only';
 
             if (alert === true) setAlert('Supported offer types: ' + offerTypeNames, 'success')
@@ -167,9 +161,9 @@ export class MarketplaceContract extends MarketApproval {
 
     async pauseMarketplace(alert = false) {
         try {
-            await this.contract.Marketplace.methods.pause().send({}, async function (err, txHash) { 
+            await this.contract.Marketplace.methods.pause().send({}, async function (err, txHash) {
 
-                addAwaiter(txHash,'Pause Marketplace operations')  
+                addAwaiter(txHash, 'Pause Marketplace operations')
 
                 if (err) setAlert(err, 'warning')
                 else {
@@ -187,9 +181,9 @@ export class MarketplaceContract extends MarketApproval {
 
     async unpauseMarketplace(alert = false) {
         try {
-            await this.contract.Marketplace.methods.unpause().send({}, async function (err, txHash) { 
+            await this.contract.Marketplace.methods.unpause().send({}, async function (err, txHash) {
 
-                addAwaiter(txHash,'Unpause Marketplace operations')  
+                addAwaiter(txHash, 'Unpause Marketplace operations')
 
                 if (err) setAlert(err, 'warning')
                 else {
@@ -216,9 +210,9 @@ export class MarketplaceContract extends MarketApproval {
                 terms,
                 offerType,
                 tokenType,
-            ).send({}, async function (err, txHash) { 
+            ).send({}, async function (err, txHash) {
                 const offerName = (offerType == OfferType.ForSale) ? 'Sell' : 'Rent';
-                addAwaiter(txHash,'Create '+offerName+' Offer')  
+                addAwaiter(txHash, 'Create ' + offerName + ' Offer')
                 if (err) setAlert(err, 'warning')
                 else {
                     if (alert === true) setAlert('End rental for token Id ' + tokenId, 'success')
@@ -279,7 +273,7 @@ export class MarketplaceContract extends MarketApproval {
             console.log(errMsg)
         }
     }
-    
+
     async getOffered(
         startIndex,
         endIndex,
@@ -496,7 +490,7 @@ export class MarketplaceContract extends MarketApproval {
                 tokenType
             ).send({}, function (err, txHash) {
                 const offerName = (offerType == OfferType.ForSale) ? 'Sell' : 'Rent';
-                addAwaiter(txHash,'Remove '+offerName+' Offer')
+                addAwaiter(txHash, 'Remove ' + offerName + ' Offer')
 
                 if (err) setAlert(err, 'warning')
                 else {
@@ -526,7 +520,7 @@ export class MarketplaceContract extends MarketApproval {
             ).send({}, function (err, txHash) {
 
                 const offerName = (offerType == OfferType.ForSale) ? 'Sell' : 'Rent';
-                addAwaiter(txHash,'Remove All '+offerName+' Offers')
+                addAwaiter(txHash, 'Remove All ' + offerName + ' Offers')
 
                 if (err) setAlert(err, 'warning')
                 else {
@@ -555,7 +549,7 @@ export class MarketplaceContract extends MarketApproval {
                 from: this.contract.account,
                 value: price
             }, function (err, txHash) {
-                addAwaiter(txHash,'Buy token id: ' + tokenId)
+                addAwaiter(txHash, 'Buy token id: ' + tokenId)
                 if (err) {
                     if (alert === true) setAlert(err, 'warning')
                     console.log('addAwaiter error: ', err)
@@ -584,7 +578,7 @@ export class MarketplaceContract extends MarketApproval {
                 from: this.contract.account,
                 value: totalAmount
             }, function (err, txHash) {
-                addAwaiter(txHash,'Rent token id: '+tokenId)
+                addAwaiter(txHash, 'Rent token id: ' + tokenId)
                 if (err) {
                     if (alert === true) setAlert(err, 'warning')
                     console.log('addAwaiter error: ', err)
@@ -609,8 +603,8 @@ export class MarketplaceContract extends MarketApproval {
             await this.contract.Marketplace.methods.endRental(
                 tokenId,
                 tokenType
-            ).send({from: this.contract.account}, function (err, txHash) {
-                addAwaiter(txHash,'End Rental of token id: '+tokenId)
+            ).send({ from: this.contract.account }, function (err, txHash) {
+                addAwaiter(txHash, 'End Rental of token id: ' + tokenId)
                 if (err) setAlert(err, 'warning')
                 else {
                     if (alert === true) setAlert('End rental for token Id ' + tokenId, 'success')
@@ -635,7 +629,7 @@ export class MarketplaceContract extends MarketApproval {
         _tokenType
     ) {
         //Collecting all offers and details 
-        let allOffers = await this.getOffered(from, to, _offerType, _tokenType)        
+        let allOffers = await this.getOffered(from, to, _offerType, _tokenType)
         let tokenIds = allOffers.map((el) => { return el.tokenId });
         let assets = []
 
@@ -746,6 +740,21 @@ export class MarketplaceContract extends MarketApproval {
         } catch (err) {
             setAlert('Error getting this egg id ', 'warning')
             console.log("Error at: cgetEgg" + err)
+        }
+    }
+
+    async checkIncubation(eggId, alert = false) {
+        try {
+            const incubationTime = await this.contract.EggToken.methods.checkIncubation(eggId).call()
+            if (alert === true) setAlert('Egg incubation time remaining is :' + incubationTime, 'info')
+            return incubationTime
+
+        } catch (err) {
+            console.log("Error at: checkIncubation " + eggId + err)
+            const errMsg = getErrors('checkIncubation', err)
+            if (alert === true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+            if (errMsg == "Incubation not started") return "-1";
         }
     }
 }

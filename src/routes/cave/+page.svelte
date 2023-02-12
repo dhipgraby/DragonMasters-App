@@ -7,7 +7,7 @@
 	import LoanBookCaveBtn from '$lib/component/dragonMenu/LoanBookCaveBtn.svelte';
 	//STORAGE
 	import { userEggs } from '$lib/storage/eggs';
-	import { userDragons } from '$lib/storage/dragon';	
+	import { userDragons } from '$lib/storage/dragon';
 	import { perpage } from '$lib/storage/pagination';
 	import { lendedEggs, lendedDragons, borrowedEggs, borrowedDragons } from '$lib/storage/loanbook';
 	//CONTRACTS
@@ -31,8 +31,20 @@
 
 	onMount(async () => {
 		perpage.useLocalStorage();
-		await LoanBookInterface(0, $perpage);
-		await LoadInterface(0, $perpage);
+		userEggs.useLocalStorage();
+		userDragons.useLocalStorage();
+		lendedEggs.useLocalStorage();
+		borrowedEggs.useLocalStorage();
+		lendedDragons.useLocalStorage();
+		borrowedDragons.useLocalStorage();
+
+		if(eggs.length < 1) await LoadInterface(0, $perpage); 
+		if(eggLends.length < 1) await LoanBookInterface(0, $perpage); 		
+		
+		console.log(eggs);
+		console.log(eggBorrows);
+		console.log(eggLends);
+		console.log(contract);
 		show = urlCurrentParam();
 	});
 </script>
@@ -57,7 +69,7 @@
 		><i class="fas fa-donate" /> BORROWS
 	</button>
 </div>
-{show}
+
 <MainContainer>
 	{#if show == 0}
 		<h2>Loading...</h2>
@@ -72,20 +84,26 @@
 	{/if}
 	<!-- LENDED EGGS -->
 	{#if show == ScreenType.eggsLend}
-		<EggGrid eggs={eggLends} {contract} loadPage={LoanBookInterface} />
+		<EggGrid displayOwner={true} eggs={eggLends} {contract} loadPage={LoanBookInterface} />
 	{/if}
 	<!-- LENDED DRAGONS -->
 	{#if show == ScreenType.dragonsLend}
-		<DragonGrid dragons={dragonLends} contract={contract['market']} loadPage={LoanBookInterface} />
+		<DragonGrid
+			displayOwner={true}
+			dragons={dragonLends}
+			contract={contract['market']}
+			loadPage={LoanBookInterface}
+		/>
 	{/if}
 	<!-- BORROWED EGGS -->
 	{#if show == ScreenType.eggsBorrow}
-		<EggGrid eggs={eggBorrows} {contract} loadPage={LoanBookInterface} />
+		<EggGrid displayOwner={true} eggs={eggBorrows} {contract} loadPage={LoanBookInterface} />
 	{/if}
 	<!-- BORROWED DRAGONS -->
 	{#if show == ScreenType.dragonsBorrow}
 		<DragonGrid
 			dragons={dragonBorrows}
+			displayOwner={true}
 			contract={contract['market']}
 			loadPage={LoanBookInterface}
 		/>
@@ -98,7 +116,7 @@
 			totalDragons={dragonLends.totalOwned}
 			{changeView}
 			_lendType={ScreenType.lends}
-		/>>
+		/>
 	{/if}
 	<!-- YOUR BORROWS	-->
 	{#if show == ScreenType.borrows}
