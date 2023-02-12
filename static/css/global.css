@@ -22,7 +22,7 @@ html {
 /********* Text Colors ***********/
 
 .c-black {
-	color:black;
+	color: black;
 }
 
 .c-grey {
@@ -34,7 +34,7 @@ html {
 }
 
 .ta-l {
-	text-align:left !important;
+	text-align: left !important;
 }
 
 .ta-r {
@@ -44,59 +44,59 @@ html {
 /********* SIZING ***********/
 
 .top10 {
-	top:10px;
+	top: 10px;
 }
 
 .top20 {
-	top:20px;
+	top: 20px;
 }
 
 .right10 {
-	right:10px;
+	right: 10px;
 }
 
 .right20 {
-	right:20px;
+	right: 20px;
 }
 
 .right30 {
-	right:30px;
+	right: 30px;
 }
 
 .right40 {
-	right:40px;
+	right: 40px;
 }
 
 .right45 {
-	right:45px;
+	right: 45px;
 }
 
 .right50 {
-	right:50px;
+	right: 50px;
 }
 
 .right75 {
-	right:75px;
+	right: 75px;
 }
 
 .right80 {
-	right:80px;
+	right: 80px;
 }
 
 .bottom10 {
-	bottom:10px;
+	bottom: 10px;
 }
 
 .bottom20 {
-	bottom:20px;
+	bottom: 20px;
 }
 
 .left10 {
-	left:10px;
+	left: 10px;
 }
 
 .left20 {
-	left:20px;
+	left: 20px;
 }
 
 .f-right {
@@ -117,7 +117,7 @@ html {
 }
 
 .text-light {
-    text-shadow: 0px 0px 3px #444444;
+	text-shadow: 0px 0px 3px #444444;
 }
 
 .darkBtn {
@@ -125,11 +125,36 @@ html {
 	background-image: linear-gradient(119deg, black, #585858);
 	border-radius: 20px !important;
 	border: none !important;
-	white-space: nowrap;		
+	white-space: nowrap;
 	font-weight: 600;
 	letter-spacing: 0.8px;
-	max-width: 200px;		
+	max-width: 200px;
 	padding: 8px 40px !important;
 	margin: auto;
 	margin: 10px;
+}
+
+
+.spacer {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.loanbox {
+	background-color: white;
+	border-radius: 20px;
+	padding: 20px;
+	width: auto;
+	cursor: pointer;
+	transition: 0.3s;
+	margin: 10px;
+	text-align: center;
+}
+
+.loanbox p {
+	font-weight: 700;
+}
+
+.loanbox:hover {
+	transform: scale(1.1);
 }
