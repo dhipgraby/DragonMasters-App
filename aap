@@ -1,0 +1,213 @@
+[33m8f2ba43[m[33m ([m[1;36mHEAD -> [m[1;32mrefactorLendAndBorrow[m[33m, [m[1;31morigin/refactorLendAndBorrow[m[33m)[m HEAD@{0}: pull: Fast-forward
+[33m77c1c3f[m HEAD@{1}: reset: moving to 77c1c3fc8f1eb62354e4dcef82e515c22d907e07
+[33m8f2ba43[m[33m ([m[1;36mHEAD -> [m[1;32mrefactorLendAndBorrow[m[33m, [m[1;31morigin/refactorLendAndBorrow[m[33m)[m HEAD@{2}: checkout: moving from master to refactorLendAndBorrow
+[33m22e8a63[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m HEAD@{3}: pull: Fast-forward
+[33m04f2b61[m HEAD@{4}: checkout: moving from refactorLendAndBorrow to master
+[33m8f2ba43[m[33m ([m[1;36mHEAD -> [m[1;32mrefactorLendAndBorrow[m[33m, [m[1;31morigin/refactorLendAndBorrow[m[33m)[m HEAD@{5}: commit: Fix commit
+[33m04f2b61[m HEAD@{6}: checkout: moving from refactorLendAndBorrow to master
+[33m77c1c3f[m HEAD@{7}: commit: fix dragon owners
+[33m83ef05e[m HEAD@{8}: commit: Improve loading of assets on cave
+[33m8477c7a[m HEAD@{9}: commit: Refactor Lend borrows buttons in cave
+[33m04f2b61[m HEAD@{10}: checkout: moving from master to refactorLendAndBorrow
+[33m04f2b61[m HEAD@{11}: pull: Fast-forward
+[33m7320dd0[m HEAD@{12}: checkout: moving from loandAndBorrowUI to master
+[33m252836e[m[33m ([m[1;31morigin/loandAndBorrowUI[m[33m, [m[1;32mloandAndBorrowUI[m[33m)[m HEAD@{13}: commit: UI for Lend and Borrow Dragons Eggs on cave page
+[33m1e6feaf[m HEAD@{14}: commit: Contract UI set current page
+[33m5e09334[m HEAD@{15}: commit: Get userLoans functions
+[33m37d6988[m HEAD@{16}: commit: fix normal pagination
+[33m7320dd0[m HEAD@{17}: checkout: moving from master to loandAndBorrowUI
+[33m7320dd0[m HEAD@{18}: pull: Fast-forward
+[33mc9d51e6[m HEAD@{19}: checkout: moving from pagination to master
+[33m0e87360[m[33m ([m[1;31morigin/pagination[m[33m, [m[1;32mpagination[m[33m)[m HEAD@{20}: commit: Pagination added to marketplace
+[33med5b1ad[m HEAD@{21}: commit: added global grid.js for nft grids & fix nft card
+[33m13fba16[m HEAD@{22}: commit: fix main container and eggsGrid
+[33m4017106[m HEAD@{23}: commit: Pagination added to dragons in cave
+[33m76fd217[m HEAD@{24}: commit: Fix grid and final pagination cache
+[33m872bf80[m HEAD@{25}: commit: finish pagination for eggs in cave
+[33m4b288e6[m HEAD@{26}: commit: Dinamic pagination
+[33m571abc6[m HEAD@{27}: commit: Pagination fixed
+[33mc9d51e6[m HEAD@{28}: checkout: moving from master to pagination
+[33mc9d51e6[m HEAD@{29}: pull: Fast-forward
+[33m91dab05[m HEAD@{30}: checkout: moving from breeding-dragoncards to master
+[33md6ebddb[m[33m ([m[1;31morigin/breeding-dragoncards[m[33m, [m[1;32mbreeding-dragoncards[m[33m)[m HEAD@{31}: commit: fixing pagination for eggs in cave
+[33m0c0f2df[m HEAD@{32}: commit: Refactor DragonCard
+[33m172e456[m HEAD@{33}: commit: Remove dragon from breed selection
+[33mf6a126b[m HEAD@{34}: commit: Remove dragon in breeding page
+[33m91dab05[m HEAD@{35}: checkout: moving from master to breeding-dragoncards
+[33m91dab05[m HEAD@{36}: pull: Fast-forward
+[33m28fc19c[m HEAD@{37}: checkout: moving from Breeding-refactor to master
+[33m2d0b655[m[33m ([m[1;31morigin/Breeding-refactor[m[33m, [m[1;32mBreeding-refactor[m[33m)[m HEAD@{38}: commit: Refactor Breed page svelte
+[33m0ef8db9[m HEAD@{39}: commit: Refactor new eggs show up
+[33m7441a9f[m HEAD@{40}: checkout: moving from master to Breeding-refactor
+[33m28fc19c[m HEAD@{41}: commit: Fix Contract events on DragonToken UI
+[33m380f534[m HEAD@{42}: checkout: moving from Breeding-refactor to master
+[33m7441a9f[m HEAD@{43}: checkout: moving from master to Breeding-refactor
+[33m380f534[m HEAD@{44}: commit: Fix GetdragonsIds
+[33mb983908[m HEAD@{45}: pull: Fast-forward
+[33md9317f5[m HEAD@{46}: checkout: moving from Breeding-refactor to master
+[33m7441a9f[m HEAD@{47}: commit: testing new eggs from breed
+[33mf7bff12[m HEAD@{48}: commit: Breed events working on 1 or 2 eggs
+[33md9317f5[m HEAD@{49}: checkout: moving from master to Breeding-refactor
+[33md9317f5[m HEAD@{50}: commit: Breeding dashboard design fix & Breed init
+[33ma62b410[m HEAD@{51}: pull: Fast-forward
+[33mec1e79c[m HEAD@{52}: checkout: moving from marketplaceUiFixes to master
+[33mddfce0d[m[33m ([m[1;31morigin/marketplaceUiFixes[m[33m, [m[1;32mmarketplaceUiFixes[m[33m)[m HEAD@{53}: commit: Fix change element in breed page
+[33mb1a2e3c[m HEAD@{54}: commit: Add connect Wallet button
+[33ma3109ca[m HEAD@{55}: commit: No offers found for all offers
+[33m03c5065[m HEAD@{56}: commit: Refactor dragon card from marketplace
+[33m2afea85[m HEAD@{57}: commit: displaying all dragons or egg offers
+[33mf6c18b0[m HEAD@{58}: commit: Change offertype new buttons component
+[33m242e4a8[m HEAD@{59}: commit: Showing all offers without rent terms
+[33mec1e79c[m HEAD@{60}: checkout: moving from master to marketplaceUiFixes
+[33mec1e79c[m HEAD@{61}: commit: user balance to navbar
+[33mebafa0b[m HEAD@{62}: commit: Added user account to navbar
+[33m9e876c7[m HEAD@{63}: commit: Fix awaiter inport into loanbook.js
+[33m100737e[m HEAD@{64}: commit: Add awaiter to collect rental income functions
+[33mb29130c[m HEAD@{65}: pull: Fast-forward
+[33m4251c35[m HEAD@{66}: commit: Change msg for create offer awaiter
+[33m3ca1f74[m HEAD@{67}: pull: Fast-forward
+[33me1f3f78[m HEAD@{68}: checkout: moving from Tx-Awaiter to master
+[33m85afacf[m[33m ([m[1;31morigin/Tx-Awaiter[m[33m, [m[1;32mTx-Awaiter[m[33m)[m HEAD@{69}: commit: Awaiter implemented on Contract classes methods
+[33m7c527a9[m HEAD@{70}: commit: Final awaiter ready
+[33m6c98b3a[m HEAD@{71}: commit: Added action name to Tx-Awaiter
+[33m3873003[m HEAD@{72}: commit: Basic awaiter component ready tested
+[33mcbef8d6[m HEAD@{73}: commit: Set Basic tx-awaiter into modifyOffer from marketplace.js
+[33me1f3f78[m HEAD@{74}: checkout: moving from master to Tx-Awaiter
+[33me1f3f78[m HEAD@{75}: commit: Adding helpers for create queue of peding transactions
+[33mfa901f9[m HEAD@{76}: commit: Fix eggs grid on cave page
+[33m32149f2[m HEAD@{77}: pull: Fast-forward
+[33m5f5a624[m HEAD@{78}: checkout: moving from marketplaceRent-integration to master
+[33m896e64b[m[33m ([m[1;31morigin/marketplaceRent-integration[m[33m, [m[1;32mmarketplaceRent-integration[m[33m)[m HEAD@{79}: commit: Add Rent a buy functionality to marketplace
+[33m1c0a30d[m HEAD@{80}: commit: Load Rent dragons into marketplace - no rent functionality
+[33m5f5a624[m HEAD@{81}: checkout: moving from master to marketplaceRent-integration
+[33m5f5a624[m HEAD@{82}: pull: Fast-forward
+[33m73d4911[m HEAD@{83}: commit: Test commit
+[33mcfde2b7[m HEAD@{84}: pull: Fast-forward
+[33m95e8f39[m HEAD@{85}: reset: moving to HEAD
+[33m95e8f39[m HEAD@{86}: commit: fix overflow from html
+[33maa76a18[m HEAD@{87}: pull: Fast-forward
+[33m912d1c8[m HEAD@{88}: checkout: moving from Loanbook-functions to master
+[33m3fc3c13[m[33m ([m[1;31morigin/Loanbook-functions[m[33m, [m[1;32mLoanbook-functions[m[33m)[m HEAD@{89}: commit: Fix UI link
+[33med3e654[m HEAD@{90}: commit: test commit
+[33m912d1c8[m HEAD@{91}: checkout: moving from master to Loanbook-functions
+[33m912d1c8[m HEAD@{92}: commit: Loanbook functions integration
+[33m69da231[m HEAD@{93}: commit: UI responsive sidebar menu
+[33m8b837da[m HEAD@{94}: commit: Helpers functions for finding function type
+[33m37116b0[m HEAD@{95}: commit: Fix UI grid + adding rental functions
+[33m2f5d4ec[m HEAD@{96}: commit: fix dragons in marketplace
+[33mb2efa7c[m HEAD@{97}: commit: Fix sell eggs for marketplace
+[33m54b17dc[m HEAD@{98}: commit: Testnet contract addresses added
+[33m04282d0[m HEAD@{99}: commit: Refactoring
+[33m8474a6f[m HEAD@{100}: pull: Fast-forward
+[33mc5dea68[m HEAD@{101}: checkout: moving from Dragon-profile-refactor to master
+[33m16a8957[m[33m ([m[1;31morigin/Dragon-profile-refactor[m[33m, [m[1;32mDragon-profile-refactor[m[33m)[m HEAD@{102}: commit: Refactoring single dragon
+[33mc5dea68[m HEAD@{103}: checkout: moving from master to Dragon-profile-refactor
+[33mc5dea68[m HEAD@{104}: pull: Fast-forward
+[33mab1c26e[m HEAD@{105}: checkout: moving from sellEggs to master
+[33m18162cf[m[33m ([m[1;31morigin/sellEggs[m[33m, [m[1;32msellEggs[m[33m)[m HEAD@{106}: commit: Displaying eggs offers in marketplace
+[33mf8f567b[m HEAD@{107}: commit: Fix approve for all for dragons and eggs
+[33mbf4e193[m HEAD@{108}: commit: Split Marketplace Approve functions into separate class
+[33me3b6e37[m HEAD@{109}: commit: Cave Approval for Circle menu refactor
+[33mbcc145f[m HEAD@{110}: commit: Approval functions refactor and UI integration
+[33mb54229f[m HEAD@{111}: commit: Load Cave contract interface once
+[33m721d306[m HEAD@{112}: commit: Grid system fixed for dragon and eggs
+[33mab1c26e[m HEAD@{113}: checkout: moving from master to sellEggs
+[33mab1c26e[m HEAD@{114}: commit: Marketplace fixes
+[33md8b0987[m HEAD@{115}: commit: Fix set offer for new dragon bug
+[33m9b28e3e[m HEAD@{116}: commit: Active menu item
+[33m3f70cbc[m HEAD@{117}: pull: Fast-forward
+[33m6459ab2[m HEAD@{118}: checkout: moving from cave-refactoring to master
+[33m5be9c6e[m[33m ([m[1;31morigin/cave-refactoring[m[33m, [m[1;32mcave-refactoring[m[33m)[m HEAD@{119}: commit: Cave sell/rent badge and ui remove test btn
+[33m6459ab2[m HEAD@{120}: checkout: moving from master to cave-refactoring
+[33m6459ab2[m HEAD@{121}: pull: Fast-forward
+[33m2749954[m HEAD@{122}: checkout: moving from Marketplace to master
+[33mb62e0ff[m[33m ([m[1;31morigin/Marketplace[m[33m, [m[1;32mMarketplace[m[33m)[m HEAD@{123}: commit: Cave fixes for showing offers
+[33m6cff32d[m HEAD@{124}: commit: Marketplace Dragon grid Cards
+[33m2d22b78[m HEAD@{125}: commit: Marketplace Interface functions
+[33m1f2af4f[m HEAD@{126}: commit: Marketplace parge Interface
+[33m70a0dbe[m HEAD@{127}: commit: Fix bug route params for single dragon page
+[33m658a5c3[m HEAD@{128}: commit: Buy function implemented on markeplace UI
+[33mcdd1ce6[m HEAD@{129}: commit: UI Desktop refactor ready
+[33ma6fbf8d[m HEAD@{130}: commit: Marketplace UI design changes
+[33m930cc63[m HEAD@{131}: pull: Fast-forward
+[33m200bffd[m HEAD@{132}: reset: moving to HEAD
+[33m200bffd[m HEAD@{133}: commit: Sidebar for Admin UI
+[33mc4a1d2c[m HEAD@{134}: commit: Small changes
+[33m5b6dfcd[m HEAD@{135}: commit: Cave Sell/Rent offer user workflow finish
+[33m66859a3[m HEAD@{136}: commit: LoanBook UI functions on component
+[33me63aaed[m HEAD@{137}: commit: Create Rent Bug Fixed
+[33m3f43e22[m HEAD@{138}: commit: LoanBook contract added
+[33mc6957b5[m HEAD@{139}: commit: Updating Offer state after Create/Remove/Modify
+[33maecd7c1[m HEAD@{140}: commit: Display offer price in modify offer tap
+[33m39d3eef[m HEAD@{141}: commit: Offer info added to dragon Object
+[33m00ca3ce[m HEAD@{142}: commit: Pagination Component
+[33m6ec2cda[m HEAD@{143}: commit: batchMint branch integration from Smart contract
+[33m0a68be9[m HEAD@{144}: commit: Sell option on Single and Approve for all
+[33m2749954[m HEAD@{145}: checkout: moving from dragon-images to Marketplace
+[33m266e98f[m[33m ([m[1;31morigin/dragon-images[m[33m, [m[1;32mdragon-images[m[33m)[m HEAD@{146}: checkout: moving from Marketplace to dragon-images
+[33m2749954[m HEAD@{147}: checkout: moving from master to Marketplace
+[33m2749954[m HEAD@{148}: pull: Fast-forward
+[33mc73c1c3[m HEAD@{149}: checkout: moving from dragon-images to master
+[33m266e98f[m[33m ([m[1;31morigin/dragon-images[m[33m, [m[1;32mdragon-images[m[33m)[m HEAD@{150}: commit: Sell dragon Screen change on approval state
+[33me51ba8d[m HEAD@{151}: commit: Approval Workflow + Marketplace Input Components
+[33mff4b62e[m HEAD@{152}: commit: Circle menu to Dragon Card and Contract approval UI
+[33mccc867c[m HEAD@{153}: commit: Marketplace functions UI
+[33m5f9f675[m HEAD@{154}: commit: Icons to Dragon Card
+[33m47ebc82[m HEAD@{155}: commit: Home back to normal
+[33m41c882b[m HEAD@{156}: commit: Dragon Card structure modifyed
+[33m8ecb001[m HEAD@{157}: commit: Eggs files added
+[33mde48121[m HEAD@{158}: commit: Image finder function added
+[33m3344f1f[m[33m ([m[1;31morigin/subSpecies[m[33m, [m[1;32msubSpecies[m[33m)[m HEAD@{159}: checkout: moving from subSpecies to dragon-images
+[33m3344f1f[m[33m ([m[1;31morigin/subSpecies[m[33m, [m[1;32msubSpecies[m[33m)[m HEAD@{160}: commit: Attributes and Skills Integration
+[33m71af8b0[m HEAD@{161}: commit: Element Selection on breeding
+[33mbea8d8a[m HEAD@{162}: commit: removed todos folder
+[33m546e7e3[m HEAD@{163}: commit: SubSpecies added to single dragon view
+[33mc7d6f03[m HEAD@{164}: commit: SubSpecies added to dragons
+[33m7cb63c5[m HEAD@{165}: commit: SubSpecies added to Egg card
+[33mbcb315b[m HEAD@{166}: commit: Contract updated SubSpecies added to eggs
+[33m5fa7ae8[m[33m ([m[1;31morigin/Breeding[m[33m, [m[1;32mBreeding[m[33m)[m HEAD@{167}: checkout: moving from Breeding to subSpecies
+[33m5fa7ae8[m[33m ([m[1;31morigin/Breeding[m[33m, [m[1;32mBreeding[m[33m)[m HEAD@{168}: reset: moving to HEAD
+[33m5fa7ae8[m[33m ([m[1;31morigin/Breeding[m[33m, [m[1;32mBreeding[m[33m)[m HEAD@{169}: commit: Eggs and Dragons to WritableStorage
+[33m57cb98a[m HEAD@{170}: commit: Birth Box Showing on EggLaid event
+[33m9f97627[m HEAD@{171}: commit: Dragon Logo added
+[33m2caecca[m HEAD@{172}: commit: Breeding events added
+[33m8a40c43[m HEAD@{173}: commit: Removed selected dragons from avaible dragons in breeding
+[33md12f35a[m HEAD@{174}: commit: Correct --host
+[33m88004cc[m HEAD@{175}: commit: Change host
+[33m2e13c64[m HEAD@{176}: commit: Fix birth.svelte
+[33m2062933[m HEAD@{177}: commit: Breed Rules - Energy lvl
+[33mff1dc11[m HEAD@{178}: commit: Removed console.logs
+[33m54e80a8[m HEAD@{179}: commit: Update user Eggs on Events
+[33m5bcc50e[m HEAD@{180}: commit: Eggs Events added to Cave
+[33m07ea201[m HEAD@{181}: commit: Breed function added to UI
+[33mb0bd8b7[m HEAD@{182}: commit: Breed UI
+[33m9a1460b[m[33m ([m[1;31morigin/DragonToKen[m[33m, [m[1;32mDragonToKen[m[33m)[m HEAD@{183}: checkout: moving from DragonToKen to Breeding
+[33m9a1460b[m[33m ([m[1;31morigin/DragonToKen[m[33m, [m[1;32mDragonToKen[m[33m)[m HEAD@{184}: commit: Cleaning Branch
+[33mdc93761[m HEAD@{185}: commit: netlify
+[33m7b850f1[m HEAD@{186}: commit: netlify
+[33mc3bfda7[m HEAD@{187}: commit: netlify
+[33mc05c630[m HEAD@{188}: commit: netlify
+[33m9dcf441[m HEAD@{189}: commit: remove netlify
+[33med6c848[m HEAD@{190}: commit: Change host config
+[33mc9aba20[m HEAD@{191}: commit: added netlify file
+[33m0f991d4[m HEAD@{192}: commit: remove netlify file
+[33m27805b5[m HEAD@{193}: commit: netlify npm run dev
+[33m8ccef78[m HEAD@{194}: commit: Default adapter src
+[33m66d07cd[m HEAD@{195}: commit: Default adapter
+[33m9dd8d7f[m HEAD@{196}: commit: Netlify adapter added
+[33md15d9eb[m HEAD@{197}: commit: Raise Dragon functionality added
+[33m7e49c43[m HEAD@{198}: commit: Energy and maturity progressBar
+[33mf3287ca[m HEAD@{199}: commit: Single dragon view - check maturity and energy buttons
+[33m4894a86[m HEAD@{200}: commit: Dragon routes and DragonCard added
+[33m6c08fcc[m HEAD@{201}: commit: Dragon section added to Cave
+[33m68f45ee[m HEAD@{202}: commit: Get all dragons functions to dragon token methods
+[33m761096e[m HEAD@{203}: commit: Single view for each Egg added
+[33m327bbb5[m HEAD@{204}: commit: Dragon token interface added
+[33m3ea0234[m[33m ([m[1;31morigin/Egg-creation[m[33m, [m[1;32mEgg-creation[m[33m)[m HEAD@{205}: checkout: moving from Egg-creation to DragonToKen
+[33m3ea0234[m[33m ([m[1;31morigin/Egg-creation[m[33m, [m[1;32mEgg-creation[m[33m)[m HEAD@{206}: commit: General refactor
+[33m104aede[m HEAD@{207}: commit: Incubation time counter and Egg design on Cave page
+[33me13cb17[m HEAD@{208}: commit: Total function supply added
+[33m705f103[m HEAD@{209}: commit: Error Handling functions for contracts revert errors
+[33m7a4a40d[m HEAD@{210}: commit: Cave page for displaying user eggs
+[33mbb0124b[m HEAD@{211}: commit: Get Egg function added with Egg details
+[33m1785797[m HEAD@{212}: commit: UI for testing Egg minting and incubation

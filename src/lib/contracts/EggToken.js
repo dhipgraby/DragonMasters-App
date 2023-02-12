@@ -112,7 +112,6 @@ export class EggContract {
     }
 
     async checkIncubation(eggId, alert = false) {
-
         try {
             const incubationTime = await this.contract.EggToken.methods.checkIncubation(eggId).call()
 
