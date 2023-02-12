@@ -10,7 +10,6 @@
 	import '$lib/css/marketplace/dragon.css';
 
 	export let dragon;
-	export let displayOwner;
 	export let contract;
 	export let callback = null;
 	export let fullEnergy = null;
@@ -19,8 +18,6 @@
 	export let showCircleMenu = false;
 	export let removeBtn = false;
 	export let removeDragon = null;
-
-	let account = contract.contract.account
 
 	onMount(() => {
 		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -59,7 +56,7 @@
 	<DragonHeaderDetails {...details} />
 	<div class="card-body ta-c">
 		<!-- ID AND SHOW OFFER TYPES -->
-		<OfferInfo {account} {dragon} {displayOwner}/>
+		<OfferInfo {dragon} />
 		<!--   ENERGY  -->
 		{#if dragon.energy}
 			<Energy energy={dragon.energy} {fullEnergy} />

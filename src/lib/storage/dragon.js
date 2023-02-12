@@ -1,9 +1,7 @@
 import { createWritableStore } from '$lib/helpers/storage'
 import { get, writable } from "svelte/store";
-
-const expirationTime = new Date().getTime() + 1000 * 60; //1 minute 
 //ALL DRAGONS
-export const userDragons = createWritableStore('userDragons', [],expirationTime)
+export const userDragons = createWritableStore('userDragons', [])
 //FOR BREEDING
 export const dragonA = createWritableStore('dragonA', 0);
 export const dragonB = createWritableStore('dragonB', 0);

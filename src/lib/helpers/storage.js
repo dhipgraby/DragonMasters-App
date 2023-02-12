@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-export const createWritableStore = (key, startValue,customExpiration = null) => {
+export const createWritableStore = (key, startValue) => {
     const { subscribe, set } = writable(startValue);
     
     return {
@@ -12,8 +12,7 @@ export const createWritableStore = (key, startValue,customExpiration = null) => 
           set(JSON.parse(json));
         }
         
-        subscribe(current => {          
-          if (customExpiration !== null)  current.expires = customExpiration  
+        subscribe(current => {
           localStorage.setItem(key, JSON.stringify(current));
         });
       }
