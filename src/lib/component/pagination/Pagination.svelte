@@ -71,8 +71,7 @@
 
 	.mycontainer {
 		width: 100%;
-		text-align: left;
-		margin-bottom: 25px;
+		text-align: left;		
 	}
 
 	.myRow {

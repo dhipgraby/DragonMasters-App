@@ -2,7 +2,7 @@
 	import ContractUI from '$lib/component/contractUI/ContractUI.svelte';
 	import { onMount } from 'svelte';
 
-	let currentParam;
+	let currentParam = 1;
 
 	onMount(() => {
 		const searchParams = new URLSearchParams(window.location.search);
@@ -23,6 +23,9 @@
 				break;
 			case 'approvals':
 				currentParam = 5;
+				break;
+				default : 
+				currentParam = 1;
 		}
 	});
 </script>

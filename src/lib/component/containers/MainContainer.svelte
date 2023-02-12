@@ -6,7 +6,7 @@
 
 <style>
 	section {
-		padding-top: 50px;
+		padding-top: 20px;
 		padding-left: 25px;
 		padding-right: 25px;
 		display: inherit;

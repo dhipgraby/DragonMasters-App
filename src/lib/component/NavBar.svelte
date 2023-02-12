@@ -70,6 +70,13 @@
 </nav>
 
 <style>
+
+	.navbar {
+		position: fixed;
+		width: 100%;
+		z-index: 100;
+	}
+
 	.connectBtn {
 		align-self: center;
 	}

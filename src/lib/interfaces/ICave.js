@@ -16,9 +16,9 @@ export async function LoadInterface(from, to, interfaceName = 'All') {
     if (from > 0) {
         from -= 1;
         to -= 1;
-    } 
+    }
     to -= 1
-    
+
     let contractData = await loadContractData()
     await contractData['market'].isApprovedForAll(TokenType.Egg);
     await contractData['market'].isApprovedForAll(TokenType.Dragon);
@@ -42,23 +42,26 @@ export async function LoadInterface(from, to, interfaceName = 'All') {
     }
 }
 
-
 export async function LoanBookInterface(from, to, interfaceName = 'All') {
 
     if (from > 0) {
         from -= 1;
         to -= 1;
-    } 
+    }
     to -= 1
-    
-    let contractData = await loadContractData()    
+
+    let contractData = await loadContractData()
     switch (interfaceName) {
         case 'Egg':
-            await loadEggLoans(contractData, from, to)            
+            await loadEggLoans(contractData, from, to)
             break;
         case 'Dragon':
-            await loadDragonLoans(contractData, from, to)            
-            break;     
+            await loadDragonLoans(contractData, from, to)
+            break;
+        case 'All':
+            await loadEggLoans(contractData, from, to)
+            await loadDragonLoans(contractData, from, to)
+            break;
     }
 }
 
@@ -97,15 +100,15 @@ async function loadEggOffers(contract, from, to) {
     await contract['market'].getOfferedBy(from, to, OfferType.ForRent, TokenType.Egg)
 }
 //USER EGG LOANBOOK
-async function loadEggLoans(contract, from, to){
-    await contract['market'].getLoans(from, to,TokenType.Egg,LoanType.Lend)
-    await contract['market'].getLoans(from, to,TokenType.Egg,LoanType.Borrow)
-}   
+async function loadEggLoans(contract, from, to) {
+    await contract['loanbook'].getUserLoans(from, to, TokenType.Egg, LoanType.Lend)
+    await contract['loanbook'].getUserLoans(from, to, TokenType.Egg, LoanType.Borrow)
+}
 //USER DRAGONS LOANBOOK
-async function loadDragonLoans(contract, from, to){
-    await contract['loanbook'].getUSerLoans(from, to,TokenType.Dragon,LoanType.Lend)
-    await contract['loanbook'].getUSerLoans(from, to,TokenType.Dragon,LoanType.Borrow)
-}   
+async function loadDragonLoans(contract, from, to) {
+    await contract['loanbook'].getUserLoans(from, to, TokenType.Dragon, LoanType.Lend)
+    await contract['loanbook'].getUserLoans(from, to, TokenType.Dragon, LoanType.Borrow)
+}
 
 async function loadEvents(contract, from, to) {
     let contractEvents = await contract['egg'].getEvents();

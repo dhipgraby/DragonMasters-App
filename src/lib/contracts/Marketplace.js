@@ -33,7 +33,7 @@ export class MarketplaceContract extends MarketApproval {
     constructor() {
         super()
         this.contract
-        this.marketplace
+        // this.marketplace
         return (async () => {
             this.contract = await contracts();
             // this.dragonInterface = await new DragonContract()
@@ -51,7 +51,7 @@ export class MarketplaceContract extends MarketApproval {
                 from: this.contract.account,
                 value: price
             }, function (err, txHash) {
-                addAwaiter(txHash,'Buying Token id: ' + tokenId)
+                addAwaiter(txHash, 'Buying Token id: ' + tokenId)
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert('Token id: ' + tokenId + ' Bought!', 'success')
@@ -77,7 +77,7 @@ export class MarketplaceContract extends MarketApproval {
                 from: this.contract.account,
                 value: totalAmount
             }, function (err, txHash) {
-                addAwaiter(txHash,'Rent Token')
+                addAwaiter(txHash, 'Rent Token')
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert('Token id: ' + tokenId + ' Rented!', 'success')
@@ -92,13 +92,13 @@ export class MarketplaceContract extends MarketApproval {
         }
     }
 
-    async endRental(tokenId, tokenType , alert = false) {
+    async endRental(tokenId, tokenType, alert = false) {
         try {
             await this.contract.Marketplace.methods.endRental(
                 tokenId,
                 tokenType
-            ).send({from: this.contract.account}, function (err, txHash) {
-                addAwaiter(txHash,'Ending Rental of token id:'+tokenId)
+            ).send({ from: this.contract.account }, function (err, txHash) {
+                addAwaiter(txHash, 'Ending Rental of token id:' + tokenId)
                 if (err) setAlert(err, 'warning')
                 else {
                     if (alert) setAlert('Ending rental for token Id ' + tokenId + '. Tx: ' + txHash, 'success')
@@ -114,16 +114,16 @@ export class MarketplaceContract extends MarketApproval {
     }
 
     async setOffer(tokenId, offerType, tokenType, terms) {
-        
+
         try {
             let offer = await this.contract.Marketplace.methods.setOffer(
                 tokenId,
                 terms,
                 offerType,
                 tokenType,
-            ).send({}, async function (err, txHash) { 
+            ).send({}, async function (err, txHash) {
                 let offerName = (offerType == OfferType.ForSale) ? 'Sell' : 'Rent';
-                addAwaiter(txHash,'Create '+offerName+' Offer')                   
+                addAwaiter(txHash, 'Create ' + offerName + ' Offer')
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert('New offer created!', 'success')
@@ -145,8 +145,8 @@ export class MarketplaceContract extends MarketApproval {
                 terms,
                 offerType,
                 tokenType,
-            ).send({}, async function (err, txHash) {                
-                addAwaiter(txHash,'Modify Offer')
+            ).send({}, async function (err, txHash) {
+                addAwaiter(txHash, 'Modify Offer')
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert('Offer Modifyed!', 'success')
@@ -168,7 +168,7 @@ export class MarketplaceContract extends MarketApproval {
         _tokenType
     ) {
         //Collecting all offers and details 
-        let allOffers = await this.getOffered(from, to, _offerType, _tokenType)        
+        let allOffers = await this.getOffered(from, to, _offerType, _tokenType)
         let tokenIds = allOffers.map((el) => { return el.tokenId });
         let assets = []
 
@@ -321,11 +321,11 @@ export class MarketplaceContract extends MarketApproval {
                     }
                     return el
                 })
-                
+
                 assetOffers.totalOwned = assets.totalOwned;
-                
+
                 switch (_tokenType) {
-                    case TokenType.Dragon:                        
+                    case TokenType.Dragon:
                         userDragons.set(assetOffers)
                         break;
                     case TokenType.Egg:
@@ -370,7 +370,7 @@ export class MarketplaceContract extends MarketApproval {
                 tokenType
             ).send({}, function (err, txHash) {
                 let offerName = (offerType == OfferType.ForSale) ? 'Sell' : 'Rent';
-                addAwaiter(txHash,'Remove '+offerName+' Offer')
+                addAwaiter(txHash, 'Remove ' + offerName + ' Offer')
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert(txHash, 'success')
@@ -395,7 +395,7 @@ export class MarketplaceContract extends MarketApproval {
                 tokenType
             ).send({}, function (err, txHash) {
                 let offerName = (offerType == OfferType.ForSale) ? 'Sell' : 'Rent';
-                addAwaiter(txHash,'Remove all '+offerName+' Offers')
+                addAwaiter(txHash, 'Remove all ' + offerName + ' Offers')
                 if (err) setAlert(err, 'warning')
                 else {
                     setAlert(txHash, 'success')
