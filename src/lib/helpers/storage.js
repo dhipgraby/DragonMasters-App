@@ -13,7 +13,7 @@ export const createWritableStore = (key, startValue,customExpiration = null) => 
         }
         
         subscribe(current => {          
-          //  if (customExpiration !== null)  current.expires = customExpiration  
+          if (customExpiration !== null)  current.expires = customExpiration  
           localStorage.setItem(key, JSON.stringify(current));
         });
       }

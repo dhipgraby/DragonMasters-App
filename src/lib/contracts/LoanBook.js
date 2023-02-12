@@ -35,18 +35,18 @@ export class LoanBookContract extends MarketplaceContract {
         for (let i = 0; i < total; i++) {
             let asset;
             if (_tokenType === TokenType.Egg) {
-                asset = await this.parseEgg(allIds.tokenIds[i])
-                asset.owner = (_loanType === LoanType.Lend) ? asset.details.borrower: asset.details.lender;
+                asset = await this.parseEgg(allIds.tokenIds[i])                
             } else {
                 asset = await this.parseDragon(allIds.tokenIds[i])
             }
+            asset.owner = (_loanType === LoanType.Lend) ? asset.details.lender: asset.details.borrower;
             allAssets.push(asset)
         }
-
-        allAssets.totalOwned = total
+        
         allAssets.sort(function (a, b) {
             return a.tokenId - b.tokenId;
-        });        
+        });
+        allAssets.totalOwned = total
         await this.updateLoanStorage(allAssets, _tokenType, _loanType)
         return allAssets
     }

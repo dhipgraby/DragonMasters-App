@@ -12,7 +12,7 @@
 	</div>
 	{#if displayOwner}
 		<div class="ta-l">
-			<!-- <span class="badge bg-black"><b>Owner</b>: {@html loadOwner(account,dragon.owner)}</span> -->
+			<span class="badge bg-black"><b>Owner</b>: {@html loadOwner(account,dragon.owner)}</span>
 		</div>
 	{/if}
 	{#if dragon?.offer?.sellOffer}

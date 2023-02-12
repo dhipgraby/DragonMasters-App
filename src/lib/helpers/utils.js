@@ -194,7 +194,7 @@ export async function loadRentTerms(asset, _offerType) {
 }
 
 export function loadOwner(account, owner) {
-    console.log(account, owner);
+    
     account = account.toLowerCase();
     owner = owner.toLowerCase();
     if (account === owner) {

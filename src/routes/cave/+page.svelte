@@ -38,12 +38,12 @@
 		lendedDragons.useLocalStorage();
 		borrowedDragons.useLocalStorage();
 
-		if(eggs.length < 1) await LoadInterface(0, $perpage); 
-		if(eggLends.length < 1) await LoanBookInterface(0, $perpage); 		
+		await LoadInterface(0, $perpage); 
+		await LoanBookInterface(0, $perpage); 		
 		
 		console.log(eggs);
-		console.log(eggBorrows);
-		console.log(eggLends);
+		console.log('dragonBorrows',dragonBorrows);
+		console.log('dragonLends',dragonLends);
 		console.log(contract);
 		show = urlCurrentParam();
 	});
