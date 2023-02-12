@@ -14,6 +14,8 @@ export function setAlert(message, alertType) {
 }
 
 export function addAwaiter(txHash,action,status='pending') {
+
+    if(txHash === undefined) return;
     txTrigger.update(value => {
         let txArray = value
         txArray.push(txParser(txHash,action, status))

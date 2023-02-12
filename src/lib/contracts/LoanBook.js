@@ -1,17 +1,75 @@
-import { setAlert,addAwaiter  } from "$lib/storage/alerts";
+import { setAlert, addAwaiter } from "$lib/storage/alerts";
 import { contracts } from "./contracts";
-
+import { MarketplaceContract } from "$lib/contracts/Marketplace";
+import { lendedEggs, lendedDragons, borrowedEggs, borrowedDragons } from "$lib/storage/loanbook";
 
 export const TokenType = { Unknown: 0, Dna: 1, Egg: 2, Dragon: 3 }
 export const OfferType = { NoOffer: 0, ForSale: 1, ForRent: 2, ForSaleOrRent: 3 }
+export const LoanType = { Unknown: 0, Lend: 1, Borrow: 2 }
 
-export class LoanBookContract {
+export class LoanBookContract extends MarketplaceContract {
     constructor() {
+        super()
         this.contract
         return (async () => {
             this.contract = await contracts();
             return this;
         })();
+    }
+
+    async getUserLoans(startIndex, endIndex, _tokenType, _loanType) {
+
+        let allAssets = []
+
+        const allIds = (_loanType === LoanType.Lend) ?
+            await this.getLoanedBy(this.contract.account, startIndex, endIndex, _tokenType)
+            :
+            await this.getBorrowedBy(this.contract.account, startIndex, endIndex, _tokenType);
+
+        const total = (_loanType === LoanType.Lend) ?
+            Number(allIds.totalLoaned)
+            :
+            Number(allIds.totalBorrowed)
+            ;
+
+        for (let i = 0; i < total; i++) {
+            let asset = (_tokenType === TokenType.Egg) ? await this.getEgg(allIds.tokenIds[i]) : await this.getDragon(allIds.tokenIds[i]);
+            let details = await this.getLoan(allIds.tokenIds[i], _tokenType)
+            asset['details'] = await this.parseLoan(details);
+            if (_tokenType === TokenType.Dragon) asset['dna'] = await this.getDna(asset.dnaId)
+            allAssets.push(asset)
+        }
+
+        allAssets.totalOwned = total
+        allAssets.sort(function(a, b) {
+            return a.tokenId - b.tokenId;
+          });
+        // console.log('allAssets', allAssets);
+        await this.updateLoanStorage(allAssets, _tokenType, _loanType)
+        return allAssets
+    }
+
+    async updateLoanStorage(assets, _tokenType, _loanType) {
+        switch (_tokenType) {
+            case TokenType.Egg:
+                (_loanType === LoanType.Lend) ? lendedEggs.set(assets) : borrowedEggs.set(assets);
+                break;
+            case TokenType.Dragon:
+                (_loanType === LoanType.Lend) ? lendedDragons.set(assets) : borrowedDragons.set(assets);
+                break;
+        }
+    }
+
+    async parseLoan(details) {
+
+        const loanDetails = {
+            borrower: details.borrower,
+            lender: details.lender,
+            terms: { deposit: details.terms.deposit, startTime: details.terms.startTime, minDuration: details.terms.minDuration },
+            tokenId: details.tokenId,
+        }
+
+        return loanDetails
     }
 
     // *** LoanBook setup / configuration functions ***
@@ -108,7 +166,7 @@ export class LoanBookContract {
                 offers.push(currentOffer)
             }
             if (alert == true) setAlert('Total Loans ' + ids.totalOnLoan + '.<p class="bold m-0">Token Ids: ' + ids.tokenIds + '</p>', 'success')
-            
+
             return offers
         } catch (err) {
             setAlert('getOnLoan error', 'warning')
@@ -182,9 +240,7 @@ export class LoanBookContract {
         try {
             const ids = await this.contract.LoanBook.methods.getBorrowedBy(borrower, startIndex, endIndex, tokenType).call()
             if (alert == true) setAlert('Borrowed tokens: ' + ids.totalBorrowed + '.<p class="bold m-0">Token Ids: ' + ids.tokenIds + '</p>', 'success')
-            
-            return ids.tokenIds
-
+            return ids
         } catch (err) {
             setAlert('getBorrowedBy error', 'warning')
             console.log("Error at: getBorrowedBy" + err)
@@ -201,8 +257,7 @@ export class LoanBookContract {
         try {
             const ids = await this.contract.LoanBook.methods.getLoanedBy(lender, startIndex, endIndex, tokenType).call()
             if (alert == true) setAlert('Loaned tokens: ' + ids.totalLoaned + '.<p class="bold m-0">Token Ids: ' + ids.tokenIds + '</p>', 'success')
-            
-            return ids.tokenIds
+            return ids
         } catch (err) {
             setAlert('getLoanedBy error', 'warning')
             console.log("Error at: getLoanedBy" + err)
@@ -217,7 +272,6 @@ export class LoanBookContract {
                 tokenType
             ).call()
             if (alert == true) setAlert('Borrower of token is: ' + borrower, 'success')
-
             return borrower
         } catch (err) {
             if (alert == true) setAlert('borrowerOf error', 'warning')
@@ -331,7 +385,7 @@ export class LoanBookContract {
         tokenIds,
         tokenTypes,
         alert
-    ) {                
+    ) {
         try {
             await this.contract.LoanBook.methods.collectRentalIncome(
                 tokenIds,
@@ -355,7 +409,7 @@ export class LoanBookContract {
             await this.contract.LoanBook.methods.collectRentalIncomeOfTypes(
                 tokenTypes
             ).send({}, function (err, txHash) {
-                addAwaiter(txHash, "Collecting income of token types: "+ JSON.stringify(tokenTypes))
+                addAwaiter(txHash, "Collecting income of token types: " + JSON.stringify(tokenTypes))
                 if (alert == true && err) setAlert(err, 'warning')
                 else {
                     if (alert == true) setAlert('Collected rental income (Wei)', 'success')
@@ -388,7 +442,7 @@ export class LoanBookContract {
         try {
             const weiAmount = await this.contract.LoanBook.methods.ethTotalDeposited().call()
             if (alert == true) setAlert('Total rental deposits (Wei): ' + weiAmount, 'success')
-            
+
             return weiAmount
         } catch (err) {
             if (alert == true) setAlert('ethTotalDeposited error', 'warning')
@@ -400,7 +454,7 @@ export class LoanBookContract {
         try {
             const cEthAmount = await this.contract.LoanBook.methods.cEthTotalHeld().call()
             if (alert == true) setAlert('Total cEth (in Compound): ' + cEthAmount, 'success')
-            
+
             return cEthAmount
         } catch (err) {
             if (alert == true) setAlert('cEthTotalHeld error', 'warning')
@@ -412,7 +466,7 @@ export class LoanBookContract {
         try {
             const weiAmount = await this.contract.LoanBook.methods.ethDeposited(tokenId, tokenType).call()
             if (alert == true) setAlert('Rental deposit (Wei): ' + weiAmount, 'success')
-            
+
             return weiAmount
         } catch (err) {
             if (alert == true) setAlert('ethDeposited error', 'warning')
@@ -424,7 +478,7 @@ export class LoanBookContract {
         try {
             const cEthAmount = await this.contract.LoanBook.methods.cEthHeld(tokenId, tokenType).call()
             if (alert == true) setAlert("Token's current cEth (in Compound): " + cEthAmount, 'success')
-            
+
             return cEthAmount
         } catch (err) {
             if (alert == true) setAlert('cEthHeld error', 'warning')

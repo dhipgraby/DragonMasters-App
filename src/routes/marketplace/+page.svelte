@@ -71,7 +71,6 @@
 	<TokenButtons {changeToken} />
 	<OfferTypeBtn {setOfferType} {_offerType} />
 
-
 	<h3>{(show === TokenType.Egg) ? "Eggs" : "Dragons"} for {offerTypeMsg} </h3>
 
 	{#if _offerType == OfferType.ForSale}

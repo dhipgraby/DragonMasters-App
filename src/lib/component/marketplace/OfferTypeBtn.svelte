@@ -11,7 +11,7 @@
 			type="button"
 			on:click={() => setOfferType(OfferType.ForSale)}
 			class="btn darkBtn {_offerType === OfferType.ForSale ? 'active' : ''}"
-			><i class="fas fa-shopping-cart" /> Buy
+			><i class="fas fa-shopping-cart" /> For Sale
 		</button>
 	</div>
 	<div class="col">
@@ -20,7 +20,7 @@
 			on:click={() => setOfferType(OfferType.ForRent)}
 			class="btn darkBtn {_offerType === OfferType.ForRent ? 'active' : ''}"
 		>
-			<i class="fas fa-donate" /> Rent
+			<i class="fas fa-donate" /> For Rent
 		</button>
 	</div>
 	<div class="col">
@@ -36,8 +36,10 @@
 
 <style>
 	.row {
-		max-width: 600px;
-
+		max-width: 650px;
+	}
+	.col {
+		width: fit-content;
 	}
 	i {
 		color: white;

@@ -33,11 +33,11 @@ export class MarketplaceContract extends MarketApproval {
     constructor() {
         super()
         this.contract
-        this.marketplace
+        // this.marketplace
         return (async () => {
             this.contract = await contracts();
-            this.dragonInterface = await new DragonContract()
-            this.eggInterface = await new EggContract()
+            // this.dragonInterface = await new DragonContract()
+            // this.eggInterface = await new EggContract()
             return this;
         })();
     }
@@ -106,7 +106,6 @@ export class MarketplaceContract extends MarketApproval {
         }
     }
 
-
     async getSupportedOfferType(tokenType, alert = false) {
         try {
             const supportedOfferTypes = await this.contract.Marketplace.methods.getSupportedOfferType(
@@ -171,6 +170,7 @@ export class MarketplaceContract extends MarketApproval {
             await this.contract.Marketplace.methods.pause().send({}, async function (err, txHash) { 
 
                 addAwaiter(txHash,'Pause Marketplace operations')  
+
                 if (err) setAlert(err, 'warning')
                 else {
                     if (alert === true) setAlert('Paused Marketplace', 'success')
@@ -190,6 +190,7 @@ export class MarketplaceContract extends MarketApproval {
             await this.contract.Marketplace.methods.unpause().send({}, async function (err, txHash) { 
 
                 addAwaiter(txHash,'Unpause Marketplace operations')  
+
                 if (err) setAlert(err, 'warning')
                 else {
                     if (alert === true) setAlert('Unpaused Marketplace', 'success')
@@ -208,6 +209,7 @@ export class MarketplaceContract extends MarketApproval {
     // Functions to set, get, modify and remove offers (for sale and/or for rent)
 
     async setOffer(tokenId, offerType, tokenType, terms, alert = false) {
+
         try {
             await this.contract.Marketplace.methods.setOffer(
                 tokenId,
@@ -238,8 +240,8 @@ export class MarketplaceContract extends MarketApproval {
                 terms,
                 offerType,
                 tokenType,
-            ).send({}, async function (err, txHash) {                
-                addAwaiter(txHash,'Modify Offer')
+            ).send({}, async function (err, txHash) {
+                addAwaiter(txHash, 'Modify Offer')
                 if (err) setAlert(err, 'warning')
                 else {
                     if (alert === true) setAlert('Modify offer for token Id ' + tokenId, 'success')
@@ -253,7 +255,6 @@ export class MarketplaceContract extends MarketApproval {
             console.log(errMsg)
         }
     }
-
 
     async getNumOffered(
         offerType,
@@ -361,7 +362,6 @@ export class MarketplaceContract extends MarketApproval {
 
             //ITS ONLY UPDATES THE OFFER OF EXISTING TOKEN TYPE ON STORAGE
             if (ownAccount == true) {
-
                 const assets = (_tokenType == TokenType.Dragon) ? get(userDragons) : get(userEggs)
                 const offerName = (_offerType == OfferType.ForSale) ? 'sellOffer' : 'rentOffer';
                 const assetOffers = assets.map(el => {
@@ -374,11 +374,11 @@ export class MarketplaceContract extends MarketApproval {
                     }
                     return el
                 })
-                
+
                 assetOffers.totalOwned = assets.totalOwned;
-                
+
                 switch (_tokenType) {
-                    case TokenType.Dragon:                        
+                    case TokenType.Dragon:
                         userDragons.set(assetOffers)
                         break;
                     case TokenType.Egg:
@@ -497,6 +497,7 @@ export class MarketplaceContract extends MarketApproval {
             ).send({}, function (err, txHash) {
                 const offerName = (offerType == OfferType.ForSale) ? 'Sell' : 'Rent';
                 addAwaiter(txHash,'Remove '+offerName+' Offer')
+
                 if (err) setAlert(err, 'warning')
                 else {
                     if (alert === true) setAlert('Remove offer for token Id ' + tokenId, 'success')
@@ -523,8 +524,10 @@ export class MarketplaceContract extends MarketApproval {
                 tokenId,
                 tokenType
             ).send({}, function (err, txHash) {
+
                 const offerName = (offerType == OfferType.ForSale) ? 'Sell' : 'Rent';
                 addAwaiter(txHash,'Remove All '+offerName+' Offers')
+
                 if (err) setAlert(err, 'warning')
                 else {
                     if (alert === true) setAlert('Remove All ' + offerName + ' offers', 'success')

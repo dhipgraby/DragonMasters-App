@@ -26,6 +26,7 @@
 		flex-direction: column;
 		width: 100%;
 		margin: 0 auto;
+		padding-top: 56px;
 		box-sizing: border-box;
 	}
 </style>

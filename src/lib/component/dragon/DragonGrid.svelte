@@ -16,10 +16,11 @@
 		<h1>Your Dragons</h1>
 		<Pagination {totalAssets} {loadPage} inferfaceName="Dragon" />
 	</div>
-	<div class="col-6 ta-r">
+	<div class="col-6 ta-r margintop">
 		<a href="/breed" class="btn btn-danger"> Breed </a>
 	</div>
 </div>
+<hr />
 
 <div class="row">
 	{#if dragons.length}
@@ -33,10 +34,11 @@
 	{/if}
 </div>
 
-<style>
-	.row div {
-		text-align: -webkit-center;
+<style>	
+	.margintop {
+		margin-top:56px;
 	}
+
 	.extended {
 		width: 100% !important;
 	}
