@@ -145,7 +145,7 @@ export function get_unique_tokenid(sellOffers, rentOffers) {
 
     let concatArray = sellOffers.concat(rentOffers)
     // let maxIndex = (sellOffers.totalOffers > rentOffers.totalOffers) ? sellOffers.totalOffers : rentOffers.totalOffers
-    let uniqueArray = []
+    let uniqueArray = []    
     //look into the short array
     concatArray.find((item) => {
         let checkunique = uniqueArray.find((unique) => unique.tokenId === item.tokenId)
@@ -170,7 +170,7 @@ export function get_unique_tokenid(sellOffers, rentOffers) {
         }
     })
 
-    uniqueArray.totalOffers = uniqueArray.length;
+    uniqueArray.totalOffers = uniqueArray.length;    
     console.log(uniqueArray);
     return uniqueArray;
 }
@@ -194,7 +194,6 @@ export async function loadRentTerms(asset, _offerType) {
 }
 
 export function loadOwner(account, owner) {
-    
     account = account.toLowerCase();
     owner = owner.toLowerCase();
     if (account === owner) {

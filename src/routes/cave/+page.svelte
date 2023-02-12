@@ -1,17 +1,16 @@
 <script>
-	import { onMount } from 'svelte';
 	//COMPONENTS
 	import EggGrid from '$lib/component/egg/EggGrid.svelte';
 	import DragonGrid from '$lib/component/dragon/DragonGrid.svelte';
-	import MainContainer from '$lib/component/containers/MainContainer.svelte';
-	import LoanBookCaveBtn from '$lib/component/dragonMenu/LoanBookCaveBtn.svelte';
 	//STORAGE
-	import { userEggs } from '$lib/storage/eggs';
 	import { userDragons } from '$lib/storage/dragon';
-	import { perpage } from '$lib/storage/pagination';
+	import { userEggs } from '$lib/storage/eggs';
 	import { lendedEggs, lendedDragons, borrowedEggs, borrowedDragons } from '$lib/storage/loanbook';
 	//CONTRACTS
+	import { onMount } from 'svelte';
 	import { LoadInterface, LoanBookInterface, contracts } from '$lib/interfaces/ICave';
+	import MainContainer from '$lib/component/containers/MainContainer.svelte';
+	import { perpage } from '$lib/storage/pagination';
 	import { urlCurrentParam, ScreenType } from '$lib/helpers/uriHelper';
 
 	let show = 0;
@@ -31,20 +30,12 @@
 
 	onMount(async () => {
 		perpage.useLocalStorage();
-		userEggs.useLocalStorage();
-		userDragons.useLocalStorage();
-		lendedEggs.useLocalStorage();
-		borrowedEggs.useLocalStorage();
-		lendedDragons.useLocalStorage();
-		borrowedDragons.useLocalStorage();
-
-		await LoadInterface(0, $perpage); 
-		await LoanBookInterface(0, $perpage); 		
-		
-		console.log(eggs);
-		console.log('dragonBorrows',dragonBorrows);
-		console.log('dragonLends',dragonLends);
-		console.log(contract);
+		await LoanBookInterface(0, $perpage);
+		await LoadInterface(0, $perpage);
+		console.log(eggLends);
+		console.log(eggBorrows);
+		console.log(dragonLends);
+		console.log(dragonBorrows);
 		show = urlCurrentParam();
 	});
 </script>
@@ -69,7 +60,7 @@
 		><i class="fas fa-donate" /> BORROWS
 	</button>
 </div>
-
+{show}
 <MainContainer>
 	{#if show == 0}
 		<h2>Loading...</h2>
@@ -84,53 +75,83 @@
 	{/if}
 	<!-- LENDED EGGS -->
 	{#if show == ScreenType.eggsLend}
-		<EggGrid displayOwner={true} eggs={eggLends} {contract} loadPage={LoanBookInterface} />
+		<EggGrid eggs={eggLends} {contract} loadPage={LoanBookInterface} />
 	{/if}
 	<!-- LENDED DRAGONS -->
 	{#if show == ScreenType.dragonsLend}
-		<DragonGrid
-			displayOwner={true}
-			dragons={dragonLends}
-			contract={contract['market']}
-			loadPage={LoanBookInterface}
-		/>
+		<DragonGrid dragons={dragonLends} contract={contract['market']} loadPage={LoanBookInterface} />
 	{/if}
 	<!-- BORROWED EGGS -->
 	{#if show == ScreenType.eggsBorrow}
-		<EggGrid displayOwner={true} eggs={eggBorrows} {contract} loadPage={LoanBookInterface} />
+		<EggGrid eggs={eggBorrows} {contract} loadPage={LoanBookInterface} />
 	{/if}
 	<!-- BORROWED DRAGONS -->
 	{#if show == ScreenType.dragonsBorrow}
 		<DragonGrid
 			dragons={dragonBorrows}
-			displayOwner={true}
 			contract={contract['market']}
 			loadPage={LoanBookInterface}
 		/>
 	{/if}
 	<!-- YOUR LENDS	-->
 	{#if show == ScreenType.lends}
-		<LoanBookCaveBtn
-			title={'Your Lends'}
-			totalEggs={eggLends.totalOwned}
-			totalDragons={dragonLends.totalOwned}
-			{changeView}
-			_lendType={ScreenType.lends}
-		/>
+		<h1>Your Lends</h1>
+		<p>Total Eggs: {eggLends.totalOwned} <span class="spacer"></span>Total Dragons: {dragonLends.totalOwned}</p>
+		<div class="row">
+			<div class="col loanbox shadow" on:click={() => changeView('eggsLend')}>
+				<p>Eggs</p>
+			</div>
+			<div class="col loanbox shadow" on:click={() => changeView('dragonsLend')}>
+				<p>Dragons</p>
+			</div>
+		</div>
 	{/if}
 	<!-- YOUR BORROWS	-->
 	{#if show == ScreenType.borrows}
-		<LoanBookCaveBtn
-			title={'Your Borrows'}
-			totalEggs={eggBorrows.totalOwned}
-			totalDragons={dragonBorrows.totalOwned}
-			{changeView}
-			_lendType={ScreenType.borrows}
-		/>
+		<h1>Your Borrows</h1>
+		<p>Total Eggs: {eggBorrows.totalOwned} <span class="spacer"></span>Total Dragons: {dragonBorrows.totalOwned}</p>
+		<div class="row">
+			<div class="col loanbox shadow" on:click={() => changeView('eggsBorrow')}>
+				<p>Eggs</p>
+			</div>
+
+			<div class="col loanbox shadow" on:click={() => changeView('dragonsBorrow')}>
+				<p>Dragons</p>
+			</div>
+		</div>
 	{/if}
 </MainContainer>
 
 <style>
+	.row {
+		max-width: 500px;
+		margin: auto;
+	}
+
+	.spacer {
+		margin-left: 10px;
+		margin-right: 10px;
+	}
+
+	.loanbox {
+		background-color: white;
+		border-radius: 20px;
+		padding: 20px;
+		width: auto;
+		cursor: pointer;
+		transition: 0.3s;
+		margin: 10px;
+		text-align: center;		
+	}
+
+	.loanbox p{
+		font-weight: 700;
+	}
+
+	.loanbox:hover {
+		transform: scale(1.1);
+	}
+
 	.btn-group {
 		margin: auto;
 		margin-top: 40px;

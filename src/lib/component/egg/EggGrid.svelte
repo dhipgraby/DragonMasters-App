@@ -4,7 +4,6 @@
 	import { ColumnSizes } from '$lib/css/grid';
 	
 	export let eggs;
-	export let displayOwner = false;
 	export let contract;
 	export let loadPage;
 
@@ -12,17 +11,17 @@
 
 </script>
 
-<div class="w-100 ta-l">
+<div class="w-100 ta-l mb-3">
 	<h1>Your Eggs</h1>
 </div>
 
 	<Pagination {totalAssets} {loadPage} inferfaceName="Egg" />
-	<hr />
+
 <div class="row">
 	{#if eggs.length}
 		{#each eggs as egg}
 			<div class={ColumnSizes}>
-				<EggCard {displayOwner} {egg} {contract} />
+				<EggCard {egg} {contract} />
 			</div>
 		{/each}
 	{:else}

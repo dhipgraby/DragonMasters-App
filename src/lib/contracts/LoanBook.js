@@ -33,20 +33,18 @@ export class LoanBookContract extends MarketplaceContract {
             ;
 
         for (let i = 0; i < total; i++) {
-            let asset;
-            if (_tokenType === TokenType.Egg) {
-                asset = await this.parseEgg(allIds.tokenIds[i])                
-            } else {
-                asset = await this.parseDragon(allIds.tokenIds[i])
-            }
-            asset.owner = (_loanType === LoanType.Lend) ? asset.details.lender: asset.details.borrower;
+            let asset = (_tokenType === TokenType.Egg) ? await this.getEgg(allIds.tokenIds[i]) : await this.getDragon(allIds.tokenIds[i]);
+            let details = await this.getLoan(allIds.tokenIds[i], _tokenType)
+            asset['details'] = await this.parseLoan(details);
+            if (_tokenType === TokenType.Dragon) asset['dna'] = await this.getDna(asset.dnaId)
             allAssets.push(asset)
         }
-        
-        allAssets.sort(function (a, b) {
-            return a.tokenId - b.tokenId;
-        });
+
         allAssets.totalOwned = total
+        allAssets.sort(function(a, b) {
+            return a.tokenId - b.tokenId;
+          });
+        // console.log('allAssets', allAssets);
         await this.updateLoanStorage(allAssets, _tokenType, _loanType)
         return allAssets
     }
@@ -62,30 +60,15 @@ export class LoanBookContract extends MarketplaceContract {
         }
     }
 
-    async parseEgg(tokenId) {
-        let asset = await this.getEgg(tokenId);
-        // let incubationTime = (asset.incubation == '0') ? null : await this.checkIncubation(tokenId, false);
-        let details = await this.getLoan(tokenId, TokenType.Egg);
-        // asset['incubationTime'] = incubationTime;
-        asset['details'] = await this.parseLoan(details);
-        return asset;
-    }
-
-    async parseDragon(tokenId) {
-        let asset = await this.getDragon(tokenId);
-        let details = await this.getLoan(tokenId, TokenType.Dragon);
-        asset['details'] = await this.parseLoan(details);
-        asset['dna'] = await this.getDna(asset.dnaId);
-        return asset;
-    }
-
     async parseLoan(details) {
+
         const loanDetails = {
             borrower: details.borrower,
             lender: details.lender,
             terms: { deposit: details.terms.deposit, startTime: details.terms.startTime, minDuration: details.terms.minDuration },
             tokenId: details.tokenId,
         }
+
         return loanDetails
     }
 
@@ -96,7 +79,7 @@ export class LoanBookContract extends MarketplaceContract {
             await this.contract.LoanBook.methods.setEditor(
                 editorAddress
             ).send({}, function (err, txHash) {
-                addAwaiter(txHash, "Setting editor for this LoanBook to: " + editorAddress)
+                addAwaiter(txHash, "Setting editor for this LoanBook to: "+ editorAddress)
                 if (alert == true && err) setAlert(err, 'warning')
                 else {
                     if (alert == true) setAlert("Assigning LoanBook's editor", 'success')
@@ -130,9 +113,9 @@ export class LoanBookContract extends MarketplaceContract {
 
     async pauseLoanBook(alert = false) {
         try {
-            await this.contract.LoanBook.methods.pause().send({}, async function (err, txHash) {
+            await this.contract.LoanBook.methods.pause().send({}, async function (err, txHash) { 
 
-                addAwaiter(txHash, 'Pause LoanBook operations')
+                addAwaiter(txHash,'Pause LoanBook operations')  
                 if (err) setAlert(err, 'warning')
                 else {
                     if (alert === true) setAlert('Paused LoanBook', 'success')
@@ -149,9 +132,9 @@ export class LoanBookContract extends MarketplaceContract {
 
     async unpauseLoanBook(alert = false) {
         try {
-            await this.contract.LoanBook.methods.unpause().send({}, async function (err, txHash) {
+            await this.contract.LoanBook.methods.unpause().send({}, async function (err, txHash) { 
 
-                addAwaiter(txHash, 'Unpause LoanBook operations')
+                addAwaiter(txHash,'Unpause LoanBook operations')  
                 if (err) setAlert(err, 'warning')
                 else {
                     if (alert === true) setAlert('Unpaused LoanBook', 'success')
