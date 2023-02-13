@@ -39,7 +39,7 @@ export class LoanBookContract extends MarketplaceContract {
             } else {
                 asset = await this.parseDragon(allIds.tokenIds[i])
             }
-            asset.owner = (_loanType === LoanType.Lend) ? asset.details.lender: asset.details.borrower;
+            asset.owner = (_loanType === LoanType.Lend) ? asset.details.lender: asset.details.lender;
             allAssets.push(asset)
         }
         

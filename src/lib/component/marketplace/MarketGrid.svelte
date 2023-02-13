@@ -22,7 +22,7 @@
 
 	const rentToken = async (tokenId, price, deposit) => {
 		console.log(price, deposit);
-		await contract['market'].rentToken(tokenId, _tokenType, price, deposit);		
+		await contract['market'].rent(tokenId, _tokenType, price, deposit);		
 	};
 </script>
 
