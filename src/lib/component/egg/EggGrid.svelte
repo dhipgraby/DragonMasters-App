@@ -5,6 +5,9 @@
 	
 	export let eggs;
 	export let displayOwner = false;
+	export let showRentDetails = false;
+	export let settingsMenu;
+	export let acctionBtn;
 	export let contract;
 	export let loadPage;
 
@@ -22,7 +25,7 @@
 	{#if eggs.length}
 		{#each eggs as egg}
 			<div class={ColumnSizes}>
-				<EggCard {displayOwner} {egg} {contract} />
+				<EggCard {showRentDetails} {acctionBtn} {settingsMenu} {displayOwner} {egg} {contract} />
 			</div>
 		{/each}
 	{:else}

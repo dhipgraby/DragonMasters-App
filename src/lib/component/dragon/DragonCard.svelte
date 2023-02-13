@@ -7,16 +7,17 @@
 	import DragonHeaderDetails from './DragonHeaderDetails.svelte';
 	import OfferInfo from './OfferInfo.svelte';
 	import Energy from './Energy.svelte';
+	import RentalTerms from '$lib/component/marketplace/RentalTerms.svelte';
 	import '$lib/css/marketplace/dragon.css';
 
 	export let dragon;
 	export let displayOwner;
+	export let showRentDetails;
 	export let contract;
 	export let callback = null;
 	export let fullEnergy = null;
 	// settings
-	export let checkDragonBtn = true;
-	export let showCircleMenu = false;
+	export let settingsMenu = false;
 	export let removeBtn = false;
 	export let removeDragon = null;
 
@@ -41,7 +42,7 @@
 	const leave = () => (hovering = false);
 
 	$: details = {
-		showCircleMenu,
+		settingsMenu,
 		removeBtn,
 		removeDragon,
 		img,
@@ -65,13 +66,12 @@
 			<Energy energy={dragon.energy} {fullEnergy} />
 		{/if}
 		<!--   ATTRIBUTES  -->
-		<div class="px-4">
+		<div class="mt-3 mb-0 px-4">
 			<DragonAttributes attributes={dragon.attributes} />
-		</div>
-		{#if checkDragonBtn}
-			<a href="/dragon/{dragon.tokenId}">
-				<button class="btn btn-dark">Checkout <i class="fas fa-arrow-circle-right" /> </button>
-			</a>
-		{/if}
+		</div>	
 	</div>
 </div>
+
+{#if showRentDetails}
+	<RentalTerms tokenId={dragon.tokenId} details={dragon.details} />
+{/if}

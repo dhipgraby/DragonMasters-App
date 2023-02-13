@@ -35,9 +35,9 @@ p {
 
 .card {
     border-radius: 20px;
-    border: solid 1px;
-    margin: 10px;
+    border: solid 1px;    
     transition: 0.5s;    
+    margin-top: 20px;
 }
 
 .element {

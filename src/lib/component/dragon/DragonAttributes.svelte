@@ -6,7 +6,7 @@ export let attributes
     
 </script>
 
-<div class="mb-3">    
+<div class="mb-2">    
     <div class="row p-0">
         {#each attributes as attribute, i}
             <div class="w-50 ta-l">

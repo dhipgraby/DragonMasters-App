@@ -4,7 +4,9 @@
 	import { ColumnSizes } from '$lib/css/grid';
 
 	export let dragons;
-	export let displayOwner
+	export let displayOwner;
+	export let settingsMenu;
+	export let showRentDetails = false;
 	export let singleApproval;
 	export let contract;
 	export let loadPage;
@@ -27,7 +29,14 @@
 	{#if dragons.length}
 		{#each dragons as dragon}
 			<div class={ColumnSizes}>
-				<DragonCard {displayOwner} showCircleMenu={true} {dragon} {contract} {singleApproval} />
+				<DragonCard
+					{displayOwner}
+					{showRentDetails}
+					{settingsMenu}
+					{dragon}
+					{contract}
+					{singleApproval}
+				/>
 			</div>
 		{/each}
 	{:else}
@@ -35,9 +44,9 @@
 	{/if}
 </div>
 
-<style>	
+<style>
 	.margintop {
-		margin-top:56px;
+		margin-top: 56px;
 	}
 
 	.extended {

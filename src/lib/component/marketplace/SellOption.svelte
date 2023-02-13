@@ -16,10 +16,11 @@
 	export let doPromise = false;
 	export let _tokenType;
 
-	let modaComponent;
 	let promise;
 	$: singleApproval = (_tokenType == TokenType.Egg) ? $approvalRequired.egg : $approvalRequired.dragon;
 	$: CheckApproval = (_tokenType == TokenType.Egg) ? $eggApproval : $dragonApproval;
+
+	let modaComponent;
 
 	onMount(() => {
 		openModal = function () {

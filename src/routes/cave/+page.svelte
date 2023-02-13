@@ -38,13 +38,8 @@
 		lendedDragons.useLocalStorage();
 		borrowedDragons.useLocalStorage();
 
-		await LoadInterface(0, $perpage); 
-		await LoanBookInterface(0, $perpage); 		
-		
-		console.log(eggs);
-		console.log('dragonBorrows',dragonBorrows);
-		console.log('dragonLends',dragonLends);
-		console.log(contract);
+		await LoadInterface(0, $perpage);
+		await LoanBookInterface(0, $perpage);
 		show = urlCurrentParam();
 	});
 </script>
@@ -76,20 +71,33 @@
 	{/if}
 	<!-- USER EGSS -->
 	{#if show == ScreenType.eggs}
-		<EggGrid {eggs} {contract} loadPage={LoadInterface} />
+		<EggGrid settingsMenu={true} {eggs} {contract} loadPage={LoadInterface} />
 	{/if}
 	<!-- USER DRAGONS -->
 	{#if show == ScreenType.dragons}
-		<DragonGrid {dragons} contract={contract['market']} loadPage={LoadInterface} />
+		<DragonGrid
+			settingsMenu={true}
+			{dragons}
+			contract={contract['market']}
+			loadPage={LoadInterface}
+		/>
 	{/if}
 	<!-- LENDED EGGS -->
 	{#if show == ScreenType.eggsLend}
-		<EggGrid displayOwner={true} eggs={eggLends} {contract} loadPage={LoanBookInterface} />
+		<EggGrid
+			displayOwner={true}
+			showRentDetails={true}
+			acctionBtn={false}
+			eggs={eggLends}
+			{contract}
+			loadPage={LoanBookInterface}
+		/>
 	{/if}
 	<!-- LENDED DRAGONS -->
 	{#if show == ScreenType.dragonsLend}
 		<DragonGrid
 			displayOwner={true}
+			showRentDetails={true}
 			dragons={dragonLends}
 			contract={contract['market']}
 			loadPage={LoanBookInterface}
@@ -97,12 +105,19 @@
 	{/if}
 	<!-- BORROWED EGGS -->
 	{#if show == ScreenType.eggsBorrow}
-		<EggGrid displayOwner={true} eggs={eggBorrows} {contract} loadPage={LoanBookInterface} />
+		<EggGrid
+			displayOwner={true}
+			showRentDetails={true}
+			eggs={eggBorrows}
+			{contract}
+			loadPage={LoanBookInterface}
+		/>
 	{/if}
 	<!-- BORROWED DRAGONS -->
 	{#if show == ScreenType.dragonsBorrow}
 		<DragonGrid
 			dragons={dragonBorrows}
+			showRentDetails={true}
 			displayOwner={true}
 			contract={contract['market']}
 			loadPage={LoanBookInterface}
