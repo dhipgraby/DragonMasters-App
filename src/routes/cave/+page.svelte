@@ -40,7 +40,6 @@
 
 		await LoadInterface(0, $perpage);
 		await LoanBookInterface(0, $perpage);
-		console.log('eggs', eggs);				
 		show = urlCurrentParam();
 	});
 </script>
