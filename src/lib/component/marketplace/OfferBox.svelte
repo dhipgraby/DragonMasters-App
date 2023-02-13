@@ -1,21 +1,39 @@
 <script>
 	import { OfferType } from '$lib/contracts/LoanBook';
-	import OfferTerms from './OfferTerms.svelte';
 
 	export let _offerType;
-	export let price;
 	export let rentTerms;
 	export let buy;
 	export let rent;
-	export let isForSale;
-
+	export let isForSale;	
 </script>
 
-<div class="offerContainer">
-	{#if _offerType == OfferType.ForSale}
-		<OfferTerms {_offerType} {rentTerms} {isForSale} salePrice={price} />
+{#if _offerType == OfferType.ForSale}
+	<button
+		class="btn btn-dark"
+		on:click={async () => {
+			await buy();
+		}}
+	>
+		Buy now <i class="fas fa-shopping-cart" />
+	</button>
+{/if}
+
+{#if _offerType == OfferType.ForRent}
+	<button
+		class="btn btn-dark"
+		on:click={async () => {
+			await rent();
+		}}
+	>
+		Rent now <i class="fas fa-shopping-cart" />
+	</button>
+{/if}
+
+{#if _offerType == OfferType.ForSaleOrRent}
+	{#if isForSale}
 		<button
-			class="btn btn-dark"
+			class="btn btn-danger"
 			on:click={async () => {
 				await buy();
 			}}
@@ -23,11 +41,9 @@
 			Buy now <i class="fas fa-shopping-cart" />
 		</button>
 	{/if}
-
-	{#if _offerType == OfferType.ForRent}
-		<OfferTerms {_offerType} {rentTerms} {isForSale} salePrice={price} />
+	{#if rentTerms}
 		<button
-			class="btn btn-dark"
+			class="btn btn-warning"
 			on:click={async () => {
 				await rent();
 			}}
@@ -35,42 +51,24 @@
 			Rent now <i class="fas fa-shopping-cart" />
 		</button>
 	{/if}
-
-	{#if _offerType == OfferType.ForSaleOrRent}
-		<OfferTerms {_offerType} {rentTerms} {isForSale} salePrice={price} />
-		{#if isForSale}
-			<button
-				class="btn btn-danger"
-				on:click={async () => {
-					await buy();
-				}}
-			>
-				Buy now <i class="fas fa-shopping-cart" />
-			</button>
-		{/if}
-		{#if rentTerms}
-			<button
-				class="btn btn-warning"
-				on:click={async () => {
-					await rent();
-				}}
-			>
-				Rent now <i class="fas fa-shopping-cart" />
-			</button>
-		{/if}
-	{/if}
-</div>
+{/if}
 
 <style>
 	button {
-		padding: 2px;
+		position: absolute;
+		left: 0px;
+		bottom: -11px;
+		padding: 18px !important;
 		width: 100%;
-		margin-bottom: 15px;
-		border-radius: 50px;
-		
+		font-size: 18px;
+		border-bottom-right-radius: 17px;
+		border-bottom-left-radius: 17px;
+		border-top-right-radius: 0px;
+		border-top-left-radius: 0px;
 	}
-	.offerContainer {
-		width: 90%;
-		margin: auto;
+
+	button:hover {
+		color: rgb(255, 181, 22);
+		opacity: 1;
 	}
 </style>

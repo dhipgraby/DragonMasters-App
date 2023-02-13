@@ -17,7 +17,7 @@
 	console.log(assets);
 
 	const buyToken = async (tokenId, price) => {
-		await contract['market'].buyToken(tokenId, _tokenType, price);		
+		await contract['market'].buy(tokenId, _tokenType, price);		
 	};
 
 	const rentToken = async (tokenId, price, deposit) => {

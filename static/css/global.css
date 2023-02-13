@@ -158,3 +158,30 @@ html {
 .loanbox:hover {
 	transform: scale(1.1);
 }
+
+.show {
+    opacity: 1;
+}
+
+.hide {
+    opacity: 0;
+}
+
+.showUp {
+    opacity: 1;
+}
+
+.hideDown {
+	opacity: 0;
+    translate:0px 100px;
+}
+
+.offerDiv {
+	transition:0.3s;
+} 
+
+.offerContainer {
+	position: relative;
+	width: 100%;		
+	margin: auto;
+}

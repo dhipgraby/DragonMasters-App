@@ -11,6 +11,7 @@
 		padding-right: 25px;
 		display: inherit;
 		width: 100%;
+		margin-bottom: 100px;
 	}
 
 	div {
