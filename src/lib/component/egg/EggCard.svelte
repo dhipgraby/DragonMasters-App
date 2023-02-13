@@ -11,6 +11,7 @@
 	export let egg;
 	export let displayOwner;
 	export let settingsMenu = false;
+	export let acctionBtn = true;
 	export let contract;
 
 	let account = contract.egg.contract.account;
@@ -96,37 +97,40 @@
 				</div>
 			{/if}
 		</div>
-		{#if egg.incubationTime == undefined}
-			<button class="btn btn-dark" on:click={() => startIncubation()}>Start Incubation</button>
-		{:else if $time == 0}
-			<button class="btn btn-yellow shadow-md" on:click={() => hatch()}>Ready to Hatch!</button>
-		{:else}
-			{#if incubating}
-				<Message>
-					<span>
-						{$time}
-					</span>
-					<small>time let for hatching...</small>
-				</Message>
+		{#if acctionBtn}
+			{#if egg.incubationTime == undefined}
+				<button class="btn btn-dark" on:click={() => startIncubation()}>Start Incubation</button>
+			{:else if $time == 0}
+				<button class="btn btn-yellow shadow-md" on:click={() => hatch()}>Ready to Hatch!</button>
+			{:else}
+				{#if incubating}
+					<Message>
+						<span>
+							{$time}
+						</span>
+						<small>time let for hatching...</small>
+					</Message>
+				{/if}
+				<button
+					class="btn btn-yellow"
+					disabled={incubating}
+					on:click={() => {
+						if (!incubating) hatch();
+					}}>Ready to Hatch!</button
+				>
 			{/if}
-			<button
-				class="btn btn-yellow"
-				disabled={incubating}
-				on:click={() => {
-					if (!incubating) hatch();
-				}}>Ready to Hatch!</button
-			>
 		{/if}
 	</div>
 </div>
 
 <style>
-	.btn-dark , .btn-yellow {
+	.btn-dark,
+	.btn-yellow {
 		border-radius: 20px;
-		width: 100%;		
+		width: 100%;
 	}
 
-	.btn-yellow:hover {		
+	.btn-yellow:hover {
 		border: solid 1px rgb(255, 166, 33);
 	}
 </style>

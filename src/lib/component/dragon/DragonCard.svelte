@@ -64,7 +64,7 @@
 			<Energy energy={dragon.energy} {fullEnergy} />
 		{/if}
 		<!--   ATTRIBUTES  -->
-		<div class="px-4">
+		<div class="mt-3 mb-0 px-4">
 			<DragonAttributes attributes={dragon.attributes} />
 		</div>	
 	</div>
