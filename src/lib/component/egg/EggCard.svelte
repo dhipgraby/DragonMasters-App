@@ -61,15 +61,16 @@
 				{hovering}
 			/>
 		{/if}
+		<a href="/egg/{egg.tokenId}">
+			<div class="egg-top-container">
+				{#if eggImg}
+					<img class="eggImg egg-top" alt="egg" src={eggImg} />
+					<div class="egg-top-shadow" />
+				{/if}
 
-		<div class="egg-top-container">
-			{#if eggImg}
-				<img class="eggImg egg-top" alt="egg" src={eggImg} />
-				<div class="egg-top-shadow" />
-			{/if}
-
-			<div class="pabsolute top10 left10">{@html element}</div>
-		</div>
+				<div class="pabsolute top10 left10">{@html element}</div>
+			</div>
+		</a>
 	</div>
 	<div class="card-body">
 		<div class="row w-100 mb-2">
@@ -98,7 +99,7 @@
 		{#if egg.incubationTime == undefined}
 			<button class="btn btn-dark" on:click={() => startIncubation()}>Start Incubation</button>
 		{:else if $time == 0}
-			<button class="btn btn-yellow" on:click={() => hatch()}>Ready to Hatch!</button>
+			<button class="btn btn-yellow shadow-md" on:click={() => hatch()}>Ready to Hatch!</button>
 		{:else}
 			{#if incubating}
 				<Message>
@@ -116,9 +117,16 @@
 				}}>Ready to Hatch!</button
 			>
 		{/if}
-
-		<a href="/egg/{egg.tokenId}"
-			><button class="btn btn-light">Checkout <i class="fas fa-arrow-circle-right" /></button></a
-		>
 	</div>
 </div>
+
+<style>
+	.btn-dark , .btn-yellow {
+		border-radius: 20px;
+		width: 100%;		
+	}
+
+	.btn-yellow:hover {		
+		border: solid 1px rgb(255, 166, 33);
+	}
+</style>

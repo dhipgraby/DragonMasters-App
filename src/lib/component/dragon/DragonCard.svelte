@@ -15,7 +15,6 @@
 	export let callback = null;
 	export let fullEnergy = null;
 	// settings
-	export let checkDragonBtn = true;
 	export let settingsMenu = false;
 	export let removeBtn = false;
 	export let removeDragon = null;
@@ -67,11 +66,6 @@
 		<!--   ATTRIBUTES  -->
 		<div class="px-4">
 			<DragonAttributes attributes={dragon.attributes} />
-		</div>
-		{#if checkDragonBtn}
-			<a href="/dragon/{dragon.tokenId}">
-				<button class="btn btn-dark">Checkout <i class="fas fa-arrow-circle-right" /> </button>
-			</a>
-		{/if}
+		</div>	
 	</div>
 </div>
