@@ -76,11 +76,11 @@
 	{/if}
 	<!-- USER EGSS -->
 	{#if show == ScreenType.eggs}
-		<EggGrid {eggs} {contract} loadPage={LoadInterface} />
+		<EggGrid settingsMenu={true} {eggs} {contract} loadPage={LoadInterface} />
 	{/if}
 	<!-- USER DRAGONS -->
 	{#if show == ScreenType.dragons}
-		<DragonGrid {dragons} contract={contract['market']} loadPage={LoadInterface} />
+		<DragonGrid settingsMenu={true} {dragons} contract={contract['market']} loadPage={LoadInterface} />
 	{/if}
 	<!-- LENDED EGGS -->
 	{#if show == ScreenType.eggsLend}

@@ -1,7 +1,7 @@
 <script>
     import CircleMenu from "../marketplace/CircleMenu.svelte";
 
-    export let showCircleMenu;
+    export let settingsMenu = false;
     export let removeBtn = false;
     export let removeDragon = null;
     export let img;
@@ -14,7 +14,7 @@
 
 </script>
 <div class="card-header">
-    {#if showCircleMenu}
+    {#if settingsMenu}
         <CircleMenu {hovering} tokenProps={dragon} {contract} _tokenType={_tokenType} />
     {/if}
 

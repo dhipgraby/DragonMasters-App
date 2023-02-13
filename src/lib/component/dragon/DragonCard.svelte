@@ -16,7 +16,7 @@
 	export let fullEnergy = null;
 	// settings
 	export let checkDragonBtn = true;
-	export let showCircleMenu = false;
+	export let settingsMenu = false;
 	export let removeBtn = false;
 	export let removeDragon = null;
 
@@ -41,7 +41,7 @@
 	const leave = () => (hovering = false);
 
 	$: details = {
-		showCircleMenu,
+		settingsMenu,
 		removeBtn,
 		removeDragon,
 		img,

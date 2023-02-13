@@ -9,10 +9,11 @@
 	import '$lib/css/marketplace/egg.css';
 
 	export let egg;
-	export let displayOwner
+	export let displayOwner;
+	export let settingsMenu = false;
 	export let contract;
 
-	let account = contract.egg.contract.account
+	let account = contract.egg.contract.account;
 	let eggImg;
 	let element;
 	let hovering;
@@ -52,12 +53,15 @@
 
 <div on:mouseenter={enter} on:mouseleave={leave} class="card">
 	<div class="card-header">
-		<CircleMenu
-			_tokenType={TokenType.Egg}
-			tokenProps={egg}
-			contract={contract['market']}
-			{hovering}
-		/>
+		{#if settingsMenu}
+			<CircleMenu
+				_tokenType={TokenType.Egg}
+				tokenProps={egg}
+				contract={contract['market']}
+				{hovering}
+			/>
+		{/if}
+
 		<div class="egg-top-container">
 			{#if eggImg}
 				<img class="eggImg egg-top" alt="egg" src={eggImg} />
@@ -71,13 +75,12 @@
 		<div class="row w-100 mb-2">
 			<div class="col m-0 ta-l">
 				<h5 class="card-title">Egg : #{egg.tokenId}</h5>
-			</div>			
-			{#if displayOwner}
-			<div class="ta-l">
-				<span class="badge bg-black"><b>Owner</b>: {@html loadOwner(account,egg.owner)}</span>
 			</div>
+			{#if displayOwner}
+				<div class="ta-l">
+					<span class="badge bg-black"><b>Owner</b>: {@html loadOwner(account, egg.owner)}</span>
+				</div>
 			{/if}
-			
 
 			{#if egg?.offer?.sellOffer}
 				<!-- FOR SALE -->
