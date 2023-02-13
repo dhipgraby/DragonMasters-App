@@ -7,10 +7,12 @@
 	import DragonHeaderDetails from './DragonHeaderDetails.svelte';
 	import OfferInfo from './OfferInfo.svelte';
 	import Energy from './Energy.svelte';
+	import RentalTerms from '$lib/component/marketplace/RentalTerms.svelte';
 	import '$lib/css/marketplace/dragon.css';
 
 	export let dragon;
 	export let displayOwner;
+	export let showRentDetails;
 	export let contract;
 	export let callback = null;
 	export let fullEnergy = null;
@@ -69,3 +71,7 @@
 		</div>	
 	</div>
 </div>
+
+{#if showRentDetails}
+	<RentalTerms tokenId={dragon.tokenId} details={dragon.details} />
+{/if}

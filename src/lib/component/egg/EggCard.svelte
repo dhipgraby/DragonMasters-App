@@ -7,10 +7,12 @@
 	import CircleMenu from '../marketplace/CircleMenu.svelte';
 	import { loadOwner } from '$lib/helpers/utils';
 	import '$lib/css/marketplace/egg.css';
+	import RentalTerms from '../marketplace/RentalTerms.svelte';
 
 	export let egg;
 	export let displayOwner;
 	export let settingsMenu = false;
+	export let showRentDetails;
 	export let acctionBtn = true;
 	export let contract;
 
@@ -22,10 +24,10 @@
 	$: incTime = Number(egg.incubationTime);
 	$: incubating = incTime > 0 ? true : false;
 
-	afterUpdate(async () => {
-		element = iconElement(egg.subSpecies);
-		eggImg = await getImg(egg.subSpecies).egg;
-	});
+	const hatch = () => contract['egg'].hatch(egg.tokenId);
+	const startIncubation = () => contract['egg'].startIncubation(egg.tokenId);
+	const enter = () => (hovering = true);
+	const leave = () => (hovering = false);
 
 	export const time = readable(incTime, function start(set) {
 		const interval = setInterval(() => {
@@ -43,13 +45,10 @@
 		};
 	});
 
-	const hatch = () => contract['egg'].hatch(egg.tokenId);
-
-	const startIncubation = () => contract['egg'].startIncubation(egg.tokenId);
-
-	const enter = () => (hovering = true);
-
-	const leave = () => (hovering = false);
+	afterUpdate(async () => {
+		element = iconElement(egg.subSpecies);
+		eggImg = await getImg(egg.subSpecies).egg;
+	});
 </script>
 
 <div on:mouseenter={enter} on:mouseleave={leave} class="card">
@@ -123,11 +122,21 @@
 	</div>
 </div>
 
+{#if showRentDetails}
+	<RentalTerms tokenId={egg.tokenId} details={egg.details} />
+{/if}
+
 <style>
+
+	.card-body {
+		padding-bottom: 8px;
+	}
+
 	.btn-dark,
 	.btn-yellow {
 		border-radius: 20px;
 		width: 100%;
+		margin-top: 10px;
 	}
 
 	.btn-yellow:hover {
