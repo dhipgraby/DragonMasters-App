@@ -45,17 +45,29 @@
 	<!-- RIGHT-SIDE ->ATTRIBUTES AND RAISE -->
 	<div class="col-6 rightsideBox">
 		{#if isOwner}
-		<div class="attrDiv">
-			<h3>Create Offer</h3>
-		</div>
-		<RaiseAndEnergy {contract} tokenId={dragon.tokenId} ageGroup={dragon.ageGroup} />
-		{/if}			
-		
+			<div class="attrDiv">
+				<h3>Create Offer</h3>
+			</div>
+			<RaiseAndEnergy {contract} tokenId={dragon.tokenId} ageGroup={dragon.ageGroup} />
+		{/if}
+		{#if isForSale}
+			<div class="attrDiv">
+				<h3>Sale interface</h3>
+				<hr />
+			</div>
+		{/if}
+		{#if isForRent}
+			<div class="attrDiv">
+				<h3>Rent interface</h3>
+				<hr />
+			</div>
+		{/if}
 	</div>
 </div>
 
 <style>
-	.leftsideBox , .rightsideBox  {
+	.leftsideBox,
+	.rightsideBox {
 		padding: 10px 10px;
 	}
 </style>

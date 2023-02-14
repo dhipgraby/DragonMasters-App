@@ -4,6 +4,7 @@
 	import { MarketplaceContract } from '$lib/contracts/Marketplace';
 	import { OfferType, TokenType } from '$lib/contracts/Marketplace';
 	import SingleDragon from '$lib/component/dragon/SingleDragon.svelte';
+	import { isOwnerAccount } from '$lib/helpers/utils';
 
 	export let data;
 	export let dragonId = data.dragonId;
@@ -15,7 +16,17 @@
 	let promise;
 	let isForSale = false;
 	let isForRent = false;
-	let owner = ""
+	let owner = '';
+	let account = '';
+	let isOwner = false;
+
+	$: dragonProps = {
+		dragon: dragon,
+		contract: contract,
+		isForSale: isForSale,
+		isForRent: isForRent,
+		isOwner: isOwner
+	};
 
 	onMount(async () => {
 		contract = await new DragonContract();
@@ -26,7 +37,9 @@
 		isForSale = await marketContract.isOnOffer(dragonId, OfferType.ForSale, TokenType.Dragon);
 		isForRent = await marketContract.isOnOffer(dragonId, OfferType.ForRent, TokenType.Dragon);
 		owner = await contract.ownerOf(dragonId);
-		console.log(owner);
+		account = await contract.contract.account;
+		isOwner = await isOwnerAccount(account, owner);
+		console.log(isOwner);
 	});
 
 	async function updateDragon() {
@@ -51,7 +64,7 @@
 			<h2>Loading...</h2>
 		{:then ready}
 			{#if dragon.tokenId}
-				<SingleDragon on:update={updateDragon} {dragon} {contract} {isForSale} {isForRent} />
+				<SingleDragon on:update={updateDragon} {...dragonProps} />
 			{:else}
 				<h2>Dragon not found...</h2>
 			{/if}
