@@ -25,6 +25,12 @@
 	let isForSale = dragon.sellOffer !== undefined ? true : false;
 	let generation = dragon.dna.generation;
 	let attributes = dragon.attributes;
+	$: hovering = false;
+
+	const enter = () => {
+		hovering = true;
+	};
+	const leave = () => (hovering = false);
 
 	onMount(async () => {
 		let currentprice = dragon.sellOffer != undefined ? dragon.sellOffer.sellPrice : 0;
@@ -33,13 +39,16 @@
 	});
 </script>
 
-<div class="card">
+<div class="card" on:mouseenter={enter} on:mouseleave={leave}>
 	<DragonBox {img} {element} {dragon} {generation} {_maturity} {owner} {attributes} />
-	<OfferBox {owner} {price} {rentTerms} {isForSale} {buy} {rent} {_offerType} />
+	<div class="{hovering ? 'showUp' : 'hideDown'} offerDiv">
+		<OfferBox {owner} {price} {rentTerms} {isForSale} {buy} {rent} {_offerType} />
+	</div>
 </div>
 
 <style>
-	.card {
+	
+	.card {		
 		border: solid 2px black;
 	}
 </style>
