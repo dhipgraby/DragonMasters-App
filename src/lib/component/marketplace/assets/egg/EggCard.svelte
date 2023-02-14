@@ -4,7 +4,7 @@
 	import { getEth, loadRentTerms, loadOwner } from '$lib/helpers/utils';
 	import { OfferType } from '$lib/contracts/Marketplace';
 	import '$lib/css/marketplace/egg.css';
-	import OfferBox from '../../OfferBox.svelte';
+	import OfferBtn from '../../OfferBtn.svelte';
 	import EggBox from './EggBox.svelte';
 	import OfferTerms from '../../OfferTerms.svelte';
 
@@ -40,7 +40,7 @@
 		<div class="offerContainer">
 			<OfferTerms {_offerType} {rentTerms} {isForSale} salePrice={price} />
 			<div class="{hovering ? 'showUp' : 'hideDown'} offerDiv">
-				<OfferBox {owner} {price} {rentTerms} {buy} {isForSale} {rent} {_offerType} />
+				<OfferBtn {owner} {price} {rentTerms} {buy} {isForSale} {rent} {_offerType} />
 			</div>
 		</div>
 	{/if}

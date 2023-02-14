@@ -206,15 +206,13 @@ export function loadOwner(account, owner) {
 
 export function isOwnerAccount(account, owner) {    
     account = account.toLowerCase();
-    owner = owner.toLowerCase();
-    console.log(account,owner);
+    owner = owner.toLowerCase();    
     if (account === owner) {
         return true;
     } else {
         return false;
     }    
 }
-
 
 export function speciesColor(specie) {
     let color;

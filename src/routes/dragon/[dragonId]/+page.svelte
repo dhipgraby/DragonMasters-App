@@ -25,7 +25,8 @@
 		contract: contract,
 		isForSale: isForSale,
 		isForRent: isForRent,
-		isOwner: isOwner
+		isOwner: isOwner,
+		account
 	};
 
 	onMount(async () => {
@@ -37,6 +38,7 @@
 		isForSale = await marketContract.isOnOffer(dragonId, OfferType.ForSale, TokenType.Dragon);
 		isForRent = await marketContract.isOnOffer(dragonId, OfferType.ForRent, TokenType.Dragon);
 		owner = await contract.ownerOf(dragonId);
+		dragon.owner = owner;
 		account = await contract.contract.account;
 		isOwner = await isOwnerAccount(account, owner);
 		console.log(isOwner);

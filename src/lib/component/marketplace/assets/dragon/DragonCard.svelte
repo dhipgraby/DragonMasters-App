@@ -6,8 +6,9 @@
 	//CSS
 	import '$lib/css/marketplace/marketplace.css';
 	import '$lib/css/marketplace/dragon.css';
-	import OfferBox from '../../OfferBox.svelte';
+	import OfferBtn from '../../OfferBtn.svelte';
 	import DragonBox from './DragonBox.svelte';
+	import OfferTerms from '$lib/component/marketplace/OfferTerms.svelte';
 
 	export let dragon;
 	export let account;
@@ -41,8 +42,9 @@
 
 <div class="card" on:mouseenter={enter} on:mouseleave={leave}>
 	<DragonBox {img} {element} {dragon} {generation} {_maturity} {owner} {attributes} />
+	<OfferTerms {_offerType} {rentTerms} {isForSale} salePrice={price} />
 	<div class="{hovering ? 'showUp' : 'hideDown'} offerDiv">
-		<OfferBox {owner} {price} {rentTerms} {isForSale} {buy} {rent} {_offerType} />
+		<OfferBtn {owner} {price} {rentTerms} {isForSale} {buy} {rent} {_offerType} />
 	</div>
 </div>
 
