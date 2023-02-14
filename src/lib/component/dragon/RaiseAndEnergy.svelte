@@ -35,7 +35,7 @@
 	}
 </script>
 
-<div class="attrDiv mt-3">
+<div class="attrDiv">
 	{#if ageGroup != Maturity.Immortal}
 		{#if maturity > 0}
 			<p class="c-black"><i class="fas fa-brain" /> Maturity</p>

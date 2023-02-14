@@ -107,7 +107,7 @@ export class DragonContract {
         } catch (err) {
             // if (alert == true) setAlert('checkEnergy error', 'warning')
             // console.log("Error at: checkEnergy " + err)
-            const errMsg = getErrors('checkEnergy', err)
+            // const errMsg = getErrors('checkEnergy', err)
             if (alert == true) setAlert(errMsg, 'warning')
             console.log(errMsg)
         }
@@ -442,6 +442,16 @@ export class DragonContract {
 
         } catch (err) {
             const errMsg = getErrors('getDna', err)
+            console.log(errMsg)
+        }
+    }
+
+    async ownerOf(tokenId) {
+        try {
+            let owner = await this.contract.DragonToken.methods.ownerOf(tokenId).call()
+            return owner
+        } catch (err) {
+            const errMsg = getErrors('ownerOf: ', err)
             console.log(errMsg)
         }
     }

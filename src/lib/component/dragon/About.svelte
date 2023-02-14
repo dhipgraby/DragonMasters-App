@@ -3,16 +3,18 @@
 export let dragon
 export let dna 
 export let maturity
-
+console.log(dragon);
 </script>
 
 <div class="attrDiv row p-0">
-    {#if dragon.mumId == 0 && dragon.dadId == 0}
+    {#if dragon.mumId === 0 && dragon.dadId === 0}
         <p class="m-0">
             <b>Gen 0 : This dragon have no parents</b>
         </p>
     {:else}
         <div class="col">
+            <h3>Parents</h3>
+            <hr />
             <p class="m-0">
                 <b>MumId:</b>
                 <a href="/dragon/{dragon.mumId}">#{dragon.mumId}</a>
@@ -32,9 +34,10 @@ export let maturity
     {/if}
 </div>
 <div class="attrDiv mt-3">
-   
-    <p class="card-text">
-        <b>Dragon ID: #{dragon.tokenId}</b>
+    <h3>Dragon Info</h3>
+    <hr />
+    <p>
+        <b>Dragon Id: </b>#{dragon.tokenId}
         <br />
         <b>Type:</b>
         {dragon.subSpecies}

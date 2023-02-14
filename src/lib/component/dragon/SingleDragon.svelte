@@ -12,6 +12,9 @@
 
 	export let dragon;
 	export let contract;
+	export let isOwner = false;
+	export let isForSale;
+	export let isForRent;
 
 	let dna;
 	let img = getImg(dragon.subSpecies).idle;
@@ -25,24 +28,34 @@
 </script>
 
 <div class="row pt-5">
-	<div class="col-4">
+	<div class="col-6 leftsideBox">
 		<!-- IMG -->
 		<div class="dragonBg">
 			<img src={img} alt="dragon" />
 			<div class="pabsolute bottom10 right10">{@html element}</div>
 		</div>
 		<About {dragon} {dna} {maturity} />
-	</div>
 
+		<div class="attrDiv">
+			<h3>Attributes</h3>
+			<hr />
+			<DragonAttributes attributes={dragon.attributes} />
+		</div>
+	</div>
 	<!-- RIGHT-SIDE ->ATTRIBUTES AND RAISE -->
-	<div class="col-8">
+	<div class="col-6 rightsideBox">
+		{#if isOwner}
 		<div class="attrDiv">
 			<h3>Create Offer</h3>
 		</div>
-		<div class="attrDiv">
-			<DragonAttributes attributes={dragon.attributes} />
-		</div>
-
 		<RaiseAndEnergy {contract} tokenId={dragon.tokenId} ageGroup={dragon.ageGroup} />
+		{/if}			
+		
 	</div>
 </div>
+
+<style>
+	.leftsideBox , .rightsideBox  {
+		padding: 10px 10px;
+	}
+</style>
