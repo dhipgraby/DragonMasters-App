@@ -15,7 +15,7 @@
 	export let showRentDetails;
 	export let acctionBtn = true;
 	export let contract;
-
+	
 	let account = contract.egg.contract.account;
 	let eggImg;
 	let element;

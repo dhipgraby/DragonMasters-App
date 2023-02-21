@@ -1,21 +1,15 @@
+import { writable } from 'svelte/store';
 //CONTRACT
-import { writable, get } from 'svelte/store';
-import { EggContract } from '$lib/contracts/EggToken';
-import { DragonContract } from '$lib/contracts/DragonToken';
-import { LoanBookContract, LoanType } from '$lib/contracts/LoanBook';
-import { MarketplaceContract, TokenType, OfferType } from '$lib/contracts/Marketplace';
+import { LoanType } from '$lib/contracts/LoanBook';
+import { TokenType, OfferType } from '$lib/contracts/Marketplace';
 import { initEventListener } from '$lib/contracts/events';
+import { loadContractData } from './Core';
 //STORAGE
-import { createWritableStore } from '$lib/helpers/storage';
-import { setAlert } from '$lib/storage/alerts';
+// import { setAlert } from '$lib/storage/alerts';
 
 export const approvalRequired = writable({ dragon: true, egg: true })
-export const contracts = createWritableStore('contract', []);
 
-export async function LoadInterface(from, to, interfaceName = 'All') {
-
-    setAlert('Loading user Interface','info')
-    console.log('Loading user Interface')
+export async function LoadInterface(from, to, interfaceName = 'All') {   
 
     if (from > 0) {
         from -= 1;
@@ -24,6 +18,7 @@ export async function LoadInterface(from, to, interfaceName = 'All') {
     to -= 1
 
     let contractData = await loadContractData()
+    
     await contractData['market'].isApprovedForAll(TokenType.Egg);
     await contractData['market'].isApprovedForAll(TokenType.Dragon);
 
@@ -47,10 +42,7 @@ export async function LoadInterface(from, to, interfaceName = 'All') {
 }
 
 export async function LoanBookInterface(from, to, interfaceName = 'All') {
-
-    setAlert('Loading Loanbook interface','info')
-    console.log('Loading Loanbook interface')
-
+    
     if (from > 0) {
         from -= 1;
         to -= 1;
@@ -70,23 +62,6 @@ export async function LoanBookInterface(from, to, interfaceName = 'All') {
             await loadDragonLoans(contractData, from, to)
             break;
     }
-}
-
-async function loadContractData() {
-    //IF CONTRACT DATA IS LOADED LOAD EVERY LIBRARY OTHERWISE JUST RETURN CONTRACTS DATA
-    let contractData = []
-    let contractsInterface = get(contracts)
-
-    if (!contractsInterface.dragon) {
-        contractData['egg'] = await new EggContract();
-        contractData['dragon'] = await new DragonContract();
-        contractData['market'] = await new MarketplaceContract();
-        contractData['loanbook'] = await new LoanBookContract();
-        contracts.set(contractData)
-    } else {
-        contractData = contractsInterface
-    }
-    return contractData
 }
 //USER EGGS
 async function loadEggs(contract, from, to) {

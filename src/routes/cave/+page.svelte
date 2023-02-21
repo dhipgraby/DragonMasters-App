@@ -11,7 +11,8 @@
 	import { perpage } from '$lib/storage/pagination';
 	import { lendedEggs, lendedDragons, borrowedEggs, borrowedDragons } from '$lib/storage/loanbook';
 	//CONTRACTS
-	import { LoadInterface, LoanBookInterface, contracts } from '$lib/interfaces/ICave';
+	import { contracts } from '$lib/interfaces/Core';
+	import { LoadInterface, LoanBookInterface } from '$lib/interfaces/ICave';
 	import { urlCurrentParam, ScreenType } from '$lib/helpers/uriHelper';
 
 	let show = 0;

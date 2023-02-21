@@ -2,7 +2,7 @@
 	import MainContainer from '$lib/component/containers/MainContainer.svelte';
 	import MarketGrid from '$lib/component/marketplace/MarketGrid.svelte';
 	import { onMount } from 'svelte';
-	import { LoadInterface, contracts } from '$lib/interfaces/IMarket';
+	import { LoadInterface } from '$lib/interfaces/IMarket';
 	import {
 		dragonsForSale,
 		eggsForSale,
@@ -10,6 +10,7 @@
 		eggsForRent
 	} from '$lib/storage/marketplace';
 	import { TokenType, OfferType } from '$lib/contracts/LoanBook';
+	import { contracts } from '$lib/interfaces/Core';
 	import { get_unique_tokenid } from '$lib/helpers/utils';
 	import TokenButtons from '$lib/component/marketplace/TokenButtons.svelte';
 	import OfferTypeBtn from '$lib/component/marketplace/OfferTypeBtn.svelte';

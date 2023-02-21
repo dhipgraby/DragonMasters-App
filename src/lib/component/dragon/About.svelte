@@ -3,13 +3,13 @@
 export let dragon
 export let dna 
 export let maturity
-console.log(dragon);
+
 </script>
 
-<div class="attrDiv row p-0">
+<div class="attrDiv row p0">
     {#if dragon.mumId === 0 && dragon.dadId === 0}
         <p class="m-0">
-            <b>Gen 0 : This dragon have no parents</b>
+            <b>Gen 0 :</b> This dragon have no parents
         </p>
     {:else}
         <div class="col">
@@ -54,3 +54,9 @@ console.log(dragon);
         {maturity}
     </p>
 </div>
+
+<style>
+    .p0 {
+        padding: 15px !important;
+    }
+</style>

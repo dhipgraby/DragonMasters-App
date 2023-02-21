@@ -6,9 +6,12 @@
 	import { getImg, iconElement } from '$lib/storage/dragonImg';
 	import OfferBtn from '$lib/component/marketplace/OfferBtn.svelte';
 	import OfferTerms from '$lib/component/marketplace/OfferTerms.svelte';
+	import { OfferType } from '$lib/contracts/Marketplace';
+	import { loadRentTerms } from '$lib/helpers/utils.js';
 	import DragonAttributes from './DragonAttributes.svelte';
 	import RaiseAndEnergy from './RaiseAndEnergy.svelte';
 	import About from './About.svelte';
+	import { getEth } from '$lib/helpers/utils.js';
 
 	const dispatch = createEventDispatcher();
 
@@ -20,16 +23,21 @@
 	export let isForRent;
 
 	let dna;
+	let price;
+	let rentTerms;
 	let img = getImg(dragon.subSpecies).idle;
 	let element = iconElement(dragon.subSpecies);
 
 	$: maturity = Object.keys(Maturity)[dragon.ageGroup];
 
 	onMount(async () => {
-		dna = await contract.getDna(dragon.dnaId);
+		console.log(isOwner);
+		dna = await contract.dragon.getDna(dragon.dnaId);
 		let currentprice = dragon.sellOffer != undefined ? dragon.sellOffer.sellPrice : 0;
-		price = await getEth(currentprice);
-		rentTerms = await loadRentTerms(dragon, _offerType);
+		if (isForRent || isForRent) {
+			price = await getEth(currentprice);
+			rentTerms = await loadRentTerms(dragon, OfferType.ForRent);
+		}
 	});
 </script>
 
@@ -78,7 +86,7 @@
 			</div>
 		{/if}
 		{#if isOwner}
-		<!-- LOAD ACTIONS -->
+			<!-- LOAD ACTIONS -->
 			<RaiseAndEnergy {contract} tokenId={dragon.tokenId} ageGroup={dragon.ageGroup} />
 		{/if}
 	</div>

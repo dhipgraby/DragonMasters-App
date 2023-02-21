@@ -1,17 +1,15 @@
 <script>
 	import { onMount, afterUpdate } from 'svelte';
-	import { DragonContract } from '$lib/contracts/DragonToken';
-	import { MarketplaceContract } from '$lib/contracts/Marketplace';
 	import { OfferType, TokenType } from '$lib/contracts/Marketplace';
-	import SingleDragon from '$lib/component/dragon/SingleDragon.svelte';
 	import { isOwnerAccount } from '$lib/helpers/utils';
+	import { loadContractData } from '$lib/interfaces/Core';
+	import SingleDragon from '$lib/component/dragon/SingleDragon.svelte';
 
 	export let data;
 	export let dragonId = data.dragonId;
 	export let doPromise = false;
 
 	let contract;
-	let marketContract;
 	let dragon = [];
 	let promise;
 	let isForSale = false;
@@ -30,27 +28,24 @@
 	};
 
 	onMount(async () => {
-		contract = await new DragonContract();
-		marketContract = await new MarketplaceContract();
-		console.log(contract);
-		dragon = await contract.getDragon(dragonId);
-		doPromise = true;
-		isForSale = await marketContract.isOnOffer(dragonId, OfferType.ForSale, TokenType.Dragon);
-		isForRent = await marketContract.isOnOffer(dragonId, OfferType.ForRent, TokenType.Dragon);
-		owner = await contract.ownerOf(dragonId);
-		dragon.owner = owner;
-		account = await contract.contract.account;
-		isOwner = await isOwnerAccount(account, owner);
-		console.log(isOwner);
+		contract = await loadContractData();
+		doPromise = true;		
+		dragon = await contract.dragon.getDragon(dragonId);
+		isForSale = await contract.market.isOnOffer(dragonId, OfferType.ForSale, TokenType.Dragon);
+		isForRent = await contract.market.isOnOffer(dragonId, OfferType.ForRent, TokenType.Dragon);		
+		owner =  await contract.dragon.ownerOf(dragonId);
+		account = await contract.dragon.contract.account;
+		dragon.owner = owner		
+		isOwner = await isOwnerAccount(account, owner);		
+	});
+
+	afterUpdate(() => {
+		if (doPromise == true) promise = later(500);
 	});
 
 	async function updateDragon() {
 		dragon = await contract.getDragon(dragonId);
 	}
-
-	afterUpdate(() => {
-		if (doPromise == true) promise = later(500);
-	});
 
 	async function later(delay) {
 		return new Promise(async (resolve) => setTimeout(resolve, delay, true));

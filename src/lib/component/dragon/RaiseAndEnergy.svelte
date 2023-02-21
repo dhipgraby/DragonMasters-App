@@ -21,21 +21,22 @@
 	}
 
 	async function raiseDragon() {
-		await contract.raiseMaturity(tokenId);
+		await contract.dragon.raiseMaturity(tokenId);
 		dispatch('update');
 	}
 
 	async function checkEnergy() {
-		energy = await contract.checkEnergy(tokenId);
+		energy = await contract.dragon.checkEnergy(tokenId);
 	}
 
 	async function checkMaturity() {
-		maturity = await contract.checkMaturity(tokenId);
+		maturity = await contract.dragon.checkMaturity(tokenId);
 		if (maturity == 0) raiseDisabled = false;
 	}
 </script>
 
 <div class="attrDiv">
+
 	{#if ageGroup != Maturity.Immortal}
 		{#if maturity > 0}
 			<p class="c-black"><i class="fas fa-brain" /> Maturity</p>

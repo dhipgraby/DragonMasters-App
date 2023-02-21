@@ -8,6 +8,8 @@ export const userDragons = createWritableStore('userDragons', [],expirationTime)
 export const dragonA = createWritableStore('dragonA', 0);
 export const dragonB = createWritableStore('dragonB', 0);
 export const dragonApproval = writable(false)
+//SINGLE DRAGON 
+export const singleDragon = createWritableStore('singleDragon',0);
 
 export function update_current_dragon(dragon, _gender) {
     //UPDATE DRAGON FOR BREEDING    
