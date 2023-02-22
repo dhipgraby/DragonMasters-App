@@ -4,21 +4,21 @@
 	import { afterUpdate, onMount } from 'svelte';
 	import { dragonApproval } from '$lib/storage/dragon';
 	import { eggApproval } from '$lib/storage/eggs';
-	import { OfferType,TokenType } from '$lib/contracts/LoanBook';
-	import BasicModal from '../BasicModal.svelte';	
-	import OfferForm from '../dragonMenu/OfferForm.svelte';
-	import AppoveToken from '$lib/component/marketplace/AppoveToken.svelte';
+	import { OfferType, TokenType } from '$lib/contracts/LoanBook';
+	import BasicModal from '../BasicModal.svelte';
 	import { approvalRequired } from '$lib/interfaces/ICave';
-	
+	import OfferBox from './OfferBox.svelte';
+
 	export let tokenProps;
-	export let contract;	
+	export let contract;
 	export let openModal;
 	export let doPromise = false;
 	export let _tokenType;
 
 	let promise;
-	$: singleApproval = (_tokenType == TokenType.Egg) ? $approvalRequired.egg : $approvalRequired.dragon;
-	$: CheckApproval = (_tokenType == TokenType.Egg) ? $eggApproval : $dragonApproval;
+	$: singleApproval =
+		_tokenType == TokenType.Egg ? $approvalRequired.egg : $approvalRequired.dragon;
+	$: CheckApproval = _tokenType == TokenType.Egg ? $eggApproval : $dragonApproval;
 
 	let modaComponent;
 
@@ -29,14 +29,15 @@
 	});
 
 	afterUpdate(() => {
+		console.log('updating',doPromise)
 		if (CheckApproval == true) singleApproval = false;
 		tokenProps.isApproved = singleApproval == false ? true : false;
-		if (doPromise == true && singleApproval == true) promise = later(500);
+		// if (doPromise == true && singleApproval == true) promise = later(500);
 	});
 
 	async function later(delay) {
 		return new Promise(async (resolve) =>
-			setTimeout(resolve, delay, await contract.getApproved(tokenProps.tokenId,_tokenType))
+			setTimeout(resolve, delay, await contract.getApproved(tokenProps.tokenId, _tokenType))
 		);
 	}
 
@@ -60,15 +61,15 @@
 		tokenProps.isApproved = true;
 	}
 
-	function handleSetOffer(event) {	
+	function handleSetOffer(event) {
 		updateOffer(event.detail.offer);
 	}
 
-	function handleModifyOffer(event) {		
+	function handleModifyOffer(event) {
 		updateOffer(event.detail.offer);
 	}
 
-	function handleRemoveOffer(event) {		
+	function handleRemoveOffer(event) {
 		let offerType = event.detail.offerType;
 		if (offerType == OfferType.ForSale) {
 			tokenProps.offer.sellOffer = null;
@@ -77,7 +78,7 @@
 		}
 	}
 
-	function updateOffer(offer) {		
+	function updateOffer(offer) {
 		if (offer.offerType == OfferType.ForSale) {
 			tokenProps.offer.sellOffer = offer;
 		} else {
@@ -87,27 +88,13 @@
 </script>
 
 <BasicModal bind:this={modaComponent} btnName={false} id={'tokenModal' + tokenProps.tokenId}>
-	<!-- CHECK APPROVE FOR ALL -->
-	{#if tokenProps.isApproved == true}
-		<OfferForm offer={tokenProps.offer} tokenId={tokenProps.tokenId} {formHanlders} {contract} {_tokenType} />
-		<!-- IF IS NOT APPROVE FOR ALL CHECK SINGLE APPROVE  -->
-	{:else if doPromise == true}
-		{#await promise}
-			<p>...waiting</p>
-		{:then approval}
-			<!-- ADDRESS IS APPROVE -->
-			{#if approval == true}
-				<OfferForm
-					offer={tokenProps.offer}
-					tokenId={tokenProps.tokenId}
-					{formHanlders}
-					{contract}
-				/>
-			{:else}
-				<AppoveToken on:approved={handleApprove} tokenId={tokenProps.tokenId} {contract} {_tokenType} />
-			{/if}
-		{:catch error}
-			<p style="color: red">{error.message}</p>
-		{/await}
-	{/if}
+	<OfferBox
+		{tokenProps}
+		{formHanlders}
+		{doPromise}
+		{promise}
+		{_tokenType}
+		{contract}
+		{handleApprove}
+	/>
 </BasicModal>

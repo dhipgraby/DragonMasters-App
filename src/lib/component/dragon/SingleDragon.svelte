@@ -13,6 +13,7 @@
 	import About from './About.svelte';
 	import { getEth } from '$lib/helpers/utils.js';
 	import { TokenType } from '$lib/contracts/MarketApproval';
+	import SellOption from '../marketplace/SellOption.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -29,12 +30,23 @@
 	let rentTerms;
 	let img = getImg(dragon.subSpecies).idle;
 	let element = iconElement(dragon.subSpecies);
+	let openModal;
+	let modaComponent;
+	let doPromise = false;
 
 	$: maturity = Object.keys(Maturity)[dragon.ageGroup];
 
 	onMount(async () => {
-		dna = await contract.dragon.getDna(dragon.dnaId);
+		openModal = function () {
+			doPromise = true;
+			modaComponent.openModal();
+		};
 
+		dna = await contract.dragon.getDna(dragon.dnaId);
+		await setPrices()
+	});
+
+	async function setPrices(){
 		if (isForSale === true) {
 			let currentprice = dragon.sellOffer != undefined ? dragon.sellOffer.sellPrice : 0;
 			price = await getEth(currentprice);
@@ -44,7 +56,8 @@
 			rentPrice = await getEth(currentprice);
 			rentTerms = await loadRentTerms(dragon, OfferType.ForRent);
 		}
-	});
+	}
+
 
 	const buyToken = async () => {
 		await contract['market'].buy(dragon.tokenId, TokenType.Dragon, dragon.sellOffer.sellPrice);
@@ -80,19 +93,8 @@
 		{#if !isForSale || !isForRent}
 			{#if isOwner}
 				<div class="attrDiv">
-					<h3>Create Offer</h3>
-					<div class="d-flex">
-						{#if !isForSale}
-							<div>
-								<h4>For Sale</h4>
-							</div>
-						{/if}
-						{#if !isForRent}
-							<div>
-								<h4>For Rent</h4>
-							</div>
-						{/if}
-					</div>
+					<h3>Create/Edit Offer</h3>
+					<SellOption bind:this={modaComponent} btnName={"Create edit Offer"} tokenProps={dragon} contract={contract.market} {doPromise} _tokenType={TokenType.Dragon} />
 				</div>
 			{/if}
 		{/if}
@@ -138,7 +140,7 @@
 					{/if}
 				</div>
 				<hr />
-				<OfferTerms _offerType={OfferType.ForRent} {rentTerms} {isForSale} salePrice={price} />
+				<OfferTerms _offerType={OfferType.ForRent} {rentTerms} {isForSale} salePrice={rentPrice} />
 				{#if !isOwner}
 					<OfferBtn
 						classicBtn={true}

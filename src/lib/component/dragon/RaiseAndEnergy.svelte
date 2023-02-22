@@ -64,7 +64,7 @@
 		on:click={() => {
 			raiseDragon();
 		}}
-		class="btn btn-yellow"
+		class="btn btn-yellow mt-3"
 		disabled={raiseDisabled}
 	>
 		Raise to Adult

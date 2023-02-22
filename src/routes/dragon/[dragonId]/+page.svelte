@@ -28,21 +28,24 @@
 	};
 
 	onMount(async () => {
+		doPromise = true;
 		contract = await loadContractData();
-		doPromise = true;		
+		await contract.market.isApprovedForAll(TokenType.Dragon);
 		dragon = await contract.dragon.getDragon(dragonId);
 		isForSale = await contract.market.isOnOffer(dragonId, OfferType.ForSale, TokenType.Dragon);
-		isForRent = await contract.market.isOnOffer(dragonId, OfferType.ForRent, TokenType.Dragon);		
-		owner =  await contract.dragon.ownerOf(dragonId);
+		isForRent = await contract.market.isOnOffer(dragonId, OfferType.ForRent, TokenType.Dragon);
+		owner = await contract.dragon.ownerOf(dragonId);
 		account = await contract.dragon.contract.account;
-		dragon.owner = owner		
+		dragon.owner = owner;
 		isOwner = await isOwnerAccount(account, owner);		
-		if(isForSale){
-			dragon.sellOffer = await contract.market.getOffer(dragonId,TokenType.Dragon);			
+		if (isForSale) {
+			dragon.sellOffer = await contract.market.getOffer(dragonId, TokenType.Dragon);
+			dragon.offer.sellOffer = dragon.sellOffer;
 		}
-		if(isForRent){
-			dragon.rentOffer = await contract.market.getOffer(dragonId,TokenType.Dragon);			
-		}
+		if (isForRent) {
+			dragon.rentOffer = await contract.market.getOffer(dragonId, TokenType.Dragon);
+			dragon.offer.rentOffer = dragon.rentOffer;
+		}		
 	});
 
 	afterUpdate(() => {

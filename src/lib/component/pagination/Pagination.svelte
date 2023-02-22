@@ -41,7 +41,7 @@
 		</div>
 	</div>
 
-	<div class="btn-group mt-3" role="group">
+	<div class="btn-group mt-3 mb-2" role="group">
 		{#if pages}
 			{#each pages as button, i}
 				<button
@@ -87,7 +87,7 @@
 
 	.btn {
 		border: none !important;
-		box-shadow: 0px 8px 5px grey;
+		box-shadow: 0px 1px 5px grey;
 	}
 
 	.btn-group .btn:nth-child(1) {
@@ -106,6 +106,10 @@
 
 	.btn-group {
 		margin: auto;
+	}
+
+	.btn-group button {
+		font-size: 12px;
 	}
 
 	.btn-light {

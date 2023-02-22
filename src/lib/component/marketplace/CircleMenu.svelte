@@ -26,8 +26,8 @@
 	});
 
 </script>
-
-<div class="{hovering ? 'show' : 'hide'} maindiv">
+<!-- {hovering ? 'show' : 'hide'}  -->
+<div class="show maindiv">
 	<div
 		on:click={() => {
 			active = active == true ? false : true;
