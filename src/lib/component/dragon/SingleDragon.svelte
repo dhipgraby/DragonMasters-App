@@ -12,6 +12,7 @@
 	import RaiseAndEnergy from './RaiseAndEnergy.svelte';
 	import About from './About.svelte';
 	import { getEth } from '$lib/helpers/utils.js';
+	import { TokenType } from '$lib/contracts/MarketApproval';
 
 	const dispatch = createEventDispatcher();
 
@@ -24,6 +25,7 @@
 
 	let dna;
 	let price;
+	let rentPrice;
 	let rentTerms;
 	let img = getImg(dragon.subSpecies).idle;
 	let element = iconElement(dragon.subSpecies);
@@ -31,14 +33,31 @@
 	$: maturity = Object.keys(Maturity)[dragon.ageGroup];
 
 	onMount(async () => {
-		console.log(isOwner);
 		dna = await contract.dragon.getDna(dragon.dnaId);
-		let currentprice = dragon.sellOffer != undefined ? dragon.sellOffer.sellPrice : 0;
-		if (isForRent || isForRent) {
+
+		if (isForSale === true) {
+			let currentprice = dragon.sellOffer != undefined ? dragon.sellOffer.sellPrice : 0;
 			price = await getEth(currentprice);
+		}
+		if (isForRent === true) {
+			let currentprice = dragon.rentOffer != undefined ? dragon.rentOffer.rent.price : 0;
+			rentPrice = await getEth(currentprice);
 			rentTerms = await loadRentTerms(dragon, OfferType.ForRent);
 		}
 	});
+
+	const buyToken = async () => {
+		await contract['market'].buy(dragon.tokenId, TokenType.Dragon, dragon.sellOffer.sellPrice);
+	};
+
+	const rentToken = async () => {
+		await contract['market'].rent(
+			dragon.tokenId,
+			TokenType.Dragon,
+			dragon.rentOffer.rent.price,
+			dragon.rentOffer.rent.deposit
+		);
+	};
 </script>
 
 <div class="row pt-5">
@@ -58,31 +77,79 @@
 	</div>
 	<!-- RIGHT-SIDE ->ATTRIBUTES AND RAISE -->
 	<div class="col-6 rightsideBox">
-		{#if isOwner && !isForSale}
-			<div class="attrDiv">
-				<h3>Create Offer</h3>
-			</div>
+		{#if !isForSale || !isForRent}
+			{#if isOwner}
+				<div class="attrDiv">
+					<h3>Create Offer</h3>
+					<div class="d-flex">
+						{#if !isForSale}
+							<div>
+								<h4>For Sale</h4>
+							</div>
+						{/if}
+						{#if !isForRent}
+							<div>
+								<h4>For Rent</h4>
+							</div>
+						{/if}
+					</div>
+				</div>
+			{/if}
 		{/if}
+
 		{#if isForSale}
 			<div class="attrDiv">
-				<h3>For Sale</h3>
+				<div class="d-flex">
+					<h3>For Sale</h3>
+					{#if isOwner}
+						<div class="divBtn">
+							<button class="btn btn-light"><i class="fas fa-edit" /> Edit</button>
+						</div>
+					{/if}
+				</div>
 				<hr />
-				<!-- {#if isOwner}
-					<button><i class="fas fa-edit" /> Edit</button>
-				{/if} -->
-				<!-- <OfferTerms {_offerType} {rentTerms} {isForSale} salePrice={price} /> -->
-				<!-- <OfferBtn {dragon}{account} displayOwner={true} /> -->
+				<div>
+					<h3>
+						Price:
+						{price} <i class="fab fa-ethereum" />
+					</h3>
+				</div>
+				{#if !isOwner}
+					<OfferBtn
+						classicBtn={true}
+						_offerType={OfferType.ForSale}
+						buy={() => buyToken()}
+						rent={() => rentToken()}
+						{dragon}
+						{account}
+						displayOwner={true}
+					/>
+				{/if}
 			</div>
 		{/if}
 		{#if isForRent}
 			<div class="attrDiv">
-				<h3>For Rent</h3>
+				<div class="d-flex">
+					<h3>Rent Offer</h3>
+					{#if isOwner}
+						<div class="divBtn">
+							<button class="btn btn-light"><i class="fas fa-edit" /> Edit</button>
+						</div>
+					{/if}
+				</div>
 				<hr />
-				<!-- {#if isOwner}
-					<button><i class="fas fa-edit" /> Edit</button>
-				{/if} -->
-				<!-- <OfferTerms {_offerType} {rentTerms} {isForSale} salePrice={price} /> -->
-				<!-- <OfferBtn {dragon}{account} displayOwner={true} /> -->
+				<OfferTerms _offerType={OfferType.ForRent} {rentTerms} {isForSale} salePrice={price} />
+				{#if !isOwner}
+					<OfferBtn
+						classicBtn={true}
+						_offerType={OfferType.ForRent}
+						buy={() => buyToken()}
+						rent={() => rentToken()}
+						{dragon}
+						{account}
+						displayOwner={true}
+					/>
+				{/if}
 			</div>
 		{/if}
 		{#if isOwner}
@@ -93,6 +160,31 @@
 </div>
 
 <style>
+	h3 {
+		margin: 0px;
+		white-space: nowrap;
+	}
+
+	.divBtn {
+		width: 100%;
+		text-align: right;
+	}
+
+	.divBtn button {
+		width: fit-content;
+		font-size: 16px;
+		margin-top: -5px;
+	}
+
+	hr {
+		margin-top: 10px;
+	}
+
+	.btn-light:hover {
+		background-color: rgb(187, 187, 187);
+		border-radius: 8px;
+	}
+
 	.leftsideBox,
 	.rightsideBox {
 		padding: 10px 10px;

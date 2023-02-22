@@ -37,6 +37,12 @@
 		account = await contract.dragon.contract.account;
 		dragon.owner = owner		
 		isOwner = await isOwnerAccount(account, owner);		
+		if(isForSale){
+			dragon.sellOffer = await contract.market.getOffer(dragonId,TokenType.Dragon);			
+		}
+		if(isForRent){
+			dragon.rentOffer = await contract.market.getOffer(dragonId,TokenType.Dragon);			
+		}
 	});
 
 	afterUpdate(() => {

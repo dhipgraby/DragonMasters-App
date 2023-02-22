@@ -181,8 +181,8 @@ export function orderByOffer(assets, _offerType) {
 }
 
 export async function loadRentTerms(asset, _offerType) {
-    if (_offerType === OfferType.ForSale || asset.rentOffer == undefined) return;
-
+    if (_offerType === OfferType.ForSale || asset.rentOffer === undefined) return;
+    console.log('loading rent terms');
     let currentDeposit = asset.rentOffer.rent.deposit;
     let fee = asset.rentOffer.rent.price;
     let minDuration = asset.rentOffer.rent.minDuration / (24 * 60 * 60) + ' days';
@@ -193,7 +193,7 @@ export async function loadRentTerms(asset, _offerType) {
     };
 }
 
-export function loadOwner(account, owner) {    
+export function loadOwner(account, owner) {
     account = account.toLowerCase();
     owner = owner.toLowerCase();
     if (account === owner) {
@@ -204,14 +204,14 @@ export function loadOwner(account, owner) {
     return owner;
 }
 
-export function isOwnerAccount(account, owner) {    
+export function isOwnerAccount(account, owner) {
     account = account.toLowerCase();
-    owner = owner.toLowerCase();    
+    owner = owner.toLowerCase();
     if (account === owner) {
         return true;
     } else {
         return false;
-    }    
+    }
 }
 
 export function speciesColor(specie) {

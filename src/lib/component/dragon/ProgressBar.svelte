@@ -53,6 +53,7 @@
 		}
 		return
 	}
+
 </script>
 
 {#if $timeLeft > 0}

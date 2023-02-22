@@ -36,7 +36,6 @@
 </script>
 
 <div class="attrDiv">
-
 	{#if ageGroup != Maturity.Immortal}
 		{#if maturity > 0}
 			<p class="c-black"><i class="fas fa-brain" /> Maturity</p>
@@ -47,15 +46,6 @@
 			<b>READY TO RAISE</b>
 			<br />
 		{/if}
-		<button
-			on:click={() => {
-				raiseDragon();
-			}}
-			class="btn btn-yellow mt-3"
-			disabled={raiseDisabled}
-		>
-			Raise to Adult
-		</button>
 	{/if}
 
 	{#if energy > 0}
@@ -69,5 +59,19 @@
 		/>
 	{:else}
 		<p class="c-black mt-3"><i class="fas fa-bolt" /> Full Energy</p>
+	{/if}
+	<button
+		on:click={() => {
+			raiseDragon();
+		}}
+		class="btn btn-yellow"
+		disabled={raiseDisabled}
+	>
+		Raise to Adult
+	</button>
+	{#if maturity > 0 || energy > 0}
+		<div class="alert alert-primary mt-2" role="alert">
+			Need full <b>energy</b> and Maturity time filled before <b>Raise your Dragon up</b> 
+		</div>
 	{/if}
 </div>

@@ -6,11 +6,12 @@
 	export let buy;
 	export let rent;
 	export let isForSale;
+	export let classicBtn = false;
 </script>
 
 {#if _offerType == OfferType.ForSale}
 	<button
-		class="btn btn-dark singleButton"
+		class="btn btn-dark {(classicBtn) ? "classBtn" : "singleButton"}"
 		on:click={async () => {
 			await buy();
 		}}
@@ -21,7 +22,7 @@
 
 {#if _offerType == OfferType.ForRent}
 	<button
-		class="btn btn-dark singleButton"
+		class="btn btn-dark {(classicBtn) ? "classBtn" : "singleButton"}"
 		on:click={async () => {
 			await rent();
 		}}
@@ -89,6 +90,15 @@
 		position: absolute;
 		left: 0px;
 		bottom: 0px;
+	}
+	
+	.classBtn {
+		font-size: 16px;
+		font-weight: 400;
+		padding: 5px 20px !important;
+		border-radius: 10px;
+		margin-top: 15px;		
+		width: fit-content;
 	}
 
 	.singleButton:hover {

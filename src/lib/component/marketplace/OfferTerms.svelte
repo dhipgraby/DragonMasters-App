@@ -5,6 +5,8 @@
 	export let rentTerms;
 	export let salePrice;
 	export let isForSale;
+	
+	console.log(rentTerms);
 </script>
 
 <div class="priceDiv">
