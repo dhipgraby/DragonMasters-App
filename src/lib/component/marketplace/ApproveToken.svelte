@@ -53,6 +53,7 @@
 		border-radius: 8px;
 		margin-left: 10px;
 	}
+	
 	p {
 		margin: 10px;
 	}

@@ -38,10 +38,9 @@
 		borrowedEggs.useLocalStorage();
 		lendedDragons.useLocalStorage();
 		borrowedDragons.useLocalStorage();
-
-		await LoadInterface(0, $perpage);
-		await LoanBookInterface(0, $perpage);
 		show = urlCurrentParam();
+		await LoadInterface(0, $perpage);
+		await LoanBookInterface(0, $perpage);		
 	});
 </script>
 
