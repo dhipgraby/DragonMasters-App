@@ -14,7 +14,7 @@
 </script>
 
 <div class="card-header">
-	{#if settingsMenu}
+	{#if settingsMenu}	
 		<CircleMenu {hovering} tokenProps={dragon} {contract} {_tokenType} />
 	{/if}
 

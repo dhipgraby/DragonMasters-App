@@ -2,7 +2,6 @@
 	import { onMount, createEventDispatcher, afterUpdate } from 'svelte';
 	import { TokenType, OfferType, saleTerms, rentTerms } from '$lib/contracts/Marketplace';
 	import { getEth, getWei, timeDropdrown } from '$lib/helpers/utils';
-	import TimeInputs from './TimeInputs.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -137,21 +136,32 @@
 				/>
 				<label for="floatingPassword">Number of days</label>
 			</div>
-
-			<TimeInputs {addTime} />
 		{/if}
 
 		<button class="btn btn-success modifyBtn text-light" on:click={() => modifyOffer()}
 			>Confirm</button
 		>
 	{:else}
-		<button class="btn btn-danger text-light" on:click={() => removeSellOffer()}>Remove </button>
+	<div class="removeDiv">
+		<button class="btn btn-danger text-light mt-4" on:click={() => removeSellOffer()}>Remove </button>
+	</div>
+		
 	{/if}
 </div>
 
 <style>
-	button {
-		position: absolute;
+
+	.removeDiv {
+		width: 100%;
+		text-align: center;
+	}
+
+	.removeDiv button{
+		width: 100%;
+		border-radius: 8px;		
+	}
+
+	button {		
 		bottom: 20px;
 		left: 20px;
 		font-weight: 600;
@@ -164,6 +174,7 @@
 	}
 
 	.tap p {
+		cursor: pointer;
 		color: rgb(110, 110, 110);
 		font-size: 16px;
 		font-weight: 700;

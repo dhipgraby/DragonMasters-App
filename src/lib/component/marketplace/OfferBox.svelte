@@ -12,7 +12,6 @@ export let contract;
 export let handleApprove;
 
 </script>
-
 <!-- CHECK APPROVE FOR ALL -->
 {#if tokenProps.isApproved == true}
 	<OfferForm
@@ -25,7 +24,7 @@ export let handleApprove;
 	<!-- IF IS NOT APPROVE FOR ALL CHECK SINGLE APPROVE  -->
 {:else if doPromise == true}
 	{#await promise}
-		<p>...waiting</p>
+		<p>Loading market...</p>
 	{:then approval}
 		<!-- ADDRESS IS APPROVE -->
 		{#if approval == true}

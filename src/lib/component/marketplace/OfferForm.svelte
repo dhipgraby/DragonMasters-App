@@ -34,7 +34,7 @@
 				showOptions = true;
 			}}
 		>
-			<i class="fas fa-arrow-left" /> Back
+		<i class="fas fa-chevron-left"></i> Back
 		</p>
 	</div>
 
@@ -76,9 +76,18 @@
 {/if}
 
 <style>
-	.backBtn {
-		color: grey !important;
-		font-size: 20px;
-		font-weight: 700;
+	.backBtn {		
+		width: fit-content;
+		cursor: pointer;
+		margin-bottom:15px;
+		color: grey;
+		font-size: 16px;
+		font-weight: 500;
+		transition: 0.3s;
+	}
+
+	.backBtn:hover {		
+		color:black;
+		transform: translateX(-5px);
 	}
 </style>

@@ -32,21 +32,20 @@
 	let element = iconElement(dragon.subSpecies);
 	let openModal;
 	let modaComponent;
-	let doPromise = false;
+	let doPromise = true;
 
 	$: maturity = Object.keys(Maturity)[dragon.ageGroup];
 
 	onMount(async () => {
-		openModal = function () {
-			doPromise = true;
+		openModal = function () {			
 			modaComponent.openModal();
 		};
 
 		dna = await contract.dragon.getDna(dragon.dnaId);
-		await setPrices()
+		await setPrices();
 	});
 
-	async function setPrices(){
+	async function setPrices() {
 		if (isForSale === true) {
 			let currentprice = dragon.sellOffer != undefined ? dragon.sellOffer.sellPrice : 0;
 			price = await getEth(currentprice);
@@ -57,7 +56,6 @@
 			rentTerms = await loadRentTerms(dragon, OfferType.ForRent);
 		}
 	}
-
 
 	const buyToken = async () => {
 		await contract['market'].buy(dragon.tokenId, TokenType.Dragon, dragon.sellOffer.sellPrice);
@@ -90,14 +88,19 @@
 	</div>
 	<!-- RIGHT-SIDE ->ATTRIBUTES AND RAISE -->
 	<div class="col-6 rightsideBox">
-		{#if !isForSale || !isForRent}
+	
 			{#if isOwner}
-				<div class="attrDiv">
-					<h3>Create/Edit Offer</h3>
-					<SellOption bind:this={modaComponent} btnName={"Create edit Offer"} tokenProps={dragon} contract={contract.market} {doPromise} _tokenType={TokenType.Dragon} />
+				<div class="attrDiv">					
+					<SellOption
+						bind:this={modaComponent}
+						noModal={true}
+						tokenProps={dragon}
+						contract={contract.market}
+						{doPromise}
+						_tokenType={TokenType.Dragon}
+					/>
 				</div>
 			{/if}
-		{/if}
 
 		{#if isForSale}
 			<div class="attrDiv">

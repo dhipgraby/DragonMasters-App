@@ -11,14 +11,12 @@
 	let active = false;
 	let openModal;
 	let modaComponent;
-	let doPromise = false
+	let doPromise = true
 
-	onMount(() => {
-		openModal = function () {			
-			doPromise = true					
+	onMount(() => {				
+		openModal = function () {									
 			modaComponent.openModal();
 		};
-
 		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
 		var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 			return new bootstrap.Tooltip(tooltipTriggerEl);
@@ -26,8 +24,8 @@
 	});
 
 </script>
-<!-- {hovering ? 'show' : 'hide'}  -->
-<div class="show maindiv">
+
+<div class="{hovering ? 'show' : 'hide'} maindiv">
 	<div
 		on:click={() => {
 			active = active == true ? false : true;

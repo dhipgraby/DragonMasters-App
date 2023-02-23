@@ -29,9 +29,9 @@
 </script>
 
 <div align="center">
-	<h3>Token ID: {tokenId}</h3>
-	<h6>Approve the marketplace to sell your NFTs</h6>
-	<p><small>Approve marketplace for only this token</small></p>
+	<h4>Marketplace Approval <br> <span class="badge bg-dark">Token ID: #{tokenId}</span></h4>
+	<p>Approve the marketplace to sell your NFTs</p>
+	<p>Approve marketplace <b>only for this token</b> or <b>all your tokens</b></p>
 	<button
 		class="btn btn-danger text-light"
 		data-bs-dismiss="modal"
@@ -39,8 +39,6 @@
 			await singleApprove();
 		}}>Approve single token</button
 	>
-	<br />
-	<p><small> Approve marketplace for your tokens</small></p>
 	<button
 		class="btn btn-danger text-light"
 		data-bs-dismiss="modal"
@@ -49,3 +47,19 @@
 		}}>Approve for All</button
 	>
 </div>
+
+<style>
+	button {
+		border-radius: 8px;
+		margin-left: 10px;
+	}
+	p {
+		margin: 10px;
+	}
+
+	.badge {
+		margin-top: 12px;
+		padding: 2px 15px;
+		font-size: 14px;		
+	}
+</style>
