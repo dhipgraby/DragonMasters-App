@@ -1,20 +1,21 @@
 <script>
+	import OfferForm from './OfferForm.svelte';
+	import ApproveToken from './ApproveToken.svelte';
 
-import OfferForm from "./OfferForm.svelte";
-import ApproveToken from "./ApproveToken.svelte";
-
-export let tokenProps;
-export let formHanlders;
-export let doPromise;
-export let promise;
-export let _tokenType;
-export let contract;
-export let handleApprove;
-
+	export let tokenProps;
+	export let formHanlders;
+	export let doPromise;
+	export let promise;
+	export let _tokenType;
+	export let contract;
+	export let handleApprove;
+	export let _offerType;
 </script>
+
 <!-- CHECK APPROVE FOR ALL -->
 {#if tokenProps.isApproved == true}
 	<OfferForm
+		{_offerType}
 		offer={tokenProps.offer}
 		tokenId={tokenProps.tokenId}
 		{formHanlders}
@@ -28,7 +29,13 @@ export let handleApprove;
 	{:then approval}
 		<!-- ADDRESS IS APPROVE -->
 		{#if approval == true}
-			<OfferForm offer={tokenProps.offer} tokenId={tokenProps.tokenId} {formHanlders} {contract} />
+			<OfferForm
+				{_offerType}
+				offer={tokenProps.offer}
+				tokenId={tokenProps.tokenId}
+				{formHanlders}
+				{contract}
+			/>
 		{:else}
 			<ApproveToken
 				on:approved={handleApprove}

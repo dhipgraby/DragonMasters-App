@@ -30,15 +30,23 @@
 	let rentTerms;
 	let img = getImg(dragon.subSpecies).idle;
 	let element = iconElement(dragon.subSpecies);
-	let openModal;
+	let openSellOption;
+	let openRentOption;
 	let modaComponent;
 	let doPromise = true;
+	let _offerType = OfferType.ForSale;
 
 	$: maturity = Object.keys(Maturity)[dragon.ageGroup];
 
 	onMount(async () => {
-		openModal = function () {			
+		openSellOption = function () {			
 			modaComponent.openModal();
+			_offerType = OfferType.ForSale;
+		};
+
+		openRentOption = function () {
+			modaComponent.openModal();
+			_offerType = OfferType.ForRent;
 		};
 
 		dna = await contract.dragon.getDna(dragon.dnaId);
@@ -71,6 +79,7 @@
 	};
 </script>
 
+<!-- SELL OFFER -->
 <div class="row pt-5">
 	<div class="col-6 leftsideBox">
 		<!-- IMG -->
@@ -88,27 +97,16 @@
 	</div>
 	<!-- RIGHT-SIDE ->ATTRIBUTES AND RAISE -->
 	<div class="col-6 rightsideBox">
-	
-			{#if isOwner}
-				<div class="attrDiv">					
-					<SellOption
-						bind:this={modaComponent}
-						noModal={true}
-						tokenProps={dragon}
-						contract={contract.market}
-						{doPromise}
-						_tokenType={TokenType.Dragon}
-					/>
-				</div>
-			{/if}
-
+		<!-- SELL OFFER -->
 		{#if isForSale}
 			<div class="attrDiv">
 				<div class="d-flex">
 					<h3>For Sale</h3>
 					{#if isOwner}
 						<div class="divBtn">
-							<button class="btn btn-light"><i class="fas fa-edit" /> Edit</button>
+							<button on:click={openSellOption} class="btn btn-light"
+								><i class="fas fa-edit" /> Edit</button
+							>
 						</div>
 					{/if}
 				</div>
@@ -132,13 +130,16 @@
 				{/if}
 			</div>
 		{/if}
+		<!-- RENT OFFER -->
 		{#if isForRent}
 			<div class="attrDiv">
 				<div class="d-flex">
 					<h3>Rent Offer</h3>
 					{#if isOwner}
 						<div class="divBtn">
-							<button class="btn btn-light"><i class="fas fa-edit" /> Edit</button>
+							<button on:click={openRentOption} class="btn btn-light"
+								><i class="fas fa-edit" /> Edit</button
+							>
 						</div>
 					{/if}
 				</div>
@@ -158,6 +159,15 @@
 			</div>
 		{/if}
 		{#if isOwner}
+			<SellOption
+				{_offerType}
+				bind:this={modaComponent}
+				noModal={true}
+				tokenProps={dragon}
+				contract={contract.market}
+				{doPromise}
+				_tokenType={TokenType.Dragon}
+			/>
 			<!-- LOAD ACTIONS -->
 			<RaiseAndEnergy {contract} tokenId={dragon.tokenId} ageGroup={dragon.ageGroup} />
 		{/if}

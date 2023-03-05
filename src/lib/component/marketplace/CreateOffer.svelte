@@ -1,5 +1,5 @@
 <script>
-	import { TokenType, OfferType, saleTerms, rentTerms } from '$lib/contracts/Marketplace';
+	import { OfferType, saleTerms, rentTerms } from '$lib/contracts/Marketplace';
 	import { getWei, timeDropdrown } from '$lib/helpers/utils';
 	import { createEventDispatcher } from 'svelte';
 	import TimeInputs from './TimeInputs.svelte';
@@ -58,9 +58,6 @@
 		}
 	}
 
-	function addTime(days) {
-		duration += days;
-	}
 </script>
 
 <h3>Create a {_offerType == OfferType.ForSale ? 'Sale' : 'Rent'} Offer</h3>
@@ -96,8 +93,6 @@
 		/>
 		<label for="floatingPassword">Number of days</label>
 	</div>
-
-	<TimeInputs {addTime} />
 {/if}
 
 <button class="btn btn-success mt-2" on:click={() => createOffer()}>Create Offer</button>

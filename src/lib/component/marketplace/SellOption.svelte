@@ -15,7 +15,7 @@
 	export let _tokenType;
 	export let doPromise = false;
 	export let btnName = false;
-	export let noModal = false;
+	export let _offerType = OfferType.NoOffer;
 
 	let promise;
 	let modaComponent;
@@ -24,21 +24,18 @@
 		_tokenType == TokenType.Egg ? $approvalRequired.egg : $approvalRequired.dragon;
 	$: CheckApproval = _tokenType == TokenType.Egg ? $eggApproval : $dragonApproval;
 
-	onMount(() => {	
-		if (noModal) {
+	onMount(() => {		
+		openModal = function () {
+			console.log(_offerType);
+			modaComponent.openModal();
+			console.log('opening modal', doPromise);
 			setApprovals();
-		} else {
-			openModal = function () {
-				modaComponent.openModal();
-				console.log('opening modal', doPromise);
-				setApprovals();
-			};
-		}
+		};
 	});
 
 	async function setApprovals() {
 		if (CheckApproval == true) singleApproval = false;
-		tokenProps.isApproved = singleApproval == false ? true : false;		
+		tokenProps.isApproved = singleApproval == false ? true : false;
 		if (doPromise == true && singleApproval == true) promise = later(500);
 		tokenProps.isApproved = singleApproval == false ? true : false;
 	}
@@ -107,8 +104,9 @@
 	}
 </script>
 
-{#if noModal == true}
+<BasicModal bind:this={modaComponent} {btnName} id={'tokenModal' + tokenProps.tokenId}>
 	<OfferBox
+		{_offerType}
 		{tokenProps}
 		{formHanlders}
 		{doPromise}
@@ -117,16 +115,4 @@
 		{contract}
 		{handleApprove}
 	/>
-{:else}
-	<BasicModal bind:this={modaComponent} {btnName} id={'tokenModal' + tokenProps.tokenId}>
-		<OfferBox
-			{tokenProps}
-			{formHanlders}
-			{doPromise}
-			{promise}
-			{_tokenType}
-			{contract}
-			{handleApprove}
-		/>
-	</BasicModal>
-{/if}
+</BasicModal>

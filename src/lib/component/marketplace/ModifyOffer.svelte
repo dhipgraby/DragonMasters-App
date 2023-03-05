@@ -72,11 +72,7 @@
 			});
 		}
 	}
-
-	function addTime(days) {
-		duration += days;
-	}
-
+	
 	onMount(async () => {
 		if (_offerType == OfferType.ForSale) {
 			price = await getEth(offer.sellPrice);

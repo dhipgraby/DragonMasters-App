@@ -9,19 +9,20 @@
 	export let tokenId;
 	export let formHanlders;
 	export let _tokenType;
+	export let _offerType;
 
-	let _offerType = OfferType.NoOffer;
-	let showOptions = true;
+	$: showOptions =
+		_offerType === OfferType.ForSale || _offerType === OfferType.ForRent ? false : true;
 
-	function forSale() {
-		showOptions = false;
-		_offerType = OfferType.ForSale;		
-	}
+	const forSale = () => {
+		_offerType = OfferType.ForSale;
+	};
 
-	function forRent() {
-		showOptions = false;
-		_offerType = OfferType.ForRent;		
-	}
+	const forRent = () => {
+		_offerType = OfferType.ForRent;
+	};
+
+
 </script>
 
 {#if showOptions}
@@ -31,10 +32,10 @@
 		<p
 			class="backBtn"
 			on:click={() => {
-				showOptions = true;
+				_offerType = OfferType.NoOffer;
 			}}
 		>
-		<i class="fas fa-chevron-left"></i> Back
+			<i class="fas fa-chevron-left" /> Back
 		</p>
 	</div>
 
@@ -51,7 +52,13 @@
 					{_tokenType}
 				/>
 			{:else}
-				<CreateOffer on:offerCreated={formHanlders} {tokenId} {contract} {_offerType} {_tokenType} />
+				<CreateOffer
+					on:offerCreated={formHanlders}
+					{tokenId}
+					{contract}
+					{_offerType}
+					{_tokenType}
+				/>
 			{/if}
 		{/if}
 
@@ -67,7 +74,13 @@
 					{_tokenType}
 				/>
 			{:else}
-				<CreateOffer on:offerCreated={formHanlders} {tokenId} {contract} {_offerType} {_tokenType} />
+				<CreateOffer
+					on:offerCreated={formHanlders}
+					{tokenId}
+					{contract}
+					{_offerType}
+					{_tokenType}
+				/>
 			{/if}
 		{/if}
 	{:else}
@@ -76,18 +89,18 @@
 {/if}
 
 <style>
-	.backBtn {		
+	.backBtn {
 		width: fit-content;
 		cursor: pointer;
-		margin-bottom:15px;
+		margin-bottom: 15px;
 		color: grey;
 		font-size: 16px;
 		font-weight: 500;
 		transition: 0.3s;
 	}
 
-	.backBtn:hover {		
-		color:black;
+	.backBtn:hover {
+		color: black;
 		transform: translateX(-5px);
 	}
 </style>
