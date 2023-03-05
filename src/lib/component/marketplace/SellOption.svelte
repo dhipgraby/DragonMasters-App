@@ -24,11 +24,9 @@
 		_tokenType == TokenType.Egg ? $approvalRequired.egg : $approvalRequired.dragon;
 	$: CheckApproval = _tokenType == TokenType.Egg ? $eggApproval : $dragonApproval;
 
-	onMount(() => {		
+	onMount(() => {
 		openModal = function () {
-			console.log(_offerType);
 			modaComponent.openModal();
-			console.log('opening modal', doPromise);
 			setApprovals();
 		};
 	});

@@ -21,9 +21,9 @@
 	export let removeBtn = false;
 	export let removeDragon = null;
 
-	let account = contract.contract.account
+	$: account = contract?.contract?.account
 
-	onMount(() => {
+	onMount(() => {		
 		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
 		var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 			return new bootstrap.Tooltip(tooltipTriggerEl);

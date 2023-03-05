@@ -40,7 +40,7 @@
 		borrowedDragons.useLocalStorage();
 		show = urlCurrentParam();
 		await LoadInterface(0, $perpage);
-		await LoanBookInterface(0, $perpage);		
+		await LoanBookInterface(0, $perpage);
 	});
 </script>
 
@@ -71,7 +71,7 @@
 	{/if}
 	<!-- USER EGSS -->
 	{#if show == ScreenType.eggs}
-		<EggGrid settingsMenu={true} {eggs} {contract} loadPage={LoadInterface} />
+		<EggGrid settingsMenu={true} {eggs} contract={contract['egg']} loadPage={LoadInterface} />
 	{/if}
 	<!-- USER DRAGONS -->
 	{#if show == ScreenType.dragons}
@@ -89,7 +89,7 @@
 			showRentDetails={true}
 			acctionBtn={false}
 			eggs={eggLends}
-			{contract}
+			contract={contract['egg']}
 			loadPage={LoanBookInterface}
 		/>
 	{/if}
@@ -109,7 +109,7 @@
 			displayOwner={true}
 			showRentDetails={true}
 			eggs={eggBorrows}
-			{contract}
+			contract={contract['egg']}
 			loadPage={LoanBookInterface}
 		/>
 	{/if}

@@ -1,20 +1,21 @@
 <script>
 	import { onMount } from 'svelte';
 	import SellOption from './SellOption.svelte';
-	import '/static/css/Assets/CircleMenu.css'
+	import { contracts } from '$lib/interfaces/Core';
+	import '/static/css/Assets/CircleMenu.css';
 
 	export let tokenProps;
-	export let contract
-	export let hovering;	
-	export let _tokenType
+	export let hovering;
+	export let _tokenType;
 
+	$: contract = $contracts;
 	let active = false;
 	let openModal;
 	let modaComponent;
-	let doPromise = true
+	let doPromise = true;
 
-	onMount(() => {				
-		openModal = function () {									
+	onMount(() => {
+		openModal = function () {
 			modaComponent.openModal();
 		};
 		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -22,7 +23,6 @@
 			return new bootstrap.Tooltip(tooltipTriggerEl);
 		});
 	});
-
 </script>
 
 <div class="{hovering ? 'show' : 'hide'} maindiv">
@@ -51,12 +51,7 @@
 			</div>
 		</a>
 
-		<div
-			on:click={openModal}
-			class="menu secondItem"
-			align="center"
-			
-		>
+		<div on:click={openModal} class="menu secondItem" align="center">
 			<i class="fas fa-dollar-sign" />
 		</div>
 	</div>

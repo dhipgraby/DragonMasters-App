@@ -22,7 +22,7 @@
 		overlay.classList.add('hidden');
 	}
 
-	export const openModal = function () {		
+	export const openModal = function () {
 		modal.classList.remove('hidden');
 		overlay.classList.remove('hidden');
 	};
