@@ -2,7 +2,7 @@
 	import '/static/css/Assets/SingleAsset.css';
 	import { onMount } from 'svelte';
 	import { createEventDispatcher } from 'svelte';
-	import { Maturity } from '$lib/helpers/utils.js';
+	import { loadOwner, Maturity } from '$lib/helpers/utils.js';
 	import { getImg, iconElement } from '$lib/storage/dragonImg';
 	import OfferBtn from '$lib/component/marketplace/OfferBtn.svelte';
 	import OfferTerms from '$lib/component/marketplace/OfferTerms.svelte';
@@ -21,6 +21,7 @@
 	export let account;
 	export let contract;
 	export let isOwner = false;
+	export let owner;
 	export let isForSale;
 	export let isForRent;
 
@@ -97,6 +98,10 @@
 	</div>
 	<!-- RIGHT-SIDE ->ATTRIBUTES AND RAISE -->
 	<div class="col-6 rightsideBox">
+		<div class="mb-4">
+			<h1>Dragon #{dragon.tokenId}</h1>
+			<p title={dragon.owner}>Owned by : {@html loadOwner(account,dragon.owner)}</p>
+		</div>
 		<!-- SELL OFFER -->
 		{#if isForSale}
 			<div class="attrDiv">
