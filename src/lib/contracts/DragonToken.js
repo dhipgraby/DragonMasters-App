@@ -49,8 +49,7 @@ export class DragonContract {
             return dragonIds
         } catch (err) {
             // if (alert == true) setAlert('getDragonIds error', 'warning')
-            console.log("Error at: getDragonIds", err)
-            const errMsg = getErrors('getDragonIds', err)
+            console.log("Error at: getDragonIds", err)            
             if (alert == true) setAlert(errMsg, 'warning')
             console.log(errMsg)
         }

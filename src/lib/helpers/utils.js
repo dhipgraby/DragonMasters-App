@@ -198,7 +198,7 @@ export function loadOwner(account, owner) {
     account = account.toLowerCase();
     owner = owner.toLowerCase();
     if (account === owner) {
-        owner = '<b class="yellowLink">You</b>';
+        owner = '<span class="yellowLink">You</span>';
     } else {
         owner = shortAddr(owner);
     }

@@ -45,6 +45,7 @@ i {
 }
 
 .dragonBg {
+    position: relative;
     padding: 25px;
     margin-bottom: 25px;
     text-align: center;

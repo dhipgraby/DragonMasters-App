@@ -1,51 +1,29 @@
 <script>
 	import { onMount, afterUpdate } from 'svelte';
-	import { OfferType, TokenType } from '$lib/contracts/Marketplace';
-	import { isOwnerAccount } from '$lib/helpers/utils';
-	import { loadContractData } from '$lib/interfaces/Core';
-	import SingleDragon from '$lib/component/dragon/SingleDragon.svelte';
+	import DragonTemplate from '$lib/component/dragon/DragonTemplate.svelte';
+	import { singleDragon } from '$lib/storage/dragon';
+	import { LoadInterface } from '$lib/interfaces/IDragon';
 
 	export let data;
 	export let dragonId = data.dragonId;
 	export let doPromise = false;
 
-	let contract;
-	let dragon = [];
 	let promise;
-	let isForSale = false;
-	let isForRent = false;
-	let owner = '';
-	let account = '';
-	let isOwner = false;
 
+	$: dragon = $singleDragon;
 	$: dragonProps = {
-		dragon: dragon,
-		contract: contract,
-		isForSale: isForSale,
-		isForRent: isForRent,
-		isOwner: isOwner,
-		account
+		dragon: dragon.dragon,
+		contract: dragon.contract,
+		isForSale: dragon.isForSale,
+		isForRent: dragon.isForRent,
+		isOwner: dragon.isOwner,
+		account: dragon.account
 	};
 
 	onMount(async () => {
 		doPromise = true;
-		contract = await loadContractData();
-		await contract.market.isApprovedForAll(TokenType.Dragon);
-		dragon = await contract.dragon.getDragon(dragonId);
-		isForSale = await contract.market.isOnOffer(dragonId, OfferType.ForSale, TokenType.Dragon);
-		isForRent = await contract.market.isOnOffer(dragonId, OfferType.ForRent, TokenType.Dragon);
-		owner = await contract.dragon.ownerOf(dragonId);
-		account = await contract.dragon.contract.account;
-		dragon.owner = owner;
-		isOwner = await isOwnerAccount(account, owner);		
-		if (isForSale) {
-			dragon.sellOffer = await contract.market.getOffer(dragonId, TokenType.Dragon);
-			dragon.offer.sellOffer = dragon.sellOffer;
-		}
-		if (isForRent) {
-			dragon.rentOffer = await contract.market.getOffer(dragonId, TokenType.Dragon);
-			dragon.offer.rentOffer = dragon.rentOffer;
-		}		
+		await LoadInterface(dragonId);
+		console.log(dragon);
 	});
 
 	afterUpdate(() => {
@@ -53,7 +31,7 @@
 	});
 
 	async function updateDragon() {
-		dragon = await contract.getDragon(dragonId);
+		await LoadInterface(dragonId);
 	}
 
 	async function later(delay) {
@@ -69,8 +47,8 @@
 		{#await promise}
 			<h2>Loading...</h2>
 		{:then ready}
-			{#if dragon.tokenId}
-				<SingleDragon on:update={updateDragon} {...dragonProps} />
+			{#if dragon.dragon.tokenId}
+				<DragonTemplate on:update={updateDragon} {...dragonProps} />
 			{:else}
 				<h2>Dragon not found...</h2>
 			{/if}

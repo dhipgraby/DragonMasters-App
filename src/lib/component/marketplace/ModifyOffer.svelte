@@ -21,7 +21,7 @@
 		tap = num;
 	};
 
-	async function removeSellOffer() {
+	async function removeOffer() {
 		let offerRemove = await contract.removeOffer(tokenId, _offerType, _tokenType);
 		if (offerRemove.blockHash) {
 			dispatch('offerRemoved', {
@@ -139,7 +139,7 @@
 		>
 	{:else}
 	<div class="removeDiv">
-		<button class="btn btn-danger text-light mt-4" on:click={() => removeSellOffer()}>Remove </button>
+		<button class="btn btn-danger text-light mt-4" on:click={() => removeOffer()}>Remove </button>
 	</div>
 		
 	{/if}
@@ -186,6 +186,6 @@
 	}
 
 	.myContainer {
-		min-width: 500px;
+		min-width: 500px;		
 	}
 </style>
