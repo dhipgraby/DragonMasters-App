@@ -30,7 +30,7 @@ export const saleTerms = {
 export class MarketplaceContract extends MarketApproval {
     constructor() {
         super()
-        this.contract        
+        this.contract
         return (async () => {
             this.contract = await contracts();
             return this;
@@ -205,7 +205,7 @@ export class MarketplaceContract extends MarketApproval {
     async setOffer(tokenId, offerType, tokenType, terms, alert = false) {
 
         try {
-            await this.contract.Marketplace.methods.setOffer(
+            const offer = await this.contract.Marketplace.methods.setOffer(
                 tokenId,
                 terms,
                 offerType,
@@ -219,6 +219,7 @@ export class MarketplaceContract extends MarketApproval {
                     return txHash
                 }
             })
+            return offer;
         } catch (err) {
             console.log("Error at: setOffer", err)
             const errMsg = getErrors('setOffer', err)
@@ -229,7 +230,7 @@ export class MarketplaceContract extends MarketApproval {
 
     async modifyOffer(tokenId, offerType, tokenType, terms, alert = false) {
         try {
-            await this.contract.Marketplace.methods.modifyOffer(
+            const offer = await this.contract.Marketplace.methods.modifyOffer(
                 tokenId,
                 terms,
                 offerType,
@@ -242,6 +243,7 @@ export class MarketplaceContract extends MarketApproval {
                     return txHash
                 }
             })
+            return offer;
         } catch (err) {
             console.log("Error at: modifyOffer", err)
             const errMsg = getErrors('modifyOffer', err)
@@ -498,7 +500,6 @@ export class MarketplaceContract extends MarketApproval {
                     return txHash
                 }
             })
-
             return offer
         } catch (err) {
             console.log("Error at: removeOffer", err)

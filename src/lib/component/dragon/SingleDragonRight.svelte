@@ -18,6 +18,7 @@
 	let openRentOption;
 
 	onMount(async () => {
+		console.log(dragon);
 		openSellOption = function () {
 			modaComponent.openModal();
 			_offerType = OfferType.ForSale;

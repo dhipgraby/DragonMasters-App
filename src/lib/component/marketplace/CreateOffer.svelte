@@ -2,7 +2,6 @@
 	import { OfferType, saleTerms, rentTerms } from '$lib/contracts/Marketplace';
 	import { getWei, timeDropdrown } from '$lib/helpers/utils';
 	import { createEventDispatcher } from 'svelte';
-	import TimeInputs from './TimeInputs.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -33,7 +32,7 @@
 		}
 
 		let offering = await contract.setOffer(tokenId, _offerType, _tokenType, Terms);
-
+		console.log("offering",offering);
 		if (offering.blockHash) {
 			let offer = {
 				offerType: _offerType,

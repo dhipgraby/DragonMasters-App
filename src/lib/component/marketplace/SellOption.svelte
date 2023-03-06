@@ -48,8 +48,7 @@
 		if (tokenProps.isApproved === true) {
 			console.log('already approved');
 			return true;
-		}
-		console.log('checking ');
+		}		
 		let approval = await contract.getApproved(tokenProps.tokenId, _tokenType);
 		console.log(approval);
 		tokenProps.isApproved = approval;
@@ -61,12 +60,15 @@
 		switch (eventName) {
 			case 'offerCreated':
 				handleSetOffer(event);
+				console.log('offer created from handler')
 				break;
 			case 'offerModifyed':
 				handleModifyOffer(event);
+				console.log('offer modifyed from handler')
 				break;
 			case 'offerRemoved':
 				handleRemoveOffer(event);
+				console.log('offer removed from handler')
 				break;
 		}
 	}

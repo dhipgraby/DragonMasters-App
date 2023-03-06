@@ -1,5 +1,5 @@
 <script>
-	import { onMount, createEventDispatcher, afterUpdate } from 'svelte';
+	import { onMount, createEventDispatcher } from 'svelte';
 	import { TokenType, OfferType, saleTerms, rentTerms } from '$lib/contracts/Marketplace';
 	import { getEth, getWei, timeDropdrown } from '$lib/helpers/utils';
 
@@ -23,6 +23,7 @@
 
 	async function removeOffer() {
 		let offerRemove = await contract.removeOffer(tokenId, _offerType, _tokenType);
+		console.log('offerRemove', offerRemove);
 		if (offerRemove.blockHash) {
 			dispatch('offerRemoved', {
 				name: 'offerRemoved',
@@ -52,6 +53,7 @@
 
 		if (modifying.blockHash) {
 			let offer = {
+				sellPrice: priceInWei,
 				offerType: _offerType,
 				owner: contract.contract.account,
 				rent:
@@ -65,15 +67,20 @@
 				tokenId: tokenId,
 				tokenType: TokenType.Dragon
 			};
-
+			console.log('offer from dispatcher', offer);
+			setPrices()
 			dispatch('offerModifyed', {
 				offer: offer,
 				name: 'offerModifyed'
 			});
 		}
 	}
-	
+
 	onMount(async () => {
+		await setPrices();
+	});
+
+	async function setPrices() {
 		if (_offerType == OfferType.ForSale) {
 			price = await getEth(offer.sellPrice);
 		} else {
@@ -84,7 +91,7 @@
 			}
 		}
 		currentPrice = price;
-	});
+	}
 </script>
 
 <h3>Change {_offerType == OfferType.ForSale ? 'Sale' : 'Rent'} Offer</h3>
@@ -138,26 +145,24 @@
 			>Confirm</button
 		>
 	{:else}
-	<div class="removeDiv">
-		<button class="btn btn-danger text-light mt-4" on:click={() => removeOffer()}>Remove </button>
-	</div>
-		
+		<div class="removeDiv">
+			<button class="btn btn-danger text-light mt-4" on:click={() => removeOffer()}>Remove </button>
+		</div>
 	{/if}
 </div>
 
 <style>
-
 	.removeDiv {
 		width: 100%;
 		text-align: center;
 	}
 
-	.removeDiv button{
+	.removeDiv button {
 		width: 100%;
-		border-radius: 8px;		
+		border-radius: 8px;
 	}
 
-	button {		
+	button {
 		bottom: 20px;
 		left: 20px;
 		font-weight: 600;
@@ -186,6 +191,6 @@
 	}
 
 	.myContainer {
-		min-width: 500px;		
+		min-width: 500px;
 	}
 </style>
