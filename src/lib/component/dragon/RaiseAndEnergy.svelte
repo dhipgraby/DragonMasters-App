@@ -36,6 +36,8 @@
 </script>
 
 <div class="attrDiv">
+	<h3><i class="fas fa-fist-raised"></i> Actions</h3>
+	<hr />
 	{#if ageGroup != Maturity.Immortal}
 		{#if maturity > 0}
 			<p class="c-black"><i class="fas fa-brain" /> Maturity</p>
@@ -68,6 +70,16 @@
 		disabled={raiseDisabled}
 	>
 		Raise to Adult
+	</button>
+<br />
+	<button
+		on:click={() => {
+			window.location.href ="/breed"
+		}}
+		class="btn btn-yellow mt-3"
+		disabled={raiseDisabled}
+	>
+		Breed
 	</button>
 	{#if maturity > 0 || energy > 0}
 		<div class="alert alert-primary mt-2" role="alert">

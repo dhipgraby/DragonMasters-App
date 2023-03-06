@@ -90,6 +90,8 @@
 		left: 50%;
 		transform: translate(-50%, -50%);
 		width: fit-content;
+		min-width: 320px;
+		max-width: 90%;
 		max-width: 800px !important;
 		background-color: #fff;
 		padding: 30px;

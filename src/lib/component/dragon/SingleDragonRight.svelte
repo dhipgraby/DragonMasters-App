@@ -36,7 +36,7 @@
 </div>
 <!-- SELL OFFER -->
 <Offers bind:this={modaComponent} {isOwner} {openSellOption} {openRentOption} {dragon} {account} {contract} />
-
+<!-- OFFER MODAL -->
 {#if isOwner}
 	<SellOption
 		bind:this={modaComponent}
