@@ -1,20 +1,40 @@
+
 <script>
 	import OfferBtn from '$lib/component/marketplace/OfferBtn.svelte';
 	import OfferTerms from '$lib/component/marketplace/OfferTerms.svelte';
 	import { OfferType } from '$lib/contracts/Marketplace';
+	import { singleDragon } from '$lib/storage/dragon';
+	import { onMount } from 'svelte';
 
 	export let openSellOption;
 	export let openRentOption;
-	export let isOwner;
 	export let dragon;
-	export let buyToken;
-	export let rentToken;
-	export let isForSale;
-	export let isForRent;
 	export let account;
-	export let rentTerms;
-	export let rentPrice;
-	export let price;
+	export let contract;
+	export let isOwner;
+
+	let dragonData;
+	let isForRent;
+	let isForSale;
+
+	onMount(() => {
+		dragonData = $singleDragon;
+		isForRent = dragonData.isForRent;
+		isForSale = dragonData.isForSale;		
+	});
+
+	const buyToken = async () => {
+		await contract['market'].buy(dragon.tokenId, TokenType.Dragon, dragon.sellOffer.sellPrice);
+	};
+
+	const rentToken = async () => {
+		await contract['market'].rent(
+			dragon.tokenId,
+			TokenType.Dragon,
+			dragon.rentOffer.rent.price,
+			dragon.rentOffer.rent.deposit
+		);
+	};
 </script>
 
 {#if isForSale}
@@ -33,7 +53,7 @@
 		<div>
 			<h3>
 				Price:
-				{price} <i class="fab fa-ethereum" />
+				{dragon.price} <i class="fab fa-ethereum" />
 			</h3>
 		</div>
 		{#if !isOwner}
@@ -63,7 +83,12 @@
 			{/if}
 		</div>
 		<hr />
-		<OfferTerms _offerType={OfferType.ForRent} {rentTerms} {isForSale} salePrice={rentPrice} />
+		<OfferTerms
+			_offerType={OfferType.ForRent}
+			rentTerms={dragon.rentTerms}
+			{isForSale}
+			salePrice={dragon.price}
+		/>
 		{#if !isOwner}
 			<OfferBtn
 				classicBtn={true}

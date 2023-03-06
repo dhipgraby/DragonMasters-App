@@ -6,24 +6,18 @@
 
 	export let data;
 	export let dragonId = data.dragonId;
-	export let doPromise = false;
-
-	let promise;
+	export let doPromise = false;	
 
 	$: dragon = $singleDragon;
-	$: dragonProps = {
-		dragon: dragon.dragon,
-		contract: dragon.contract,
-		isForSale: dragon.isForSale,
-		isForRent: dragon.isForRent,
-		isOwner: dragon.isOwner,
-		account: dragon.account
-	};
+	let promise;
+	let account
+	let isOwner;
 
 	onMount(async () => {
 		doPromise = true;
 		await LoadInterface(dragonId);
-		console.log(dragon);
+		account = dragon.account;	
+		isOwner= dragon.isOwner	
 	});
 
 	afterUpdate(() => {
@@ -47,8 +41,14 @@
 		{#await promise}
 			<h2>Loading...</h2>
 		{:then ready}
-			{#if dragon.dragon.tokenId}
-				<DragonTemplate on:update={updateDragon} {...dragonProps} />
+			{#if dragon?.dragon?.tokenId}
+				<DragonTemplate
+					on:update={updateDragon}
+					dragon={dragon.dragon}
+					contract={dragon.contract}
+					{account}
+					{isOwner}
+				/>
 			{:else}
 				<h2>Dragon not found...</h2>
 			{/if}

@@ -182,7 +182,7 @@ export function orderByOffer(assets, _offerType) {
 
 export async function loadRentTerms(asset, _offerType) {
     if (_offerType === OfferType.ForSale || asset.rentOffer === undefined) return;
-    console.log('loading rent terms');
+    
     let currentDeposit = asset.rentOffer.rent.deposit;
     let fee = asset.rentOffer.rent.price;
     let minDuration = asset.rentOffer.rent.minDuration / (24 * 60 * 60) + ' days';
