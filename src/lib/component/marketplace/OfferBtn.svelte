@@ -1,17 +1,18 @@
 <script>
 	import { OfferType } from '$lib/contracts/LoanBook';
 
-	export let _offerType;
-	export let rentTerms;
 	export let buy;
 	export let rent;
 	export let isForSale;
+	export let rentTerms;
+	export let _offerType;
 	export let classicBtn = false;
+	
 </script>
 
 {#if _offerType == OfferType.ForSale}
 	<button
-		class="btn btn-dark {(classicBtn) ? "classBtn" : "singleButton"}"
+		class="btn btn-dark {classicBtn ? 'classBtn' : 'singleButton'}"
 		on:click={async () => {
 			await buy();
 		}}
@@ -22,7 +23,7 @@
 
 {#if _offerType == OfferType.ForRent}
 	<button
-		class="btn btn-dark {(classicBtn) ? "classBtn" : "singleButton"}"
+		class="btn btn-dark {classicBtn ? 'classBtn' : 'singleButton'}"
 		on:click={async () => {
 			await rent();
 		}}
@@ -57,7 +58,6 @@
 {/if}
 
 <style>
-
 	.multiButton {
 		width: 100%;
 		position: absolute;
@@ -69,35 +69,34 @@
 
 	.multiButton button {
 		width: 100%;
-		padding: 10px !important;		
+		padding: 10px !important;
 		font-size: 18px;
 		border-top-right-radius: 0px;
 		border-top-left-radius: 0px;
 	}
 
-
-	.multiButton button:hover {		
+	.multiButton button:hover {
 		opacity: 1;
 	}
 
 	.singleButton {
 		font-size: 18px;
-		padding: 10px !important;	
+		padding: 10px !important;
 		border-bottom-right-radius: 17px;
 		border-bottom-left-radius: 17px;
-		border-top-right-radius: 0px ;
+		border-top-right-radius: 0px;
 		border-top-left-radius: 0px;
 		position: absolute;
 		left: 0px;
 		bottom: 0px;
 	}
-	
+
 	.classBtn {
 		font-size: 16px;
 		font-weight: 400;
 		padding: 5px 20px !important;
 		border-radius: 10px;
-		margin-top: 15px;		
+		margin-top: 15px;
 		width: fit-content;
 	}
 

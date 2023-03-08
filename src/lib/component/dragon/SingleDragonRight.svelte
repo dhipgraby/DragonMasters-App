@@ -1,10 +1,15 @@
 <script>
 	import { onMount } from 'svelte';
-	import { get } from 'svelte/store';
 	import { loadOwner } from '$lib/helpers/utils.js';
 	import { OfferType } from '$lib/contracts/Marketplace';
 	import { TokenType } from '$lib/contracts/MarketApproval';
-	import { singleOffer } from '$lib/storage/dragon';
+	import { singleOffer } from '$lib/storage/marketplace';
+	import {
+		updateSellStorage,
+		updateRentStorage,
+		deleteSellStorage,
+		deleteRentStorage
+	} from '$lib/storage/marketplace';
 	import SellOption from '../marketplace/SellOption.svelte';
 	import RaiseAndEnergy from './RaiseAndEnergy.svelte';
 	import Offers from './Offers.svelte';
@@ -95,35 +100,6 @@
 		console.log('updated dragon', dragon);
 	}
 
-	function deleteSellStorage() {
-		let currentOffer = get(singleOffer);
-		currentOffer.isForSale = false;
-		currentOffer.sellOffer = null;
-		singleOffer.set(currentOffer);
-	}
-
-	function deleteRentStorage() {
-		let currentOffer = get(singleOffer);
-		currentOffer.isForRent = false;
-		currentOffer.rentOffer = null;
-		singleOffer.set(currentOffer);
-	}
-
-	function updateSellStorage(offer) {
-		let currentOffer = get(singleOffer);
-		currentOffer.isForSale = true;
-		currentOffer.sellOffer = offer;
-		singleOffer.set(currentOffer);
-	}
-
-	function updateRentStorage(offer) {
-		let currentOffer = get(singleOffer);
-		currentOffer.isForRent = true;
-		currentOffer.rentOffer = offer;
-		currentOffer.rentTerms = offer.rentTerms;
-		singleOffer.set(currentOffer);
-	}
-
 	// HANDLE BUY & RENT
 	function handleBuy() {
 		isForSale = false;
@@ -158,14 +134,11 @@
 	bind:this={modaComponent}
 	on:buyed={formHanlders}
 	on:rented={formHanlders}
-	{isOwner}
-	{isForRent}
-	{isForSale}
+	{offer}
+	tokenId={dragon.tokenId}
+	{contract}
 	{openSellOption}
 	{openRentOption}
-	{dragon}
-	{account}
-	{contract}
 />
 <!-- ACTIONS -->
 {#if isOwner}

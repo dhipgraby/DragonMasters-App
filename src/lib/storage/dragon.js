@@ -10,8 +10,6 @@ export const dragonB = createWritableStore('dragonB', 0);
 export const dragonApproval = writable(false)
 //SINGLE DRAGON 
 export const singleDragon = createWritableStore('singleDragon', 0);
-//SINGLE OFFER
-export const singleOffer = createWritableStore('singleoffer', 0);
 //UPDATE DRAGON FOR BREEDING    
 export function update_current_dragon(dragon, _gender) {
     dragon.gender = _gender

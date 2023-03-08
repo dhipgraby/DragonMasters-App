@@ -1,5 +1,6 @@
 import { loadContractData } from './Core';
-import { singleDragon, singleOffer } from '$lib/storage/dragon';
+import { singleDragon } from '$lib/storage/dragon';
+import { singleOffer } from '$lib/storage/marketplace';
 import { TokenType } from '$lib/contracts/MarketApproval';
 import { OfferType } from '$lib/contracts/Marketplace';
 import { isOwnerAccount } from '$lib/helpers/utils';
@@ -28,6 +29,7 @@ async function loadDragon(id, contract) {
         dragon.offer.sellOffer = dragon.sellOffer;
         let salePrice = dragon.sellOffer.sellPrice;
         dragon.price = await getEth(salePrice);
+        dragon.offer.sellOffer.price = dragon.price
     }
     if (isForRent) {
         dragon.rentOffer = await contract.market.getOffer(id, TokenType.Dragon);
@@ -52,6 +54,7 @@ async function loadDragon(id, contract) {
         rentTerms: (dragon.rentTerms) ? dragon.rentTerms : null,
         isForSale: isForSale,
         isForRent: isForRent,
+        isOwner:isOwner
     }
     console.log(OfferData);
     singleDragon.set(dragonData)

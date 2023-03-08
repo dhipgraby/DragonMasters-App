@@ -3,28 +3,18 @@
 	import OfferBtn from '$lib/component/marketplace/OfferBtn.svelte';
 	import OfferTerms from '$lib/component/marketplace/OfferTerms.svelte';
 	import { OfferType, TokenType } from '$lib/contracts/Marketplace';
-	
-	export let openSellOption;
-	export let openRentOption;
-	export let dragon;
-	export let account;
-	export let contract;
-	export let isOwner;
-	export let isForSale;
-	export let isForRent;
 
+	export let offer;
+	export let tokenId;
+	export let contract;
+	export let openSellOption;
+	export let openRentOption;			
+		
 	const dispatch = createEventDispatcher();
 
 	const buyToken = async () => {
-		const tx = await contract['market'].buy(
-			dragon.tokenId,
-			TokenType.Dragon,
-			dragon.sellOffer.sellPrice
-		);
+		const tx = await contract['market'].buy(tokenId, TokenType.Dragon, offer.sellOffer.sellPrice);
 		if (tx.blockHash) {
-			isForSale = false;
-			isForRent = false;
-			isOwner = true;
 			dispatch('buyed', {
 				name: 'buyed'
 			});
@@ -33,16 +23,13 @@
 
 	const rentToken = async () => {
 		const tx = await contract['market'].rent(
-			dragon.tokenId,
+			tokenId,
 			TokenType.Dragon,
-			dragon.rentOffer.rent.price,
-			dragon.rentOffer.rent.deposit
+			offer.rentOffer.rent.price,
+			offer.rentOffer.rent.deposit
 		);
 
 		if (tx.blockHash) {
-			isForSale = false;
-			isForRent = false;
-			isOwner = true;
 			dispatch('rented', {
 				name: 'rented'
 			});
@@ -50,11 +37,11 @@
 	};
 </script>
 
-{#if isForSale}
+{#if offer.isForSale}
 	<div class="attrDiv">
 		<div class="d-flex">
 			<h3>For Sale</h3>
-			{#if isOwner}
+			{#if offer.isOwner}
 				<div class="divBtn">
 					<button on:click={openSellOption} class="btn btn-light"
 						><i class="fas fa-edit" /> Edit</button
@@ -66,22 +53,19 @@
 		<div>
 			<h3>
 				Price:
-				{dragon.price} <i class="fab fa-ethereum" />
+				{offer.sellOffer.price} <i class="fab fa-ethereum" />
 			</h3>
 		</div>
-		{#if !isOwner}
+		{#if !offer.isOwner}
 			<OfferBtn
-				classicBtn={true}
-				_offerType={OfferType.ForSale}
 				buy={() => buyToken()}
 				rent={() => rentToken()}
-				{dragon}
-				{account}
-				displayOwner={true}
+				_offerType={OfferType.ForSale}
+				classicBtn={true}
 			/>
 		{/if}
 	</div>
-{:else if isOwner}
+{:else if offer.isOwner}
 	<div class="divBtn ta-l mb-3">
 		<button on:click={openSellOption} class="btn btn-dark"
 			><i class="fas fa-plus" /> Create Sell Offer</button
@@ -89,11 +73,11 @@
 	</div>
 {/if}
 <!-- RENT OFFER -->
-{#if isForRent}
+{#if offer.isForRent}
 	<div class="attrDiv">
 		<div class="d-flex">
 			<h3>Rent Offer</h3>
-			{#if isOwner}
+			{#if offer.isOwner}
 				<div class="divBtn">
 					<button on:click={openRentOption} class="btn btn-light"
 						><i class="fas fa-edit" /> Edit</button
@@ -104,23 +88,20 @@
 		<hr />
 		<OfferTerms
 			_offerType={OfferType.ForRent}
-			rentTerms={dragon.rentTerms}
-			{isForSale}
-			salePrice={dragon.price}
+			rentTerms={offer.rentTerms}
+			isForSale={offer.isForSale}
+			salePrice={offer.sellOffer.price}
 		/>
-		{#if !isOwner}
+		{#if !offer.isOwner}
 			<OfferBtn
-				classicBtn={true}
-				_offerType={OfferType.ForRent}
 				buy={() => buyToken()}
 				rent={() => rentToken()}
-				{dragon}
-				{account}
-				displayOwner={true}
+				_offerType={OfferType.ForRent}
+				classicBtn={true}
 			/>
 		{/if}
 	</div>
-{:else if isOwner}
+{:else if offer.isOwner}
 	<div class="divBtn ta-l mb-3">
 		<button on:click={openRentOption} class="btn btn-dark"
 			><i class="fas fa-plus" /> Create Rent Offer</button

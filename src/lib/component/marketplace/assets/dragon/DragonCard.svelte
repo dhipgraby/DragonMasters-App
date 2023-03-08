@@ -44,7 +44,7 @@
 	<DragonBox {img} {element} {dragon} {generation} {_maturity} {owner} {attributes} />
 	<OfferTerms {_offerType} {rentTerms} {isForSale} salePrice={price} />
 	<div class="{hovering ? 'showUp' : 'hideDown'} offerDiv">
-		<OfferBtn {owner} {price} {rentTerms} {isForSale} {buy} {rent} {_offerType} />
+		<OfferBtn {owner} {rentTerms} {isForSale} {buy} {rent} {_offerType} />
 	</div>
 </div>
 
