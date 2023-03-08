@@ -149,10 +149,11 @@
 	<SellOption
 		bind:this={modaComponent}
 		{formHanlders}
+		{offer}
 		{_offerType}
 		{doPromise}
 		noModal={true}
-		tokenProps={dragon}
+		tokenProps={dragon}		
 		contract={contract.market}
 		_tokenType={TokenType.Dragon}
 	/>

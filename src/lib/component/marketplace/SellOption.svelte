@@ -9,7 +9,7 @@
 	import OfferBox from './OfferBox.svelte';
 	import BasicModal from '../BasicModal.svelte';
 
-	export let tokenProps;
+	export let offer;
 	export let contract;
 	export let openModal;
 	export let _tokenType;
@@ -18,6 +18,7 @@
 	export let _offerType = OfferType.NoOffer;
 	export let formHanlders;
 
+	let tokenId = offer.tokenId;
 	let promise;
 	let modaComponent;
 
@@ -34,9 +35,9 @@
 
 	async function setApprovals() {
 		if (CheckApproval == true) singleApproval = false;
-		tokenProps.isApproved = singleApproval == false ? true : false;
+		offer.isApproved = singleApproval == false ? true : false;
 		if (doPromise == true && singleApproval == true) promise = later(500);
-		tokenProps.isApproved = singleApproval == false ? true : false;
+		offer.isApproved = singleApproval == false ? true : false;
 	}
 
 	async function later(delay) {
@@ -46,32 +47,31 @@
 	}
 
 	async function getAprroval() {
-		if (tokenProps.isApproved === true) {
+		if (offer.isApproved === true) {
 			console.log('already approved');
 			return true;
 		}
-		let approval = await contract.getApproved(tokenProps.tokenId, _tokenType);
+		let approval = await contract.getApproved(tokenId, _tokenType);
 		console.log(approval);
-		tokenProps.isApproved = approval;
+		offer.isApproved = approval;
 		return approval;
 	}
 
 	function handleApprove(event) {
 		singleApproval = false;
-		tokenProps.isApproved = true;
+		offer.isApproved = true;
 	}
-
 </script>
 
-<BasicModal bind:this={modaComponent} {btnName} id={'tokenModal' + tokenProps.tokenId}>
+<BasicModal bind:this={modaComponent} {btnName} id={'tokenModal' + tokenId}>
 	<OfferBox
+		{offer}
 		{_offerType}
-		{tokenProps}
-		{formHanlders}
-		{doPromise}
-		{promise}
 		{_tokenType}
 		{contract}
+		{doPromise}
+		{promise}
+		{formHanlders}
 		{handleApprove}
 	/>
 </BasicModal>

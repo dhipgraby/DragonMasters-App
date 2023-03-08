@@ -112,7 +112,7 @@
 <SellOption
 	bind:this={modaComponent}
 	{formHanlders}
-	{tokenProps}
+	offer={tokenProps}
 	{contract}
 	{doPromise}
 	{_tokenType}

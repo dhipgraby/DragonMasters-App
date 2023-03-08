@@ -5,7 +5,7 @@ const config = {
 	plugins: [sveltekit()],
 	server: {
 		// host: '0.0.0.0',
-		port: 3000,
+		port: 4000,
 		// hmr: {
 		//   host: 'localhost',
 		//   protocol: 'wss',

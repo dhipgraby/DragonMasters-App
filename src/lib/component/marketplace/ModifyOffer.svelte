@@ -11,8 +11,6 @@
 	export let _offerType;
 	export let _tokenType;
 
-	console.log(contract);
-
 	let price;
 	let deposit;
 	let duration;
@@ -25,7 +23,7 @@
 
 	async function removeOffer() {
 		let offerRemove = await contract.removeOffer(tokenId, _offerType, _tokenType);
-		console.log('offerRemove', offerRemove);
+		
 		if (offerRemove.blockHash) {
 			dispatch('offerRemoved', {
 				name: 'offerRemoved',

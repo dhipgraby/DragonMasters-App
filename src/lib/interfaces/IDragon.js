@@ -49,12 +49,14 @@ async function loadDragon(id, contract) {
     }
 
     const OfferData = {
+        tokenId:dragon.tokenId,
         sellOffer: (dragon.sellOffer) ? dragon.sellOffer : null,
         rentOffer: (dragon.rentOffer) ? dragon.rentOffer : null,
         rentTerms: (dragon.rentTerms) ? dragon.rentTerms : null,
         isForSale: isForSale,
         isForRent: isForRent,
-        isOwner:isOwner
+        isOwner:isOwner,
+        isApproved:false
     }
     console.log(OfferData);
     singleDragon.set(dragonData)
