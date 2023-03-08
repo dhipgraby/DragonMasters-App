@@ -11,6 +11,8 @@
 	export let _offerType;
 	export let _tokenType;
 
+	console.log(contract);
+
 	let price;
 	let deposit;
 	let duration;
