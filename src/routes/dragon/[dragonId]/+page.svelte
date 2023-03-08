@@ -10,7 +10,7 @@
 
 	$: dragon = $singleDragon;
 	let promise;
-	let account
+	let account;
 	let isOwner;
 
 	onMount(async () => {

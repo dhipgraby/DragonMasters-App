@@ -2,8 +2,6 @@
 	import OfferBtn from '$lib/component/marketplace/OfferBtn.svelte';
 	import OfferTerms from '$lib/component/marketplace/OfferTerms.svelte';
 	import { OfferType } from '$lib/contracts/Marketplace';
-	import { singleDragon } from '$lib/storage/dragon';
-	import { onMount } from 'svelte';
 
 	export let openSellOption;
 	export let openRentOption;
@@ -11,16 +9,8 @@
 	export let account;
 	export let contract;
 	export let isOwner;
-
-	let dragonData;
-	let isForRent;
-	let isForSale;
-
-	onMount(() => {
-		dragonData = $singleDragon;
-		isForRent = dragonData.isForRent;
-		isForSale = dragonData.isForSale;
-	});
+	export let isForSale;
+	export let isForRent;
 
 	const buyToken = async () => {
 		await contract['market'].buy(dragon.tokenId, TokenType.Dragon, dragon.sellOffer.sellPrice);
@@ -68,7 +58,7 @@
 		{/if}
 	</div>
 {:else if isOwner}
-	<div class="divBtn ta-l mb-4">
+	<div class="divBtn ta-l mb-3">
 		<button on:click={openSellOption} class="btn btn-dark"
 			><i class="fas fa-plus"></i> Create Sell Offer</button
 		>
@@ -107,7 +97,7 @@
 		{/if}
 	</div>
 {:else if isOwner}
-	<div class="divBtn ta-l mb-4">
+	<div class="divBtn ta-l mb-3">
 		<button on:click={openRentOption} class="btn btn-dark"
 			><i class="fas fa-plus"></i> Create Rent Offer</button
 		>

@@ -50,25 +50,28 @@
 		}
 
 		let modifying = await contract.modifyOffer(tokenId, _offerType, _tokenType, Terms);
+		let _rentTerms =
+			rent == true
+				? {
+						price: price,
+						deposit: Terms.rental.deposit,
+						minDuration: Terms.rental.minDuration
+				  }
+				: null;
 
 		if (modifying.blockHash) {
 			let offer = {
 				sellPrice: priceInWei,
+				price:price,
 				offerType: _offerType,
 				owner: contract.contract.account,
-				rent:
-					rent == true
-						? {
-								price: priceInWei,
-								deposit: Terms.rental.deposit,
-								minDuration: Terms.rental.minDuration
-						  }
-						: null,
+				rent:_rentTerms,
+				rentTerms:_rentTerms,
 				tokenId: tokenId,
 				tokenType: TokenType.Dragon
-			};
-			console.log('offer from dispatcher', offer);
-			setPrices()
+			};			
+
+			currentPrice = price			
 			dispatch('offerModifyed', {
 				offer: offer,
 				name: 'offerModifyed'

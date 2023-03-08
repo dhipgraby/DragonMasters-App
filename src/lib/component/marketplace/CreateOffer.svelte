@@ -32,19 +32,23 @@
 		}
 
 		let offering = await contract.setOffer(tokenId, _offerType, _tokenType, Terms);
-		console.log("offering",offering);
+		let _rentTerms =
+			rent == true
+				? {
+						price: price,
+						deposit: Terms.rental.deposit,
+						minDuration: Terms.rental.minDuration
+				  }
+				: null;
+
 		if (offering.blockHash) {
 			let offer = {
 				offerType: _offerType,
 				owner: contract.contract.account,
-				rent:
-					rent == true
-						? {
-								deposit: Terms.rental.deposit,
-								minDuration: Terms.rental.minDuration
-						  }
-						: null,
+				rent: _rentTerms,
+				rentTerms: _rentTerms,
 				sellPrice: priceInWei,
+				price: price,
 				tokenId: tokenId,
 				tokenType: _tokenType
 			};
@@ -56,7 +60,6 @@
 			});
 		}
 	}
-
 </script>
 
 <h3>Create a {_offerType == OfferType.ForSale ? 'Sale' : 'Rent'} Offer</h3>

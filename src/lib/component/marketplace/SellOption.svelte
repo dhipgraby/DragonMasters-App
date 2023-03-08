@@ -5,9 +5,9 @@
 	import { dragonApproval } from '$lib/storage/dragon';
 	import { eggApproval } from '$lib/storage/eggs';
 	import { OfferType, TokenType } from '$lib/contracts/LoanBook';
-	import BasicModal from '../BasicModal.svelte';
 	import { approvalRequired } from '$lib/interfaces/ICave';
 	import OfferBox from './OfferBox.svelte';
+	import BasicModal from '../BasicModal.svelte';
 
 	export let tokenProps;
 	export let contract;
@@ -16,6 +16,7 @@
 	export let doPromise = false;
 	export let btnName = false;
 	export let _offerType = OfferType.NoOffer;
+	export let formHanlders;
 
 	let promise;
 	let modaComponent;
@@ -48,29 +49,11 @@
 		if (tokenProps.isApproved === true) {
 			console.log('already approved');
 			return true;
-		}		
+		}
 		let approval = await contract.getApproved(tokenProps.tokenId, _tokenType);
 		console.log(approval);
 		tokenProps.isApproved = approval;
 		return approval;
-	}
-
-	function formHanlders(event) {
-		let eventName = event.detail.name;
-		switch (eventName) {
-			case 'offerCreated':
-				handleSetOffer(event);
-				console.log('offer created from handler')
-				break;
-			case 'offerModifyed':
-				handleModifyOffer(event);
-				console.log('offer modifyed from handler')
-				break;
-			case 'offerRemoved':
-				handleRemoveOffer(event);
-				console.log('offer removed from handler')
-				break;
-		}
 	}
 
 	function handleApprove(event) {
@@ -78,30 +61,6 @@
 		tokenProps.isApproved = true;
 	}
 
-	function handleSetOffer(event) {
-		updateOffer(event.detail.offer);
-	}
-
-	function handleModifyOffer(event) {
-		updateOffer(event.detail.offer);
-	}
-
-	function handleRemoveOffer(event) {
-		let offerType = event.detail.offerType;
-		if (offerType == OfferType.ForSale) {
-			tokenProps.offer.sellOffer = null;
-		} else {
-			tokenProps.offer.rentOffer = null;
-		}
-	}
-
-	function updateOffer(offer) {
-		if (offer.offerType == OfferType.ForSale) {
-			tokenProps.offer.sellOffer = offer;
-		} else {
-			tokenProps.offer.rentOffer = offer;
-		}
-	}
 </script>
 
 <BasicModal bind:this={modaComponent} {btnName} id={'tokenModal' + tokenProps.tokenId}>

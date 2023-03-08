@@ -31,6 +31,10 @@ body {
 	right: 25px;	
 }
 
+.txList li {
+margin-top: 10px;
+}
+
 .txaction {
 	font-size: 12px;
 	color: white;
