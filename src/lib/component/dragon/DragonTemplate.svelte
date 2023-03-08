@@ -6,10 +6,9 @@
 	import { OfferType } from '$lib/contracts/Marketplace';
 	import SingleDragonLeft from './SingleDragonLeft.svelte';
 	import SingleDragonRight from './SingleDragonRight.svelte';
-	import RaiseAndEnergy from './RaiseAndEnergy.svelte';
 
 	export let dragon;
-	export let contract;	
+	export let contract;
 	export let account;
 	export let isOwner;
 
@@ -22,9 +21,8 @@
 	$: maturity = Object.keys(Maturity)[dragon.ageGroup];
 
 	onMount(async () => {
-		dna = await contract.dragon.getDna(dragon.dnaId);		
+		dna = await contract.dragon.getDna(dragon.dnaId);
 	});
-
 </script>
 
 <!-- SELL OFFER -->
@@ -32,16 +30,7 @@
 	<SingleDragonLeft {img} {element} {dragon} {dna} {maturity} />
 	<!-- RIGHT-SIDE ->ATTRIBUTES AND RAISE -->
 	<div class="col-6 rightsideBox">
-		<SingleDragonRight			
-			{dragon}
-			{contract}									
-			{_offerType}
-			{doPromise}
-			{account}
-			{isOwner}
-		/>
-		<!-- ACTIONS -->
-		<RaiseAndEnergy {contract} tokenId={dragon.tokenId} ageGroup={dragon.ageGroup} />
+		<SingleDragonRight {dragon} {contract} {_offerType} {doPromise} {account} {isOwner} />
 	</div>
 </div>
 

@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { setAlert,addAwaiter } from "$lib/storage/alerts";
+import { setAlert, addAwaiter } from "$lib/storage/alerts";
 import { userDragons } from "$lib/storage/dragon";
 import { subSpeciesName } from "$lib/helpers/utils"
 import { contracts } from "./contracts";
@@ -17,12 +17,12 @@ const Relationship = {
 Object.freeze(Relationship);
 
 const Maturity = {
-    Hatchling: 0, Juvenile: 1, Adult: 2, Veteran: 3, Elder: 4, Ancient: 5, Immortal:6
+    Hatchling: 0, Juvenile: 1, Adult: 2, Veteran: 3, Elder: 4, Ancient: 5, Immortal: 6
 }
 Object.freeze(Maturity);
 
 const Attribute = {
-    Strength: 0, Endurance: 1, Agility: 2, Charisma:3, Intelligence:4, Wisdom:5
+    Strength: 0, Endurance: 1, Agility: 2, Charisma: 3, Intelligence: 4, Wisdom: 5
 }
 Object.freeze(Attribute);
 
@@ -42,23 +42,23 @@ export class DragonContract {
     }
 
 
-    async getDragonIds(owner, startIndex, endIndex, alert = false){
+    async getDragonIds(owner, startIndex, endIndex, alert = false) {
         try {
             const dragonIds = await this.contract.DragonToken.methods.getDragonIds(owner, startIndex, endIndex).call()
-            if (alert == true) setAlert('Dragon Ids: '+ JSON.stringify(dragonIds), 'success')
+            if (alert == true) setAlert('Dragon Ids: ' + JSON.stringify(dragonIds), 'success')
             return dragonIds
         } catch (err) {
             // if (alert == true) setAlert('getDragonIds error', 'warning')
-            console.log("Error at: getDragonIds", err)            
+            console.log("Error at: getDragonIds", err)
             if (alert == true) setAlert(errMsg, 'warning')
             console.log(errMsg)
         }
     }
 
     async getDragon(dragonId, alert = false) {
-        
+
         try {
-            let dragonDetails = await this.contract.DragonToken.methods.getDragon(dragonId).call()            
+            let dragonDetails = await this.contract.DragonToken.methods.getDragon(dragonId).call()
             const toNumbers2D = arr => arr.map(arr => arr.map(Number));
             dragonDetails = {
                 ...dragonDetails[0], skills: toNumbers2D(dragonDetails[1])
@@ -76,10 +76,10 @@ export class DragonContract {
                 dadId: 0,
                 skills: dragonDetails.skills,
                 attributes: dragonDetails.attributes,
-                offer:[]
+                offer: []
             }
 
-            if (alert == true) setAlert('Dragon Details: '+ JSON.stringify(dragon), 'success')
+            if (alert == true) setAlert('Dragon Details: ' + JSON.stringify(dragon), 'success')
 
             return dragon
 
@@ -95,7 +95,7 @@ export class DragonContract {
     async checkEnergy(dragonId, alert = false) {
         try {
             const timeToFullEnergy = await this.contract.DragonToken.methods.checkEnergy(dragonId).call()
-
+            
             if (timeToFullEnergy == 0) {
                 if (alert == true) setAlert('Dragon has full energy!', 'success')
             } else {
@@ -107,8 +107,8 @@ export class DragonContract {
             // if (alert == true) setAlert('checkEnergy error', 'warning')
             // console.log("Error at: checkEnergy " + err)
             // const errMsg = getErrors('checkEnergy', err)
-            if (alert == true) setAlert(errMsg, 'warning')
-            console.log(errMsg)
+            if (alert == true) setAlert(err, 'warning')
+            console.log(err)
         }
     }
 
@@ -122,7 +122,7 @@ export class DragonContract {
                 if (alert == true) setAlert('This dragon is a mature ' +
                     currentMaturity + ' and is ready to be raised!', 'success')
             } else {
-                if (alert == true) setAlert('Dragon is an immature '+
+                if (alert == true) setAlert('Dragon is an immature ' +
                     currentMaturity + ' but will mature in ' +
                     secondsToMature + ' seconds', 'info')
             }
@@ -157,13 +157,13 @@ export class DragonContract {
     async getSkills(dragonId, alert = false) {
         try {
             const dragonsSkillIds = await this.contract.DragonToken.methods.getSkills(dragonId).call()
-            
+
             const allSkillNames = Object.keys(Skill)
             let dragonsSkills = ''
-            for (let i=0; i<dragonsSkillIds.length; i++) {
+            for (let i = 0; i < dragonsSkillIds.length; i++) {
                 dragonsSkills += allSkillNames[dragonsSkillIds[i]]
-                if (i < dragonsSkillIds.length-1) dragonsSkills += ', '
-                if (i+1 == dragonsSkillIds.length-1) dragonsSkills += 'and '
+                if (i < dragonsSkillIds.length - 1) dragonsSkills += ', '
+                if (i + 1 == dragonsSkillIds.length - 1) dragonsSkills += 'and '
             }
             if (alert == true) setAlert('Dragon has skills: ' + dragonsSkills, 'success')
 
@@ -179,10 +179,10 @@ export class DragonContract {
     async getSkillLevel(dragonId, skill, alert = false) {
         try {
             const level = await this.contract.DragonToken.methods.getSkillLevel(dragonId, skill).call()
-            
+
             const skillName = Object.keys(Skill)[skill]
             if (alert == true)
-                setAlert("Dragon's "+skillName+' skill = ' + level, 'success')
+                setAlert("Dragon's " + skillName + ' skill = ' + level, 'success')
 
             return level
 
@@ -199,11 +199,11 @@ export class DragonContract {
 
             const allSkillNames = Object.keys(Skill)
             let dragonsSkillsWithLevels = ''
-            for (let i=0; i<skillsWithLevels[0].length; i++) {
+            for (let i = 0; i < skillsWithLevels[0].length; i++) {
                 const nextSkillwithLevel = allSkillNames[skillsWithLevels[0][i]] + '=' + skillsWithLevels[1][i]
                 dragonsSkillsWithLevels += nextSkillwithLevel
-                if (i < skillsWithLevels[0].length-1) dragonsSkillsWithLevels += ', '
-                if (i+1 == skillsWithLevels[0].length-1) dragonsSkillsWithLevels += 'and '
+                if (i < skillsWithLevels[0].length - 1) dragonsSkillsWithLevels += ', '
+                if (i + 1 == skillsWithLevels[0].length - 1) dragonsSkillsWithLevels += 'and '
             }
             if (alert == true) setAlert('Dragon has skills: ' + dragonsSkillsWithLevels, 'success')
 
@@ -221,14 +221,14 @@ export class DragonContract {
             const dragonIds = ids.split(',')
 
             await this.contract.DragonToken.methods.raiseMaturity(dragonIds).send({}, function (err, txHash) {
-                addAwaiter(txHash,'Raise maturity Ids: ' + JSON.stringify(dragonIds))
-                if (alert == true ) {
+                addAwaiter(txHash, 'Raise maturity Ids: ' + JSON.stringify(dragonIds))
+                if (alert == true) {
                     if (err) {
                         setAlert(err, 'warning')
                         console.log('Awaiter err: ', err)
                     }
                     else {
-                        setAlert('Raise Maturity Tx: '+txHash, 'success')
+                        setAlert('Raise Maturity Tx: ' + txHash, 'success')
                     }
                 }
                 return txHash
@@ -248,33 +248,33 @@ export class DragonContract {
             const mateBsIds = idDragonMateB.split(',')
 
             await this.contract.DragonToken.methods.breed(mateAsIds, mateBsIds).send({}, function (err, txHash) {
-                addAwaiter(txHash,'Breed mate Ids: ' + JSON.stringify(mateAsIds) +' - ' + JSON.stringify(mateBsIds))
-                if (alert == true ) {
+                addAwaiter(txHash, 'Breed mate Ids: ' + JSON.stringify(mateAsIds) + ' - ' + JSON.stringify(mateBsIds))
+                if (alert == true) {
                     if (err) {
                         setAlert(err, 'warning')
                         console.log('Awaiter err: ', err)
                     }
                     else {
-                        setAlert('Breed Tx: '+txHash, 'success')
+                        setAlert('Breed Tx: ' + txHash, 'success')
                     }
                 }
                 return txHash
             })
         } catch (err) {
-           console.log("Error at: Breeding function" + err)
-           if (alert == true) setAlert('breed error', 'warning');
+            console.log("Error at: Breeding function" + err)
+            if (alert == true) setAlert('breed error', 'warning');
             //const errMsg = getErrors('breed', err);
             //if (alert == true) setAlert(errMsg, 'warning');            
         }
     }
 
 
-// Admin Functions (eecutable by DragonToken contract owner)
+    // Admin Functions (eecutable by DragonToken contract owner)
 
     async pause(alert = false) {
         try {
             await this.contract.DragonToken.methods.pause().send({}, function (err, txHash) {
-                addAwaiter(txHash,'Pause DragonToken contract')
+                addAwaiter(txHash, 'Pause DragonToken contract')
                 if (alert == true) {
                     if (err) setAlert(err, 'warning')
                     else {
@@ -295,7 +295,7 @@ export class DragonContract {
     async unpause(alert = false) {
         try {
             await this.contract.DragonToken.methods.unpause().send({}, function (err, txHash) {
-                addAwaiter(txHash,'Unpause DragonToken contract')
+                addAwaiter(txHash, 'Unpause DragonToken contract')
                 if (alert == true) {
                     if (err) setAlert(err, 'warning')
                     else {
@@ -408,10 +408,10 @@ export class DragonContract {
 
 
     // KENNETH'S FUNCTIONS - Q. ARE THESE NEEDED FOR APP?  IF NOT DELETE THEM!??
-    
+
     async getUserDragons(from, to) {
 
-        const allDragons = await this.getDragonIds(this.contract.account,from, to)
+        const allDragons = await this.getDragonIds(this.contract.account, from, to)
         let dragons = []
         // let dragonOffers = get(dragonsForSale)
         for (let i = 0; i < allDragons.tokenIds.length; i++) {
@@ -419,7 +419,7 @@ export class DragonContract {
             let dragonDetails = await this.getDragon(allDragons.tokenIds[i])
             dragonDetails['dna'] = await this.getDna(dragonDetails.dnaId)
             // if(dragonOffers.length){
-                
+
             //     let offerIds = temp1.map((el)=>{
             //         return el.tokenId 
             //     })

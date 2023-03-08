@@ -1,8 +1,9 @@
 <script>
+	import { createEventDispatcher } from 'svelte';
 	import OfferBtn from '$lib/component/marketplace/OfferBtn.svelte';
 	import OfferTerms from '$lib/component/marketplace/OfferTerms.svelte';
-	import { OfferType } from '$lib/contracts/Marketplace';
-
+	import { OfferType, TokenType } from '$lib/contracts/Marketplace';
+	
 	export let openSellOption;
 	export let openRentOption;
 	export let dragon;
@@ -12,19 +13,41 @@
 	export let isForSale;
 	export let isForRent;
 
+	const dispatch = createEventDispatcher();
+
 	const buyToken = async () => {
-		await contract['market'].buy(dragon.tokenId, TokenType.Dragon, dragon.sellOffer.sellPrice);
+		const tx = await contract['market'].buy(
+			dragon.tokenId,
+			TokenType.Dragon,
+			dragon.sellOffer.sellPrice
+		);
+		if (tx.blockHash) {
+			isForSale = false;
+			isForRent = false;
+			isOwner = true;
+			dispatch('buyed', {
+				name: 'buyed'
+			});
+		}
 	};
 
 	const rentToken = async () => {
-		await contract['market'].rent(
+		const tx = await contract['market'].rent(
 			dragon.tokenId,
 			TokenType.Dragon,
 			dragon.rentOffer.rent.price,
 			dragon.rentOffer.rent.deposit
 		);
-	};
 
+		if (tx.blockHash) {
+			isForSale = false;
+			isForRent = false;
+			isOwner = true;
+			dispatch('rented', {
+				name: 'rented'
+			});
+		}
+	};
 </script>
 
 {#if isForSale}
@@ -61,7 +84,7 @@
 {:else if isOwner}
 	<div class="divBtn ta-l mb-3">
 		<button on:click={openSellOption} class="btn btn-dark"
-			><i class="fas fa-plus"></i> Create Sell Offer</button
+			><i class="fas fa-plus" /> Create Sell Offer</button
 		>
 	</div>
 {/if}
@@ -70,7 +93,7 @@
 	<div class="attrDiv">
 		<div class="d-flex">
 			<h3>Rent Offer</h3>
-			{#if isOwner}			
+			{#if isOwner}
 				<div class="divBtn">
 					<button on:click={openRentOption} class="btn btn-light"
 						><i class="fas fa-edit" /> Edit</button
@@ -100,7 +123,7 @@
 {:else if isOwner}
 	<div class="divBtn ta-l mb-3">
 		<button on:click={openRentOption} class="btn btn-dark"
-			><i class="fas fa-plus"></i> Create Rent Offer</button
+			><i class="fas fa-plus" /> Create Rent Offer</button
 		>
 	</div>
 {/if}

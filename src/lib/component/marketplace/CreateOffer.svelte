@@ -13,7 +13,7 @@
 	let price;
 	let deposit;
 	let duration = 0;
-
+	
 	async function createOffer() {
 		let Terms;
 		let rent = null;

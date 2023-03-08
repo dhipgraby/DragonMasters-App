@@ -45,6 +45,10 @@ margin-top: 10px;
 	color: rgb(235, 182, 39) !important;
 }
 
+.c-purple {
+	color:#6246ff;
+}
+
 #svelte {
 	min-height: 80vh;
 	display: flex;

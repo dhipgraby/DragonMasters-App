@@ -543,7 +543,7 @@ export class MarketplaceContract extends MarketApproval {
 
     async buy(tokenId, tokenType, price, alert = false) {
         try {
-            await this.contract.Marketplace.methods.buy(
+            const tx = await this.contract.Marketplace.methods.buy(
                 tokenId,
                 tokenType,
             ).send({
@@ -560,6 +560,7 @@ export class MarketplaceContract extends MarketApproval {
                     return txHash
                 }
             })
+            return tx;
         } catch (err) {
             console.log("Error at: buyToken" + err)
             const errMsg = getErrors('buyToken', err)
@@ -572,7 +573,7 @@ export class MarketplaceContract extends MarketApproval {
         try {
             const totalAmount = (Number(price) + Number(deposit))
 
-            await this.contract.Marketplace.methods.rent(
+            const tx = await this.contract.Marketplace.methods.rent(
                 tokenId,
                 tokenType,
             ).send({
@@ -589,6 +590,7 @@ export class MarketplaceContract extends MarketApproval {
                     return txHash
                 }
             })
+            return tx;
         } catch (err) {
             console.log("Error at: rent" + err)
             const errMsg = getErrors('rent', err)

@@ -1,7 +1,9 @@
 <script>
-	import { onMount } from 'svelte';
+	import { onMount, createEventDispatcher } from 'svelte';
 	import { Maturity } from '$lib/helpers/utils.js';
 	import ProgressBar from './ProgressBar.svelte';
+
+	const dispatch = createEventDispatcher();
 
 	export let contract;
 	export let tokenId;
@@ -12,8 +14,8 @@
 	let raiseDisabled = true;
 
 	onMount(async () => {
-		checkEnergy();
-		checkMaturity();
+		await checkEnergy();
+		await checkMaturity();
 	});
 
 	function readyToRaise() {
@@ -26,17 +28,19 @@
 	}
 
 	async function checkEnergy() {
+		if (!tokenId) return;
 		energy = await contract.dragon.checkEnergy(tokenId);
 	}
 
 	async function checkMaturity() {
+		if (!tokenId) return;
 		maturity = await contract.dragon.checkMaturity(tokenId);
 		if (maturity == 0) raiseDisabled = false;
 	}
 </script>
 
 <div class="attrDiv">
-	<h3><i class="fas fa-fist-raised"></i> Actions</h3>
+	<h3><i class="fas fa-fist-raised" /> Actions</h3>
 	<hr />
 	{#if ageGroup != Maturity.Immortal}
 		{#if maturity > 0}
@@ -71,10 +75,10 @@
 	>
 		Raise to Adult
 	</button>
-<br />
+	<br />
 	<button
 		on:click={() => {
-			window.location.href ="/breed"
+			window.location.href = '/breed';
 		}}
 		class="btn btn-yellow mt-3"
 		disabled={raiseDisabled}
@@ -83,7 +87,7 @@
 	</button>
 	{#if maturity > 0 || energy > 0}
 		<div class="alert alert-primary mt-2" role="alert">
-			Need full <b>energy</b> and Maturity time filled before <b>Raise your Dragon up</b> 
+			Need full <b>energy</b> and Maturity time filled before <b>Raise your Dragon or Breed</b>
 		</div>
 	{/if}
 </div>

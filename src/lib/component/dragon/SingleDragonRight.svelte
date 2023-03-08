@@ -5,6 +5,7 @@
 	import { TokenType } from '$lib/contracts/MarketApproval';
 	import { singleDragon } from '$lib/storage/dragon';
 	import SellOption from '../marketplace/SellOption.svelte';
+	import RaiseAndEnergy from './RaiseAndEnergy.svelte';
 	import Offers from './Offers.svelte';
 
 	export let dragon;
@@ -21,12 +22,14 @@
 	let dragonData;
 	let isForRent;
 	let isForSale;
+	let owner;
 
 	onMount(async () => {
 		console.log(dragon);
 		dragonData = $singleDragon;
 		isForRent = dragonData.isForRent;
 		isForSale = dragonData.isForSale;
+		owner = loadOwner(account, dragon.owner);
 
 		openSellOption = function () {
 			modaComponent.openModal();
@@ -43,7 +46,7 @@
 		let eventName = event.detail.name;
 		switch (eventName) {
 			case 'offerCreated':
-				handleSetOffer(event);				
+				handleSetOffer(event);
 				break;
 			case 'offerModifyed':
 				handleModifyOffer(event);
@@ -51,9 +54,15 @@
 			case 'offerRemoved':
 				handleRemoveOffer(event);
 				break;
+			case 'buyed':
+				handleBuy();
+				break;
+			case 'rented':
+				handleRent(event);
+				break;
 		}
 	}
-
+	// HANDLE OFFERS OWNER FUNCTION
 	function handleSetOffer(event) {
 		console.log('offer created', event);
 		updateOffer(event.detail.offer);
@@ -81,20 +90,45 @@
 			isForSale = true;
 		} else {
 			dragon.offer.rentOffer = offer;
-			dragon.rentTerms = offer.rentTerms
+			dragon.rentTerms = offer.rentTerms;
 			isForRent = true;
 		}
-		console.log('updated dragon',dragon);
+		console.log('updated dragon', dragon);
+	}
+	// HANDLE BUY & RENT
+	function handleBuy() {
+		isForSale = false;
+		isForRent = false;
+		isOwner = true;
+		dragon.owner = account;
+		owner = loadOwner(account, dragon.owner);
+	}
+
+	function handleRent() {
+		isForSale = false;
+		isForRent = false;
+		isOwner = true;
+		dragon.owner = account;
+		owner = loadOwner(account, dragon.owner);
 	}
 </script>
 
 <div class="mb-4">
 	<h1>Dragon #{dragon.tokenId}</h1>
-	<p title={dragon.owner}>Owned by : {@html loadOwner(account, dragon.owner)}</p>
+	<p title={dragon.owner}>
+		Owned by :
+		{#if owner === 'You'}
+			<span class="c-purple"><b>{owner}</b></span>
+		{:else}
+			{owner}
+		{/if}
+	</p>
 </div>
 <!-- SELL OFFER -->
 <Offers
 	bind:this={modaComponent}
+	on:buyed={formHanlders}
+	on:rented={formHanlders}
 	{isOwner}
 	{isForRent}
 	{isForSale}
@@ -104,7 +138,11 @@
 	{account}
 	{contract}
 />
-<!-- OFFER MODAL -->
+<!-- ACTIONS -->
+{#if isOwner}
+	<RaiseAndEnergy {contract} tokenId={dragon.tokenId} ageGroup={dragon.ageGroup} />
+{/if}
+<!-- HANDLE OFFERS MODAL -->
 {#if isOwner}
 	<SellOption
 		bind:this={modaComponent}
