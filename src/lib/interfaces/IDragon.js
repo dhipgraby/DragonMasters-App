@@ -1,5 +1,5 @@
 import { loadContractData } from './Core';
-import { singleDragon } from '$lib/storage/dragon';
+import { singleDragon, singleOffer } from '$lib/storage/dragon';
 import { TokenType } from '$lib/contracts/MarketApproval';
 import { OfferType } from '$lib/contracts/Marketplace';
 import { isOwnerAccount } from '$lib/helpers/utils';
@@ -9,11 +9,11 @@ import { loadRentTerms } from '$lib/helpers/utils.js';
 export async function LoadInterface(dragonId) {
 
     let contract = await loadContractData();
-    await loadDragon(dragonId,contract)
+    await loadDragon(dragonId, contract)
 }
 
- async function loadDragon(id,contract){
-    
+async function loadDragon(id, contract) {
+
     await contract.market.isApprovedForAll(TokenType.Dragon);
     let dragon = await contract.dragon.getDragon(id);
     let isForSale = await contract.market.isOnOffer(id, OfferType.ForSale, TokenType.Dragon);
@@ -21,31 +21,40 @@ export async function LoadInterface(dragonId) {
     let owner = await contract.dragon.ownerOf(id);
     let account = await contract.dragon.contract.account;
     dragon.owner = owner;
-    let isOwner = await isOwnerAccount(account, owner);		
+    let isOwner = await isOwnerAccount(account, owner);
 
     if (isForSale) {
         dragon.sellOffer = await contract.market.getOffer(id, TokenType.Dragon);
         dragon.offer.sellOffer = dragon.sellOffer;
         let salePrice = dragon.sellOffer.sellPrice;
-        dragon.price = await getEth(salePrice);        
+        dragon.price = await getEth(salePrice);
     }
     if (isForRent) {
         dragon.rentOffer = await contract.market.getOffer(id, TokenType.Dragon);
         dragon.offer.rentOffer = dragon.rentOffer;
         let rentPrice = dragon.rentOffer.rent.price;
-        dragon.rentPrice = await getEth(rentPrice);        
-        dragon.rentTerms = await loadRentTerms(dragon, OfferType.ForRent);                
-    }		
-
-    const dragonData = {
-        contract:contract,
-        dragon:dragon,
-        isOwner:isOwner,
-        isForSale:isForSale,
-        isForRent:isForRent,
-        account:account        
+        dragon.rentPrice = await getEth(rentPrice);
+        dragon.rentTerms = await loadRentTerms(dragon, OfferType.ForRent);
     }
 
+    const dragonData = {
+        contract: contract,
+        dragon: dragon,
+        isOwner: isOwner,
+        isForSale: isForSale,
+        isForRent: isForRent,
+        account: account
+    }
+
+    const OfferData = {
+        sellOffer: (dragon.sellOffer) ? dragon.sellOffer : null,
+        rentOffer: (dragon.rentOffer) ? dragon.rentOffer : null,
+        rentTerms: (dragon.rentTerms) ? dragon.rentTerms : null,
+        isForSale: isForSale,
+        isForRent: isForRent,
+    }
+    console.log(OfferData);
     singleDragon.set(dragonData)
-    
- }
+    singleOffer.set(OfferData)
+
+}

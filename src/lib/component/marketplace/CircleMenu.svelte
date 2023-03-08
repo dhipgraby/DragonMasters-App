@@ -14,7 +14,7 @@
 	let openModal;
 	let modaComponent;
 	let doPromise = true;
-	let viewUrl = (_tokenType === TokenType.Dragon) ?  "dragon/" : "egg/" + tokenProps.tokenId
+	let viewUrl = _tokenType === TokenType.Dragon ? 'dragon/' : 'egg/' + tokenProps.tokenId;
 
 	onMount(() => {
 		openModal = function () {
@@ -26,7 +26,6 @@
 		});
 	});
 
-	
 	function formHanlders(event) {
 		let eventName = event.detail.name;
 		switch (eventName) {
@@ -71,11 +70,11 @@
 	function updateOffer(offer) {
 		if (offer.offerType == OfferType.ForSale) {
 			tokenProps.offer.sellOffer = offer;
-			tokenProps.price = offer.price;			
+			tokenProps.price = offer.price;
 		} else {
 			tokenProps.offer.rentOffer = offer;
-			tokenProps.rentTerms = offer.rentTerms;			
-		}		
+			tokenProps.rentTerms = offer.rentTerms;
+		}
 	}
 </script>
 
@@ -89,7 +88,7 @@
 	>
 		<i class="fas fa-cog" />
 	</div>
-	
+
 	<div class={active == true ? 'd-block' : 'd-hide'}>
 		<a href={viewUrl}>
 			<div
@@ -110,4 +109,11 @@
 	</div>
 </div>
 
-<SellOption bind:this={modaComponent} {formHanlders} {tokenProps} {contract} {doPromise} {_tokenType} />
+<SellOption
+	bind:this={modaComponent}
+	{formHanlders}
+	{tokenProps}
+	{contract}
+	{doPromise}
+	{_tokenType}
+/>

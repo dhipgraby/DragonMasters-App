@@ -1,9 +1,10 @@
 <script>
 	import { onMount } from 'svelte';
+	import { get } from 'svelte/store';
 	import { loadOwner } from '$lib/helpers/utils.js';
 	import { OfferType } from '$lib/contracts/Marketplace';
 	import { TokenType } from '$lib/contracts/MarketApproval';
-	import { singleDragon } from '$lib/storage/dragon';
+	import { singleOffer } from '$lib/storage/dragon';
 	import SellOption from '../marketplace/SellOption.svelte';
 	import RaiseAndEnergy from './RaiseAndEnergy.svelte';
 	import Offers from './Offers.svelte';
@@ -19,18 +20,13 @@
 	let openSellOption;
 	let openRentOption;
 
-	let dragonData;
-	let isForRent;
-	let isForSale;
+	$: offer = $singleOffer;
+	$: isForRent = offer.isForRent;
+	$: isForSale = offer.isForSale;
 	let owner;
 
 	onMount(async () => {
-		console.log(dragon);
-		dragonData = $singleDragon;
-		isForRent = dragonData.isForRent;
-		isForSale = dragonData.isForSale;
 		owner = loadOwner(account, dragon.owner);
-
 		openSellOption = function () {
 			modaComponent.openModal();
 			_offerType = OfferType.ForSale;
@@ -64,7 +60,6 @@
 	}
 	// HANDLE OFFERS OWNER FUNCTION
 	function handleSetOffer(event) {
-		console.log('offer created', event);
 		updateOffer(event.detail.offer);
 	}
 
@@ -77,9 +72,11 @@
 		if (offerType == OfferType.ForSale) {
 			dragon.offer.sellOffer = null;
 			isForSale = false;
+			deleteSellStorage();
 		} else {
 			dragon.offer.rentOffer = null;
 			isForRent = false;
+			deleteRentStorage();
 		}
 	}
 
@@ -88,13 +85,45 @@
 			dragon.offer.sellOffer = offer;
 			dragon.price = offer.price;
 			isForSale = true;
+			updateSellStorage(offer);
 		} else {
 			dragon.offer.rentOffer = offer;
 			dragon.rentTerms = offer.rentTerms;
 			isForRent = true;
+			updateRentStorage(offer);
 		}
 		console.log('updated dragon', dragon);
 	}
+
+	function deleteSellStorage() {
+		let currentOffer = get(singleOffer);
+		currentOffer.isForSale = false;
+		currentOffer.sellOffer = null;
+		singleOffer.set(currentOffer);
+	}
+
+	function deleteRentStorage() {
+		let currentOffer = get(singleOffer);
+		currentOffer.isForRent = false;
+		currentOffer.rentOffer = null;
+		singleOffer.set(currentOffer);
+	}
+
+	function updateSellStorage(offer) {
+		let currentOffer = get(singleOffer);
+		currentOffer.isForSale = true;
+		currentOffer.sellOffer = offer;
+		singleOffer.set(currentOffer);
+	}
+
+	function updateRentStorage(offer) {
+		let currentOffer = get(singleOffer);
+		currentOffer.isForRent = true;
+		currentOffer.rentOffer = offer;
+		currentOffer.rentTerms = offer.rentTerms;
+		singleOffer.set(currentOffer);
+	}
+
 	// HANDLE BUY & RENT
 	function handleBuy() {
 		isForSale = false;
