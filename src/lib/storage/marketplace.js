@@ -40,3 +40,14 @@ export function updateRentStorage(offer) {
     currentOffer.rentTerms = offer.rentTerms;
     singleOffer.set(currentOffer);
 }
+
+export function setNoOffer(isOwner, account) {
+    let currentOffer = get(singleOffer);
+    currentOffer.isForSale = false;
+    currentOffer.isForRent = false;
+    if (isOwner) {
+        currentOffer.isOwner = true;
+        currentOffer.owner = account
+    }
+    singleOffer.set(currentOffer);
+}

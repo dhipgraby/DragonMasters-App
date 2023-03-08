@@ -3,8 +3,9 @@
 	import { loadOwner } from '$lib/helpers/utils.js';
 	import { OfferType } from '$lib/contracts/Marketplace';
 	import { TokenType } from '$lib/contracts/MarketApproval';
-	import { singleOffer } from '$lib/storage/marketplace';
 	import {
+		singleOffer,
+		setNoOffer,
 		updateSellStorage,
 		updateRentStorage,
 		deleteSellStorage,
@@ -19,16 +20,13 @@
 	export let account;
 	export let _offerType;
 	export let doPromise;
-	export let isOwner;
 
 	let modaComponent;
 	let openSellOption;
 	let openRentOption;
 
 	$: offer = $singleOffer;
-	$: isForRent = offer.isForRent;
-	$: isForSale = offer.isForSale;
-	let owner;
+	$: owner = loadOwner(account, offer.owner);
 
 	onMount(async () => {
 		owner = loadOwner(account, dragon.owner);
@@ -47,74 +45,34 @@
 		let eventName = event.detail.name;
 		switch (eventName) {
 			case 'offerCreated':
-				handleSetOffer(event);
+				updateOffer(event.detail.offer);
 				break;
 			case 'offerModifyed':
-				handleModifyOffer(event);
+				updateOffer(event.detail.offer);
 				break;
 			case 'offerRemoved':
-				handleRemoveOffer(event);
+				if (event.detail.offerType == OfferType.ForSale) {
+					deleteSellStorage();
+				} else {
+					deleteRentStorage();
+				}
 				break;
 			case 'buyed':
-				handleBuy();
+				setNoOffer(true, account);
 				break;
 			case 'rented':
-				handleRent(event);
+				setNoOffer(true, account);
 				break;
 		}
 	}
 	// HANDLE OFFERS OWNER FUNCTION
-	function handleSetOffer(event) {
-		updateOffer(event.detail.offer);
-	}
-
-	function handleModifyOffer(event) {
-		updateOffer(event.detail.offer);
-	}
-
-	function handleRemoveOffer(event) {
-		let offerType = event.detail.offerType;
-		if (offerType == OfferType.ForSale) {
-			dragon.offer.sellOffer = null;
-			isForSale = false;
-			deleteSellStorage();
-		} else {
-			dragon.offer.rentOffer = null;
-			isForRent = false;
-			deleteRentStorage();
-		}
-	}
 
 	function updateOffer(offer) {
 		if (offer.offerType == OfferType.ForSale) {
-			dragon.offer.sellOffer = offer;
-			dragon.price = offer.price;
-			isForSale = true;
 			updateSellStorage(offer);
 		} else {
-			dragon.offer.rentOffer = offer;
-			dragon.rentTerms = offer.rentTerms;
-			isForRent = true;
 			updateRentStorage(offer);
 		}
-		console.log('updated dragon', dragon);
-	}
-
-	// HANDLE BUY & RENT
-	function handleBuy() {
-		isForSale = false;
-		isForRent = false;
-		isOwner = true;
-		dragon.owner = account;
-		owner = loadOwner(account, dragon.owner);
-	}
-
-	function handleRent() {
-		isForSale = false;
-		isForRent = false;
-		isOwner = true;
-		dragon.owner = account;
-		owner = loadOwner(account, dragon.owner);
 	}
 </script>
 
@@ -141,11 +99,11 @@
 	{openRentOption}
 />
 <!-- ACTIONS -->
-{#if isOwner}
+{#if offer.isOwner}
 	<RaiseAndEnergy {contract} tokenId={dragon.tokenId} ageGroup={dragon.ageGroup} />
 {/if}
 <!-- HANDLE OFFERS MODAL -->
-{#if isOwner}
+{#if offer.isOwner}
 	<SellOption
 		bind:this={modaComponent}
 		{formHanlders}
@@ -153,7 +111,7 @@
 		{_offerType}
 		{doPromise}
 		noModal={true}
-		tokenProps={dragon}		
+		tokenProps={dragon}
 		contract={contract.market}
 		_tokenType={TokenType.Dragon}
 	/>

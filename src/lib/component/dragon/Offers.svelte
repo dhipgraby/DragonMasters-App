@@ -90,7 +90,7 @@
 			_offerType={OfferType.ForRent}
 			rentTerms={offer.rentTerms}
 			isForSale={offer.isForSale}
-			salePrice={offer.sellOffer.price}
+			salePrice={offer.rentOffer.price}
 		/>
 		{#if !offer.isOwner}
 			<OfferBtn

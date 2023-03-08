@@ -56,6 +56,7 @@ async function loadDragon(id, contract) {
         isForSale: isForSale,
         isForRent: isForRent,
         isOwner:isOwner,
+        owner:dragon.owner,
         isApproved:false
     }
     console.log(OfferData);
