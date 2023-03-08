@@ -180,12 +180,12 @@ export function orderByOffer(assets, _offerType) {
     return assets.sort((a, b) => (a[sortOffer] > b[sortOffer]) ? 1 : -1);
 }
 
-export async function loadRentTerms(asset, _offerType) {
-    if (_offerType === OfferType.ForSale || asset.rentOffer === undefined) return null;
-console.log(asset)
-    let currentDeposit = asset.rentOffer.rent.deposit;
-    let fee = asset.rentOffer.rent.price;
-    let minDuration = asset.rentOffer.rent.minDuration / (24 * 60 * 60) + ' days';
+export async function loadRentTerms(rentOffer, _offerType) {    
+    if (_offerType === OfferType.ForSale || rentOffer === undefined) return null;
+
+    let currentDeposit = rentOffer.rent.deposit;
+    let fee = rentOffer.rent.price;
+    let minDuration = rentOffer.rent.minDuration / (24 * 60 * 60) + ' days';
     return {
         price: await getEth(fee),
         deposit: await getEth(currentDeposit),

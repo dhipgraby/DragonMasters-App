@@ -1,23 +1,21 @@
 <script>
 	import { onMount, afterUpdate } from 'svelte';
-	import DragonTemplate from '$lib/component/dragon/DragonTemplate.svelte';
 	import { singleDragon } from '$lib/storage/dragon';
 	import { LoadInterface } from '$lib/interfaces/IDragon';
+	import DragonTemplate from '$lib/component/dragon/DragonTemplate.svelte';
 
 	export let data;
 	export let dragonId = data.dragonId;
-	export let doPromise = false;	
+	export let doPromise = false;
 
 	$: dragon = $singleDragon;
 	let promise;
 	let account;
-	let isOwner;
 
 	onMount(async () => {
 		doPromise = true;
 		await LoadInterface(dragonId);
-		account = dragon.account;	
-		isOwner= dragon.isOwner	
+		account = dragon.account;
 	});
 
 	afterUpdate(() => {
@@ -47,7 +45,6 @@
 					dragon={dragon.dragon}
 					contract={dragon.contract}
 					{account}
-					{isOwner}
 				/>
 			{:else}
 				<h2>Dragon not found...</h2>

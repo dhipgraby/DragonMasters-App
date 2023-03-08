@@ -10,7 +10,6 @@
 	export let dragon;
 	export let contract;
 	export let account;
-	export let isOwner;
 
 	let dna;
 	let img = getImg(dragon.subSpecies).idle;
@@ -30,7 +29,7 @@
 	<SingleDragonLeft {img} {element} {dragon} {dna} {maturity} />
 	<!-- RIGHT-SIDE ->ATTRIBUTES AND RAISE -->
 	<div class="col-6 rightsideBox">
-		<SingleDragonRight {dragon} {contract} {_offerType} {doPromise} {account} {isOwner} />
+		<SingleDragonRight {dragon} {contract} {_offerType} {doPromise} {account} />
 	</div>
 </div>
 

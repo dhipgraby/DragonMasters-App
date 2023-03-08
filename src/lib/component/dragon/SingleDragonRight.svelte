@@ -3,14 +3,7 @@
 	import { loadOwner } from '$lib/helpers/utils.js';
 	import { OfferType } from '$lib/contracts/Marketplace';
 	import { TokenType } from '$lib/contracts/MarketApproval';
-	import {
-		singleOffer,
-		setNoOffer,
-		updateSellStorage,
-		updateRentStorage,
-		deleteSellStorage,
-		deleteRentStorage
-	} from '$lib/storage/marketplace';
+	import { singleOffer, formHanlders } from '$lib/storage/marketplace';
 	import SellOption from '../marketplace/SellOption.svelte';
 	import RaiseAndEnergy from './RaiseAndEnergy.svelte';
 	import Offers from './Offers.svelte';
@@ -34,46 +27,11 @@
 			modaComponent.openModal();
 			_offerType = OfferType.ForSale;
 		};
-
 		openRentOption = function () {
 			modaComponent.openModal();
 			_offerType = OfferType.ForRent;
 		};
 	});
-
-	function formHanlders(event) {
-		let eventName = event.detail.name;
-		switch (eventName) {
-			case 'offerCreated':
-				updateOffer(event.detail.offer);
-				break;
-			case 'offerModifyed':
-				updateOffer(event.detail.offer);
-				break;
-			case 'offerRemoved':
-				if (event.detail.offerType == OfferType.ForSale) {
-					deleteSellStorage();
-				} else {
-					deleteRentStorage();
-				}
-				break;
-			case 'buyed':
-				setNoOffer(true, account);
-				break;
-			case 'rented':
-				setNoOffer(true, account);
-				break;
-		}
-	}
-	// HANDLE OFFERS OWNER FUNCTION
-
-	function updateOffer(offer) {
-		if (offer.offerType == OfferType.ForSale) {
-			updateSellStorage(offer);
-		} else {
-			updateRentStorage(offer);
-		}
-	}
 </script>
 
 <div class="mb-4">

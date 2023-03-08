@@ -1,5 +1,6 @@
 import { createWritableStore } from "$lib/helpers/storage"
 import { get } from "svelte/store";
+import { OfferType } from '$lib/contracts/Marketplace';
 
 const expirationTime = new Date().getTime() + 1000 * 60; //1 minute 
 //ITEMS FOR SALE STORAGE
@@ -12,28 +13,61 @@ export const userOffers = createWritableStore('userOffers', { eggs: [], dragons:
 //SINGLE OFFER
 export const singleOffer = createWritableStore('singleoffer', 0);
 
-export function deleteSellStorage() {
+export function formHanlders(event) {
+    let eventName = event.detail.name;
+    switch (eventName) {
+        case 'offerCreated':
+            updateOffer(event.detail.offer);
+            break;
+        case 'offerModifyed':
+            updateOffer(event.detail.offer);
+            break;
+        case 'offerRemoved':
+            if (event.detail.offerType == OfferType.ForSale) {
+                deleteSellStorage();
+            } else {
+                deleteRentStorage();
+            }
+            break;
+        case 'buyed':
+            setNoOffer(true, account);
+            break;
+        case 'rented':
+            setNoOffer(true, account);
+            break;
+    }
+}
+// HANDLE OFFERS OWNER FUNCTION
+function updateOffer(offer) {
+    if (offer.offerType == OfferType.ForSale) {
+        updateSellStorage(offer);
+    } else {
+        updateRentStorage(offer);
+    }
+}
+
+function deleteSellStorage() {
     let currentOffer = get(singleOffer);
     currentOffer.isForSale = false;
     currentOffer.sellOffer = null;
     singleOffer.set(currentOffer);
 }
 
-export function deleteRentStorage() {
+function deleteRentStorage() {
     let currentOffer = get(singleOffer);
     currentOffer.isForRent = false;
     currentOffer.rentOffer = null;
     singleOffer.set(currentOffer);
 }
 
-export function updateSellStorage(offer) {
+function updateSellStorage(offer) {
     let currentOffer = get(singleOffer);
     currentOffer.isForSale = true;
     currentOffer.sellOffer = offer;
     singleOffer.set(currentOffer);
 }
 
-export function updateRentStorage(offer) {
+function updateRentStorage(offer) {
     let currentOffer = get(singleOffer);
     currentOffer.isForRent = true;
     currentOffer.rentOffer = offer;
@@ -41,7 +75,7 @@ export function updateRentStorage(offer) {
     singleOffer.set(currentOffer);
 }
 
-export function setNoOffer(isOwner, account) {
+function setNoOffer(isOwner, account) {
     let currentOffer = get(singleOffer);
     currentOffer.isForSale = false;
     currentOffer.isForRent = false;

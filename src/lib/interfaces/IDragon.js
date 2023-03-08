@@ -23,41 +23,36 @@ async function loadDragon(id, contract) {
     let account = await contract.dragon.contract.account;
     dragon.owner = owner;
     let isOwner = await isOwnerAccount(account, owner);
+    let sellOffer;
+    let rentOffer;
 
     if (isForSale) {
-        dragon.sellOffer = await contract.market.getOffer(id, TokenType.Dragon);
-        dragon.offer.sellOffer = dragon.sellOffer;
-        let salePrice = dragon.sellOffer.sellPrice;
-        dragon.price = await getEth(salePrice);
-        dragon.offer.sellOffer.price = dragon.price
+        sellOffer = await contract.market.getOffer(id, TokenType.Dragon);
+        sellOffer.price = await getEth(sellOffer.sellPrice);
     }
     if (isForRent) {
-        dragon.rentOffer = await contract.market.getOffer(id, TokenType.Dragon);
-        dragon.offer.rentOffer = dragon.rentOffer;
-        let rentPrice = dragon.rentOffer.rent.price;
-        dragon.rentPrice = await getEth(rentPrice);
-        dragon.rentTerms = await loadRentTerms(dragon, OfferType.ForRent);
+        rentOffer = await contract.market.getOffer(id, TokenType.Dragon);
+        let rentPrice = rentOffer.rent.price;
+        rentOffer.rentPrice = await getEth(rentPrice);
+        rentOffer.rentTerms = await loadRentTerms(rentOffer, OfferType.ForRent);        
     }
 
     const dragonData = {
         contract: contract,
-        dragon: dragon,
-        isOwner: isOwner,
-        isForSale: isForSale,
-        isForRent: isForRent,
+        dragon: dragon,        
         account: account
     }
 
     const OfferData = {
-        tokenId:dragon.tokenId,
-        sellOffer: (dragon.sellOffer) ? dragon.sellOffer : null,
-        rentOffer: (dragon.rentOffer) ? dragon.rentOffer : null,
-        rentTerms: (dragon.rentTerms) ? dragon.rentTerms : null,
+        tokenId: dragon.tokenId,
+        sellOffer: (sellOffer) ? sellOffer : null,
+        rentOffer: (rentOffer) ? rentOffer : null,
+        rentTerms: (rentOffer.rentTerms) ? rentOffer.rentTerms : null,
         isForSale: isForSale,
         isForRent: isForRent,
-        isOwner:isOwner,
-        owner:dragon.owner,
-        isApproved:false
+        isOwner: isOwner,
+        owner: dragon.owner,
+        isApproved: false
     }
     console.log(OfferData);
     singleDragon.set(dragonData)
