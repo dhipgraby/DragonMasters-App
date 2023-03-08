@@ -18,12 +18,13 @@
 		let Terms;
 		let rent = null;
 		let priceInWei = await getWei(price);
+		let depositInWei;
 
 		if (_offerType == OfferType.ForSale) {
 			Terms = saleTerms;
 			Terms.price = priceInWei;
 		} else {
-			let depositInWei = await getWei(deposit);
+			depositInWei = await getWei(deposit);
 			Terms = rentTerms;
 			Terms.price = priceInWei;
 			Terms.rental.deposit = depositInWei;
@@ -36,7 +37,16 @@
 			rent == true
 				? {
 						price: price,
-						deposit: Terms.rental.deposit,
+						deposit: deposit,
+						duration: duration + ' days'
+				  }
+				: null;
+
+		let rentalTerms =
+			rent == true
+				? {
+						price: priceInWei,
+						deposit: depositInWei,
 						minDuration: Terms.rental.minDuration
 				  }
 				: null;
@@ -45,7 +55,7 @@
 			let offer = {
 				offerType: _offerType,
 				owner: contract.contract.account,
-				rent: _rentTerms,
+				rent: rentalTerms,
 				rentTerms: _rentTerms,
 				sellPrice: priceInWei,
 				price: price,
@@ -53,7 +63,7 @@
 				tokenType: _tokenType
 			};
 
-			console.log('offer created:' + JSON.stringify(offer));
+			console.log('offer created:', offer);
 			dispatch('offerCreated', {
 				offer: offer,
 				name: 'offerCreated'

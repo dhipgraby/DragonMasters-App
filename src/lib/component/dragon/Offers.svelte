@@ -24,6 +24,7 @@
 			dragon.rentOffer.rent.deposit
 		);
 	};
+
 </script>
 
 {#if isForSale}

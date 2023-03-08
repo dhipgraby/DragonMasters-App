@@ -81,6 +81,7 @@
 			isForSale = true;
 		} else {
 			dragon.offer.rentOffer = offer;
+			dragon.rentTerms = offer.rentTerms
 			isForRent = true;
 		}
 		console.log('updated dragon',dragon);
