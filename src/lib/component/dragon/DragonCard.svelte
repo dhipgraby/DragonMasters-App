@@ -5,7 +5,7 @@
 	import { TokenType } from '$lib/contracts/Marketplace';
 	import DragonAttributes from './DragonAttributes.svelte';
 	import DragonHeaderDetails from './DragonHeaderDetails.svelte';
-	import OfferInfo from './OfferInfo.svelte';
+	import OfferInfo from '../marketplace/OfferInfo.svelte';
 	import Energy from './Energy.svelte';
 	import RentalTerms from '$lib/component/marketplace/RentalTerms.svelte';
 	import '$lib/css/marketplace/dragon.css';

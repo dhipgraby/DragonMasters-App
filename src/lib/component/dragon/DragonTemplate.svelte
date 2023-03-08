@@ -4,8 +4,10 @@
 	import { Maturity } from '$lib/helpers/utils.js';
 	import { getImg, iconElement } from '$lib/storage/dragonImg';
 	import { OfferType } from '$lib/contracts/Marketplace';
+	import { TokenType } from '$lib/contracts/MarketApproval';
 	import SingleDragonLeft from './SingleDragonLeft.svelte';
-	import SingleDragonRight from './SingleDragonRight.svelte';
+	import SingleAssetRight from '../marketplace/SingleAssetRight.svelte';
+	import RaiseAndEnergy from './RaiseAndEnergy.svelte';
 
 	export let dragon;
 	export let contract;
@@ -29,7 +31,18 @@
 	<SingleDragonLeft {img} {element} {dragon} {dna} {maturity} />
 	<!-- RIGHT-SIDE ->ATTRIBUTES AND RAISE -->
 	<div class="col-6 rightsideBox">
-		<SingleDragonRight {dragon} {contract} {_offerType} {doPromise} {account} />
+		<SingleAssetRight
+			asset={dragon}
+			{contract}
+			{_offerType}
+			_tokenType={TokenType.Dragon}
+			{doPromise}
+			{account}
+		/>
+		<!-- ACTIONS -->
+		{#if dragon.isOwner}
+			<RaiseAndEnergy {contract} tokenId={dragon.tokenId} ageGroup={dragon.ageGroup} />
+		{/if}
 	</div>
 </div>
 

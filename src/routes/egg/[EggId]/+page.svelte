@@ -1,8 +1,8 @@
 <script>
 	import { onMount, afterUpdate } from 'svelte';
 	import { singleEgg } from '$lib/storage/eggs';
-	import { LoadInterface } from '$lib/interfaces/IDragon';
-	import DragonTemplate from '$lib/component/dragon/DragonTemplate.svelte';
+	import { LoadInterface } from '$lib/interfaces/IEgg';
+	import EggTemplate from '$lib/component/egg/EggTemplate.svelte';
 
 	export let data;
 	export let eggId = data.eggId;
@@ -22,7 +22,7 @@
 		if (doPromise == true) promise = later(500);
 	});
 
-	async function updateDragon() {
+	async function updateEgg() {
 		await LoadInterface(eggId);
 	}
 
@@ -40,12 +40,7 @@
 			<h2>Loading...</h2>
 		{:then ready}
 			{#if egg?.egg?.tokenId}
-				<DragonTemplate
-					on:update={updateDragon}
-					dragon={egg.egg}
-					contract={egg.contract}
-					{account}
-				/>
+				<EggTemplate on:update={updateEgg} egg={egg.egg} contract={egg.contract} {account} />
 			{:else}
 				<h2>Egg not found...</h2>
 			{/if}

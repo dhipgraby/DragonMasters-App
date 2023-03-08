@@ -729,7 +729,7 @@ export class MarketplaceContract extends MarketApproval {
 
         try {
             const eggDetails = await this.contract.EggToken.methods.getEgg(eggId).call()
-
+            
             if (message == true) setAlert(eggDetails, 'success')
             return {
                 tokenId: eggId,
@@ -742,7 +742,7 @@ export class MarketplaceContract extends MarketApproval {
 
         } catch (err) {
             setAlert('Error getting this egg id ', 'warning')
-            console.log("Error at: cgetEgg" + err)
+            console.log("Error at: getEgg " + err)
         }
     }
 

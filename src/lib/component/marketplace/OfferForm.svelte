@@ -51,7 +51,7 @@
 					{_offerType}
 					{_tokenType}
 				/>
-			{:else}
+			{:else}			
 				<CreateOffer
 					on:offerCreated={formHanlders}
 					{tokenId}

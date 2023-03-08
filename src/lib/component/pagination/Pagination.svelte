@@ -32,14 +32,14 @@
 </script>
 
 <div class="mycontainer">
-	<div class="myRow">
+	<!-- <div class="myRow">
 		<div>
 			<input type="number" bind:value={setPerpage} class="form-control" placeholder="Per page" />
 		</div>
 		<div>
 			<button class="btn btn-primary" on:click={() => updatePages()}>SET</button>
 		</div>
-	</div>
+	</div> -->
 
 	<div class="btn-group mt-3 mb-2" role="group">
 		{#if pages}

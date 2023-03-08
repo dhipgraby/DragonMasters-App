@@ -23,6 +23,7 @@ async function loadDragon(id, contract) {
     let account = await contract.dragon.contract.account;
     dragon.owner = owner;
     let isOwner = await isOwnerAccount(account, owner);
+    dragon.isOWner = isOwner;
     let sellOffer;
     let rentOffer;
 
@@ -34,12 +35,12 @@ async function loadDragon(id, contract) {
         rentOffer = await contract.market.getOffer(id, TokenType.Dragon);
         let rentPrice = rentOffer.rent.price;
         rentOffer.rentPrice = await getEth(rentPrice);
-        rentOffer.rentTerms = await loadRentTerms(rentOffer, OfferType.ForRent);        
+        rentOffer.rentTerms = await loadRentTerms(rentOffer, OfferType.ForRent);
     }
 
     const dragonData = {
         contract: contract,
-        dragon: dragon,        
+        dragon: dragon,
         account: account
     }
 
@@ -47,7 +48,7 @@ async function loadDragon(id, contract) {
         tokenId: dragon.tokenId,
         sellOffer: (sellOffer) ? sellOffer : null,
         rentOffer: (rentOffer) ? rentOffer : null,
-        rentTerms: (rentOffer.rentTerms) ? rentOffer.rentTerms : null,
+        rentTerms: (rentOffer?.rentTerms) ? rentOffer.rentTerms : null,
         isForSale: isForSale,
         isForRent: isForRent,
         isOwner: isOwner,

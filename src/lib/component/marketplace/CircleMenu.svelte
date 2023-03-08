@@ -17,6 +17,7 @@
 	let viewUrl = _tokenType === TokenType.Dragon ? 'dragon/' : 'egg/' + tokenProps.tokenId;
 
 	onMount(() => {
+		
 		openModal = function () {
 			modaComponent.openModal();
 		};

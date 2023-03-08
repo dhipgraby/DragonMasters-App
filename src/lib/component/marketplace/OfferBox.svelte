@@ -7,10 +7,10 @@
 	export let _tokenType;
 	export let contract;
 	export let doPromise;
-	export let promise;		
+	export let promise;
 	export let formHanlders;
 	export let handleApprove;
-	
+
 </script>
 
 <!-- CHECK APPROVE FOR ALL -->

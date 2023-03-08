@@ -4,14 +4,14 @@
 	import { OfferType } from '$lib/contracts/Marketplace';
 	import { TokenType } from '$lib/contracts/MarketApproval';
 	import { singleOffer, formHanlders } from '$lib/storage/marketplace';
-	import SellOption from '../marketplace/SellOption.svelte';
-	import RaiseAndEnergy from './RaiseAndEnergy.svelte';
+	import SellOption from './SellOption.svelte';
 	import Offers from './Offers.svelte';
 
-	export let dragon;
+	export let asset;
 	export let contract;
 	export let account;
 	export let _offerType;
+	export let _tokenType;
 	export let doPromise;
 
 	let modaComponent;
@@ -21,8 +21,10 @@
 	$: offer = $singleOffer;
 	$: owner = loadOwner(account, offer.owner);
 
+	console.log(asset);
 	onMount(async () => {
-		owner = loadOwner(account, dragon.owner);
+		
+		owner = loadOwner(account, asset.owner);
 		openSellOption = function () {
 			modaComponent.openModal();
 			_offerType = OfferType.ForSale;
@@ -35,8 +37,8 @@
 </script>
 
 <div class="mb-4">
-	<h1>Dragon #{dragon.tokenId}</h1>
-	<p title={dragon.owner}>
+	<h1>{_tokenType === TokenType.Dragon ? 'Dragon # ' : 'Egg # '} {asset.tokenId}</h1>
+	<p title={asset.owner}>
 		Owned by :
 		{#if owner === 'You'}
 			<span class="c-purple"><b>{owner}</b></span>
@@ -51,15 +53,11 @@
 	on:buyed={formHanlders}
 	on:rented={formHanlders}
 	{offer}
-	tokenId={dragon.tokenId}
+	tokenId={asset.tokenId}
 	{contract}
 	{openSellOption}
 	{openRentOption}
 />
-<!-- ACTIONS -->
-{#if offer.isOwner}
-	<RaiseAndEnergy {contract} tokenId={dragon.tokenId} ageGroup={dragon.ageGroup} />
-{/if}
 <!-- HANDLE OFFERS MODAL -->
 {#if offer.isOwner}
 	<SellOption
@@ -69,8 +67,8 @@
 		{_offerType}
 		{doPromise}
 		noModal={true}
-		tokenProps={dragon}
+		tokenProps={asset}
 		contract={contract.market}
-		_tokenType={TokenType.Dragon}
+		{_tokenType}
 	/>
 {/if}

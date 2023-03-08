@@ -23,6 +23,9 @@ async function loadEgg(id, contract) {
     let account = await contract.egg.contract.account;
     egg.owner = owner;
     let isOwner = await isOwnerAccount(account, owner);
+    egg.isOwner = isOwner;
+    let incubationTime = (egg.incubation == '0') ? null : await contract.egg.checkIncubation(id, false)
+    egg.incubationTime = incubationTime
     let sellOffer;
     let rentOffer;
 
@@ -46,7 +49,7 @@ async function loadEgg(id, contract) {
         tokenId: egg.tokenId,
         sellOffer: (sellOffer) ? sellOffer : null,
         rentOffer: (rentOffer) ? rentOffer : null,
-        rentTerms: (rentOffer.rentTerms) ? rentOffer.rentTerms : null,
+        rentTerms: (rentOffer?.rentTerms) ? rentOffer.rentTerms : null,
         isForSale: isForSale,
         isForRent: isForRent,
         isOwner: isOwner,
