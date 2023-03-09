@@ -77,7 +77,9 @@
 }
 
 .eggBg {
+    min-height: 400px;
     max-height: 600px;
+    width: 100%;
     position: relative;
     padding: 25px;
     margin-bottom: 25px;

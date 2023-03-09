@@ -10,6 +10,7 @@
 	import BasicModal from '../BasicModal.svelte';
 
 	export let offer;
+	export let tokenId;
 	export let contract;
 	export let openModal;
 	export let _tokenType;
@@ -18,7 +19,7 @@
 	export let _offerType = OfferType.NoOffer;
 	export let formHanlders;
 
-	let tokenId = offer.tokenId;
+	console.log(tokenId);
 	let promise;
 	let modaComponent;
 

@@ -361,14 +361,16 @@ export class MarketplaceContract extends MarketApproval {
                 const assets = (_tokenType == TokenType.Dragon) ? get(userDragons) : get(userEggs)
                 const offerName = (_offerType == OfferType.ForSale) ? 'sellOffer' : 'rentOffer';
                 const assetOffers = assets.map(el => {
-                    const TID = el.tokenId
-                    if (tokenIds.includes(TID)) {
+                    const id = el.tokenId
+                    el.offer["tokenId"] = id
+                    if (tokenIds.includes(id)) {
                         if (el.offer == undefined) el.offer = []
                         el.offer[offerName] = offers.find(function (offer) {
-                            return offer.tokenId === TID;
+                            return offer.tokenId === id;
                         });
                     }
                     return el
+
                 })
 
                 assetOffers.totalOwned = assets.totalOwned;
@@ -388,9 +390,9 @@ export class MarketplaceContract extends MarketApproval {
 
         } catch (err) {
             console.log("Error at: getOfferedBy", err)
-            const errMsg = getErrors('getOfferedBy', err)
+            // const errMsg = getErrors('getOfferedBy', err)
             if (alert === true) setAlert(errMsg, 'warning')
-            console.log(errMsg)
+            console.log(err)
         }
     }
 
@@ -729,7 +731,7 @@ export class MarketplaceContract extends MarketApproval {
 
         try {
             const eggDetails = await this.contract.EggToken.methods.getEgg(eggId).call()
-            
+
             if (message == true) setAlert(eggDetails, 'success')
             return {
                 tokenId: eggId,

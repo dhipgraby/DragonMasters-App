@@ -11,6 +11,8 @@
 	export let _tokenType;
 	export let _offerType;
 
+	console.log(tokenId);
+
 	$: showOptions =
 		_offerType === OfferType.ForSale || _offerType === OfferType.ForRent ? false : true;
 
@@ -26,7 +28,7 @@
 </script>
 
 {#if showOptions}
-	<SwitchOfferType {forSale} {forRent} />
+	<SwitchOfferType {forSale} {forRent} {tokenId} />
 {:else}
 	<div class="ta-l">
 		<p

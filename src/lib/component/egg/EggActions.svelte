@@ -29,6 +29,8 @@
 </script>
 
 <div class="attrDiv">
+	<h3><i class="fas fa-fist-raised" aria-hidden="true"></i> Actions</h3>
+	<hr />
 	{#if egg.incubationTime == undefined}
 		<button class="btn btn-dark" on:click={() => startIncubation()}>Start Incubation</button>
 	{:else if $time == 0}

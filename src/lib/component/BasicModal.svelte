@@ -52,6 +52,7 @@
 
 	.modal {
 		padding: 20px !important;
+		text-align: center;
 	}
 
 	.btn-light {

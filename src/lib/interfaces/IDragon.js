@@ -22,8 +22,8 @@ async function loadDragon(id, contract) {
     let owner = await contract.dragon.ownerOf(id);
     let account = await contract.dragon.contract.account;
     dragon.owner = owner;
-    let isOwner = await isOwnerAccount(account, owner);
-    dragon.isOWner = isOwner;
+    let isOwner = isOwnerAccount(account, owner);
+    dragon.isOwner = isOwner;
     let sellOffer;
     let rentOffer;
 

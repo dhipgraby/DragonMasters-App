@@ -3,6 +3,7 @@
 	import SellOption from './SellOption.svelte';
 	import { contracts } from '$lib/interfaces/Core';
 	import { TokenType } from '$lib/contracts/MarketApproval';
+	import { OfferType } from '$lib/contracts/Marketplace';
 	import '/static/css/Assets/CircleMenu.css';
 
 	export let tokenProps;
@@ -17,7 +18,6 @@
 	let viewUrl = _tokenType === TokenType.Dragon ? 'dragon/' : 'egg/' + tokenProps.tokenId;
 
 	onMount(() => {
-		
 		openModal = function () {
 			modaComponent.openModal();
 		};
@@ -113,8 +113,9 @@
 <SellOption
 	bind:this={modaComponent}
 	{formHanlders}
-	offer={tokenProps}
-	{contract}
+	tokenId={tokenProps.tokenId}
+	offer={tokenProps.offer}
+	contract={contract.market}
 	{doPromise}
 	{_tokenType}
 />

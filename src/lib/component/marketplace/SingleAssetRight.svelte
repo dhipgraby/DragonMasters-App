@@ -64,6 +64,7 @@
 		bind:this={modaComponent}
 		{formHanlders}
 		{offer}
+		tokenId={asset.tokenId}
 		{_offerType}
 		{doPromise}
 		noModal={true}

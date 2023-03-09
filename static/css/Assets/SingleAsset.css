@@ -44,8 +44,12 @@ i {
     margin-top: 40px;
 }
 
+
 .dragonBg {
     position: relative;
+    min-height: 400px;
+    max-height: 600px;
+    width: 100%;
     padding: 25px;
     margin-bottom: 25px;
     text-align: center;
@@ -56,6 +60,7 @@ i {
 
 img {
     width: 100%;    
+    max-width: 300px;
 }
 
 .card-text {

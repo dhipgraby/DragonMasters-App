@@ -19,6 +19,8 @@
 	let doPromise = true;
 	let _offerType = OfferType.ForSale;
 
+	console.log(dragon.isOwner);
+
 	$: maturity = Object.keys(Maturity)[dragon.ageGroup];
 
 	onMount(async () => {
