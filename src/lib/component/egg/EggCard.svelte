@@ -16,7 +16,7 @@
 	export let acctionBtn = true;
 	export let contract;
 
-	let account = contract.egg.contract.account;
+	let account = contract?.contract?.account;
 	let eggImg;
 	let element;
 	let hovering;
@@ -24,8 +24,8 @@
 	$: incTime = Number(egg.incubationTime);
 	$: incubating = incTime > 0 ? true : false;
 
-	const hatch = () => contract['egg'].hatch(egg.tokenId);
-	const startIncubation = () => contract['egg'].startIncubation(egg.tokenId);
+	const hatch = () => contract.hatch(egg.tokenId);
+	const startIncubation = () => contract.startIncubation(egg.tokenId);
 	const enter = () => (hovering = true);
 	const leave = () => (hovering = false);
 
@@ -54,12 +54,7 @@
 <div on:mouseenter={enter} on:mouseleave={leave} class="card">
 	<div class="card-header">
 		{#if settingsMenu}
-			<CircleMenu
-				_tokenType={TokenType.Egg}
-				tokenProps={egg}
-				contract={contract['market']}
-				{hovering}
-			/>
+			<CircleMenu _tokenType={TokenType.Egg} tokenProps={egg} {hovering} />
 		{/if}
 		<a href="/egg/{egg.tokenId}">
 			<div class="egg-top-container">
@@ -127,7 +122,6 @@
 {/if}
 
 <style>
-
 	.card-body {
 		padding-bottom: 8px;
 	}

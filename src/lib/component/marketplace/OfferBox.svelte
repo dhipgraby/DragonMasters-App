@@ -1,98 +1,33 @@
 <script>
-	import { OfferType } from '$lib/contracts/LoanBook';
+	import OfferForm from './OfferForm.svelte';
+	import ApproveToken from './ApproveToken.svelte';
 
+	export let offer;
 	export let _offerType;
-	export let rentTerms;
-	export let buy;
-	export let rent;
-	export let isForSale;
+	export let _tokenType;
+	export let contract;
+	export let doPromise;
+	export let promise;
+	export let formHanlders;
+	export let handleApprove;
+
 </script>
 
-{#if _offerType == OfferType.ForSale}
-	<button
-		class="btn btn-dark singleButton"
-		on:click={async () => {
-			await buy();
-		}}
-	>
-		Buy now <i class="fas fa-shopping-cart" />
-	</button>
-{/if}
-
-{#if _offerType == OfferType.ForRent}
-	<button
-		class="btn btn-dark singleButton"
-		on:click={async () => {
-			await rent();
-		}}
-	>
-		Rent now <i class="fas fa-shopping-cart" />
-	</button>
-{/if}
-
-{#if _offerType == OfferType.ForSaleOrRent}
-	<div class="multiButton">
-		{#if isForSale}
-			<button
-				class="btn btn-dark"
-				on:click={async () => {
-					await buy();
-				}}
-			>
-				Buy now <i class="fas fa-shopping-cart" />
-			</button>
+<!-- CHECK APPROVE FOR ALL -->
+{#if offer.isApproved == true}
+	<OfferForm {_offerType} {offer} tokenId={offer.tokenId} {formHanlders} {contract} {_tokenType} />
+	<!-- IF IS NOT APPROVE FOR ALL CHECK SINGLE APPROVE  -->
+{:else if doPromise == true}
+	{#await promise}
+		<p>Loading market...</p>
+	{:then approval}
+		<!-- ADDRESS IS APPROVE -->
+		{#if approval == true}
+			<OfferForm {_offerType} {offer} tokenId={offer.tokenId} {formHanlders} {contract} />
+		{:else}
+			<ApproveToken on:approved={handleApprove} tokenId={offer.tokenId} {contract} {_tokenType} />
 		{/if}
-		{#if rentTerms}
-			<button
-				class="btn btn-warning"
-				on:click={async () => {
-					await rent();
-				}}
-			>
-				Rent now <i class="fas fa-shopping-cart" />
-			</button>
-		{/if}
-	</div>
+	{:catch error}
+		<p style="color: red">{error.message}</p>
+	{/await}
 {/if}
-
-<style>
-
-	.multiButton {
-		width: 100%;
-		position: absolute;
-		display: inline-flex;
-		left: 0px;
-		bottom: 0px;
-		margin-top: 10px;
-	}
-
-	.multiButton button {
-		width: 100%;
-		padding: 10px !important;		
-		font-size: 18px;
-		border-top-right-radius: 0px;
-		border-top-left-radius: 0px;
-	}
-
-
-	.multiButton button:hover {		
-		opacity: 1;
-	}
-
-	.singleButton {
-		font-size: 18px;
-		padding: 10px !important;	
-		border-bottom-right-radius: 17px;
-		border-bottom-left-radius: 17px;
-		border-top-right-radius: 0px ;
-		border-top-left-radius: 0px;
-		position: absolute;
-		left: 0px;
-		bottom: 0px;
-	}
-
-	.singleButton:hover {
-		color: rgb(255, 181, 22);
-		opacity: 1;
-	}
-</style>

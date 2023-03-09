@@ -1,113 +1,78 @@
 <svelte:options accessors={true} />
 
 <script>
-	import { afterUpdate, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import { dragonApproval } from '$lib/storage/dragon';
 	import { eggApproval } from '$lib/storage/eggs';
-	import { OfferType,TokenType } from '$lib/contracts/LoanBook';
-	import BasicModal from '../BasicModal.svelte';	
-	import OfferForm from '../dragonMenu/OfferForm.svelte';
-	import AppoveToken from '$lib/component/marketplace/AppoveToken.svelte';
+	import { OfferType, TokenType } from '$lib/contracts/LoanBook';
 	import { approvalRequired } from '$lib/interfaces/ICave';
-	
-	export let tokenProps;
-	export let contract;	
+	import OfferBox from './OfferBox.svelte';
+	import BasicModal from '../BasicModal.svelte';
+
+	export let offer;
+	export let tokenId;
+	export let contract;
 	export let openModal;
-	export let doPromise = false;
 	export let _tokenType;
+	export let doPromise = false;
+	export let btnName = false;
+	export let _offerType = OfferType.NoOffer;
+	export let formHanlders;
 
+	console.log(tokenId);
 	let promise;
-	$: singleApproval = (_tokenType == TokenType.Egg) ? $approvalRequired.egg : $approvalRequired.dragon;
-	$: CheckApproval = (_tokenType == TokenType.Egg) ? $eggApproval : $dragonApproval;
-
 	let modaComponent;
+
+	$: singleApproval =
+		_tokenType == TokenType.Egg ? $approvalRequired.egg : $approvalRequired.dragon;
+	$: CheckApproval = _tokenType == TokenType.Egg ? $eggApproval : $dragonApproval;
 
 	onMount(() => {
 		openModal = function () {
 			modaComponent.openModal();
+			setApprovals();
 		};
 	});
 
-	afterUpdate(() => {
+	async function setApprovals() {
 		if (CheckApproval == true) singleApproval = false;
-		tokenProps.isApproved = singleApproval == false ? true : false;
+		offer.isApproved = singleApproval == false ? true : false;
 		if (doPromise == true && singleApproval == true) promise = later(500);
-	});
-
-	async function later(delay) {
-		return new Promise(async (resolve) =>
-			setTimeout(resolve, delay, await contract.getApproved(tokenProps.tokenId,_tokenType))
-		);
+		offer.isApproved = singleApproval == false ? true : false;
 	}
 
-	function formHanlders(event) {
-		let eventName = event.detail.name;
-		switch (eventName) {
-			case 'offerCreated':
-				handleSetOffer(event);
-				break;
-			case 'offerModifyed':
-				handleModifyOffer(event);
-				break;
-			case 'offerRemoved':
-				handleRemoveOffer(event);
-				break;
+	async function later(delay) {
+		return new Promise(async (resolve) => {
+			setTimeout(resolve, delay, await getAprroval());
+		});
+	}
+
+	async function getAprroval() {
+		if (offer.isApproved === true) {
+			console.log('already approved');
+			return true;
 		}
+		let approval = await contract.getApproved(tokenId, _tokenType);
+		console.log(approval);
+		offer.isApproved = approval;
+		return approval;
 	}
 
 	function handleApprove(event) {
 		singleApproval = false;
-		tokenProps.isApproved = true;
-	}
-
-	function handleSetOffer(event) {	
-		updateOffer(event.detail.offer);
-	}
-
-	function handleModifyOffer(event) {		
-		updateOffer(event.detail.offer);
-	}
-
-	function handleRemoveOffer(event) {		
-		let offerType = event.detail.offerType;
-		if (offerType == OfferType.ForSale) {
-			tokenProps.offer.sellOffer = null;
-		} else {
-			tokenProps.offer.rentOffer = null;
-		}
-	}
-
-	function updateOffer(offer) {		
-		if (offer.offerType == OfferType.ForSale) {
-			tokenProps.offer.sellOffer = offer;
-		} else {
-			tokenProps.offer.rentOffer = offer;
-		}
+		offer.isApproved = true;
 	}
 </script>
 
-<BasicModal bind:this={modaComponent} btnName={false} id={'tokenModal' + tokenProps.tokenId}>
-	<!-- CHECK APPROVE FOR ALL -->
-	{#if tokenProps.isApproved == true}
-		<OfferForm offer={tokenProps.offer} tokenId={tokenProps.tokenId} {formHanlders} {contract} {_tokenType} />
-		<!-- IF IS NOT APPROVE FOR ALL CHECK SINGLE APPROVE  -->
-	{:else if doPromise == true}
-		{#await promise}
-			<p>...waiting</p>
-		{:then approval}
-			<!-- ADDRESS IS APPROVE -->
-			{#if approval == true}
-				<OfferForm
-					offer={tokenProps.offer}
-					tokenId={tokenProps.tokenId}
-					{formHanlders}
-					{contract}
-				/>
-			{:else}
-				<AppoveToken on:approved={handleApprove} tokenId={tokenProps.tokenId} {contract} {_tokenType} />
-			{/if}
-		{:catch error}
-			<p style="color: red">{error.message}</p>
-		{/await}
-	{/if}
+<BasicModal bind:this={modaComponent} {btnName} id={'tokenModal' + tokenId}>
+	<OfferBox
+		{offer}
+		{_offerType}
+		{_tokenType}
+		{contract}
+		{doPromise}
+		{promise}
+		{formHanlders}
+		{handleApprove}
+	/>
 </BasicModal>

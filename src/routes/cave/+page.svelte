@@ -11,7 +11,8 @@
 	import { perpage } from '$lib/storage/pagination';
 	import { lendedEggs, lendedDragons, borrowedEggs, borrowedDragons } from '$lib/storage/loanbook';
 	//CONTRACTS
-	import { LoadInterface, LoanBookInterface, contracts } from '$lib/interfaces/ICave';
+	import { contracts } from '$lib/interfaces/Core';
+	import { LoadInterface, LoanBookInterface } from '$lib/interfaces/ICave';
 	import { urlCurrentParam, ScreenType } from '$lib/helpers/uriHelper';
 
 	let show = 0;
@@ -37,10 +38,9 @@
 		borrowedEggs.useLocalStorage();
 		lendedDragons.useLocalStorage();
 		borrowedDragons.useLocalStorage();
-
+		show = urlCurrentParam();
 		await LoadInterface(0, $perpage);
 		await LoanBookInterface(0, $perpage);
-		show = urlCurrentParam();
 	});
 </script>
 
@@ -71,7 +71,7 @@
 	{/if}
 	<!-- USER EGSS -->
 	{#if show == ScreenType.eggs}
-		<EggGrid settingsMenu={true} {eggs} {contract} loadPage={LoadInterface} />
+		<EggGrid settingsMenu={true} {eggs} contract={contract['egg']} loadPage={LoadInterface} />
 	{/if}
 	<!-- USER DRAGONS -->
 	{#if show == ScreenType.dragons}
@@ -89,7 +89,7 @@
 			showRentDetails={true}
 			acctionBtn={false}
 			eggs={eggLends}
-			{contract}
+			contract={contract['egg']}
 			loadPage={LoanBookInterface}
 		/>
 	{/if}
@@ -109,7 +109,7 @@
 			displayOwner={true}
 			showRentDetails={true}
 			eggs={eggBorrows}
-			{contract}
+			contract={contract['egg']}
 			loadPage={LoanBookInterface}
 		/>
 	{/if}

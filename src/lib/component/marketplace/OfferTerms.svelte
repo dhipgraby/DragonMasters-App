@@ -5,6 +5,7 @@
 	export let rentTerms;
 	export let salePrice;
 	export let isForSale;
+	
 </script>
 
 <div class="priceDiv">
@@ -15,7 +16,7 @@
 		{/if}
 
 		{#if _offerType === OfferType.ForRent}
-			{#if rentTerms !== undefined}
+			{#if rentTerms}
 				<b>Fee:</b>
 				{rentTerms.price} <i class="fab fa-ethereum" />
 				<br />
@@ -35,7 +36,7 @@
 			{/if}
 
 			<hr />
-			{#if rentTerms !== undefined}
+			{#if rentTerms}
 				<span class="badge bg-warning">Rent Offer:</span>
 				<br />
 				<b>Fee:</b>

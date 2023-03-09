@@ -1,16 +1,8 @@
 //CONTRACT
-import { EggContract } from '$lib/contracts/EggToken';
-import { DragonContract } from '$lib/contracts/DragonToken';
-import { MarketplaceContract, TokenType, OfferType } from '$lib/contracts/Marketplace';
-//STORAGE
-import { createWritableStore } from '$lib/helpers/storage';
-import { get } from "svelte/store";
-
-export const contracts = createWritableStore('contract', []);
+import { TokenType, OfferType } from '$lib/contracts/Marketplace';
+import { loadContractData } from './Core';
 
 export async function LoadInterface(from, to, interfaceName = 'All') {
-
-    console.log(from, to, interfaceName);
 
     if (from > 0) {
         from -= 1;
@@ -18,18 +10,7 @@ export async function LoadInterface(from, to, interfaceName = 'All') {
     }
     to -= 1
 
-    let LoadedContracts = get(contracts)
-    if (LoadedContracts.length < 1) {
-        await loadContractData()
-        await loadData(from, to, interfaceName)
-    } else {
-        await loadData(from, to, interfaceName)
-    }
-}
-
-export async function loadData(from, to, interfaceName) {
-
-    const LoadedContracts = get(contracts)
+    const LoadedContracts = await loadContractData();
 
     switch (interfaceName) {
         case 'Egg':
@@ -44,15 +25,6 @@ export async function loadData(from, to, interfaceName) {
             //HERE YOU CAN ALSO LOAD EVENTS & LISTENERS
             break;
     }
-}
-
-async function loadContractData() {
-    let contractData = []
-    contractData['egg'] = await new EggContract();
-    contractData['dragon'] = await new DragonContract();
-    contractData['market'] = await new MarketplaceContract();
-    contracts.set(contractData)
-    return contractData;
 }
 
 async function loadDragons(contract, from, to) {

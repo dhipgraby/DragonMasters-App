@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { setAlert,addAwaiter } from "$lib/storage/alerts";
+import { setAlert, addAwaiter } from "$lib/storage/alerts";
 import { userEggs } from "$lib/storage/eggs";
-import { subSpeciesName,EggSize } from "$lib/helpers/utils"
+import { subSpeciesName, EggSize } from "$lib/helpers/utils"
 import { contracts } from "./contracts";
 import { getErrors } from "./errorHandling";
 
@@ -16,8 +16,8 @@ export class EggContract {
 
     async mintGen0EggsTo(owner, amount, alert = false) {
         try {
-            await this.contract.EggToken.methods.mintGen0EggsTo(owner,amount,EggSize.Medium).send({}, function (err, txHash) {
-                addAwaiter(txHash,'Minting Gen-0 Egg')
+            await this.contract.EggToken.methods.mintGen0EggsTo(owner, amount, EggSize.Medium).send({}, function (err, txHash) {
+                addAwaiter(txHash, 'Minting Gen-0 Egg')
                 if (err) {
                     if (alert) setAlert(err, 'warning')
                     console.log('addAwaiter error: ', err)
@@ -35,10 +35,10 @@ export class EggContract {
         }
     }
 
-    async getAllEggIds(startIndex, endIndex, alert = false){
+    async getAllEggIds(startIndex, endIndex, alert = false) {
         try {
             const eggIds = await this.contract.EggToken.methods.getAllEggIds(startIndex, endIndex).call()
-            if (alert === true) setAlert('Egg Ids: '+ JSON.stringify(eggIds), 'success')
+            if (alert === true) setAlert('Egg Ids: ' + JSON.stringify(eggIds), 'success')
 
             return eggIds
 
@@ -50,10 +50,10 @@ export class EggContract {
         }
     }
 
-    async getEggIds(owner, startIndex, endIndex, alert = false){
+    async getEggIds(owner, startIndex, endIndex, alert = false) {
         try {
             const eggIds = await this.contract.EggToken.methods.getEggIds(owner, startIndex, endIndex).call()
-            if (alert === true) setAlert('Egg Ids: '+ JSON.stringify(eggIds), 'success')
+            if (alert === true) setAlert('Egg Ids: ' + JSON.stringify(eggIds), 'success')
             return eggIds
         } catch (err) {
             console.log("Error at: getEggIds", err)
@@ -64,21 +64,21 @@ export class EggContract {
     }
 
     async getEgg(eggId, alert = false) {
- 
+
         try {
             let eggDetails = await this.contract.EggToken.methods.getEgg(eggId).call()
-            
+
             const egg = {
                 tokenId: eggId,
-                eggSize:eggDetails.size,
+                eggSize: eggDetails.size,
                 mumId: eggDetails.mumId,
                 dadId: eggDetails.dadId,
                 incubation: eggDetails.incubationCompleteAt,
                 laidTime: eggDetails.laidTime,
-                subSpecies:subSpeciesName(eggDetails.species),
-                offer:[]
+                subSpecies: subSpeciesName(eggDetails.species),
+                offer: []
             }
-            if (alert === true) setAlert('Egg Details: '+ JSON.stringify(egg), 'success')
+            if (alert === true) setAlert('Egg Details: ' + JSON.stringify(egg), 'success')
 
             return egg
 
@@ -93,13 +93,13 @@ export class EggContract {
     async startIncubation(eggIds, alert = false) {
 
         try {
-            eggIds = eggIds.split(',')        
+            eggIds = eggIds.split(',')
 
             await this.contract.EggToken.methods.startIncubation(eggIds).send({}, async function (err, txHash) {
-                addAwaiter(txHash,'Starting incubation, eggIds: ' + JSON.stringify(eggIds))
+                addAwaiter(txHash, 'Starting incubation, eggIds: ' + JSON.stringify(eggIds))
                 if (err) setAlert(err, 'warning')
                 else {
-                    if (alert) setAlert('Incubation started for Egg Ids: ' + eggIds, 'success')              
+                    if (alert) setAlert('Incubation started for Egg Ids: ' + eggIds, 'success')
                     return txHash
                 }
             })
@@ -129,12 +129,12 @@ export class EggContract {
     }
 
     async hatch(eggIds, alert = false) {
-        
+
         try {
-            eggIds = eggIds.split(',')        
+            eggIds = eggIds.split(',')
 
             await this.contract.EggToken.methods.hatch(eggIds).send({}, function (err, txHash) {
-                addAwaiter(txHash,'Hatching egg Ids: ' + JSON.stringify(eggIds))
+                addAwaiter(txHash, 'Hatching egg Ids: ' + JSON.stringify(eggIds))
                 if (err) setAlert(err, 'warning')
                 else {
                     if (alert) setAlert(txHash, 'success')
@@ -143,13 +143,13 @@ export class EggContract {
             })
         } catch (err) {
             console.log("Error at: hatch" + err)
-            const errMsg = getErrors('hatch', err)
+            // const errMsg = getErrors('hatch', err)
             if (alert === true) setAlert(errMsg, 'warning')
-            console.log(errMsg)
+            console.log(err)
         }
     }
 
-    async getEvents(){
+    async getEvents() {
         return this.contract.EggToken.events
     }
 
@@ -207,12 +207,12 @@ export class EggContract {
     }
 
 
-    async getUserEggs(from,to) {        
-        let allEggs = await this.getEggIds(this.contract.account,from,to)                
-        let eggs = []        
-        
+    async getUserEggs(from, to) {
+        let allEggs = await this.getEggIds(this.contract.account, from, to)
+        let eggs = []
+
         for (let i = 0; i < allEggs.tokenIds.length; i++) {
-            let eggDetails = await this.getEgg(allEggs.tokenIds[i])                                        
+            let eggDetails = await this.getEgg(allEggs.tokenIds[i])
             let incubationTime = (eggDetails.incubation == '0') ? null : await this.checkIncubation(allEggs.tokenIds[i], false)
             eggDetails.incubationTime = incubationTime
             eggs.push(eggDetails)
@@ -227,7 +227,7 @@ export class EggContract {
     async pause(alert = false) {
         try {
             await this.contract.EggToken.methods.pause().send({}, function (err, txHash) {
-                addAwaiter(txHash,'Pause EggToken contract')
+                addAwaiter(txHash, 'Pause EggToken contract')
                 if (alert == true) {
                     if (err) setAlert(err, 'warning')
                     else {
@@ -246,7 +246,7 @@ export class EggContract {
     async unpause(alert = false) {
         try {
             await this.contract.EggToken.methods.unpause().send({}, function (err, txHash) {
-                addAwaiter(txHash,'Unpause EggToken contract')
+                addAwaiter(txHash, 'Unpause EggToken contract')
                 if (alert == true) {
                     if (err) setAlert(err, 'warning')
                     else {
@@ -258,6 +258,16 @@ export class EggContract {
         } catch (err) {
             const errMsg = getErrors('unpause', err)
             if (alert == true) setAlert(errMsg, 'warning')
+            console.log(errMsg)
+        }
+    }
+
+    async ownerOf(tokenId) {
+        try {
+            let owner = await this.contract.EggToken.methods.ownerOf(tokenId).call()
+            return owner
+        } catch (err) {
+            const errMsg = getErrors('ownerOf: ', err)
             console.log(errMsg)
         }
     }

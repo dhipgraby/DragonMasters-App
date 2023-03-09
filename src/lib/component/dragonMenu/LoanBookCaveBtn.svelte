@@ -13,7 +13,7 @@
 </script>
 
 <h1>{title}</h1>
-<p>Total Eggs: {totalEggs} <span class="spacer" />Total Dragons: {totalDragons}</p>
+<p>Total Eggs: {totalEggs} <span class="spacer" /> Total Dragons: {totalDragons}</p>
 <div class="row">
 	<div class="col loanbox shadow" on:click={() => changeView(eggsView)}>
 		<p>Eggs</p>

@@ -3,14 +3,15 @@ import { get, writable } from "svelte/store";
 
 const expirationTime = new Date().getTime() + 1000 * 60; //1 minute 
 //ALL DRAGONS
-export const userDragons = createWritableStore('userDragons', [],expirationTime)
+export const userDragons = createWritableStore('userDragons', [], expirationTime)
 //FOR BREEDING
 export const dragonA = createWritableStore('dragonA', 0);
 export const dragonB = createWritableStore('dragonB', 0);
 export const dragonApproval = writable(false)
-
+//SINGLE DRAGON 
+export const singleDragon = createWritableStore('singleDragon', 0);
+//UPDATE DRAGON FOR BREEDING    
 export function update_current_dragon(dragon, _gender) {
-    //UPDATE DRAGON FOR BREEDING    
     dragon.gender = _gender
     if (_gender == 'dad') {
         dragonA.set(dragon);
@@ -19,9 +20,8 @@ export function update_current_dragon(dragon, _gender) {
         dragonB.set(dragon);
     }
 }
-
+//UPDATE DRAGON FOR BREEDING    
 export function remove_current_dragon(dragon, _gender) {
-    //UPDATE DRAGON FOR BREEDING    
     dragon.gender = _gender
     if (_gender == 'dad') {
         dragonA.set([]);

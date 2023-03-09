@@ -1,5 +1,5 @@
 export async function load({ params }) {
     return {        
-            eggId: params.EggId        
+            eggId: params.eggId        
     }
 }

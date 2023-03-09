@@ -12,9 +12,7 @@
 	export let _offerType;
 
 	let inferfaceName = (_tokenType === TokenType.Egg) ? "Egg" : (_tokenType === TokenType.Dragons)  ? "Dragon" : "All"
-	$: totalAssets = assets.totalOffers
-
-	console.log(assets);
+	$: totalAssets = assets.totalOffers;
 
 	const buyToken = async (tokenId, price) => {
 		await contract['market'].buy(tokenId, _tokenType, price);		

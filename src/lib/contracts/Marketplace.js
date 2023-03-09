@@ -30,7 +30,7 @@ export const saleTerms = {
 export class MarketplaceContract extends MarketApproval {
     constructor() {
         super()
-        this.contract        
+        this.contract
         return (async () => {
             this.contract = await contracts();
             return this;
@@ -205,7 +205,7 @@ export class MarketplaceContract extends MarketApproval {
     async setOffer(tokenId, offerType, tokenType, terms, alert = false) {
 
         try {
-            await this.contract.Marketplace.methods.setOffer(
+            const offer = await this.contract.Marketplace.methods.setOffer(
                 tokenId,
                 terms,
                 offerType,
@@ -219,6 +219,7 @@ export class MarketplaceContract extends MarketApproval {
                     return txHash
                 }
             })
+            return offer;
         } catch (err) {
             console.log("Error at: setOffer", err)
             const errMsg = getErrors('setOffer', err)
@@ -229,7 +230,7 @@ export class MarketplaceContract extends MarketApproval {
 
     async modifyOffer(tokenId, offerType, tokenType, terms, alert = false) {
         try {
-            await this.contract.Marketplace.methods.modifyOffer(
+            const offer = await this.contract.Marketplace.methods.modifyOffer(
                 tokenId,
                 terms,
                 offerType,
@@ -242,6 +243,7 @@ export class MarketplaceContract extends MarketApproval {
                     return txHash
                 }
             })
+            return offer;
         } catch (err) {
             console.log("Error at: modifyOffer", err)
             const errMsg = getErrors('modifyOffer', err)
@@ -359,14 +361,16 @@ export class MarketplaceContract extends MarketApproval {
                 const assets = (_tokenType == TokenType.Dragon) ? get(userDragons) : get(userEggs)
                 const offerName = (_offerType == OfferType.ForSale) ? 'sellOffer' : 'rentOffer';
                 const assetOffers = assets.map(el => {
-                    const TID = el.tokenId
-                    if (tokenIds.includes(TID)) {
+                    const id = el.tokenId
+                    el.offer["tokenId"] = id
+                    if (tokenIds.includes(id)) {
                         if (el.offer == undefined) el.offer = []
                         el.offer[offerName] = offers.find(function (offer) {
-                            return offer.tokenId === TID;
+                            return offer.tokenId === id;
                         });
                     }
                     return el
+
                 })
 
                 assetOffers.totalOwned = assets.totalOwned;
@@ -386,9 +390,9 @@ export class MarketplaceContract extends MarketApproval {
 
         } catch (err) {
             console.log("Error at: getOfferedBy", err)
-            const errMsg = getErrors('getOfferedBy', err)
+            // const errMsg = getErrors('getOfferedBy', err)
             if (alert === true) setAlert(errMsg, 'warning')
-            console.log(errMsg)
+            console.log(err)
         }
     }
 
@@ -498,7 +502,6 @@ export class MarketplaceContract extends MarketApproval {
                     return txHash
                 }
             })
-
             return offer
         } catch (err) {
             console.log("Error at: removeOffer", err)
@@ -542,7 +545,7 @@ export class MarketplaceContract extends MarketApproval {
 
     async buy(tokenId, tokenType, price, alert = false) {
         try {
-            await this.contract.Marketplace.methods.buy(
+            const tx = await this.contract.Marketplace.methods.buy(
                 tokenId,
                 tokenType,
             ).send({
@@ -559,6 +562,7 @@ export class MarketplaceContract extends MarketApproval {
                     return txHash
                 }
             })
+            return tx;
         } catch (err) {
             console.log("Error at: buyToken" + err)
             const errMsg = getErrors('buyToken', err)
@@ -571,7 +575,7 @@ export class MarketplaceContract extends MarketApproval {
         try {
             const totalAmount = (Number(price) + Number(deposit))
 
-            await this.contract.Marketplace.methods.rent(
+            const tx = await this.contract.Marketplace.methods.rent(
                 tokenId,
                 tokenType,
             ).send({
@@ -588,6 +592,7 @@ export class MarketplaceContract extends MarketApproval {
                     return txHash
                 }
             })
+            return tx;
         } catch (err) {
             console.log("Error at: rent" + err)
             const errMsg = getErrors('rent', err)
@@ -739,7 +744,7 @@ export class MarketplaceContract extends MarketApproval {
 
         } catch (err) {
             setAlert('Error getting this egg id ', 'warning')
-            console.log("Error at: cgetEgg" + err)
+            console.log("Error at: getEgg " + err)
         }
     }
 

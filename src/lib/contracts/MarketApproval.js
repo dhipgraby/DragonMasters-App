@@ -1,5 +1,5 @@
 import { get } from 'svelte/store';
-import { setAlert } from "$lib/storage/alerts";
+import { setAlert, addAwaiter } from "$lib/storage/alerts";
 import { dragonApproval } from '$lib/storage/dragon'
 import { eggApproval } from '$lib/storage/eggs'
 import { approvalRequired } from "$lib/interfaces/ICave"
@@ -11,7 +11,7 @@ export class MarketApproval {
     constructor() {
         this.contract
         return (async () => {
-            this.contract = await contracts();      
+            this.contract = await contracts();
             return this;
         })();
     }
@@ -20,9 +20,9 @@ export class MarketApproval {
     async approveToken(tokenId, _tokenType) {
         switch (_tokenType) {
             case TokenType.Dragon:
-                return this.approveDragon(tokenId)                
+                return this.approveDragon(tokenId)
             case TokenType.Egg:
-                return this.approveEgg(tokenId)                
+                return this.approveEgg(tokenId)
         }
     }
 
@@ -120,9 +120,9 @@ export class MarketApproval {
     async approveForAll(_tokenType) {
         switch (_tokenType) {
             case TokenType.Dragon:
-                return this.approveAllDragons()                
+                return this.approveAllDragons()
             case TokenType.Egg:
-                return this.approveAllEggs()                
+                return this.approveAllEggs()
         }
     }
 
@@ -134,6 +134,7 @@ export class MarketApproval {
             ).send({}, function (err, txHash) {
                 if (err) setAlert(err, 'warning')
                 else {
+                    addAwaiter(txHash, 'Approve for All Dragon contract')
                     dragonApproval.set(true)
                     setAlert('Maketplace approved for all', 'success')
                     return true
@@ -156,6 +157,7 @@ export class MarketApproval {
             ).send({}, function (err, txHash) {
                 if (err) setAlert(err, 'warning')
                 else {
+                    addAwaiter(txHash, 'Approve for All Egg contract ')
                     eggApproval.set(true)
                     setAlert('Maketplace approved for all', 'success')
                     return true
@@ -179,7 +181,7 @@ export class MarketApproval {
                 break;
         }
     }
-    
+
     async removeApproveForAllDragons() {
         try {
             let dragonsIds = await this.contract.DragonToken.methods.setApprovalForAll(
@@ -188,6 +190,7 @@ export class MarketApproval {
             ).send({}, function (err, txHash) {
                 if (err) setAlert(err, 'warning')
                 else {
+                    addAwaiter(txHash, 'Revoke approve for All')
                     dragonApproval.set(false)
                     setAlert('Maketplace approved for all removed!', 'success')
                     return txHash
@@ -209,6 +212,7 @@ export class MarketApproval {
             ).send({}, function (err, txHash) {
                 if (err) setAlert(err, 'warning')
                 else {
+                    addAwaiter(txHash, 'Revoke approve for All')
                     eggApproval.set(false)
                     setAlert('Maketplace approved for all removed!', 'success')
                     return txHash
@@ -221,12 +225,12 @@ export class MarketApproval {
         }
     }
 
-    async getApproved(tokenId,_tokenType, msg = false) {
+    async getApproved(tokenId, _tokenType, msg = false) {
         switch (_tokenType) {
             case TokenType.Dragon:
-                return this.getApprovedDragon(tokenId, msg)                
+                return this.getApprovedDragon(tokenId, msg)
             case TokenType.Egg:
-                return this.getApprovedEgg(tokenId, msg)            
+                return this.getApprovedEgg(tokenId, msg)
         }
     }
 
@@ -278,15 +282,15 @@ export class MarketApproval {
         return isApproved
     }
 
-    async isApprovedForAll(_tokenType,msg = false) {            
+    async isApprovedForAll(_tokenType, msg = false) {
         switch (_tokenType) {
-            case TokenType.Dragon :                
+            case TokenType.Dragon:
                 this.isApprovedForAllDragons(msg)
                 break;
-            case TokenType.Egg :                
+            case TokenType.Egg:
                 this.isApprovedForAllEggs(msg)
                 break;
-        }    
+        }
     }
 
     async isApprovedForAllDragons(msg = false) {
@@ -295,7 +299,7 @@ export class MarketApproval {
             const isMarketplaceAnOperator = await this.contract.DragonToken.methods.isApprovedForAll(this.contract.account, this.contract.address.Marketplace).call()
 
             if (isMarketplaceAnOperator == true) {
-                
+
                 let _approvalRequired = get(approvalRequired)
                 _approvalRequired.dragon = false
                 approvalRequired.set(_approvalRequired)
@@ -317,7 +321,7 @@ export class MarketApproval {
             const isMarketplaceAnOperator = await this.contract.EggToken.methods.isApprovedForAll(this.contract.account, this.contract.address.Marketplace).call()
 
             if (isMarketplaceAnOperator == true) {
-                
+
                 let _approvalRequired = get(approvalRequired)
                 _approvalRequired.egg = false
                 approvalRequired.set(_approvalRequired)

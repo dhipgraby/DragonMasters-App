@@ -180,29 +180,39 @@ export function orderByOffer(assets, _offerType) {
     return assets.sort((a, b) => (a[sortOffer] > b[sortOffer]) ? 1 : -1);
 }
 
-export async function loadRentTerms(asset, _offerType) {
-    if (_offerType === OfferType.ForSale || asset.rentOffer == undefined) return;
+export async function loadRentTerms(rentOffer, _offerType) {    
+    if (_offerType === OfferType.ForSale || rentOffer === undefined) return null;
 
-    let currentDeposit = asset.rentOffer.rent.deposit;
-    let fee = asset.rentOffer.rent.price;
-    let minDuration = asset.rentOffer.rent.minDuration / (24 * 60 * 60) + ' days';
+    let currentDeposit = rentOffer.rent.deposit;
+    let fee = rentOffer.rent.price;
+    let minDuration = rentOffer.rent.minDuration / (24 * 60 * 60) + ' days';
     return {
-        deposit: await getEth(currentDeposit),
         price: await getEth(fee),
+        deposit: await getEth(currentDeposit),
         duration: minDuration
     };
 }
 
 export function loadOwner(account, owner) {
-    
+    if (!account) return
     account = account.toLowerCase();
     owner = owner.toLowerCase();
     if (account === owner) {
-        owner = '<b class="yellowLink">You</b>';
+        owner = 'You';
     } else {
         owner = shortAddr(owner);
     }
     return owner;
+}
+
+export function isOwnerAccount(account, owner) {
+    account = account.toLowerCase();
+    owner = owner.toLowerCase();
+    if (account === owner) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 export function speciesColor(specie) {

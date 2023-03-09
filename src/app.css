@@ -31,6 +31,10 @@ body {
 	right: 25px;	
 }
 
+.txList li {
+margin-top: 10px;
+}
+
 .txaction {
 	font-size: 12px;
 	color: white;
@@ -39,6 +43,10 @@ body {
 
 .yellowLink  {		
 	color: rgb(235, 182, 39) !important;
+}
+
+.c-purple {
+	color:#6246ff;
 }
 
 #svelte {

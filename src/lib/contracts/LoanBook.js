@@ -7,9 +7,8 @@ export const TokenType = { Unknown: 0, Dna: 1, Egg: 2, Dragon: 3 }
 export const OfferType = { NoOffer: 0, ForSale: 1, ForRent: 2, ForSaleOrRent: 3 }
 export const LoanType = { Unknown: 0, Lend: 1, Borrow: 2 }
 
-export class LoanBookContract extends MarketplaceContract {
-    constructor() {
-        super()
+export class LoanBookContract {
+    constructor() {        
         this.contract
         return (async () => {
             this.contract = await contracts();
@@ -20,6 +19,7 @@ export class LoanBookContract extends MarketplaceContract {
     async getUserLoans(startIndex, endIndex, _tokenType, _loanType) {
 
         let allAssets = []
+        const marketContract = await new MarketplaceContract();
 
         const allIds = (_loanType === LoanType.Lend) ?
             await this.getLoanedBy(this.contract.account, startIndex, endIndex, _tokenType)
@@ -35,9 +35,9 @@ export class LoanBookContract extends MarketplaceContract {
         for (let i = 0; i < total; i++) {
             let asset;
             if (_tokenType === TokenType.Egg) {
-                asset = await this.parseEgg(allIds.tokenIds[i])                
+                asset = await this.parseEgg(allIds.tokenIds[i],marketContract)                
             } else {
-                asset = await this.parseDragon(allIds.tokenIds[i])
+                asset = await this.parseDragon(allIds.tokenIds[i],marketContract)
             }
             asset.owner = (_loanType === LoanType.Lend) ? asset.details.lender: asset.details.lender;
             allAssets.push(asset)
@@ -62,8 +62,8 @@ export class LoanBookContract extends MarketplaceContract {
         }
     }
 
-    async parseEgg(tokenId) {
-        let asset = await this.getEgg(tokenId);
+    async parseEgg(tokenId,contract) {
+        let asset = await contract.getEgg(tokenId);
         // let incubationTime = (asset.incubation == '0') ? null : await this.checkIncubation(tokenId, false);
         let details = await this.getLoan(tokenId, TokenType.Egg);
         // asset['incubationTime'] = incubationTime;
@@ -71,11 +71,11 @@ export class LoanBookContract extends MarketplaceContract {
         return asset;
     }
 
-    async parseDragon(tokenId) {
-        let asset = await this.getDragon(tokenId);
+    async parseDragon(tokenId,contract) {
+        let asset = await contract.getDragon(tokenId);
         let details = await this.getLoan(tokenId, TokenType.Dragon);
         asset['details'] = await this.parseLoan(details);
-        asset['dna'] = await this.getDna(asset.dnaId);
+        asset['dna'] = await contract.getDna(asset.dnaId);
         return asset;
     }
 

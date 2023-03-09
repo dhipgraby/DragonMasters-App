@@ -1,8 +1,7 @@
 <script>
-	import { TokenType, OfferType, saleTerms, rentTerms } from '$lib/contracts/Marketplace';
+	import { OfferType, saleTerms, rentTerms } from '$lib/contracts/Marketplace';
 	import { getWei, timeDropdrown } from '$lib/helpers/utils';
 	import { createEventDispatcher } from 'svelte';
-	import TimeInputs from './TimeInputs.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -14,17 +13,18 @@
 	let price;
 	let deposit;
 	let duration = 0;
-
+	
 	async function createOffer() {
 		let Terms;
 		let rent = null;
 		let priceInWei = await getWei(price);
+		let depositInWei;
 
 		if (_offerType == OfferType.ForSale) {
 			Terms = saleTerms;
 			Terms.price = priceInWei;
 		} else {
-			let depositInWei = await getWei(deposit);
+			depositInWei = await getWei(deposit);
 			Terms = rentTerms;
 			Terms.price = priceInWei;
 			Terms.rental.deposit = depositInWei;
@@ -33,33 +33,42 @@
 		}
 
 		let offering = await contract.setOffer(tokenId, _offerType, _tokenType, Terms);
+		let _rentTerms =
+			rent == true
+				? {
+						price: price,
+						deposit: deposit,
+						duration: duration + ' days'
+				  }
+				: null;
+
+		let rentalTerms =
+			rent == true
+				? {
+						price: priceInWei,
+						deposit: depositInWei,
+						minDuration: Terms.rental.minDuration
+				  }
+				: null;
 
 		if (offering.blockHash) {
 			let offer = {
 				offerType: _offerType,
 				owner: contract.contract.account,
-				rent:
-					rent == true
-						? {
-								deposit: Terms.rental.deposit,
-								minDuration: Terms.rental.minDuration
-						  }
-						: null,
+				rent: rentalTerms,
+				rentTerms: _rentTerms,
 				sellPrice: priceInWei,
+				price: price,
 				tokenId: tokenId,
 				tokenType: _tokenType
 			};
 
-			console.log('offer created:' + JSON.stringify(offer));
+			console.log('offer created:', offer);
 			dispatch('offerCreated', {
 				offer: offer,
 				name: 'offerCreated'
 			});
 		}
-	}
-
-	function addTime(days) {
-		duration += days;
 	}
 </script>
 
@@ -96,8 +105,6 @@
 		/>
 		<label for="floatingPassword">Number of days</label>
 	</div>
-
-	<TimeInputs {addTime} />
 {/if}
 
 <button class="btn btn-success mt-2" on:click={() => createOffer()}>Create Offer</button>
